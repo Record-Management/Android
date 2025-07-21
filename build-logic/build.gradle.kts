@@ -13,7 +13,7 @@ gradlePlugin {
     plugins {
         register("Hilt") {
             id = "record.hilt"
-            implementationClass = "com.youth.app.HiltSetting"
+            implementationClass = "com.youth.app.HiltPlugin"
         }
     }
 }
