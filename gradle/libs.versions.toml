@@ -29,6 +29,7 @@ ksp = "2.0.0-1.0.22"
 kotlinxSerializationJson = "1.8.0"
 
 navigationCompose = "2.8.1"
+jetbrainsKotlinJvm = "1.9.24"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -94,3 +95,4 @@ hiltPlugins = { id="com.google.dagger.hilt.android", version.ref = "hiltAndroid"
 
 #Serialization
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinxSerializationJson" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
