@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "record.daily.app"
+    namespace = "record.daily.android"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "record.daily.app"
+        applicationId = "record.daily.android"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

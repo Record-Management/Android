@@ -1,4 +1,4 @@
-package hegunhee.meme.android
+package record.daily.android
 
 import org.junit.Test
 
