@@ -10,18 +10,14 @@ dependencies {
 }
 
 gradlePlugin {
-
+    plugins {
+        register("Hilt") {
+            id = "record.hilt"
+            implementationClass = "com.youth.app.HiltPlugin"
+        }
+    }
 }
 
 tasks.register(":clean", Delete::class) {
     delete = setOf(rootProject.layout.buildDirectory)
-}
-
-gradlePlugin {
-    plugins {
-        register("Hilt") {
-            id = "record.hilt"
-            implementationClass = "com.youth.app.HiltSetting"
-        }
-    }
 }
