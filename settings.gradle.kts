@@ -26,4 +26,5 @@ include(":app")
 include(
     "core:domain",
     "core:data",
+    "core:model"
 )
