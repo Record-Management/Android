@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "hegunhee.meme.android"
+    namespace = "record.daily.android"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "hegunhee.meme.android"
+        applicationId = "record.daily.android"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

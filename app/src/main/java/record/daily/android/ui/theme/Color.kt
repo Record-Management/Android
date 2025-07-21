@@ -1,4 +1,4 @@
-package hegunhee.meme.android.ui.theme
+package record.daily.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
