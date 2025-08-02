@@ -28,3 +28,7 @@ include(
     "core:data",
     "core:model"
 )
+
+include(
+    ":feature:login"
+)
