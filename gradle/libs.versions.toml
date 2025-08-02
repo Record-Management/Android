@@ -33,6 +33,8 @@ jetbrainsKotlinJvm = "1.9.24"
 appcompat = "1.7.1"
 material = "1.12.0"
 
+kakaoUser = "2.20.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -88,6 +90,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersio
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+#kakao-login
+kakao-v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
