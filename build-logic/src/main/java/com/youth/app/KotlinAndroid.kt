@@ -1,5 +1,6 @@
 package com.youth.app
 
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -13,6 +14,10 @@ internal fun Project.configureKotlinAndroid() {
         apply("org.jetbrains.kotlin.android")
     }
 
+    fun getApiKey(propertyKey: String): String {
+        return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
+    }
+
     androidExtension.apply {
 
         compileSdk = 35
@@ -21,6 +26,9 @@ internal fun Project.configureKotlinAndroid() {
             minSdk = 26
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+            buildConfigField("String", "KAKAO_API_KEY", getApiKey("kakao.api.key"))
+            addManifestPlaceholders(mapOf("KAKAO_API_KEY" to getApiKey("kakao.api.xml.key")))
         }
 
         buildTypes {
