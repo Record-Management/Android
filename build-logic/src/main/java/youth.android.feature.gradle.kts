@@ -29,6 +29,8 @@ configureHilt()
 
 dependencies {
 
+    implementation(project(":core:designsystem"))
+
     implementation(libs.findLibrary("hilt.navigation.compose").get())
     implementation(libs.findLibrary("androidx.navigation.compose").get())
     implementation(libs.findLibrary("timber").get())
