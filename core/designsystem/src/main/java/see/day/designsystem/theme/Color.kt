@@ -1,4 +1,4 @@
-package record.daily.android.ui.theme
+package see.day.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
