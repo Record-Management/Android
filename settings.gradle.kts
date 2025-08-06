@@ -33,5 +33,6 @@ include(
 )
 
 include(
+    ":feature:main",
     ":feature:login"
 )
