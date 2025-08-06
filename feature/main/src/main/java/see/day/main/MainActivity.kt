@@ -1,4 +1,4 @@
-package record.daily.android
+package see.day.main
 
 import android.content.Intent
 import android.os.Bundle
