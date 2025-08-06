@@ -2,7 +2,6 @@ package record.daily.android
 
 import android.content.Intent
 import android.os.Bundle
-import android.service.autofill.OnClickAction
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,8 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import record.daily.android.ui.theme.AndroidTheme
 import record.daily.login.LoginActivity
+import see.day.designsystem.theme.SeeDayTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +28,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            AndroidTheme {
+            SeeDayTheme  {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -63,7 +62,7 @@ fun Greeting(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    AndroidTheme {
+    SeeDayTheme {
         Greeting("Android", onClickLogin = {})
     }
 }

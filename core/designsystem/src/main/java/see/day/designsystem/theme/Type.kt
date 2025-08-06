@@ -1,4 +1,4 @@
-package record.daily.android.ui.theme
+package see.day.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
