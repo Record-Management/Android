@@ -1,7 +1,5 @@
 plugins {
     id("youth.android.application")
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -15,10 +13,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-    }
-
-    buildFeatures {
-        compose = true
     }
 }
 
