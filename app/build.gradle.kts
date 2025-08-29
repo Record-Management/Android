@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "record.daily.android"
+    namespace = "see.day.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "record.daily.android"
+        applicationId = "see.day.app"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
