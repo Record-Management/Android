@@ -4,6 +4,7 @@ import android.app.Application
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import record.daily.android.timber.ClassNameCustomTimber
+import see.day.app.BuildConfig
 import timber.log.Timber
 
 @HiltAndroidApp
