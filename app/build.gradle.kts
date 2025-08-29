@@ -1,5 +1,6 @@
 plugins {
     id("youth.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -21,4 +22,7 @@ dependencies {
     implementation(project(":feature:main"))
 
     implementation(libs.kakao.v2.user)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
