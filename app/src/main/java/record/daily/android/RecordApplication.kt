@@ -14,7 +14,7 @@ class RecordApplication : Application() {
         super.onCreate()
 
         KakaoSdk.init(this, BuildConfig.KAKAO_API_KEY)
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(ClassNameCustomTimber())
         }
     }

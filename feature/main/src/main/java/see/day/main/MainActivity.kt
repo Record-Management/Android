@@ -28,12 +28,12 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            SeeDayTheme  {
+            SeeDayTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding),
-                        onClickLogin = onClickLoginActivity,
+                        onClickLogin = onClickLoginActivity
                     )
                 }
             }
@@ -42,11 +42,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(
-    name: String,
-    modifier: Modifier = Modifier,
-    onClickLogin: () -> Unit,
-) {
+fun Greeting(name: String, modifier: Modifier = Modifier, onClickLogin: () -> Unit) {
     Column {
         Text(
             text = "Hello $name!",
@@ -56,7 +52,6 @@ fun Greeting(
             Text("로그인 화면으로 이동")
         }
     }
-
 }
 
 @Preview(showBackground = true)

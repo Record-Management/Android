@@ -4,7 +4,6 @@ plugins {
 
 android {
     namespace = "record.daily.data"
-
 }
 
 dependencies {
