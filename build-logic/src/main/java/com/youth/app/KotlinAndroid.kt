@@ -13,6 +13,7 @@ internal fun Project.configureKotlinAndroid() {
     with(pluginManager) {
         apply("org.jetbrains.kotlin.android")
     }
+    configureVerifyKtLint()
 
     fun getApiKey(propertyKey: String): String {
         return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
