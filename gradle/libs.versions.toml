@@ -38,6 +38,8 @@ kakaoUser = "2.20.1"
 
 googleServices = "4.4.3"
 
+ktlint = "12.1.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -104,9 +106,10 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kspPlugins = {id = "com.google.devtools.ksp", version.ref = "ksp"}
-hiltPlugins = { id="com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
-google-services = { id = "com.google.gms.google-services",version.ref = "googleServices"}
+kspPlugins = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hiltPlugins = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 #Serialization
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinxSerializationJson" }

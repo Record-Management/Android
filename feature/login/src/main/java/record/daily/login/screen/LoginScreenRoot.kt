@@ -11,9 +11,7 @@ import record.daily.login.social.kakaoLogin
 import timber.log.Timber
 
 @Composable
-internal fun LoginScreenRoot(
-    modifier: Modifier = Modifier
-) {
+internal fun LoginScreenRoot(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     LoginScreen(
@@ -27,12 +25,9 @@ internal fun LoginScreenRoot(
 }
 
 @Composable
-internal fun LoginScreen(
-    modifier: Modifier = Modifier,
-    onClickKakaoLogin: () -> Unit,
-) {
+internal fun LoginScreen(modifier: Modifier = Modifier, onClickKakaoLogin: () -> Unit) {
     Column(
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text("hello LoginScreen")
 
