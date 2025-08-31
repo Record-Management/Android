@@ -1,0 +1,29 @@
+root = true
+
+[*]
+#파일 끝 개행 문자 추가
+end_of_line = lf
+#들여쓰기 공백 4개, space로 지정
+indent_size = 4
+indent_style = space
+#각 줄 끝 공백문자 제거
+trim_trailing_whitespace = true
+#파일 끝에 줄을 추가하기
+insert_final_newline = true
+
+[*.{kt,kts}]
+ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+ktlint_code_style = android_studio
+ij_any_class_annotation_wrap = off
+#클래스에 어노테이션이 있을 경우 한칸 내리는 상황 제거
+ktlint_standard_annotation = disabled
+ij_c_class_constructor_init_list_align_multiline = false
+ktlint_function_naming_ignore_when_annotated_with=Composable
+
+[*/**/test/**/*.{kt,kts}]
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_import-ordering = disabled
+
+[*/**/androidTest/**/*.{kt,kts}]
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_import-ordering = disabled
