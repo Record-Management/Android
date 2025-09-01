@@ -28,6 +28,7 @@ internal fun Project.configureKotlinAndroid() {
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+            buildConfigField("String","SERVER_API_KEY", getApiKey("server.api.key"))
             buildConfigField("String", "KAKAO_API_KEY", getApiKey("kakao.api.key"))
             addManifestPlaceholders(mapOf("KAKAO_API_KEY" to getApiKey("kakao.api.xml.key")))
         }

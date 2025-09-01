@@ -1,4 +1,4 @@
-package record.daily.data
+package see.day.data
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("record.daily.data.test", appContext.packageName)
+        assertEquals("see.day.data.test", appContext.packageName)
     }
 }

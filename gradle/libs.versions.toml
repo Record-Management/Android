@@ -27,8 +27,6 @@ timberVersion = "5.0.1"
 
 ksp = "2.0.0-1.0.22"
 
-kotlinxSerializationJson = "1.8.0"
-
 navigationCompose = "2.8.1"
 jetbrainsKotlinJvm = "1.9.24"
 appcompat = "1.7.1"
@@ -39,6 +37,10 @@ kakaoUser = "2.20.1"
 googleServices = "4.4.3"
 
 ktlint = "12.1.1"
+
+okhttp = "4.12.0"
+retrofit = "2.11.0"
+kotlinxSerializationJson = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -92,6 +94,15 @@ coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-
 
 #timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
+
+#http
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
+okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
+okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-kotlin-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
+okhttp3-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp"}
 
 #Serialization
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
