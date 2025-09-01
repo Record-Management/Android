@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "record.daily.data"
+    namespace = "see.day.data"
 }
 
 dependencies {
