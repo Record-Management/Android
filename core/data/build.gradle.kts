@@ -18,4 +18,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.okhttp3.mockwebserver)
+    testImplementation(libs.mockito.kotlin)
 }
