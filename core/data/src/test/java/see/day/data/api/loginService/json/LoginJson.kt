@@ -13,7 +13,7 @@ internal val createLoginResponse = """
         },
         "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
         "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-        "isNewUser": true
+        "newUser": true
       }
     }
 """.trimIndent()
@@ -31,7 +31,7 @@ internal val oldLoginResponse = """
         },
         "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
         "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-        "isNewUser": false
+        "newUser": false
       }
     }
 """.trimIndent()
