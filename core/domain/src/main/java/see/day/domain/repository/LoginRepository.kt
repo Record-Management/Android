@@ -1,4 +1,4 @@
-package record.daily.domain.repository
+package see.day.domain.repository
 
 import record.daily.model.login.SocialLogin
 
