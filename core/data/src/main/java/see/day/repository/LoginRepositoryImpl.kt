@@ -1,0 +1,31 @@
+package see.day.repository
+
+import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import record.daily.model.exception.NoDataException
+import record.daily.model.login.SocialLogin
+import see.day.datastore.DataStoreDataSource
+import see.day.domain.repository.LoginRepository
+import see.day.mapper.toDto
+import see.day.network.LoginService
+import see.day.utils.ErrorUtils.createResult
+
+class LoginRepositoryImpl @Inject constructor(
+    private val dataSource: DataStoreDataSource,
+    private val loginService: LoginService
+) : LoginRepository {
+
+    override suspend fun login(socialLogin: SocialLogin): Result<Boolean> {
+        return createResult {
+            val result = loginService.signIn(socialLogin.toDto().toRequestBody()).data ?: throw NoDataException()
+
+            withContext(Dispatchers.IO) {
+                dataSource.saveAccessToken(result.accessToken)
+                dataSource.saveRefreshToken(result.refreshToken)
+            }
+
+            result.isNewUser
+        }
+    }
+}
