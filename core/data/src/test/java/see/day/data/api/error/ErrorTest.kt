@@ -8,15 +8,12 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import record.daily.model.exception.NetworkErrorException
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.data.api.error.json.errorResponse
-import see.day.data.api.loginService.json.createLoginResponse
 import see.day.network.LoginService
 import see.day.network.dto.login.LoginRequest
 import see.day.utils.ErrorUtils.createResult
@@ -69,11 +66,10 @@ class ErrorTest {
                 createResult {
                     sut.signIn(loginRequest.toRequestBody())
                 }.onFailure {
-                    assertEquals("서버 내부 오류가 발생했습니다.",it.message)
+                    assertEquals("서버 내부 오류가 발생했습니다.", it.message)
                 }.getOrThrow()
             }
         }
         Unit
     }
-
 }

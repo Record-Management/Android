@@ -19,6 +19,8 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.okhttp3.mockwebserver)
     testImplementation(libs.mockito.kotlin)
