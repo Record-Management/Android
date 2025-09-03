@@ -32,7 +32,7 @@ object ErrorUtils {
             401 -> UnAuthorizedException(response.message)
             404 -> NotFoundException(response.message)
             400 -> BadRequestException(response.message)
-            500 -> InvalidValueException(response.message)
+            500 -> NetworkErrorException(response.message)
             else -> IllegalStateException(response.message)
         }
     }
