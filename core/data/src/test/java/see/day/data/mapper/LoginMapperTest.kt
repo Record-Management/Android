@@ -17,6 +17,6 @@ class LoginMapperTest {
         val loginRequest = kakaoSocialLogin.toDto()
 
         // then
-        Assert.assertEquals(loginRequest.socialType,kakaoSocialLogin.socialType.name)
+        Assert.assertEquals(loginRequest.socialType, kakaoSocialLogin.socialType.name)
     }
 }

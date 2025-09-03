@@ -51,10 +51,7 @@ class ApiModule {
     @Singleton
     @Provides
     @Login
-    fun provideLoginRetrofit(
-        @Login okHttpClient: OkHttpClient,
-        converterFactory: Factory
-    ): Retrofit {
+    fun provideLoginRetrofit(@Login okHttpClient: OkHttpClient, converterFactory: Factory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.SERVER_API_KEY)
             .addConverterFactory(converterFactory)
