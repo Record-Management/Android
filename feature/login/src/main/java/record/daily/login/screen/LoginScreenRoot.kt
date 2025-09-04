@@ -44,7 +44,7 @@ internal fun LoginScreen(modifier: Modifier = Modifier, onClickKakaoLogin: () ->
             modifier = modifier,
             onClickKakaoLogin = onClickKakaoLogin
         )
-        Spacer(modifier = modifier.padding(bottom = 24.dp))
+        Spacer(modifier = modifier.padding(bottom = 72.dp))
     }
 }
 
