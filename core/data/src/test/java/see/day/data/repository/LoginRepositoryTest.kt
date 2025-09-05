@@ -57,7 +57,7 @@ class LoginRepositoryTest {
                     200,
                     "S200",
                     "요청이 성공적으로 처리되었습니다.",
-                    LoginResponse(accessToken, refreshToken, UserDto("", "", ""), isNewUser = true)
+                    LoginResponse(accessToken, refreshToken, UserDto("", "", "","","",false), isNewUser = true)
                 )
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
@@ -88,7 +88,7 @@ class LoginRepositoryTest {
                     201,
                     "S201",
                     "요청이 성공적으로 처리되었습니다.",
-                    LoginResponse(accessToken, refreshToken, UserDto("", "", ""), isNewUser = false)
+                    LoginResponse(accessToken, refreshToken, UserDto("", "", "","","",false), isNewUser = false)
                 )
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
