@@ -15,13 +15,14 @@ class NavigationState(
     val currentDestination: State<NavBackStackEntry?>
         @Composable get() = navController.currentBackStackEntryAsState()
 
-    fun navigateLogin() {
-        val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                inclusive = true
-            }
-            launchSingleTop = true
+    private fun cleanBackstackNavOptions() = navOptions {
+        popUpTo(navController.graph.findStartDestination().id) {
+            inclusive = true
         }
-        navController.navigateLogin(navOptions)
+        launchSingleTop = true
+    }
+
+    fun navigateLogin() {
+        navController.navigateLogin(cleanBackstackNavOptions())
     }
 }
