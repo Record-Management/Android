@@ -14,13 +14,16 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import record.daily.model.exception.BadRequestException
-import record.daily.model.login.SocialLogin
-import record.daily.model.login.SocialType
+import see.day.model.exception.BadRequestException
+import see.day.model.login.SocialLogin
+import see.day.model.login.SocialType
 import retrofit2.HttpException
 import retrofit2.Response
 import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.LoginRepository
+import see.day.model.navigation.AppStartState
+import see.day.model.navigation.AppStartState.MAIN
+import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.LoginService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.common.UserDto
@@ -57,20 +60,22 @@ class LoginRepositoryTest {
                     200,
                     "S200",
                     "요청이 성공적으로 처리되었습니다.",
-                    LoginResponse(accessToken, refreshToken, UserDto("", "", ""), isNewUser = true)
+                    LoginResponse(accessToken, refreshToken, UserDto("", "", "", "", "", false), isNewUser = true)
                 )
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
             whenever(dataSource.saveRefreshToken(refreshToken)).thenReturn(Unit)
+            whenever(dataSource.saveAppStartState(ONBOARDING)).thenReturn(Unit)
 
             // when
             val result = sut.login(newSocialLogin).getOrThrow()
 
             // then
-            assertTrue(result)
+            assertEquals(ONBOARDING, result)
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
+            verify(dataSource).saveAppStartState(ONBOARDING)
             verify(loginService).signIn(any())
         }
     }
@@ -88,20 +93,22 @@ class LoginRepositoryTest {
                     201,
                     "S201",
                     "요청이 성공적으로 처리되었습니다.",
-                    LoginResponse(accessToken, refreshToken, UserDto("", "", ""), isNewUser = false)
+                    LoginResponse(accessToken, refreshToken, UserDto("", "", "", "", "", true), isNewUser = false)
                 )
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
             whenever(dataSource.saveRefreshToken(refreshToken)).thenReturn(Unit)
+            whenever(dataSource.saveAppStartState(MAIN)).thenReturn(Unit)
 
             // when
             val result = sut.login(oldSocialLogin).getOrThrow()
 
             // then
-            assertFalse(result)
+            assertEquals(MAIN, result)
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
+            verify(dataSource).saveAppStartState(MAIN)
             verify(loginService).signIn(any())
         }
     }

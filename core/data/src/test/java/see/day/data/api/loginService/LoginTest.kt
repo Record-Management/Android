@@ -6,9 +6,9 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import see.day.data.api.ApiTestUtils
@@ -75,7 +75,9 @@ class LoginTest {
         assertEquals("요청이 성공적으로 처리되었습니다.", response.message)
         assertEquals("S200", response.code)
         assertNotNull(response.data)
-        assertTrue(response.data?.isNewUser ?: false)
+        response.data?.let { data ->
+            assertTrue(data.isNewUser || !data.user.onboardingCompleted)
+        } ?: fail()
     }
 
     @Test
@@ -107,6 +109,8 @@ class LoginTest {
         assertEquals("요청이 성공적으로 처리되었습니다.", response.message)
         assertEquals("S201", response.code)
         assertNotNull(response.data)
-        assertFalse(response.data?.isNewUser ?: true)
+        response.data?.let { data ->
+            assertTrue(!data.isNewUser && data.user.onboardingCompleted)
+        } ?: fail()
     }
 }

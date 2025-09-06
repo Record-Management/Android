@@ -1,4 +1,4 @@
-package record.daily.model.user
+package see.day.model.user
 
 data class User(
     val id: String,
