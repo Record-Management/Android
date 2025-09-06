@@ -3,9 +3,7 @@ package see.day.data.repository
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,8 +19,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.LoginRepository
-import see.day.model.navigation.AppStartState
-import see.day.model.navigation.AppStartState.MAIN
+import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.LoginService
 import see.day.network.dto.CommonResponse
@@ -98,17 +95,17 @@ class LoginRepositoryTest {
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
             whenever(dataSource.saveRefreshToken(refreshToken)).thenReturn(Unit)
-            whenever(dataSource.saveAppStartState(MAIN)).thenReturn(Unit)
+            whenever(dataSource.saveAppStartState(HOME)).thenReturn(Unit)
 
             // when
             val result = sut.login(oldSocialLogin).getOrThrow()
 
             // then
-            assertEquals(MAIN, result)
+            assertEquals(HOME, result)
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(dataSource).saveAppStartState(MAIN)
+            verify(dataSource).saveAppStartState(HOME)
             verify(loginService).signIn(any())
         }
     }

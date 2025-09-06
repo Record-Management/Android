@@ -20,6 +20,9 @@ dependencies {
 
     implementation(project(":feature:main"))
 
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+
     implementation(libs.kakao.v2.user)
 
     implementation(platform(libs.firebase.bom))

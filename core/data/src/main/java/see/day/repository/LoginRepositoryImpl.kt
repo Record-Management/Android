@@ -9,7 +9,7 @@ import see.day.mapper.toDto
 import see.day.model.exception.NoDataException
 import see.day.model.login.SocialLogin
 import see.day.model.navigation.AppStartState
-import see.day.model.navigation.AppStartState.MAIN
+import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.LoginService
 import see.day.utils.ErrorUtils.createResult
@@ -30,9 +30,9 @@ class LoginRepositoryImpl @Inject constructor(
 
             if (result.isOnboardingComplete()) {
                 withContext(Dispatchers.IO) {
-                    dataSource.saveAppStartState(MAIN)
+                    dataSource.saveAppStartState(HOME)
                 }
-                MAIN
+                HOME
             } else {
                 withContext(Dispatchers.IO) {
                     dataSource.saveAppStartState(ONBOARDING)

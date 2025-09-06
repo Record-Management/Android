@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import see.day.datastore.DataSource
 import see.day.datastore.DataStoreDataSource
+import see.day.domain.repository.LoginRepository
+import see.day.repository.LoginRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -13,4 +15,7 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsDataSource(dataStoreDataSource: DataStoreDataSource): DataSource
+
+    @Binds
+    abstract fun bindsLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository
 }

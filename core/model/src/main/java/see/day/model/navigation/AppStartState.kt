@@ -3,7 +3,7 @@ package see.day.model.navigation
 enum class AppStartState {
     LOGIN,
     ONBOARDING,
-    MAIN;
+    HOME;
 
     companion object {
         fun fromString(value: String?): AppStartState {

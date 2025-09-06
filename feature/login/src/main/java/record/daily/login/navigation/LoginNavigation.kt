@@ -12,8 +12,11 @@ fun NavController.navigateLogin(navOptions: NavOptions? = null) {
     navigate(LOGIN_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.loginNavigation() {
+fun NavGraphBuilder.loginNavigation(onGoHome: () -> Unit, onGoOnboarding: () -> Unit) {
     composable(LOGIN_ROUTE) {
-        LoginScreenRoot()
+        LoginScreenRoot(
+            onGoOnboarding = onGoOnboarding,
+            onGoHome = onGoHome
+        )
     }
 }

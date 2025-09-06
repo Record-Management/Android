@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import record.daily.login.navigation.navigateLogin
+import see.day.main.test.navigateHome
+import see.day.main.test.navigateOnboarding
 
 class NavigationState(
     val navController: NavHostController
@@ -15,13 +17,22 @@ class NavigationState(
     val currentDestination: State<NavBackStackEntry?>
         @Composable get() = navController.currentBackStackEntryAsState()
 
-    fun navigateLogin() {
-        val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                inclusive = true
-            }
-            launchSingleTop = true
+    private fun cleanBackstackNavOptions() = navOptions {
+        popUpTo(navController.graph.id) {
+            inclusive = true
         }
-        navController.navigateLogin(navOptions)
+        launchSingleTop = true
+    }
+
+    fun navigateLogin() {
+        navController.navigateLogin(cleanBackstackNavOptions())
+    }
+
+    fun navigateOnboarding() {
+        navController.navigateOnboarding(cleanBackstackNavOptions())
+    }
+
+    fun navigateHome() {
+        navController.navigateHome(cleanBackstackNavOptions())
     }
 }
