@@ -7,7 +7,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import timber.log.Timber
 
-internal fun kakaoLogin(context: Context, onSuccess: (Long) -> Unit) {
+internal fun kakaoLogin(context: Context, onSuccess: (String) -> Unit) {
     val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             Timber.e(error, "카카오계정으로 로그인 실패")
@@ -17,7 +17,7 @@ internal fun kakaoLogin(context: Context, onSuccess: (Long) -> Unit) {
                 if (error != null) {
                     Timber.e("카카오 계정 정보 가져오기 실패")
                 } else if (tokenInfo != null) {
-                    onSuccess(tokenInfo.id ?: -1)
+                    onSuccess(token.accessToken)
                 }
             }
         }
@@ -38,7 +38,7 @@ internal fun kakaoLogin(context: Context, onSuccess: (Long) -> Unit) {
                     if (instanceError != null) {
                         Timber.e("$instanceError 사용자 정보 요청 실패")
                     } else if (user != null) {
-                        onSuccess(user.id ?: -1)
+                        onSuccess(token.accessToken)
                     }
                 }
             }
