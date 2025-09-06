@@ -5,7 +5,7 @@ import see.day.network.dto.login.LoginRequest
 
 fun SocialLogin.toDto(): LoginRequest {
     return LoginRequest(
-        socialType = socialType.name,
+        socialType = socialType.name.lowercase(),
         accessToken = accessToken
     )
 }
