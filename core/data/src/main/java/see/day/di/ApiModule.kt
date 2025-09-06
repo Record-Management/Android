@@ -14,6 +14,7 @@ import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import see.day.data.BuildConfig
+import see.day.network.LoginService
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,8 +37,8 @@ class ApiModule {
         return json.asConverterFactory("application/json".toMediaType())
     }
 
-    @Provides
     @Singleton
+    @Provides
     @Login
     fun provideLoginOkHttp(): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
@@ -57,5 +58,11 @@ class ApiModule {
             .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoginService(@Login retrofit: Retrofit): LoginService {
+        return retrofit.create(LoginService::class.java)
     }
 }
