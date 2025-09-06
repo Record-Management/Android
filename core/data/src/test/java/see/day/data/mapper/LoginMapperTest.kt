@@ -2,8 +2,8 @@ package see.day.data.mapper
 
 import org.junit.Assert
 import org.junit.Test
-import record.daily.model.login.SocialLogin
-import record.daily.model.login.SocialType
+import see.day.model.login.SocialLogin
+import see.day.model.login.SocialType
 import see.day.mapper.toDto
 
 class LoginMapperTest {

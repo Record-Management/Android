@@ -14,9 +14,9 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import record.daily.model.exception.BadRequestException
-import record.daily.model.login.SocialLogin
-import record.daily.model.login.SocialType
+import see.day.model.exception.BadRequestException
+import see.day.model.login.SocialLogin
+import see.day.model.login.SocialType
 import retrofit2.HttpException
 import retrofit2.Response
 import see.day.datastore.DataStoreDataSource

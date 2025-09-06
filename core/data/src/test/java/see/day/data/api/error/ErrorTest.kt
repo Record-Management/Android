@@ -10,7 +10,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import record.daily.model.exception.NetworkErrorException
+import see.day.model.exception.NetworkErrorException
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.data.api.error.json.errorResponse

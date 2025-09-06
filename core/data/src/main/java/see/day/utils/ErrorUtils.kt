@@ -2,11 +2,11 @@ package see.day.utils
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import record.daily.model.exception.BadRequestException
-import record.daily.model.exception.InvalidValueException
-import record.daily.model.exception.NetworkErrorException
-import record.daily.model.exception.NotFoundException
-import record.daily.model.exception.UnAuthorizedException
+import see.day.model.exception.BadRequestException
+import see.day.model.exception.InvalidValueException
+import see.day.model.exception.NetworkErrorException
+import see.day.model.exception.NotFoundException
+import see.day.model.exception.UnAuthorizedException
 import retrofit2.HttpException
 import see.day.network.dto.CommonResponse
 import timber.log.Timber

@@ -1,4 +1,4 @@
-package record.daily.model.login
+package see.day.model.login
 
 data class SocialLogin(
     val socialType: SocialType,

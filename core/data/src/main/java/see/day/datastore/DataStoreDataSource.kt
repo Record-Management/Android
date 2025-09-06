@@ -16,6 +16,7 @@ class DataStoreDataSource @Inject constructor(
     object PreferencesKey {
         val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
         val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
+        val NAV_APP_STATE = stringPreferencesKey("APP_NAV_STATE")
     }
 
     override fun hasToken(): Flow<Boolean> = dataStore.data.map { preferences ->
