@@ -8,7 +8,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import see.day.datastore.DataStoreDataSource.PreferencesKey.ACCESS_TOKEN
+import see.day.datastore.DataStoreDataSource.PreferencesKey.APP_START_STATE
 import see.day.datastore.DataStoreDataSource.PreferencesKey.REFRESH_TOKEN
+import see.day.model.navigation.AppStartState
 
 class DataStoreDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>
@@ -16,7 +18,7 @@ class DataStoreDataSource @Inject constructor(
     object PreferencesKey {
         val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
         val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
-        val NAV_APP_STATE = stringPreferencesKey("APP_NAV_STATE")
+        val APP_START_STATE = stringPreferencesKey("APP_NAV_STATE")
     }
 
     override fun hasToken(): Flow<Boolean> = dataStore.data.map { preferences ->
@@ -35,6 +37,12 @@ class DataStoreDataSource @Inject constructor(
         }
     }
 
+    fun getAppStartState(): Flow<AppStartState> {
+        return dataStore.data.map { prefs ->
+            AppStartState.fromString(prefs[APP_START_STATE])
+        }
+    }
+
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { prefs ->
             prefs[ACCESS_TOKEN] = token
@@ -44,6 +52,12 @@ class DataStoreDataSource @Inject constructor(
     suspend fun saveRefreshToken(token: String) {
         dataStore.edit { prefs ->
             prefs[REFRESH_TOKEN] = token
+        }
+    }
+
+    suspend fun saveAppStartState(state: AppStartState) {
+        dataStore.edit { prefs ->
+            prefs[APP_START_STATE] = state.toString().uppercase()
         }
     }
 
