@@ -22,16 +22,23 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.login.SocialType
 
 @Composable
-internal fun LoginScreenRoot(viewModel: LoginViewModel = hiltViewModel(), modifier: Modifier = Modifier) {
+internal fun LoginScreenRoot(
+    viewModel: LoginViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
+    onGoOnboarding: () -> Unit,
+    onGoHome: () -> Unit
+) {
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 LoginUiEffect.GoOnboarding -> {
+                    onGoOnboarding()
                 }
 
                 LoginUiEffect.GoHome -> {
+                    onGoHome
                 }
             }
         }

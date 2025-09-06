@@ -11,6 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
 import see.day.main.navigation.graph.MAIN_ROUTE
 import see.day.main.navigation.graph.mainNavigation
+import see.day.main.test.homeNavigation
+import see.day.main.test.onboardingNavigation
 
 @Composable
 fun SeedayApp(navigationState: NavigationState = rememberNavigationState()) {
@@ -19,7 +21,12 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState()) {
             mainNavigation(
                 onClickLogin = navigationState::navigateLogin
             )
-            loginNavigation()
+            loginNavigation(
+                onGoOnboarding = navigationState::navigateOnboarding,
+                onGoHome = navigationState::navigateHome
+            )
+            onboardingNavigation()
+            homeNavigation()
         }
     }
 }
