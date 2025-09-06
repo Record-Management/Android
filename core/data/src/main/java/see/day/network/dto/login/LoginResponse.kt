@@ -10,4 +10,8 @@ data class LoginResponse(
     val refreshToken: String,
     val user: UserDto,
     @SerialName("newUser") val isNewUser: Boolean
-)
+) {
+    fun isOnboardingComplete(): Boolean {
+        return !isNewUser && user.onboardingCompleted
+    }
+}

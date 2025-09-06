@@ -2,12 +2,12 @@ package see.day.utils
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
+import retrofit2.HttpException
 import see.day.model.exception.BadRequestException
 import see.day.model.exception.InvalidValueException
 import see.day.model.exception.NetworkErrorException
 import see.day.model.exception.NotFoundException
 import see.day.model.exception.UnAuthorizedException
-import retrofit2.HttpException
 import see.day.network.dto.CommonResponse
 import timber.log.Timber
 
