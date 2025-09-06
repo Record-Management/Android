@@ -12,7 +12,7 @@ import record.daily.login.state.login.LoginUiEffect
 import see.day.domain.usecase.login.PostLoginUseCase
 import see.day.model.login.SocialLogin
 import see.day.model.login.SocialType
-import see.day.model.navigation.AppStartState.MAIN
+import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 
 @HiltViewModel
@@ -28,8 +28,8 @@ class LoginViewModel @Inject constructor(
             postLoginUseCase(SocialLogin(socialType, accessToken)).onSuccess {
                 if (it == ONBOARDING) {
                     _uiEffect.emit(LoginUiEffect.GoOnboarding)
-                } else if (it == MAIN) {
-                    _uiEffect.emit(LoginUiEffect.GoMain)
+                } else if (it == HOME) {
+                    _uiEffect.emit(LoginUiEffect.GoHome)
                 }
             }.onFailure {
             }

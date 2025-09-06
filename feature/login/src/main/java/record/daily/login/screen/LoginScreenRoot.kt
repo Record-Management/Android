@@ -31,7 +31,7 @@ internal fun LoginScreenRoot(viewModel: LoginViewModel = hiltViewModel(), modifi
                 LoginUiEffect.GoOnboarding -> {
                 }
 
-                LoginUiEffect.GoMain -> {
+                LoginUiEffect.GoHome -> {
                 }
             }
         }
