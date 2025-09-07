@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="record_message">꾸준함, 어렵지 않아요 :)\n내개 맞는 기록 방식을 골라보세요.</string>
+    <string name="nickname_message">어떻게 불러드릴까요?\n기록 속 당신의 이름을 알려주세요.</string>
+    <string name="birthday_message">당신의 특별한 날은 언제인가요?\n생년월일을 입력해주세요.</string>
+    <string name="goals_message">목표를 정해볼까요?\n작은 목표가 큰 변화를 만들어요.</string>
+    <string name="alert_message">기록을 잊지 않게 알려드릴게요.\n알림을 설정할까요?</string>
+</resources>
