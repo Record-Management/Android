@@ -4,7 +4,6 @@ plugins {
 
 android {
     namespace = "see.day.onboarding"
-
 }
 
 dependencies {

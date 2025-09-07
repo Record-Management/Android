@@ -1,4 +1,4 @@
-package see.day.main.test
+package see.day.onboarding.navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text

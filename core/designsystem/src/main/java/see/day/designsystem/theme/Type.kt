@@ -24,58 +24,58 @@ val Typography =
     Typography(
         // P/22/Bold
         bodyLarge =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W700,
-                fontSize = 22.sp,
-                lineHeight = 22.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W700,
+            fontSize = 22.sp,
+            lineHeight = 22.sp * 1.5f,
+            color = gray100
+        ),
         // P/20/Bold
         bodyMedium =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W700,
-                fontSize = 20.sp,
-                lineHeight = 20.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W700,
+            fontSize = 20.sp,
+            lineHeight = 20.sp * 1.5f,
+            color = gray100
+        ),
         // P/20/SemiBold
         bodySmall =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W600,
-                fontSize = 20.sp,
-                lineHeight = 20.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W600,
+            fontSize = 20.sp,
+            lineHeight = 20.sp * 1.5f,
+            color = gray100
+        ),
         // P/18/SemiBold
         titleLarge =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W600,
-                fontSize = 18.sp,
-                lineHeight = 18.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W600,
+            fontSize = 18.sp,
+            lineHeight = 18.sp * 1.5f,
+            color = gray100
+        ),
         // P/18/Medium
         titleMedium =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W500,
-                fontSize = 18.sp,
-                lineHeight = 18.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W500,
+            fontSize = 18.sp,
+            lineHeight = 18.sp * 1.5f,
+            color = gray100
+        ),
         // P/16/SemiBold
         titleSmall =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W600,
-                fontSize = 16.sp,
-                lineHeight = 16.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W600,
+            fontSize = 16.sp,
+            lineHeight = 16.sp * 1.5f,
+            color = gray100
+        ),
         // P/16/Medium
         displayLarge = TextStyle(
             fontFamily = preTendFont,
@@ -86,13 +86,13 @@ val Typography =
         ),
         // P/16/Regular
         displayMedium =
-            TextStyle(
-                fontFamily = preTendFont,
-                fontWeight = FontWeight.W400,
-                fontSize = 16.sp,
-                lineHeight = 16.sp * 1.5f,
-                color = gray100
-            ),
+        TextStyle(
+            fontFamily = preTendFont,
+            fontWeight = FontWeight.W400,
+            fontSize = 16.sp,
+            lineHeight = 16.sp * 1.5f,
+            color = gray100
+        ),
         // P/14/Semibold
         displaySmall = TextStyle(
             fontFamily = preTendFont,
@@ -159,5 +159,4 @@ fun TypoPreview() {
             style = Typography.headlineSmall
         )
     }
-
 }
