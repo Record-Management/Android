@@ -9,3 +9,8 @@ enum class OnboardingScreenState(val titleRes: Int, val iconRes: Int) {
     GOAL(R.string.goals_message, R.drawable.onboard_goal),
     ALERT(R.string.alert_message, R.drawable.onboard_alert)
 }
+
+fun OnboardingScreenState.getProgress(): Float {
+    val totalSteps = OnboardingScreenState.entries.size
+    return (this.ordinal + 1).toFloat() / totalSteps
+}
