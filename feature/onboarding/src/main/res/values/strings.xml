@@ -5,4 +5,5 @@
     <string name="birthday_message">당신의 특별한 날은 언제인가요?\n생년월일을 입력해주세요.</string>
     <string name="goals_message">목표를 정해볼까요?\n작은 목표가 큰 변화를 만들어요.</string>
     <string name="alert_message">기록을 잊지 않게 알려드릴게요.\n알림을 설정할까요?</string>
+    <string name="back_button_desc">뒤로가기 버튼</string>
 </resources>

@@ -12,8 +12,11 @@ fun NavController.navigateOnboarding(navOptions: NavOptions? = null) {
     navigate(ONBOARDING_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.onboardingNavigation() {
+fun NavGraphBuilder.onboardingNavigation(onBack: () -> Unit, onGoHome: () -> Unit) {
     composable(ONBOARDING_ROUTE) {
-        OnboardingScreenRoot()
+        OnboardingScreenRoot(
+            onBack = onBack,
+            onGoHome = onGoHome
+        )
     }
 }

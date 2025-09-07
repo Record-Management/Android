@@ -25,7 +25,10 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState()) {
                 onGoOnboarding = navigationState::navigateOnboarding,
                 onGoHome = navigationState::navigateHome
             )
-            onboardingNavigation()
+            onboardingNavigation(
+                onBack = navigationState.navController::popBackStack,
+                onGoHome = navigationState::navigateHome
+            )
             homeNavigation()
         }
     }
