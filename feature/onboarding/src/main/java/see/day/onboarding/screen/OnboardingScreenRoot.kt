@@ -16,9 +16,7 @@ internal fun OnboardingScreenRoot() {
 }
 
 @Composable
-internal fun OnboardingScreen(
-    modifier : Modifier = Modifier,
-) {
+internal fun OnboardingScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.systemBarsPadding()
     ) { innerPadding ->
@@ -27,7 +25,6 @@ internal fun OnboardingScreen(
         ) {
             Text("온보딩")
         }
-
     }
 }
 
