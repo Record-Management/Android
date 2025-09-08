@@ -20,7 +20,8 @@ private val DarkColorScheme =
         surfaceContainer = Color.White,
         error = Color.White,
         onError = onError,
-        errorContainer = Color.White
+        errorContainer = Color.White,
+        onSecondary = onSecondary
     )
 
 private val LightColorScheme =
@@ -36,7 +37,8 @@ private val LightColorScheme =
         onSurface = onSurface,
         error = Color.White,
         onError = onError,
-        errorContainer = Color.White
+        errorContainer = Color.White,
+        onSecondary = onSecondary
     )
 
 @Composable
