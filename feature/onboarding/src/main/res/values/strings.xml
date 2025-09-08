@@ -15,4 +15,7 @@
     <string name="schedule_body">해야 할 일과 중요한 순간을 놓치지 말아요.</string>
     <string name="habit_title">습관 기록</string>
     <string name="habit_body">작은 습관부터, 나의 변화를 기록해요.</string>
+
+    <string name="nickname_hint">닉네임 혹은 이름을 입력해 주세요.</string>
+    <string name="nickname_description">한글, 영문 최대 6글자 / 공백, 특수기호 입력 불가</string>
 </resources>
