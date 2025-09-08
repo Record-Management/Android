@@ -3,13 +3,12 @@ package see.day.main.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import record.daily.login.navigation.navigateLogin
 import see.day.main.test.navigateHome
-import see.day.main.test.navigateOnboarding
+import see.day.onboarding.navigation.navigateOnboarding
 
 class NavigationState(
     val navController: NavHostController

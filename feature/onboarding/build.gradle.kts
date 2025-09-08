@@ -3,13 +3,10 @@ plugins {
 }
 
 android {
-    namespace = "see.day.main"
+    namespace = "see.day.onboarding"
 }
 
 dependencies {
-
-    implementation(project(":feature:login"))
-    implementation(project(":feature:onboarding"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
