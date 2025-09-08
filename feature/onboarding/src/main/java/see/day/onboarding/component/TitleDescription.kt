@@ -2,6 +2,7 @@ package see.day.onboarding.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import see.day.onboarding.state.onboarding.OnboardingUiState
 @Composable
 internal fun TitleDescription(modifier: Modifier = Modifier, uiState: OnboardingUiState) {
     Image(
-        modifier = modifier.padding(top = 30.dp, start = 16.dp),
+        modifier = modifier.padding(top = 30.dp, start = 16.dp).size(30.dp),
         painter = painterResource(uiState.onboardingScreenState.iconRes),
         contentDescription = "온보딩 ${uiState.onboardingScreenState.ordinal} 번째 아이콘"
     )

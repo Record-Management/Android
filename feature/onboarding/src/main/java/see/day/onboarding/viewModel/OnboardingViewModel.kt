@@ -1,6 +1,7 @@
 package see.day.onboarding.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import see.day.model.record.RecordType
 import see.day.onboarding.state.OnboardingScreenState
 import see.day.onboarding.state.OnboardingScreenState.ALERT
@@ -106,7 +108,9 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
     private fun onBack() {
         val currentScreenState = uiState.value.onboardingScreenState
         if (currentScreenState == RECORD) {
-            // 종료
+            viewModelScope.launch {
+                _uiEffect.emit(OnboardingUiEffect.FinishApp)
+            }
         } else {
             _uiState.update {
                 it.copy(

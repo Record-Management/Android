@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,11 +21,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 
 @Composable
-fun NextButton(
-    modifier: Modifier = Modifier,
-    isEnabled: Boolean,
-    onClick: () -> Unit
-) {
+fun NextButton(modifier: Modifier = Modifier, isEnabled: Boolean, onClick: () -> Unit) {
     Button(
         modifier = modifier
             .fillMaxWidth()
@@ -47,7 +42,7 @@ fun NextButton(
             text = "다음",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.displayLarge,
-            color = if(isEnabled) Color.White else MaterialTheme.colorScheme.onPrimary
+            color = if (isEnabled) Color.White else MaterialTheme.colorScheme.onPrimary
         )
     }
 }

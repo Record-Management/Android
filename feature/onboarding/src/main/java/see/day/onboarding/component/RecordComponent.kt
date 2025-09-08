@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -59,7 +60,8 @@ internal fun RecordComponent(modifier: Modifier = Modifier, recordType: RecordTy
         ) {
             Image(
                 painter = painterResource(recordType.getIcon()),
-                contentDescription = "$recordType Image"
+                contentDescription = "$recordType Image",
+                modifier = modifier.size(50.dp)
             )
             Column(
                 modifier = modifier
@@ -92,7 +94,7 @@ private fun RecordComponentPreview() {
     val recordType = RecordType.DAILY
     var isChecked by remember { mutableStateOf(false) }
     val onClickItem: (RecordType) -> Unit = { type ->
-        if(recordType == type) {
+        if (recordType == type) {
             isChecked = !isChecked
         }
     }
