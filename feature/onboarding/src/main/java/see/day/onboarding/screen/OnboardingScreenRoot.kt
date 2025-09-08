@@ -17,8 +17,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.component.OnboardingTopBar
 import see.day.onboarding.component.TitleDescription
+import see.day.onboarding.screen.onboarding.NicknameScreen
 import see.day.onboarding.screen.onboarding.RecordTypeScreen
 import see.day.onboarding.state.OnboardingScreenState
+import see.day.onboarding.state.OnboardingScreenState.NICKNAME
 import see.day.onboarding.state.OnboardingScreenState.RECORD
 import see.day.onboarding.state.onboarding.OnboardingUiEffect
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
@@ -77,7 +79,14 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                         onClickCompleteButton = uiEvent
                     )
                 }
-                OnboardingScreenState.NICKNAME -> TODO()
+
+                NICKNAME -> {
+                    NicknameScreen(
+                        nickname = uiState.nickname,
+                        onComplete = uiEvent
+                    )
+                }
+
                 OnboardingScreenState.BIRTHDAY -> TODO()
                 OnboardingScreenState.GOAL -> TODO()
                 OnboardingScreenState.ALERT -> TODO()
