@@ -1,6 +1,7 @@
 package see.day.onboarding.screen.onboarding
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +35,9 @@ internal fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType:
                 }
             )
         }
+
+        Spacer(modifier = modifier.weight(1f))
+
         NextButton(
             modifier = modifier,
             isEnabled = currentSelectedRecordType != null,

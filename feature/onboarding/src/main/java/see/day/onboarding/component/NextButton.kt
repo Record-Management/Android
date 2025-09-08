@@ -3,6 +3,7 @@ package see.day.onboarding.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -25,7 +26,8 @@ fun NextButton(modifier: Modifier = Modifier, isEnabled: Boolean, onClick: () ->
     Button(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 48.dp)
+            .padding(bottom = 12.dp)
+            .systemBarsPadding()
             .height(52.dp)
             .padding(horizontal = 16.dp),
         onClick = onClick,
