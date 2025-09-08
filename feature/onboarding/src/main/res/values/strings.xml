@@ -6,4 +6,13 @@
     <string name="goals_message">목표를 정해볼까요?\n작은 목표가 큰 변화를 만들어요.</string>
     <string name="alert_message">기록을 잊지 않게 알려드릴게요.\n알림을 설정할까요?</string>
     <string name="back_button_desc">뒤로가기 버튼</string>
+
+    <string name="daily_title">하루 기록</string>
+    <string name="daily_body">나의 찰나와 감정까지, 오늘을 기록해요.</string>
+    <string name="exercise_title">운동 기록</string>
+    <string name="exercise_body">운동 루틴과 목표, 나의 건강함을 기록해요.</string>
+    <string name="schedule_title">일정 기록</string>
+    <string name="schedule_body">해야 할 일과 중요한 순간을 놓치지 말아요.</string>
+    <string name="habit_title">습관 기록</string>
+    <string name="habit_body">작은 습관부터, 나의 변화를 기록해요.</string>
 </resources>

@@ -14,10 +14,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.state.onboarding.OnboardingUiState
 
 @Composable
-internal fun TitleDescription(
-    modifier: Modifier = Modifier,
-    uiState: OnboardingUiState
-) {
+internal fun TitleDescription(modifier: Modifier = Modifier, uiState: OnboardingUiState) {
     Image(
         modifier = modifier.padding(top = 30.dp, start = 16.dp),
         painter = painterResource(uiState.onboardingScreenState.iconRes),
