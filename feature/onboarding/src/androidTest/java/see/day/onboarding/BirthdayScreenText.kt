@@ -3,7 +3,6 @@ package see.day.onboarding
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -12,10 +11,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import see.day.onboarding.screen.OnboardingScreen
-import see.day.onboarding.state.OnboardingScreenState.NICKNAME
+import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.onboarding.OnboardingUiState
+import java.time.LocalDate
 
-class NicknameScreenTest {
+class BirthdayScreenText {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -29,7 +29,7 @@ class NicknameScreenTest {
 
     @Test
     fun givenInitOnboarding_whenScreening_shownRecordTitleAndBody() {
-        val uiState = OnboardingUiState.init.copy(onboardingScreenState = NICKNAME)
+        val uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY)
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
@@ -38,7 +38,7 @@ class NicknameScreenTest {
         }
 
         composeTestRule
-            .onNodeWithText(context.getString(R.string.nickname_message))
+            .onNodeWithText(context.getString(R.string.birthday_message))
             .assertIsDisplayed()
 
         composeTestRule
@@ -48,7 +48,7 @@ class NicknameScreenTest {
 
     @Test
     fun givenEmptyNickname_whenScreening_shownEnableNextButton() {
-        val uiState = OnboardingUiState.init.copy(onboardingScreenState = NICKNAME)
+        val uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY)
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
@@ -57,51 +57,14 @@ class NicknameScreenTest {
         }
 
         composeTestRule
-            .onNodeWithText(context.getString(R.string.nickname_hint))
+            .onNodeWithText(LocalDate.now().year.toString())
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("다음")
-            .assertIsNotEnabled()
-    }
-
-    @Test
-    fun givenCorrectNickname_whenScreening_shownEnableNextButton() {
-        val uiState = OnboardingUiState.init.copy(onboardingScreenState = NICKNAME, nickname = "good")
-
-        composeTestRule.setContent {
-            OnboardingScreen(
-                uiState = uiState,
-                uiEvent = {}
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("good")
+            .onNodeWithText(LocalDate.now().dayOfMonth.toString())
             .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("다음")
-            .assertIsEnabled()
     }
 
-    @Test
-    fun givenIncorrectNickname_whenScreening_shownDisableNextButton() {
-        val uiState = OnboardingUiState.init.copy(onboardingScreenState = NICKNAME, nickname = "@@")
 
-        composeTestRule.setContent {
-            OnboardingScreen(
-                uiState = uiState,
-                uiEvent = {}
-            )
-        }
 
-        composeTestRule
-            .onNodeWithText("@@")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("다음")
-            .assertIsNotEnabled()
-    }
 }
