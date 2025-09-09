@@ -1,4 +1,4 @@
-package see.day.onboarding
+package see.day.onboarding.screen
 
 import android.content.Context
 import androidx.activity.ComponentActivity
@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import see.day.model.record.RecordType
-import see.day.onboarding.screen.OnboardingScreen
+import see.day.onboarding.R
 import see.day.onboarding.state.onboarding.OnboardingUiState
 
 class RecordScreenTest {
