@@ -75,7 +75,6 @@ class GoalsScreenTest {
                 .onNodeWithText("다음")
                 .assertIsEnabled()
         }
-
     }
 
     @Test

@@ -63,7 +63,4 @@ class BirthdayScreenTest {
             .onNodeWithText(LocalDate.now().dayOfMonth.toString())
             .assertIsDisplayed()
     }
-
-
-
 }

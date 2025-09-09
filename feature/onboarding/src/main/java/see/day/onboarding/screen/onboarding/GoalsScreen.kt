@@ -20,11 +20,7 @@ import see.day.onboarding.component.NextButton
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 
 @Composable
-internal fun GoalsScreen(
-    modifier: Modifier = Modifier,
-    goals: Int,
-    onComplete: (OnboardingUiEvent) -> Unit
-) {
+internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: (OnboardingUiEvent) -> Unit) {
     var currentGoals by remember { mutableStateOf(goals) }
 
     Column(
@@ -38,17 +34,16 @@ internal fun GoalsScreen(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            listOf(10, 20, 30).forEach {  goal ->
+            listOf(10, 20, 30).forEach { goal ->
                 GoalsComponent(
                     goals = goal,
                     currentGoals = currentGoals,
                     onClick = { selectedGoal ->
-                        if(selectedGoal == currentGoals) {
+                        if (selectedGoal == currentGoals) {
                             currentGoals = 0
-                        }else {
+                        } else {
                             currentGoals = selectedGoal
                         }
-
                     }
                 )
             }

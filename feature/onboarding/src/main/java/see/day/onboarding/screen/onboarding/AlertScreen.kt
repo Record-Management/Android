@@ -23,10 +23,7 @@ import see.day.onboarding.component.NextButton
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 
 @Composable
-internal fun AlertScreen(
-    modifier: Modifier = Modifier,
-    onClickComplete: (OnboardingUiEvent) -> Unit
-) {
+internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (OnboardingUiEvent) -> Unit) {
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -34,7 +31,7 @@ internal fun AlertScreen(
     }
 
     LaunchedEffect(Unit) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
@@ -65,7 +62,6 @@ internal fun AlertScreen(
 private fun AlertScreenPreview() {
     SeeDayTheme {
         AlertScreen {
-
         }
     }
 }

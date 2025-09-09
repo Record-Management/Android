@@ -1,8 +1,8 @@
 package see.day.onboarding.state.onboarding
 
+import java.time.LocalDate
 import see.day.model.record.RecordType
 import see.day.onboarding.state.OnboardingScreenState
-import java.time.LocalDate
 
 data class OnboardingUiState(
     val onboardingScreenState: OnboardingScreenState,
@@ -21,7 +21,7 @@ data class OnboardingUiState(
             goalDays = 0,
             notificationEnabled = false
         )
-        private fun todayDate() : String {
+        private fun todayDate(): String {
             val now = LocalDate.now()
             return "${now.year}-${now.monthValue}-${now.dayOfMonth}"
         }

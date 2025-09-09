@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.pm.ShortcutInfoCompat.Surface
@@ -30,25 +28,20 @@ import see.day.designsystem.theme.gray20
 import see.day.onboarding.R
 
 @Composable
-internal fun GoalsComponent(
-    modifier: Modifier = Modifier,
-    goals: Int,
-    currentGoals: Int,
-    onClick: (Int) -> Unit,
-) {
-    Surface (
+internal fun GoalsComponent(modifier: Modifier = Modifier, goals: Int, currentGoals: Int, onClick: (Int) -> Unit) {
+    Surface(
         modifier = modifier
             .height(157.dp)
             .width(104.dp)
             .clickable { onClick(goals) },
         shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(1.dp,if(goals == currentGoals) MaterialTheme.colorScheme.primary else gray20)
+        border = BorderStroke(1.dp, if (goals == currentGoals) MaterialTheme.colorScheme.primary else gray20)
     ) {
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if(goals == 10) {
+            if (goals == 10) {
                 Image(
                     painter = painterResource(R.drawable.goal_10),
                     contentDescription = "goal 10 image",
@@ -70,7 +63,7 @@ internal fun GoalsComponent(
                     color = gray100,
                     style = MaterialTheme.typography.titleLarge
                 )
-            }else if(goals == 20) {
+            } else if (goals == 20) {
                 Image(
                     painter = painterResource(R.drawable.goal_20),
                     contentDescription = "goal 20 image",
@@ -80,11 +73,10 @@ internal fun GoalsComponent(
                     modifier = modifier
                         .padding(top = 14.dp)
                         .background(Color(0xFFFFF4E5), shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                    ,
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
                     text = stringResource(R.string.goals_20_message),
                     style = MaterialTheme.typography.headlineLarge,
-                    color = Color(0xFFE65100),
+                    color = Color(0xFFE65100)
                 )
                 Text(
                     modifier = modifier
@@ -93,7 +85,7 @@ internal fun GoalsComponent(
                     color = gray100,
                     style = MaterialTheme.typography.titleLarge
                 )
-            }else if(goals == 30) {
+            } else if (goals == 30) {
                 Image(
                     painter = painterResource(R.drawable.goal_30),
                     contentDescription = "goal 20 image",
@@ -103,11 +95,10 @@ internal fun GoalsComponent(
                     modifier = modifier
                         .padding(top = 14.dp)
                         .background(Color(0xFFE8F5E9), shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                    ,
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
                     text = stringResource(R.string.goals_30_message),
                     style = MaterialTheme.typography.headlineLarge,
-                    color = Color(0xFF1B5E20),
+                    color = Color(0xFF1B5E20)
                 )
                 Text(
                     modifier = modifier
