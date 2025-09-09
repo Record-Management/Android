@@ -31,12 +31,10 @@ import see.day.onboarding.state.onboarding.OnboardingUiEffect
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.onboarding.state.onboarding.OnboardingUiState
 import see.day.onboarding.viewModel.OnboardingViewModel
-import timber.log.Timber
 
 @Composable
 internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoHome: () -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    Timber.d(uiState.toString())
     BackHandler(true) {
         viewModel.onEvent(OnboardingUiEvent.OnBack)
     }
