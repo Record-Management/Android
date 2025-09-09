@@ -53,7 +53,9 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
             is OnboardingUiEvent.CheckNotification -> {
                 setNotificationEnabled(event.notificationEnabled)
             }
-
+            is OnboardingUiEvent.FinishOnboarding -> {
+                finishOnboarding()
+            }
             OnboardingUiEvent.OnBack -> {
                 onBack()
             }
@@ -102,6 +104,9 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
                 notificationEnabled = enabled
             )
         }
+    }
+
+    private fun finishOnboarding() {
         // UiEffect를 GoOnboardFinish로 이동
     }
 

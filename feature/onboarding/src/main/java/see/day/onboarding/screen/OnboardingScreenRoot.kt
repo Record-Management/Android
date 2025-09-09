@@ -17,12 +17,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.component.OnboardingTopBar
 import see.day.onboarding.component.TitleDescription
+import see.day.onboarding.screen.onboarding.AlertScreen
 import see.day.onboarding.screen.onboarding.BirthdayScreen
 import see.day.onboarding.screen.onboarding.GoalsScreen
 import see.day.onboarding.screen.onboarding.NicknameScreen
 import see.day.onboarding.screen.onboarding.RecordTypeScreen
-import see.day.onboarding.state.OnboardingScreenState
+import see.day.onboarding.state.OnboardingScreenState.ALERT
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
+import see.day.onboarding.state.OnboardingScreenState.GOAL
 import see.day.onboarding.state.OnboardingScreenState.NICKNAME
 import see.day.onboarding.state.OnboardingScreenState.RECORD
 import see.day.onboarding.state.onboarding.OnboardingUiEffect
@@ -33,7 +35,6 @@ import see.day.onboarding.viewModel.OnboardingViewModel
 @Composable
 internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoHome: () -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
     BackHandler(true) {
         viewModel.onEvent(OnboardingUiEvent.OnBack)
     }
@@ -96,13 +97,17 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                         onClickComplete = uiEvent
                     )
                 }
-                OnboardingScreenState.GOAL -> {
+                GOAL -> {
                     GoalsScreen(
                         goals = uiState.goalDays,
                         onComplete = uiEvent
                     )
                 }
-                OnboardingScreenState.ALERT -> TODO()
+                ALERT -> {
+                    AlertScreen(
+                        onClickComplete = uiEvent
+                    )
+                }
             }
         }
     }
@@ -113,7 +118,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
 private fun OnboardingScreenPreview() {
     SeeDayTheme {
         OnboardingScreen(
-            uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY),
+            uiState = OnboardingUiState.init.copy(onboardingScreenState = ALERT),
             uiEvent = {}
         )
     }
