@@ -18,4 +18,7 @@
 
     <string name="nickname_hint">닉네임 혹은 이름을 입력해 주세요.</string>
     <string name="nickname_description">한글, 영문 최대 6글자 / 공백, 특수기호 입력 불가</string>
+    <string name="goals_10_message">첫 걸음</string>
+    <string name="goals_20_message">습관의 시작</string>
+    <string name="goals_30_message">꾸준한 성장</string>
 </resources>

@@ -18,6 +18,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.component.OnboardingTopBar
 import see.day.onboarding.component.TitleDescription
 import see.day.onboarding.screen.onboarding.BirthdayScreen
+import see.day.onboarding.screen.onboarding.GoalsScreen
 import see.day.onboarding.screen.onboarding.NicknameScreen
 import see.day.onboarding.screen.onboarding.RecordTypeScreen
 import see.day.onboarding.state.OnboardingScreenState
@@ -95,7 +96,12 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                         onClickComplete = uiEvent
                     )
                 }
-                OnboardingScreenState.GOAL -> TODO()
+                OnboardingScreenState.GOAL -> {
+                    GoalsScreen(
+                        goals = uiState.goalDays,
+                        onComplete = uiEvent
+                    )
+                }
                 OnboardingScreenState.ALERT -> TODO()
             }
         }

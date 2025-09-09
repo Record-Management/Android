@@ -3,7 +3,6 @@ package see.day.onboarding
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -15,7 +14,7 @@ import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.onboarding.OnboardingUiState
 import java.time.LocalDate
 
-class BirthdayScreenText {
+class BirthdayScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
