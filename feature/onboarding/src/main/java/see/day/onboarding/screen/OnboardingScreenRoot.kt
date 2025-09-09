@@ -17,9 +17,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.component.OnboardingTopBar
 import see.day.onboarding.component.TitleDescription
+import see.day.onboarding.screen.onboarding.BirthdayScreen
 import see.day.onboarding.screen.onboarding.NicknameScreen
 import see.day.onboarding.screen.onboarding.RecordTypeScreen
 import see.day.onboarding.state.OnboardingScreenState
+import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.OnboardingScreenState.NICKNAME
 import see.day.onboarding.state.OnboardingScreenState.RECORD
 import see.day.onboarding.state.onboarding.OnboardingUiEffect
@@ -87,7 +89,12 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                     )
                 }
 
-                OnboardingScreenState.BIRTHDAY -> TODO()
+                BIRTHDAY -> {
+                    BirthdayScreen(
+                        birthDay = uiState.birthDate,
+                        onClickComplete = uiEvent
+                    )
+                }
                 OnboardingScreenState.GOAL -> TODO()
                 OnboardingScreenState.ALERT -> TODO()
             }
@@ -100,7 +107,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
 private fun OnboardingScreenPreview() {
     SeeDayTheme {
         OnboardingScreen(
-            uiState = OnboardingUiState.init.copy(onboardingScreenState = RECORD),
+            uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY),
             uiEvent = {}
         )
     }
