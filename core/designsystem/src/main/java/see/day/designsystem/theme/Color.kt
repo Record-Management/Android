@@ -2,7 +2,7 @@ package see.day.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-val primaryColor = Color(0xFFFF6000)
+val primaryColor = Color(0xFFFF9528)
 val onPrimary = Color(0xFFFFCA93)
 val onSecondary = Color(0xFFFFF0E1)
 
