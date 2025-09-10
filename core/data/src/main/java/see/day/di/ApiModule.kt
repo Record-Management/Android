@@ -14,6 +14,7 @@ import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import see.day.data.BuildConfig
+import see.day.datastore.DataStoreDataSource
 import see.day.network.LoginService
 
 @Module
@@ -23,6 +24,10 @@ class ApiModule {
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class Login
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class Main
 
     @Provides
     @Singleton
@@ -64,5 +69,42 @@ class ApiModule {
     @Provides
     fun provideLoginService(@Login retrofit: Retrofit): LoginService {
         return retrofit.create(LoginService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Main
+    fun provideAuthInterceptor(dataStoreDataSource: DataStoreDataSource): AuthInterceptor = AuthInterceptor(dataStoreDataSource)
+
+    @Provides
+    @Singleton
+    @Main
+    fun provideTokenAuthenticator(dataSource: DataStoreDataSource, loginService: LoginService): TokenAuthenticator =
+        TokenAuthenticator(dataSource, loginService)
+
+    @Provides
+    @Singleton
+    @Main
+    fun provideMainOkHttpClient(@Main authInterceptor: AuthInterceptor, @Main tokenAuthInterceptor: TokenAuthenticator): OkHttpClient {
+        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
+            .authenticator(tokenAuthInterceptor)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Main
+    fun provideMainRetrofit(@Main okHttpClient: OkHttpClient, converterFactory: Factory): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.SERVER_API_KEY)
+            .addConverterFactory(converterFactory)
+            .client(okHttpClient)
+            .build()
     }
 }
