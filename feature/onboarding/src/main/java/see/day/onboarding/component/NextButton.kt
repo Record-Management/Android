@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 
 @Composable
-fun NextButton(modifier: Modifier = Modifier, isEnabled: Boolean, onClick: () -> Unit) {
+fun NextButton(modifier: Modifier = Modifier,text : String, isEnabled: Boolean, onClick: () -> Unit) {
     Button(
         modifier = modifier
             .fillMaxWidth()
@@ -41,7 +41,7 @@ fun NextButton(modifier: Modifier = Modifier, isEnabled: Boolean, onClick: () ->
         )
     ) {
         Text(
-            text = "다음",
+            text = text,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.displayLarge,
             color = if (isEnabled) Color.White else MaterialTheme.colorScheme.onPrimary
@@ -56,6 +56,7 @@ fun NextButtonPreview() {
 
     SeeDayTheme {
         NextButton(
+            text = "다음",
             isEnabled = isEnabled,
             onClick = {
                 isEnabled = !isEnabled

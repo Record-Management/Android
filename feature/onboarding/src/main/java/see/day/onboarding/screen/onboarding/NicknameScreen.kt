@@ -97,6 +97,7 @@ internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onC
 
         NextButton(
             modifier = modifier,
+            text = "다음",
             isEnabled = !isError && nicknameValue.isNotEmpty(),
             onClick = { onComplete(OnboardingUiEvent.EnterNickname(nicknameValue)) }
         )

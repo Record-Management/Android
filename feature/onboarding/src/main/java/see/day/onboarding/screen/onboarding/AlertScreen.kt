@@ -51,6 +51,7 @@ internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (Onboar
 
         NextButton(
             modifier = modifier,
+            text = "다음",
             isEnabled = true,
             onClick = { onClickComplete(OnboardingUiEvent.FinishOnboarding) }
         )

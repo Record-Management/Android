@@ -21,4 +21,10 @@
     <string name="goals_10_message">첫 걸음</string>
     <string name="goals_20_message">습관의 시작</string>
     <string name="goals_30_message">꾸준한 성장</string>
+    <string name="onboard_complete_title_message">하루를 담을 준비를 하고 있어요!</string>
+
+    <string name="onboard_complete_label_1">당신에게 맞는 기록을 준비하고 있어요.</string>
+    <string name="onboard_complete_label_2">목표를 살펴보고 있어요</string>
+    <string name="onboard_complete_label_3">이제 시작할 수 있어요!</string>
+    <string name="notification_setting_denied">알림 설정이 거부되었습니다.</string>
 </resources>
