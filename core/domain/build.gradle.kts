@@ -11,4 +11,5 @@ dependencies {
     implementation(project(":core:model"))
 
     implementation(libs.hilt.core)
+    implementation(libs.coroutines.core)
 }
