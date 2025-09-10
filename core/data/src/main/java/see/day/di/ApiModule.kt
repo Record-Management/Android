@@ -15,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import see.day.data.BuildConfig
 import see.day.datastore.DataStoreDataSource
+import see.day.network.AuthService
 import see.day.network.LoginService
 
 @Module
@@ -23,7 +24,7 @@ class ApiModule {
 
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
-    annotation class Login
+    annotation class Auth
 
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
@@ -44,7 +45,7 @@ class ApiModule {
 
     @Singleton
     @Provides
-    @Login
+    @Auth
     fun provideLoginOkHttp(): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -56,8 +57,8 @@ class ApiModule {
 
     @Singleton
     @Provides
-    @Login
-    fun provideLoginRetrofit(@Login okHttpClient: OkHttpClient, converterFactory: Factory): Retrofit {
+    @Auth
+    fun provideLoginRetrofit(@Auth okHttpClient: OkHttpClient, converterFactory: Factory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.SERVER_API_KEY)
             .addConverterFactory(converterFactory)
@@ -67,8 +68,15 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideLoginService(@Login retrofit: Retrofit): LoginService {
+    fun provideLoginService(@Auth retrofit: Retrofit): LoginService {
         return retrofit.create(LoginService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    @Auth
+    fun provideAuthService(@Auth retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
     @Provides
@@ -79,8 +87,8 @@ class ApiModule {
     @Provides
     @Singleton
     @Main
-    fun provideTokenAuthenticator(dataSource: DataStoreDataSource, loginService: LoginService): TokenAuthenticator =
-        TokenAuthenticator(dataSource, loginService)
+    fun provideTokenAuthenticator(dataSource: DataStoreDataSource, @Auth authService: AuthService): TokenAuthenticator =
+        TokenAuthenticator(dataSource, authService)
 
     @Provides
     @Singleton

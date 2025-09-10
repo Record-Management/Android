@@ -10,12 +10,13 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import see.day.datastore.DataStoreDataSource
-import see.day.network.LoginService
+import see.day.di.ApiModule.Auth
+import see.day.network.AuthService
 import see.day.network.dto.auth.RefreshTokenRequest
 
 class TokenAuthenticator @Inject constructor(
     private val dataStore: DataStoreDataSource,
-    private val loginService: LoginService
+    @Auth private val authService: AuthService
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -24,7 +25,7 @@ class TokenAuthenticator @Inject constructor(
             runCatching {
                 val refreshToken = dataStore.getRefreshToken().first() ?: throw IllegalStateException("Refresh token is null")
 
-                val tokenResponse = loginService.refresh(RefreshTokenRequest(refreshToken).toRequestBody())
+                val tokenResponse = authService.refresh(RefreshTokenRequest(refreshToken).toRequestBody())
                 if (tokenResponse.statusCode != 200 && tokenResponse.data == null) {
                     throw IllegalStateException("refreshToken 발급 실패")
                 }

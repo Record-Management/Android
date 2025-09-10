@@ -29,7 +29,7 @@ import see.day.network.dto.toResponseBody
 import see.day.repository.LoginRepositoryImpl
 
 @RunWith(MockitoJUnitRunner::class)
-class LoginRepositoryTest {
+class AuthRepositoryTest {
 
     private lateinit var sut: LoginRepository
 

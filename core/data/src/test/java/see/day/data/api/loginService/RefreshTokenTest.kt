@@ -12,13 +12,14 @@ import org.junit.Test
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.data.api.loginService.json.refreshJson
+import see.day.network.AuthService
 import see.day.network.LoginService
 import see.day.network.dto.auth.RefreshTokenRequest
 
 class RefreshTokenTest {
 
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var sut: LoginService
+    private lateinit var sut: AuthService
     private lateinit var okHttpClient: OkHttpClient
 
     @Before
@@ -35,7 +36,7 @@ class RefreshTokenTest {
             client = okHttpClient
         )
 
-        sut = retrofit.create(LoginService::class.java)
+        sut = retrofit.create(AuthService::class.java)
     }
 
     @After

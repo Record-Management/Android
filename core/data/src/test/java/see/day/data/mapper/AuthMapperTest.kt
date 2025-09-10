@@ -6,7 +6,7 @@ import see.day.model.login.SocialLogin
 import see.day.model.login.SocialType
 import see.day.mapper.toDto
 
-class LoginMapperTest {
+class AuthMapperTest {
 
     @Test
     fun givenKakaoSocialLogin_whenMapLoginRequest_thenSocialTypeToLowercase() {
@@ -17,6 +17,6 @@ class LoginMapperTest {
         val loginRequest = kakaoSocialLogin.toDto()
 
         // then
-        Assert.assertEquals(loginRequest.socialType, kakaoSocialLogin.socialType.name)
+        Assert.assertEquals(loginRequest.socialType, kakaoSocialLogin.socialType.name.toLowerCase())
     }
 }
