@@ -15,9 +15,12 @@ import see.day.main.test.homeNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
 @Composable
-fun SeedayApp(navigationState: NavigationState = rememberNavigationState()) {
+fun SeedayApp(
+    navigationState: NavigationState = rememberNavigationState(),
+    appStartDestination : String
+) {
     Column(modifier = Modifier.fillMaxSize()) {
-        NavHost(navigationState.navController, startDestination = MAIN_ROUTE) {
+        NavHost(navigationState.navController, startDestination = appStartDestination) {
             mainNavigation(
                 onClickLogin = navigationState::navigateLogin
             )
