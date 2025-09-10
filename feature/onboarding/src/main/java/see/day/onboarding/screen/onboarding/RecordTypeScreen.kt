@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.record.RecordType
-import see.day.onboarding.component.NextButton
 import see.day.onboarding.component.RecordComponent
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
+import see.day.ui.button.CompleteButton
 
 @Composable
 internal fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordType?, onClickCompleteButton: (OnboardingUiEvent) -> Unit) {
@@ -38,7 +38,7 @@ internal fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType:
 
         Spacer(modifier = modifier.weight(1f))
 
-        NextButton(
+        CompleteButton(
             modifier = modifier,
             text = "다음",
             isEnabled = currentSelectedRecordType != null,

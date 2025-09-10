@@ -28,8 +28,8 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray60
 import see.day.onboarding.R
-import see.day.onboarding.component.NextButton
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
+import see.day.ui.button.CompleteButton
 
 @Composable
 internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onComplete: (OnboardingUiEvent) -> Unit) {
@@ -95,7 +95,7 @@ internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onC
 
         Spacer(modifier = modifier.weight(1f))
 
-        NextButton(
+        CompleteButton(
             modifier = modifier,
             text = "다음",
             isEnabled = !isError && nicknameValue.isNotEmpty(),

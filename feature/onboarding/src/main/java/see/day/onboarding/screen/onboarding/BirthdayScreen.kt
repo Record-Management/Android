@@ -22,8 +22,8 @@ import java.time.LocalDate
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray40
-import see.day.onboarding.component.NextButton
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
+import see.day.ui.button.CompleteButton
 
 @Composable
 internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onClickComplete: (OnboardingUiEvent) -> Unit) {
@@ -57,7 +57,7 @@ internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onC
             day = snappedDate.dayOfMonth
         }
         Spacer(modifier = modifier.weight(1f))
-        NextButton(
+        CompleteButton(
             modifier = modifier,
             text = "다음",
             isEnabled = true,

@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.R
-import see.day.onboarding.component.NextButton
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
+import see.day.ui.button.CompleteButton
 
 @Composable
 internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (OnboardingUiEvent) -> Unit) {
@@ -49,7 +49,7 @@ internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (Onboar
         )
         Spacer(modifier = modifier.weight(1f))
 
-        NextButton(
+        CompleteButton(
             modifier = modifier,
             text = "다음",
             isEnabled = true,

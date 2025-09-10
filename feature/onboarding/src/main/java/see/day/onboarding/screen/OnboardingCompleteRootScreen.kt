@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.R
-import see.day.onboarding.component.NextButton
 import see.day.onboarding.component.OnboardingCompleteLabel
 import see.day.onboarding.util.isNotificationPermissionGranted
+import see.day.ui.button.CompleteButton
 
 @Composable
 internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
@@ -89,7 +89,7 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: (
 
         if (showNextButton) {
             Spacer(modifier = modifier.weight(1f))
-            NextButton(
+            CompleteButton(
                 isEnabled = true,
                 text = "시작하기",
                 onClick = onGoHome
