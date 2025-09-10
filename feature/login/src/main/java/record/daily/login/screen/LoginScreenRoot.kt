@@ -38,7 +38,7 @@ internal fun LoginScreenRoot(
                 }
 
                 LoginUiEffect.GoHome -> {
-                    onGoHome
+                    onGoHome()
                 }
             }
         }

@@ -52,6 +52,7 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
 
         NextButton(
             modifier = modifier,
+            text = "다음",
             isEnabled = currentGoals != 0,
             onClick = { onComplete(OnboardingUiEvent.EnterGoal(currentGoals)) }
         )

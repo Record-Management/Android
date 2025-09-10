@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.user.PostOnboardCompleteUseCase
 import see.day.model.record.RecordType
+import see.day.model.user.OnboardingComplete
 import see.day.onboarding.state.OnboardingScreenState
 import see.day.onboarding.state.OnboardingScreenState.ALERT
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
@@ -22,9 +24,12 @@ import see.day.onboarding.state.OnboardingScreenState.RECORD
 import see.day.onboarding.state.onboarding.OnboardingUiEffect
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.onboarding.state.onboarding.OnboardingUiState
+import timber.log.Timber
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor() : ViewModel() {
+class OnboardingViewModel @Inject constructor(
+    private val postOnboardCompleteUseCase: PostOnboardCompleteUseCase
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<OnboardingUiState> = MutableStateFlow(OnboardingUiState.init)
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
@@ -107,7 +112,22 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun finishOnboarding() {
-        // UiEffect를 GoOnboardFinish로 이동
+        val onboardState = uiState.value
+        val onboardingComplete = OnboardingComplete(
+            nickname = onboardState.nickname,
+            mainRecordType = onboardState.mainRecordType ?: RecordType.DAILY,
+            birthDate = onboardState.birthDate,
+            goalDays = onboardState.goalDays,
+            notificationEnabled = onboardState.notificationEnabled
+        )
+        viewModelScope.launch {
+            postOnboardCompleteUseCase(onboardingComplete)
+                .onSuccess {
+                    _uiEffect.emit(OnboardingUiEffect.GoOnboardingComplete)
+                }.onFailure {
+                    Timber.e(it)
+                }
+        }
     }
 
     private fun onBack() {

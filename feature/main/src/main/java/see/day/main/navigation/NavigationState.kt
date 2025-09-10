@@ -9,6 +9,7 @@ import androidx.navigation.navOptions
 import record.daily.login.navigation.navigateLogin
 import see.day.main.test.navigateHome
 import see.day.onboarding.navigation.navigateOnboarding
+import see.day.onboarding.navigation.navigateOnboardingComplete
 
 class NavigationState(
     val navController: NavHostController
@@ -33,5 +34,9 @@ class NavigationState(
 
     fun navigateHome() {
         navController.navigateHome(cleanBackstackNavOptions())
+    }
+
+    fun navigateOnboardingComplete() {
+        navController.navigateOnboardingComplete(cleanBackstackNavOptions())
     }
 }

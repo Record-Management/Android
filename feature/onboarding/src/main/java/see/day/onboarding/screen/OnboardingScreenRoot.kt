@@ -33,7 +33,7 @@ import see.day.onboarding.state.onboarding.OnboardingUiState
 import see.day.onboarding.viewModel.OnboardingViewModel
 
 @Composable
-internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoHome: () -> Unit) {
+internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoOnboardingComplete: () -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     BackHandler(true) {
         viewModel.onEvent(OnboardingUiEvent.OnBack)
@@ -46,8 +46,8 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
                     onBack()
                 }
 
-                OnboardingUiEffect.GoHome -> {
-                    onGoHome()
+                OnboardingUiEffect.GoOnboardingComplete -> {
+                    onGoOnboardingComplete()
                 }
             }
         }

@@ -40,6 +40,7 @@ internal fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType:
 
         NextButton(
             modifier = modifier,
+            text = "다음",
             isEnabled = currentSelectedRecordType != null,
             onClick = {
                 currentSelectedRecordType?.let { recordType ->
