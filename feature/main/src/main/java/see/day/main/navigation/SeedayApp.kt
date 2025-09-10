@@ -9,16 +9,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
-import see.day.main.navigation.graph.MAIN_ROUTE
 import see.day.main.navigation.graph.mainNavigation
 import see.day.main.test.homeNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
 @Composable
-fun SeedayApp(
-    navigationState: NavigationState = rememberNavigationState(),
-    appStartDestination : String
-) {
+fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appStartDestination: String) {
     Column(modifier = Modifier.fillMaxSize()) {
         NavHost(navigationState.navController, startDestination = appStartDestination) {
             mainNavigation(

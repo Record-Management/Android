@@ -23,10 +23,12 @@ fun NavController.navigateHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeNavigation() {
     composable(HOME_ROUTE) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .height(300.dp), verticalArrangement = Arrangement.Center) {
-
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .height(300.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
             Spacer(modifier = Modifier.size(300.dp))
             Text(modifier = Modifier.fillMaxSize(), text = "여기까지 스프린트 A", textAlign = TextAlign.Center)
         }

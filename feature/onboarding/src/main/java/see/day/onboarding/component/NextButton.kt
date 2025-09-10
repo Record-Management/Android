@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 
 @Composable
-fun NextButton(modifier: Modifier = Modifier,text : String, isEnabled: Boolean, onClick: () -> Unit) {
+fun NextButton(modifier: Modifier = Modifier, text: String, isEnabled: Boolean, onClick: () -> Unit) {
     Button(
         modifier = modifier
             .fillMaxWidth()

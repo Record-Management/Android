@@ -37,13 +37,10 @@ import see.day.onboarding.component.OnboardingCompleteLabel
 import see.day.onboarding.util.isNotificationPermissionGranted
 
 @Composable
-internal fun OnboardingCompleteScreenRoot(
-    modifier: Modifier = Modifier,
-    onGoHome: () -> Unit
-) {
+internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
     val context = LocalContext.current
 
-    if(!isNotificationPermissionGranted(context)) {
+    if (!isNotificationPermissionGranted(context)) {
         Toast.makeText(context, stringResource(R.string.notification_setting_denied), Toast.LENGTH_SHORT).show()
     }
 
@@ -54,14 +51,11 @@ internal fun OnboardingCompleteScreenRoot(
 }
 
 @Composable
-internal fun OnboardingCompleteScreen(
-    modifier: Modifier = Modifier,
-    onGoHome: () -> Unit
-) {
+internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
     var showNextButton by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay((labelList().size * waitTime).toLong())
+        delay((labelList().size * WAIT_TIME).toLong())
         showNextButton = true
     }
     Column {
@@ -89,11 +83,11 @@ internal fun OnboardingCompleteScreen(
         labelList().forEachIndexed { index, labelText ->
             FadeInLabel(
                 labelText = labelText,
-                delayMills = index * waitTime
+                delayMills = index * WAIT_TIME
             )
         }
 
-        if(showNextButton) {
+        if (showNextButton) {
             Spacer(modifier = modifier.weight(1f))
             NextButton(
                 isEnabled = true,
@@ -108,12 +102,12 @@ internal fun OnboardingCompleteScreen(
 fun FadeInLabel(@StringRes labelText: Int, delayMills: Int) {
     val alpha = remember { Animatable(0f) }
 
-    LaunchedEffect (Unit) {
+    LaunchedEffect(Unit) {
         delay(delayMills.toLong())
         alpha.animateTo(
             targetValue = 1f,
             animationSpec = tween(
-                durationMillis = waitTime,
+                durationMillis = WAIT_TIME,
                 easing = LinearEasing
             )
         )
@@ -135,8 +129,8 @@ private fun OnboardingCompleteScreenPreview() {
     }
 }
 
-private fun labelList() :List<Int> {
-    return listOf(R.string.onboard_complete_label_1,R.string.onboard_complete_label_2,R.string.onboard_complete_label_3)
+private fun labelList(): List<Int> {
+    return listOf(R.string.onboard_complete_label_1, R.string.onboard_complete_label_2, R.string.onboard_complete_label_3)
 }
 
-const val waitTime = 700
+const val WAIT_TIME = 700

@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     appStartDestination = when (appStartState) {
                         AppStartState.LOGIN -> LOGIN_ROUTE
                         AppStartState.HOME -> {
-                            if(appStartDestination != ONBOARDING_ROUTE) {
+                            if (appStartDestination != ONBOARDING_ROUTE) {
                                 HOME_ROUTE
                             } else {
                                 appStartDestination

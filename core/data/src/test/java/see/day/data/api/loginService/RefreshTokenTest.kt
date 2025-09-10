@@ -13,7 +13,6 @@ import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.data.api.loginService.json.refreshJson
 import see.day.network.AuthService
-import see.day.network.LoginService
 import see.day.network.dto.auth.RefreshTokenRequest
 
 class RefreshTokenTest {
