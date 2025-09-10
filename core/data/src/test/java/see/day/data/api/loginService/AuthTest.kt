@@ -18,7 +18,7 @@ import see.day.data.api.loginService.json.oldLoginResponse
 import see.day.network.LoginService
 import see.day.network.dto.login.LoginRequest
 
-class LoginTest {
+class AuthTest {
 
     private lateinit var mockWebServer: MockWebServer
     private lateinit var sut: LoginService
