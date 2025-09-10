@@ -57,11 +57,10 @@ internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onC
             day = snappedDate.dayOfMonth
         }
         Spacer(modifier = modifier.weight(1f))
-
         NextButton(
             modifier = modifier,
             isEnabled = true,
-            onClick = { onClickComplete(OnboardingUiEvent.EnterBirthDay("$year-$month-$day")) }
+            onClick = { onClickComplete(OnboardingUiEvent.EnterBirthDay("%04d-%02d-%02d".format(year, month, day))) }
         )
     }
 }

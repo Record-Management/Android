@@ -23,7 +23,7 @@ data class OnboardingUiState(
         )
         private fun todayDate(): String {
             val now = LocalDate.now()
-            return "${now.year}-${now.monthValue}-${now.dayOfMonth}"
+            return "%04d-%02d-%02d".format(now.year, now.monthValue, now.dayOfMonth)
         }
     }
 }
