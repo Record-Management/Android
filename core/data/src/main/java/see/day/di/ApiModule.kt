@@ -17,6 +17,7 @@ import see.day.data.BuildConfig
 import see.day.datastore.DataStoreDataSource
 import see.day.network.AuthService
 import see.day.network.LoginService
+import see.day.network.UserService
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -114,5 +115,11 @@ class ApiModule {
             .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserService(@Main retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
     }
 }

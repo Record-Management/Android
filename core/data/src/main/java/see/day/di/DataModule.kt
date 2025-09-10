@@ -7,7 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import see.day.datastore.DataSource
 import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.LoginRepository
+import see.day.domain.repository.UserRepository
 import see.day.repository.LoginRepositoryImpl
+import see.day.repository.UserRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,4 +20,7 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository
+
+    @Binds
+    abstract fun bindsUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
 }
