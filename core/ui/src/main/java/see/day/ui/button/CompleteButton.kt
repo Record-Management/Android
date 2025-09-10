@@ -1,4 +1,4 @@
-package see.day.onboarding.component
+package see.day.ui.button
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 
 @Composable
-fun NextButton(modifier: Modifier = Modifier, text: String, isEnabled: Boolean, onClick: () -> Unit) {
+fun CompleteButton(modifier: Modifier = Modifier, text: String, isEnabled: Boolean, onClick: () -> Unit) {
     Button(
         modifier = modifier
             .fillMaxWidth()
@@ -51,11 +51,11 @@ fun NextButton(modifier: Modifier = Modifier, text: String, isEnabled: Boolean, 
 
 @Preview
 @Composable
-fun NextButtonPreview() {
+fun CompleteButtonPreview() {
     var isEnabled by remember { mutableStateOf(true) }
 
     SeeDayTheme {
-        NextButton(
+        CompleteButton(
             text = "다음",
             isEnabled = isEnabled,
             onClick = {

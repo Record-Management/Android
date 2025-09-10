@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.component.GoalsComponent
-import see.day.onboarding.component.NextButton
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
+import see.day.ui.button.CompleteButton
 
 @Composable
 internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: (OnboardingUiEvent) -> Unit) {
@@ -50,7 +50,7 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
         }
         Spacer(modifier = modifier.weight(1f))
 
-        NextButton(
+        CompleteButton(
             modifier = modifier,
             text = "다음",
             isEnabled = currentGoals != 0,

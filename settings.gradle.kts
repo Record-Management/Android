@@ -38,3 +38,4 @@ include(
     ":feature:login",
     ":feature:onboarding"
 )
+include(":core:ui")
