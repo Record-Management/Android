@@ -9,5 +9,5 @@ import see.day.network.dto.user.FullUserResponse
 interface UserService {
 
     @POST("api/users/onboarding/complete")
-    suspend fun postOnboardComplete(@Body requestBody: RequestBody) : CommonResponse<FullUserResponse>
+    suspend fun postOnboardComplete(@Body requestBody: RequestBody): CommonResponse<FullUserResponse>
 }

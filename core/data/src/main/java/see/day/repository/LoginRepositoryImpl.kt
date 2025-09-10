@@ -2,6 +2,7 @@ package see.day.repository
 
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.LoginRepository
@@ -40,5 +41,9 @@ class LoginRepositoryImpl @Inject constructor(
                 ONBOARDING
             }
         }
+    }
+
+    override fun getLoginState(): Flow<AppStartState> {
+        return dataSource.getAppStartState()
     }
 }

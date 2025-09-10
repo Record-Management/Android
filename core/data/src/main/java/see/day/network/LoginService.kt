@@ -4,7 +4,6 @@ import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 import see.day.network.dto.CommonResponse
-import see.day.network.dto.auth.RefreshTokenResponse
 import see.day.network.dto.login.LoginResponse
 
 interface LoginService {

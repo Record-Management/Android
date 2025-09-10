@@ -23,13 +23,10 @@ import see.day.designsystem.theme.gray20
 import see.day.onboarding.R
 
 @Composable
-fun OnboardingCompleteLabel(
-    modifier: Modifier = Modifier,
-    @StringRes labelText: Int
-) {
+fun OnboardingCompleteLabel(modifier: Modifier = Modifier, @StringRes labelText: Int) {
     Surface(
         modifier = modifier.padding(top = 14.dp).padding(horizontal = 16.dp).fillMaxWidth().background(gray20),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(8.dp)
     ) {
         Row(
             modifier = Modifier.padding(top = 13.dp, bottom = 14.dp).padding(horizontal = 16.dp),
