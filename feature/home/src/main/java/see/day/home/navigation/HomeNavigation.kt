@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import see.day.home.screen.HomeScreenRoot
 
 const val HOME_ROUTE = "HOME"
 
@@ -23,14 +24,6 @@ fun NavController.navigateHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeNavigation() {
     composable(HOME_ROUTE) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .height(300.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.size(300.dp))
-            Text(modifier = Modifier.fillMaxSize(), text = "여기까지 스프린트 A", textAlign = TextAlign.Center)
-        }
+        HomeScreenRoot()
     }
 }
