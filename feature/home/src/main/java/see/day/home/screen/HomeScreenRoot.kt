@@ -43,7 +43,6 @@ fun HomeScreenRoot(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier
@@ -72,7 +71,7 @@ fun HomeScreen(
 
 @Preview
 @Composable
-fun HomeScreenPreview() {
+private fun HomeScreenPreview() {
     SeeDayTheme {
         HomeScreen()
     }

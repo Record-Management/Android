@@ -14,13 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.home.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopBar(
+internal fun HomeTopBar(
     modifier: Modifier = Modifier,
     isFullExpand: Boolean
 ) {
@@ -64,4 +66,14 @@ fun HomeTopBar(
         },
 
         )
+}
+
+@Preview
+@Composable
+private fun HomeTopBarPreview() {
+    SeeDayTheme {
+        HomeTopBar(
+            isFullExpand = false
+        )
+    }
 }
