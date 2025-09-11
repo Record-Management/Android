@@ -1,4 +1,4 @@
-package see.day.main.test
+package see.day.home.navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
