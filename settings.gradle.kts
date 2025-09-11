@@ -30,12 +30,13 @@ include(
     "core:domain",
     "core:data",
     "core:model",
-    ":core:designsystem"
+    "core:designsystem",
+    "core:ui"
 )
 
 include(
-    ":feature:main",
-    ":feature:login",
-    ":feature:onboarding"
+    "feature:main",
+    "feature:login",
+    "feature:onboarding",
+    "feature:home"
 )
-include(":core:ui")
