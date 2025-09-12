@@ -51,7 +51,7 @@ internal fun HomeTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(
-            containerColor = Color.Transparent
+            containerColor = if(isFullExpand) Color.Transparent else Color.White
         ),
         navigationIcon = {
             IconButton(
