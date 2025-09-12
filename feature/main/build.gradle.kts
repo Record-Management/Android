@@ -10,6 +10,7 @@ dependencies {
 
     implementation(project(":feature:login"))
     implementation(project(":feature:onboarding"))
+    implementation(project(":feature:home"))
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)

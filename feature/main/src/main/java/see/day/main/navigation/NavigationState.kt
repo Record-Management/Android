@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import record.daily.login.navigation.navigateLogin
-import see.day.main.test.navigateHome
+import see.day.home.navigation.navigateHome
 import see.day.onboarding.navigation.navigateOnboarding
 import see.day.onboarding.navigation.navigateOnboardingComplete
 

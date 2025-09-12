@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import record.daily.login.navigation.LOGIN_ROUTE
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.main.navigation.SeedayApp
-import see.day.main.test.HOME_ROUTE
+import see.day.home.navigation.HOME_ROUTE
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
 import see.day.onboarding.navigation.ONBOARDING_ROUTE

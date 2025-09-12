@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
 import see.day.main.navigation.graph.mainNavigation
-import see.day.main.test.homeNavigation
+import see.day.home.navigation.homeNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
 @Composable
