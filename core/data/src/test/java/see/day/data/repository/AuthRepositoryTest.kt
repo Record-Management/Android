@@ -21,6 +21,7 @@ import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.LoginRepository
 import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
+import see.day.network.AuthService
 import see.day.network.LoginService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.common.UserDto
@@ -39,9 +40,12 @@ class AuthRepositoryTest {
     @Mock
     private lateinit var dataSource: DataStoreDataSource
 
+    @Mock
+    private lateinit var authService: AuthService
+
     @Before
     fun setUp() {
-        sut = LoginRepositoryImpl(dataSource, loginService)
+        sut = LoginRepositoryImpl(dataSource, loginService, authService)
     }
 
     @Test
@@ -62,7 +66,6 @@ class AuthRepositoryTest {
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
             whenever(dataSource.saveRefreshToken(refreshToken)).thenReturn(Unit)
-            whenever(dataSource.saveAppStartState(ONBOARDING)).thenReturn(Unit)
 
             // when
             val result = sut.login(newSocialLogin).getOrThrow()
@@ -72,7 +75,6 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(dataSource).saveAppStartState(ONBOARDING)
             verify(loginService).signIn(any())
         }
     }
@@ -95,7 +97,6 @@ class AuthRepositoryTest {
             )
             whenever(dataSource.saveAccessToken(accessToken)).thenReturn(Unit)
             whenever(dataSource.saveRefreshToken(refreshToken)).thenReturn(Unit)
-            whenever(dataSource.saveAppStartState(HOME)).thenReturn(Unit)
 
             // when
             val result = sut.login(oldSocialLogin).getOrThrow()
@@ -105,7 +106,6 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(dataSource).saveAppStartState(HOME)
             verify(loginService).signIn(any())
         }
     }

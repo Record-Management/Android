@@ -38,14 +38,8 @@ class LoginRepositoryImpl @Inject constructor(
             }
 
             if (result.isOnboardingComplete()) {
-                withContext(Dispatchers.IO) {
-                    dataSource.saveAppStartState(HOME)
-                }
                 HOME
             } else {
-                withContext(Dispatchers.IO) {
-                    dataSource.saveAppStartState(ONBOARDING)
-                }
                 ONBOARDING
             }
         }
