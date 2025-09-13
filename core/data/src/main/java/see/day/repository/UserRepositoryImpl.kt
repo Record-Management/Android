@@ -9,14 +9,12 @@ import see.day.model.user.OnboardingComplete
 import see.day.network.UserService
 
 class UserRepositoryImpl @Inject constructor(
-    private val userService: UserService,
-    private val dataSource: DataStoreDataSource
+    private val userService: UserService
 ) : UserRepository {
 
     override suspend fun onboardComplete(onboardingComplete: OnboardingComplete): Result<Unit> {
         return runCatching {
             userService.postOnboardComplete(onboardingComplete.toDto().toRequestBody())
-            dataSource.saveAppStartState(AppStartState.HOME)
         }
     }
 }
