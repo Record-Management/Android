@@ -24,6 +24,7 @@ import see.day.home.R
 @Composable
 internal fun HomeTopBar(
     modifier: Modifier = Modifier,
+    alpha: Float,
     isFullExpand: Boolean
 ) {
     TopAppBar(
@@ -51,7 +52,7 @@ internal fun HomeTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(
-            containerColor = if(isFullExpand) Color.Transparent else Color.White
+            containerColor = Color.White.copy(alpha = alpha)
         ),
         navigationIcon = {
             IconButton(
@@ -73,6 +74,7 @@ internal fun HomeTopBar(
 private fun HomeTopBarPreview() {
     SeeDayTheme {
         HomeTopBar(
+            alpha = 0f,
             isFullExpand = false
         )
     }
