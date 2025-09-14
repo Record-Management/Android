@@ -16,14 +16,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.commandiron.wheel_picker_compose.WheelDatePicker
-import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDate
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray40
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.ui.button.CompleteButton
+import see.day.ui.picker.WheelDatePicker
+import see.day.ui.picker.WheelPickerDefaults
 
 @Composable
 internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onClickComplete: (OnboardingUiEvent) -> Unit) {

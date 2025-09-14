@@ -33,6 +33,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+<<<<<<< HEAD
     implementation(libs.coil3.coil.network.okttp)
     implementation(libs.coil3.coil.compose)
+=======
+    implementation("dev.chrisbanes.snapper:snapper:0.3.0")
+>>>>>>> 91b75eb ([ANDROID-48] feat : 생년월일 UI를 오픈소스에서 따로 분리)
 }

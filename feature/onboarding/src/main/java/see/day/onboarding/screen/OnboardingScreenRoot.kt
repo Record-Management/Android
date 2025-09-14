@@ -118,7 +118,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
 private fun OnboardingScreenPreview() {
     SeeDayTheme {
         OnboardingScreen(
-            uiState = OnboardingUiState.init.copy(onboardingScreenState = ALERT),
+            uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY),
             uiEvent = {}
         )
     }
