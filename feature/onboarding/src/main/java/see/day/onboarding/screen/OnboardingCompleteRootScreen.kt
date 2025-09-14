@@ -3,6 +3,7 @@ package see.day.onboarding.screen
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -52,12 +53,6 @@ internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, onGoHom
 
 @Composable
 internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
-    var showNextButton by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        delay((labelList().size * WAIT_TIME).toLong())
-        showNextButton = true
-    }
     Column {
         Image(
             modifier = modifier
@@ -87,9 +82,10 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: (
             )
         }
 
-        if (showNextButton) {
-            Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = modifier.weight(1f))
+        FadeEffect(2100) { modifier ->
             CompleteButton(
+                modifier = modifier,
                 isEnabled = true,
                 text = "시작하기",
                 onClick = onGoHome
@@ -117,6 +113,24 @@ fun FadeInLabel(@StringRes labelText: Int, delayMills: Int) {
         labelText = labelText,
         modifier = Modifier.alpha(alpha.value)
     )
+}
+
+@Composable
+fun FadeEffect(delayMills: Int, content: @Composable (modifier: Modifier) -> Unit) {
+    val alpha = remember { Animatable(0f) }
+
+    LaunchedEffect(Unit) {
+        delay(delayMills.toLong())
+        alpha.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = WAIT_TIME,
+                easing = LinearEasing
+            )
+        )
+    }
+
+    content(Modifier.alpha(alpha.value))
 }
 
 @Preview
