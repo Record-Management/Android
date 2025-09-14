@@ -50,6 +50,8 @@ class OnboardingCompleteScreenTest {
             .onNodeWithText(context.getString(R.string.onboard_complete_label_3))
             .assertIsDisplayed()
 
+        composeTestRule.mainClock.advanceTimeBy(700)
+        
         composeTestRule
             .onNodeWithText("시작하기")
             .assertIsDisplayed()
