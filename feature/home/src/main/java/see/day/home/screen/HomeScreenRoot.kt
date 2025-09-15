@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +26,6 @@ import see.day.home.component.HomeImage
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,9 +36,11 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import kotlinx.coroutines.launch
 import see.day.home.R
 import see.day.home.component.HomeTopBar
 
@@ -58,6 +58,7 @@ fun HomeScreenRoot(
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState)
 
@@ -70,6 +71,12 @@ fun HomeScreen(
     var minOffset by remember { mutableStateOf<Float?>(null) }
     var maxOffset by remember { mutableStateOf<Float?>(null) }
     var toolbarAlpha by remember { mutableStateOf(0f) }
+
+    val onDownBottomSheet : () -> Unit = {
+        coroutineScope.launch {
+            bottomSheetState.partialExpand()
+        }
+    }
 
     LaunchedEffect(bottomSheetState) {
         snapshotFlow { bottomSheetState.requireOffset() }
@@ -97,7 +104,10 @@ fun HomeScreen(
                 HomeTopBar(
                     modifier = modifier,
                     alpha = toolbarAlpha,
-                    isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded
+                    isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
+                    onClickBackButton = {
+                        onDownBottomSheet()
+                    }
                 )
             },
             containerColor = Color.Transparent,

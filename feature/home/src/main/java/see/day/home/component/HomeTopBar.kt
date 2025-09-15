@@ -25,7 +25,8 @@ import see.day.home.R
 internal fun HomeTopBar(
     modifier: Modifier = Modifier,
     alpha: Float,
-    isFullExpand: Boolean
+    isFullExpand: Boolean,
+    onClickBackButton : () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -55,15 +56,21 @@ internal fun HomeTopBar(
             containerColor = Color.White.copy(alpha = alpha)
         ),
         navigationIcon = {
-            IconButton(
-                onClick = {}
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.arrow_left),
-                    contentDescription = "뒤로 가기 버튼",
-                    tint = gray100
-                )
+            if(isFullExpand) {
+                IconButton(
+                    onClick = {
+                        onClickBackButton()
+                    }
+                ) {
+
+                    Icon(
+                        painter = painterResource(R.drawable.arrow_left),
+                        contentDescription = "뒤로 가기 버튼",
+                        tint = gray100
+                    )
+                }
             }
+
         },
 
         )
@@ -75,7 +82,8 @@ private fun HomeTopBarPreview() {
     SeeDayTheme {
         HomeTopBar(
             alpha = 0f,
-            isFullExpand = false
+            isFullExpand = false,
+            onClickBackButton = {}
         )
     }
 }
