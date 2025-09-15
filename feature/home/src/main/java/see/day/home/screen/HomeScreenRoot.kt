@@ -1,9 +1,11 @@
 package see.day.home.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,13 +25,23 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.home.component.HomeImage
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import see.day.home.R
 import see.day.home.component.HomeTopBar
 
 @Composable
@@ -106,8 +118,23 @@ fun HomeScreen(
                 RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             }
         ) { innerPadding ->
-
         }
+        if(bottomSheetState.currentValue != SheetValue.Expanded) {
+            FloatingActionButton(
+                onClick = {},
+                modifier = modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 20.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                shape = CircleShape,
+                elevation = FloatingActionButtonDefaults.elevation(0.dp,0.dp,0.dp,0.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.image_edit),
+                    contentDescription = "추가하기 버튼",
+                    modifier = modifier.size(24.dp)
+                )
+            }
+        }
+
     }
 }
 
