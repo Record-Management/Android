@@ -72,7 +72,7 @@ fun HomeScreen(
     var maxOffset by remember { mutableStateOf<Float?>(null) }
     var toolbarAlpha by remember { mutableStateOf(0f) }
 
-    val onDownBottomSheet : () -> Unit = {
+    val onDownBottomSheet: () -> Unit = {
         coroutineScope.launch {
             bottomSheetState.partialExpand()
         }
@@ -98,7 +98,7 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize()
     ) {
         HomeImage(modifier)
-        BottomSheetScaffold (
+        BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
             topBar = {
                 HomeTopBar(
@@ -116,39 +116,38 @@ fun HomeScreen(
                     modifier = modifier.fillMaxHeight(fraction = topPaddingFraction)
                 ) {
                     Text("teaseda")
-                    if(bottomSheetState.currentValue == SheetValue.Expanded) {
+                    if (bottomSheetState.currentValue == SheetValue.Expanded) {
                         Text("hello I am Expended")
                     }
                 }
             },
             sheetPeekHeight = bottomSheetPeekHeight,
-            sheetShape = if(bottomSheetState.currentValue == SheetValue.Expanded) {
+            sheetShape = if (bottomSheetState.currentValue == SheetValue.Expanded) {
                 RoundedCornerShape(0.dp)
             } else {
                 RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             }
         ) { innerPadding ->
         }
-        if(bottomSheetState.currentValue != SheetValue.Expanded) {
-            FloatingActionButton(
-                onClick = {},
-                modifier = modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 20.dp),
-                containerColor = MaterialTheme.colorScheme.primary,
-                shape = CircleShape,
-                elevation = FloatingActionButtonDefaults.elevation(0.dp,0.dp,0.dp,0.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.image_edit),
-                    contentDescription = "추가하기 버튼",
-                    modifier = modifier.size(24.dp)
-                )
-            }
+        FloatingActionButton(
+            onClick = {},
+            modifier = modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 16.dp, bottom = 20.dp),
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.image_edit),
+                contentDescription = "추가하기 버튼",
+                modifier = modifier.size(24.dp)
+            )
         }
-
     }
 }
 
-fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings: PaddingValues) : Float {
+fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings: PaddingValues): Float {
     val screenHeight = configuration.screenHeightDp.dp
     val topBarHeight = 60.dp
     return (screenHeight - statusBarPaddings.calculateTopPadding() - topBarHeight) / screenHeight
