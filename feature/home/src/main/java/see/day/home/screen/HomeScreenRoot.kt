@@ -1,9 +1,16 @@
 package see.day.home.screen
 
 import android.content.res.Configuration
+import android.widget.Space
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,29 +30,66 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.home.component.HomeImage
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import kotlinx.coroutines.launch
+import see.day.designsystem.theme.gray10
+import see.day.designsystem.theme.gray100
+import see.day.designsystem.theme.gray20
+import see.day.home.R
 import see.day.home.component.HomeTopBar
+import see.day.home.component.SelectedDateComponent
+import see.day.home.component.SelectedFilterRecordType
+import see.day.home.util.RecordFilterType
 
 @Composable
 fun HomeScreenRoot(
     modifier: Modifier = Modifier
 ) {
+    val currentYear by remember { mutableStateOf(2025) }
+    val currentMonth by remember { mutableStateOf(10) }
+    val selectedFilterType by remember { mutableStateOf(RecordFilterType.ALL) }
     HomeScreen(
-        modifier
+        modifier,
+        currentYear,
+        currentMonth,
+        selectedFilterType,
+        onClickSelectedDate = { year, month -> },
+        onClickFilterType = { }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currentYear: Int,
+    currentMonth: Int,
+    selectedFilterType: RecordFilterType,
+    onClickSelectedDate: (Int, Int) -> Unit,
+    onClickFilterType: (RecordFilterType) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState)
 
@@ -58,6 +102,12 @@ fun HomeScreen(
     var minOffset by remember { mutableStateOf<Float?>(null) }
     var maxOffset by remember { mutableStateOf<Float?>(null) }
     var toolbarAlpha by remember { mutableStateOf(0f) }
+
+    val onDownBottomSheet: () -> Unit = {
+        coroutineScope.launch {
+            bottomSheetState.partialExpand()
+        }
+    }
 
     LaunchedEffect(bottomSheetState) {
         snapshotFlow { bottomSheetState.requireOffset() }
@@ -79,39 +129,62 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize()
     ) {
         HomeImage(modifier)
-        BottomSheetScaffold (
+        BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
             topBar = {
                 HomeTopBar(
                     modifier = modifier,
                     alpha = toolbarAlpha,
-                    isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded
+                    isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
+                    onClickBackButton = {
+                        onDownBottomSheet()
+                    }
                 )
             },
-            containerColor = Color.Transparent,
             sheetContent = {
                 Column(
-                    modifier = modifier.fillMaxHeight(fraction = topPaddingFraction)
+                    modifier = modifier
+                        .fillMaxHeight(fraction = topPaddingFraction)
+                        .fillMaxWidth()
                 ) {
-                    Text("teaseda")
-                    if(bottomSheetState.currentValue == SheetValue.Expanded) {
-                        Text("hello I am Expended")
+                    Row(
+                        modifier = modifier.padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SelectedDateComponent(modifier, currentYear, currentMonth, onClickSelectedDate)
+                        Spacer(modifier = modifier.weight(1f))
+                        SelectedFilterRecordType(modifier, selectedFilterType, onClickFilterType)
                     }
                 }
             },
             sheetPeekHeight = bottomSheetPeekHeight,
-            sheetShape = if(bottomSheetState.currentValue == SheetValue.Expanded) {
+            sheetShape = if (bottomSheetState.currentValue == SheetValue.Expanded) {
                 RoundedCornerShape(0.dp)
             } else {
                 RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-            }
+            },
+            sheetContainerColor = Color.White
         ) { innerPadding ->
-
+        }
+        FloatingActionButton(
+            onClick = {},
+            modifier = modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 16.dp, bottom = 20.dp),
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.image_edit),
+                contentDescription = "추가하기 버튼",
+                modifier = modifier.size(24.dp)
+            )
         }
     }
 }
 
-fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings: PaddingValues) : Float {
+fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings: PaddingValues): Float {
     val screenHeight = configuration.screenHeightDp.dp
     val topBarHeight = 60.dp
     return (screenHeight - statusBarPaddings.calculateTopPadding() - topBarHeight) / screenHeight
@@ -121,6 +194,12 @@ fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings:
 @Composable
 private fun HomeScreenPreview() {
     SeeDayTheme {
-        HomeScreen()
+        HomeScreen(
+            currentYear = 2025,
+            currentMonth = 10,
+            selectedFilterType = RecordFilterType.DAILY,
+            onClickSelectedDate = { year, month -> },
+            onClickFilterType = { }
+        )
     }
 }
