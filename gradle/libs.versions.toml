@@ -46,8 +46,11 @@ kotlinxSerializationJson = "1.8.0"
 datastorePreferences = "1.1.1"
 datastorePreferencesCore = "1.1.1"
 
+balloon = "1.6.13"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+balloon = { module = "com.github.skydoves:balloon", version.ref = "balloon" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -120,6 +123,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 #kakao-login
 kakao-v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
+
+balloon-compose = { group = "com.github.skydoves", name = "balloon-compose", version.ref = "balloon"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
