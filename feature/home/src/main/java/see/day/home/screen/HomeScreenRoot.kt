@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.home.component.HomeImage
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -110,10 +111,9 @@ fun HomeScreen(
                     }
                 )
             },
-            containerColor = Color.Transparent,
             sheetContent = {
                 Column(
-                    modifier = modifier.fillMaxHeight(fraction = topPaddingFraction)
+                    modifier = modifier.fillMaxHeight(fraction = topPaddingFraction).fillMaxWidth()
                 ) {
                     Text("teaseda")
                     if (bottomSheetState.currentValue == SheetValue.Expanded) {
@@ -126,7 +126,8 @@ fun HomeScreen(
                 RoundedCornerShape(0.dp)
             } else {
                 RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-            }
+            },
+            sheetContainerColor = Color.White
         ) { innerPadding ->
         }
         FloatingActionButton(
