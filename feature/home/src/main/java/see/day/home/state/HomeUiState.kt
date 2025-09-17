@@ -29,9 +29,9 @@ data class HomeUiState(
             dailyDetailRecords = DailyDetailRecord(getTodayDate(), listOf())
         )
 
-        private fun getTodayDate(): String {
+        fun getTodayDate(): String {
             val now = LocalDate.now()
-            return "${now.year}-${now.monthValue}-${now.dayOfMonth}"
+            return "${now.year}-${now.monthValue.toString().padStart(2, '0')}-${now.dayOfMonth.toString().padStart(2, '0')}"
         }
     }
 }
