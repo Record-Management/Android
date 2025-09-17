@@ -4,6 +4,7 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -35,6 +36,11 @@ class CalendarMonthlyTest {
         )
 
         sut = retrofit.create(CalendarService::class.java)
+    }
+
+    @After
+    fun tearDown() {
+        mockWebServer.shutdown()
     }
 
     @Test
