@@ -1,4 +1,4 @@
-package see.day.mapper
+package see.day.mapper.calendar
 
 import see.day.model.calendar.DailyRecord
 import see.day.model.calendar.DailyRecords
