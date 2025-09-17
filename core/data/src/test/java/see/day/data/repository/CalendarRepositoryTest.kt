@@ -16,8 +16,10 @@ import see.day.domain.repository.CalendarRepository
 import see.day.model.record.RecordType
 import see.day.network.CalendarService
 import see.day.network.dto.CommonResponse
+import see.day.network.dto.calendar.DailyDetailRecordResponse
 import see.day.network.dto.calendar.DailyRecordResponse
 import see.day.network.dto.calendar.DailyRecordsResponse
+import see.day.network.dto.calendar.DetailRecordResponse
 import see.day.network.dto.calendar.MonthlyRecordResponse
 import see.day.repository.CalendarRepositoryImpl
 
@@ -59,6 +61,29 @@ class CalendarRepositoryTest {
 
             verify(calendarService).getMonthlyRecords(year, month, types)
         }
+    }
 
+    @Test
+    fun givenDate_whenGetDailyDetailRecord_thenReturnsDailyRecords() {
+        runTest {
+            // given
+            val date = "2025-09-17"
+
+            val response = successCommonResponse(
+                response = DailyDetailRecordResponse(
+                    date = date,
+                    records = listOf(DetailRecordResponse("", "HABIT", "", "", listOf(), "", "", "", ""))
+                )
+            )
+            whenever(calendarService.getDailyRecordData(date)).thenReturn(response)
+
+            // when
+            val result = sut.getDailyDetailRecords(date).getOrThrow()
+
+            // then
+            assertTrue(result.records.any { it.type == RecordType.HABIT })
+
+            verify(calendarService).getDailyRecordData(date)
+        }
     }
 }
