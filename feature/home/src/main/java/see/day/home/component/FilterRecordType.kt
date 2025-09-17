@@ -32,13 +32,14 @@ import com.skydoves.balloon.compose.setBackgroundColor
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.home.R
+import see.day.home.state.HomeUiEvent
 import see.day.home.util.RecordFilterType
 
 @Composable
 internal fun SelectedFilterRecordType(
     modifier: Modifier = Modifier,
     selectedFilterType: RecordFilterType,
-    onClickFilterType: (RecordFilterType) -> Unit,
+    uiEvent: (HomeUiEvent) -> Unit
 ) {
     val builder = rememberBalloonBuilder {
         setArrowSize(19)
@@ -82,7 +83,7 @@ internal fun SelectedFilterRecordType(
                                 .clip(CircleShape)
                                 .background(Color.White)
                                 .clickable {
-                                    onClickFilterType(type)
+                                    uiEvent(HomeUiEvent.OnClickFilterType(type))
                                     balloonWindow?.dismiss()
                                 }
                         }
@@ -136,7 +137,7 @@ private fun SelectedFilterRecordTypePreview() {
     SeeDayTheme {
         SelectedFilterRecordType(
             selectedFilterType = RecordFilterType.DAILY,
-            onClickFilterType = {}
+            uiEvent = {}
         )
     }
 }
