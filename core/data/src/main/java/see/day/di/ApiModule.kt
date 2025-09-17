@@ -16,6 +16,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import see.day.data.BuildConfig
 import see.day.datastore.DataStoreDataSource
 import see.day.network.AuthService
+import see.day.network.CalendarService
 import see.day.network.LoginService
 import see.day.network.UserService
 
@@ -121,5 +122,11 @@ class ApiModule {
     @Singleton
     fun provideUserService(@Main retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCalendarService(@Main retrofit: Retrofit): CalendarService {
+        return retrofit.create(CalendarService::class.java)
     }
 }

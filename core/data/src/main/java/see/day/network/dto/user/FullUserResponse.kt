@@ -13,6 +13,6 @@ data class FullUserResponse(
     val birthDate: String,
     val goalDays: Int,
     val notificationEnabled: Boolean,
-    val onboardingComplete: Boolean = true,
+    val onboardingCompleted: Boolean,
     val createdAt: String
 )
