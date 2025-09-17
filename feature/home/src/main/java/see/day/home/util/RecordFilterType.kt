@@ -1,7 +1,7 @@
 package see.day.home.util
 
 import androidx.annotation.DrawableRes
-import see.day.home.R
+import see.day.ui.R
 
 enum class RecordFilterType(@DrawableRes val iconRes: Int) {
     ALL(R.drawable.filter_all),

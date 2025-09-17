@@ -16,9 +16,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,6 +37,11 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.gray50
 import see.day.model.record.RecordType
+import see.day.model.record.RecordType.DAILY
+import see.day.model.record.RecordType.HABIT
+import see.day.model.record.RecordType.SCHEDULE
+import see.day.util.getGrayIcon
+import see.day.util.getIcon
 
 @Composable
 fun DayCell(
@@ -49,58 +51,123 @@ fun DayCell(
     year: Int,
     month: Int,
     day: Int,
+    filterType: RecordType?,
     mainRecordType: RecordType,
     records: List<RecordType>,
-    schedules : List<String>,
+    schedules: List<String>,
     onClickItem: (Int, Int, Int) -> Unit
 ) {
     Column(
         modifier = modifier
             .heightIn(min = 80.dp)
             .fillMaxWidth()
-            .clickable { onClickItem(year ,month, day) },
+            .clickable { onClickItem(year, month, day) },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = day.toString(),
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
-            color = if(isSelected) Color.White else if(isSameMonth) gray100 else gray40,
-            modifier = if(isSelected) {
-                modifier.fillMaxWidth().padding(horizontal = 17.dp).clip(RoundedCornerShape(100.dp)).background(MaterialTheme.colorScheme.primary)
+            color = if (isSelected) Color.White else if (isSameMonth) gray100 else gray40,
+            modifier = if (isSelected) {
+                modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 17.dp)
+                    .clip(RoundedCornerShape(100.dp))
+                    .background(MaterialTheme.colorScheme.primary)
             } else {
                 modifier.fillMaxWidth()
             }
         )
-        Box(
-            modifier = modifier
-                .height(25.dp)
-                .padding(horizontal = (5.5).dp)
-                .fillMaxWidth()
-        ) {
-            Row(
-                modifier = modifier
-                    .padding(top = 1.dp)
-                    .align(Alignment.Center)
-            ) {
-                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                Image(
-                    painter = painterResource(R.drawable.image_daily),
-                    modifier = modifier.size(24.dp),
-                    contentDescription = "이미지"
-                )
-            }
-            // 점이 찍히는 조건
-            Image(
-                painter = painterResource(R.drawable.ic_red_dot),
-                modifier = modifier
-                    .size(6.dp)
-                    .align(Alignment.TopCenter)
-                    .offset(x = (14.5).dp),
-                contentDescription = "선택된 버튼",
-            )
+        if (!isSameMonth) {
+            return
         }
-        if(schedules.isNotEmpty()) {
+        // 아이콘이 정상적인 색상으로 나오는 것
+        if(filterType == null && records.contains(mainRecordType)) {
+            Box(
+                modifier = modifier
+                    .height(25.dp)
+                    .padding(horizontal = (5.5).dp)
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    modifier = modifier
+                        .padding(top = 1.dp)
+                        .align(Alignment.Center)
+                ) {
+                    // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                    Image(
+                        painter = painterResource(mainRecordType.getIcon()),
+                        modifier = modifier.size(24.dp),
+                        contentDescription = "이미지",
+                    )
+                }
+                // 점이 찍히는 조건
+                if (records.size >= 2) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_red_dot),
+                        modifier = modifier
+                            .size(6.dp)
+                            .align(Alignment.TopCenter)
+                            .offset(x = (14.5).dp),
+                        contentDescription = "선택된 버튼",
+                    )
+                }
+            }
+        } else if(filterType == null && !records.contains(mainRecordType)) {
+            Box(
+                modifier = modifier
+                    .height(25.dp)
+                    .padding(horizontal = (5.5).dp)
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    modifier = modifier
+                        .padding(top = 1.dp)
+                        .align(Alignment.Center)
+                ) {
+                    // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                    Image(
+                        painter = painterResource(mainRecordType.getGrayIcon()),
+                        modifier = modifier.size(24.dp),
+                        contentDescription = "이미지",
+                    )
+                }
+                // 점이 찍히는 조건
+                if (records.isNotEmpty()) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_red_dot),
+                        modifier = modifier
+                            .size(6.dp)
+                            .align(Alignment.TopCenter)
+                            .offset(x = (14.5).dp),
+                        contentDescription = "선택된 버튼",
+                    )
+                }
+            }
+        } else if(filterType != null && records.contains(filterType) && (filterType != RecordType.SCHEDULE)) {
+            Box(
+                modifier = modifier
+                    .height(25.dp)
+                    .padding(horizontal = (5.5).dp)
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    modifier = modifier
+                        .padding(top = 1.dp)
+                        .align(Alignment.Center)
+                ) {
+                    // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                    Image(
+                        painter = painterResource(filterType.getIcon()),
+                        modifier = modifier.size(24.dp),
+                        contentDescription = "이미지",
+                    )
+                }
+            }
+        }
+
+        if (schedules.isNotEmpty() && (filterType == null || filterType == RecordType.SCHEDULE)) {
             Spacer(modifier = modifier.size(6.dp))
             Row(
                 modifier = modifier
@@ -113,10 +180,12 @@ fun DayCell(
                 verticalAlignment = Alignment.Bottom
             ) {
                 // 색상
-                Spacer(modifier = modifier
-                    .padding(2.dp)
-                    .size(width = 2.dp, height = 10.dp)
-                    .background(gray50))
+                Spacer(
+                    modifier = modifier
+                        .padding(2.dp)
+                        .size(width = 2.dp, height = 10.dp)
+                        .background(gray50)
+                )
                 Text(
                     text = schedules[0],
                     style = MaterialTheme.typography.headlineSmall,
@@ -125,9 +194,9 @@ fun DayCell(
                     modifier = modifier.padding(bottom = 1.dp)
                 )
             }
-            if(schedules.size >= 2) {
+            if (schedules.size >= 2) {
                 Text(
-                    text = "+${schedules.size-1}",
+                    text = "+${schedules.size - 1}",
                     modifier = modifier
                         .padding(2.dp)
                         .clip(RoundedCornerShape(4.dp))
@@ -137,13 +206,13 @@ fun DayCell(
                 )
             }
         }
-
     }
 }
 
+// 두 개 이상인 경우
 @Preview
 @Composable
-private fun DayCellPreview() {
+private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
     val context = LocalContext.current
     SeeDayTheme {
         Column(
@@ -153,39 +222,125 @@ private fun DayCellPreview() {
                 year = 2025,
                 month = 9,
                 day = 13,
-                mainRecordType = RecordType.DAILY,
-                records = listOf(RecordType.DAILY),
-                schedules = listOf("일정이있습니다.","하나 더 있습니다."),
+                filterType = null,
+                isSelected = true,
+                mainRecordType = DAILY,
+                records = listOf(DAILY, RecordType.HABIT),
+                schedules = listOf(),
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
-                }
+                },
+                isSameMonth = true,
             )
         }
     }
 }
 
+// 타입이 ALL이고 본인에 해당하는 타입이 없으며 records가 한 개 존재하는경우
 @Preview
 @Composable
-private fun DayCellsPreview() {
+private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
     val context = LocalContext.current
-    val list = (1..35).toList()
-    SeeDayTheme{
-        LazyVerticalGrid (
-            columns = GridCells.Fixed(7)
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
         ) {
-            items(items = list, key = { it}) { it ->
-                DayCell(
-                    year = 2025,
-                    month = 1,
-                    day = it,
-                    mainRecordType = RecordType.DAILY,
-                    records = listOf(RecordType.DAILY),
-                    schedules = listOf("일정이있습니다.","하나 더 있습니다."),
-                    onClickItem = { year, month, day ->
-                        Toast.makeText(context, "$month $day", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+            DayCell(
+                year = 2025,
+                month = 9,
+                day = 13,
+                filterType = null,
+                isSelected = true,
+                mainRecordType = DAILY,
+                records = listOf(RecordType.HABIT),
+                schedules = listOf("hello"),
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true,
+            )
         }
     }
 }
+
+// 타입이 Daily이고 본인에 해당하는 타입이 없으며 records가 여러 개 존재하는경우
+@Preview
+@Composable
+private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = 2025,
+                month = 9,
+                day = 13,
+                filterType = DAILY,
+                isSelected = true,
+                mainRecordType = DAILY,
+                records = listOf(DAILY, DAILY, HABIT),
+                schedules = listOf("hello"),
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true,
+            )
+        }
+    }
+}
+
+// 타입이 Daily이고 본인에 해당하는 타입이 없으며 record가 다른게 하나 존재하는 경우
+@Preview
+@Composable
+private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = 2025,
+                month = 9,
+                day = 13,
+                filterType = DAILY,
+                isSelected = true,
+                mainRecordType = DAILY,
+                records = listOf(HABIT),
+                schedules = listOf("hello"),
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true,
+            )
+        }
+    }
+}
+
+// 타입이 스케줄이고 본인에 해당하는 타입이 없으며 record가 다른게 하나 존재하는 경우
+@Preview
+@Composable
+private fun DayCellFilterTypeScheduleOneRecordNoSchedulePreview() {
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = 2025,
+                month = 9,
+                day = 13,
+                filterType = SCHEDULE,
+                isSelected = true,
+                mainRecordType = DAILY,
+                records = listOf(HABIT),
+                schedules = listOf("hello"),
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true,
+            )
+        }
+    }
+}
+// 상황별 분리
