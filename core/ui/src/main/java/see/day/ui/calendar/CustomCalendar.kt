@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.model.date.CalendarDayInfo
 import see.day.model.date.generateCalendarDays
 import see.day.model.record.RecordType
 import kotlin.math.abs
@@ -35,8 +36,9 @@ fun CustomCalendar(
     currentMonth: Int,
     selectedMonth: Int,
     selectedDay: Int,
-    // 해당 월, 그 전 월, 다음 월에 대한 정보들
-    // 메인으로 선택한 기록 타입
+    calendarDayInfo: List<CalendarDayInfo>,
+    currentFilterType: RecordType?,
+    mainRecordType: RecordType,
     onClickCell: (Int, Int, Int) -> Unit,
     onSwipeCalendar: (Int, Int) -> Unit,
 ) {
@@ -97,11 +99,16 @@ fun CustomCalendar(
                 month = date.month,
                 day = date.day,
                 isSameMonth = date.isCurrentMonth,
+                filterType = currentFilterType,
                 isSelected = currentYear == date.year && selectedDay == date.day && selectedMonth == date.month,
-                mainRecordType = RecordType.DAILY,
-                records = listOf(RecordType.DAILY),
-                schedules = listOf("asdsad", "asdasd"),
-                onClickItem = onClickCell
+                mainRecordType = mainRecordType,
+                records = calendarDayInfo.firstOrNull {
+                    it.day == date.day && it.month == date.month && it.year == date.year
+                }?.records ?: listOf(),
+                schedules = calendarDayInfo.firstOrNull {
+                    it.day == date.day && it.month == date.month && it.year == date.year
+                }?.schedules ?: listOf(),
+                onClickItem = onClickCell,
             )
         }
     }
@@ -129,14 +136,10 @@ private fun CustomCalendarPreview(){
                 Toast.makeText(context, "$year $month", Toast.LENGTH_SHORT).show()
                 currentYear = year
                 currentMonth = month
-            }
-
+            },
+            calendarDayInfo = listOf(),
+            currentFilterType = null,
+            mainRecordType = RecordType.EXERCISE
         )
     }
-}
-
-@Preview
-@Composable
-private fun CustomCalendarSwipePreview() {
-
 }

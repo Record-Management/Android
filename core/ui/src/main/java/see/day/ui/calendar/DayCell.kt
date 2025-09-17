@@ -83,91 +83,93 @@ fun DayCell(
             return
         }
         // 아이콘이 정상적인 색상으로 나오는 것
-        if(filterType == null && records.contains(mainRecordType)) {
-            Box(
-                modifier = modifier
-                    .height(25.dp)
-                    .padding(horizontal = (5.5).dp)
-                    .fillMaxWidth()
-            ) {
-                Row(
+        if(mainRecordType != SCHEDULE) {
+            if(filterType == null && records.contains(mainRecordType)) {
+                Box(
                     modifier = modifier
-                        .padding(top = 1.dp)
-                        .align(Alignment.Center)
+                        .height(25.dp)
+                        .padding(horizontal = (5.5).dp)
+                        .fillMaxWidth()
                 ) {
-                    // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                    Image(
-                        painter = painterResource(mainRecordType.getIcon()),
-                        modifier = modifier.size(24.dp),
-                        contentDescription = "이미지",
-                    )
-                }
-                // 점이 찍히는 조건
-                if (records.size >= 2) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_red_dot),
+                    Row(
                         modifier = modifier
-                            .size(6.dp)
-                            .align(Alignment.TopCenter)
-                            .offset(x = (14.5).dp),
-                        contentDescription = "선택된 버튼",
-                    )
+                            .padding(top = 1.dp)
+                            .align(Alignment.Center)
+                    ) {
+                        // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                        Image(
+                            painter = painterResource(mainRecordType.getIcon()),
+                            modifier = modifier.size(24.dp),
+                            contentDescription = "이미지",
+                        )
+                    }
+                    // 점이 찍히는 조건
+                    if (records.size >= 2) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_red_dot),
+                            modifier = modifier
+                                .size(6.dp)
+                                .align(Alignment.TopCenter)
+                                .offset(x = (14.5).dp),
+                            contentDescription = "선택된 버튼",
+                        )
+                    }
                 }
-            }
-        } else if(filterType == null && !records.contains(mainRecordType)) {
-            Box(
-                modifier = modifier
-                    .height(25.dp)
-                    .padding(horizontal = (5.5).dp)
-                    .fillMaxWidth()
-            ) {
-                Row(
+            } else if(filterType == null && !records.contains(mainRecordType)) {
+                Box(
                     modifier = modifier
-                        .padding(top = 1.dp)
-                        .align(Alignment.Center)
+                        .height(25.dp)
+                        .padding(horizontal = (5.5).dp)
+                        .fillMaxWidth()
                 ) {
-                    // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                    Image(
-                        painter = painterResource(mainRecordType.getGrayIcon()),
-                        modifier = modifier.size(24.dp),
-                        contentDescription = "이미지",
-                    )
-                }
-                // 점이 찍히는 조건
-                if (records.isNotEmpty()) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_red_dot),
+                    Row(
                         modifier = modifier
-                            .size(6.dp)
-                            .align(Alignment.TopCenter)
-                            .offset(x = (14.5).dp),
-                        contentDescription = "선택된 버튼",
-                    )
+                            .padding(top = 1.dp)
+                            .align(Alignment.Center)
+                    ) {
+                        // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                        Image(
+                            painter = painterResource(mainRecordType.getGrayIcon()),
+                            modifier = modifier.size(24.dp),
+                            contentDescription = "이미지",
+                        )
+                    }
+                    // 점이 찍히는 조건
+                    if (records.isNotEmpty()) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_red_dot),
+                            modifier = modifier
+                                .size(6.dp)
+                                .align(Alignment.TopCenter)
+                                .offset(x = (14.5).dp),
+                            contentDescription = "선택된 버튼",
+                        )
+                    }
                 }
-            }
-        } else if(filterType != null && records.contains(filterType) && (filterType != RecordType.SCHEDULE)) {
-            Box(
-                modifier = modifier
-                    .height(25.dp)
-                    .padding(horizontal = (5.5).dp)
-                    .fillMaxWidth()
-            ) {
-                Row(
+            } else if(filterType != null && records.contains(filterType)) {
+                Box(
                     modifier = modifier
-                        .padding(top = 1.dp)
-                        .align(Alignment.Center)
+                        .height(25.dp)
+                        .padding(horizontal = (5.5).dp)
+                        .fillMaxWidth()
                 ) {
-                    // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                    Image(
-                        painter = painterResource(filterType.getIcon()),
-                        modifier = modifier.size(24.dp),
-                        contentDescription = "이미지",
-                    )
+                    Row(
+                        modifier = modifier
+                            .padding(top = 1.dp)
+                            .align(Alignment.Center)
+                    ) {
+                        // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                        Image(
+                            painter = painterResource(filterType.getIcon()),
+                            modifier = modifier.size(24.dp),
+                            contentDescription = "이미지",
+                        )
+                    }
                 }
             }
         }
 
-        if (schedules.isNotEmpty() && (filterType == null || filterType == RecordType.SCHEDULE)) {
+        if (schedules.isNotEmpty() && (filterType == null || filterType == SCHEDULE)) {
             Spacer(modifier = modifier.size(6.dp))
             Row(
                 modifier = modifier
