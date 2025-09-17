@@ -1,6 +1,7 @@
 package see.day.home.screen
 
 import android.content.res.Configuration
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
@@ -41,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.launch
 import see.day.home.R
@@ -48,23 +51,38 @@ import see.day.home.component.HomeTopBar
 import see.day.home.component.SelectedDateComponent
 import see.day.home.component.SelectedFilterRecordType
 import see.day.home.util.RecordFilterType
+import see.day.model.record.RecordType
+import see.day.ui.calendar.CustomCalendar
 
 @Composable
 fun HomeScreenRoot(
     modifier: Modifier = Modifier
 ) {
-    val currentYear by remember { mutableStateOf(2025) }
-    val currentMonth by remember { mutableStateOf(10) }
+    var currentYear by remember { mutableStateOf(2025) }
+    var currentMonth by remember { mutableStateOf(9) }
+    var selectedMonth by remember { mutableStateOf(10) }
+    var selectedDay by remember { mutableStateOf(17) }
     var selectedFilterType by remember { mutableStateOf(RecordFilterType.ALL) }
+    var mainRecordType by remember { mutableStateOf(RecordType.DAILY) }
     HomeScreen(
         modifier,
         currentYear,
         currentMonth,
+        selectedMonth,
+        selectedDay,
         selectedFilterType,
-        onClickSelectedDate = { year, month -> },
+        mainRecordType = mainRecordType,
+        onClickSelectedDate = { year, month ->
+            currentYear = year
+            currentMonth = month
+        },
         onClickFilterType = { type ->
             selectedFilterType = type
-        }
+        },
+        onClickCell = { year, month, day ->
+            selectedMonth = month
+            selectedDay = day
+        },
     )
 }
 
@@ -74,9 +92,13 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     currentYear: Int,
     currentMonth: Int,
+    selectedMonth : Int,
+    selectedDay: Int,
     selectedFilterType: RecordFilterType,
+    mainRecordType: RecordType,
     onClickSelectedDate: (Int, Int) -> Unit,
     onClickFilterType: (RecordFilterType) -> Unit,
+    onClickCell : (Int, Int, Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
@@ -144,6 +166,19 @@ fun HomeScreen(
                         Spacer(modifier = modifier.weight(1f))
                         SelectedFilterRecordType(modifier, selectedFilterType, onClickFilterType)
                     }
+                    Spacer(modifier = modifier.padding(top = 10.dp))
+                    CustomCalendar(
+                        modifier = modifier,
+                        currentYear = currentYear,
+                        currentMonth = currentMonth,
+                        selectedMonth = selectedMonth,
+                        selectedDay = selectedDay,
+                        calendarDayInfo = listOf(),
+                        currentFilterType = selectedFilterType.toRecordType(),
+                        mainRecordType = mainRecordType,
+                        onClickCell = onClickCell,
+                        onSwipeCalendar = onClickSelectedDate
+                    )
                 }
             },
             sheetPeekHeight = bottomSheetPeekHeight,
@@ -159,7 +194,8 @@ fun HomeScreen(
             onClick = {},
             modifier = modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 20.dp),
+                .padding(end = 16.dp, bottom = 20.dp)
+                .systemBarsPadding(),
             containerColor = MaterialTheme.colorScheme.primary,
             shape = CircleShape,
             elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
@@ -179,6 +215,16 @@ fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings:
     return (screenHeight - statusBarPaddings.calculateTopPadding() - topBarHeight) / screenHeight
 }
 
+fun RecordFilterType.toRecordType() : RecordType? {
+    return when(this) {
+        RecordFilterType.ALL -> null
+        RecordFilterType.DAILY -> RecordType.DAILY
+        RecordFilterType.EXERCISE -> RecordType.EXERCISE
+        RecordFilterType.SCHEDULE -> RecordType.SCHEDULE
+        RecordFilterType.HABIT -> RecordType.HABIT
+    }
+}
+
 @Preview
 @Composable
 private fun HomeScreenPreview() {
@@ -188,7 +234,11 @@ private fun HomeScreenPreview() {
             currentMonth = 10,
             selectedFilterType = RecordFilterType.DAILY,
             onClickSelectedDate = { year, month -> },
-            onClickFilterType = { }
+            onClickFilterType = { },
+            selectedMonth = 9,
+            selectedDay = 15,
+            mainRecordType = RecordType.DAILY,
+            onClickCell = { year, month, day -> }
         )
     }
 }
