@@ -19,6 +19,6 @@ data class DailyRecordsResponse(
 data class DailyRecordResponse(
     val id: String,
     val type: String,
-    val emotion: String
+    val emotion: String = ""
 )
 
