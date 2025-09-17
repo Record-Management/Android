@@ -10,7 +10,8 @@ import org.junit.Before
 import org.junit.Test
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
-import see.day.data.api.calendarService.json.calendarGetResponse
+import see.day.data.api.calendarService.json.getDetailRecordsResponse
+import see.day.data.api.calendarService.json.getMonthlyRecordResponse
 import see.day.network.CalendarService
 
 class CalendarMonthlyTest {
@@ -37,13 +38,13 @@ class CalendarMonthlyTest {
     }
 
     @Test
-    fun givenYearAndMonth_whenGetCalendarInfo_thenWorksFine() = runTest{
+    fun givenYearAndMonth_whenGetMonthlyRecord_thenWorksFine() = runTest {
         // given
         val year = 2025
         val month = 1
         val types = arrayOf<String>()
 
-        val responseJson = calendarGetResponse
+        val responseJson = getMonthlyRecordResponse
 
         mockWebServer.enqueue(
             MockResponse()
@@ -51,7 +52,7 @@ class CalendarMonthlyTest {
                 .setBody(responseJson)
         )
         // when
-        val response = sut.getMonthlyRecords(year,month,types)
+        val response = sut.getMonthlyRecords(year, month, types)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
@@ -65,6 +66,33 @@ class CalendarMonthlyTest {
         assertNotNull(response.data)
         assertEquals(year, response.data?.year)
         assertEquals(month, response.data?.month)
+    }
 
+    @Test
+    fun givenDate_whenGetDetailRecord_thenWorksFine() = runTest {
+        // given
+        val date = "2025-01-07"
+
+        val responseJson = getDetailRecordsResponse
+
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(responseJson)
+        )
+        // when
+        val response = sut.getDailyRecordData(date)
+        val recordedRequest = mockWebServer.takeRequest()
+
+        // then
+        // 요청 검증
+        assertEquals("/api/records/daily/$date", recordedRequest.path)
+
+        // 응답 body 검증
+        assertEquals(200, response.statusCode)
+        assertEquals("일일 기록이 성공적으로 조회되었습니다", response.message)
+        assertEquals("S200", response.code)
+        assertNotNull(response.data)
+        assertEquals(date, response.data?.date)
     }
 }

@@ -4,6 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import see.day.network.dto.CommonResponse
+import see.day.network.dto.calendar.DailyDetailRecordResponse
 import see.day.network.dto.calendar.MonthlyRecordResponse
 
 interface CalendarService {
@@ -11,4 +12,6 @@ interface CalendarService {
     @GET("api/records/calendar/{year}/{month}")
     suspend fun getMonthlyRecords(@Path("year") year: Int, @Path("month") month: Int, @Query("types") types: Array<String>) : CommonResponse<MonthlyRecordResponse>
 
+    @GET("api/records/daily/{date}")
+    suspend fun getDailyRecordData(@Path("date") date: String) : CommonResponse<DailyDetailRecordResponse>
 }
