@@ -12,6 +12,6 @@ interface CalendarService {
     @GET("api/records/calendar/{year}/{month}")
     suspend fun getMonthlyRecords(@Path("year") year: Int, @Path("month") month: Int, @Query("types") types: Array<String>) : CommonResponse<MonthlyRecordResponse>
 
-    @GET("api/records/daily/{date}")
+    @GET("api/records/date/{date}")
     suspend fun getDailyRecordData(@Path("date") date: String) : CommonResponse<DailyDetailRecordResponse>
 }
