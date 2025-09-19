@@ -34,7 +34,6 @@ fun List<DailyRecordResponse>.toDailyRecordList() : List<DailyRecord> {
 fun DailyRecordResponse.toModel() : DailyRecord {
     return DailyRecord(
         id = id,
-        type = RecordType.valueOf(type),
-        emotion = emotion
+        type = RecordType.valueOf(type)
     )
 }
