@@ -33,7 +33,7 @@ fun OnboardingCompleteLabel(modifier: Modifier = Modifier, @StringRes labelText:
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(R.drawable.ic_checked),
+                painter = painterResource(see.day.designsystem.R.drawable.ic_checked),
                 contentDescription = "체크",
                 modifier = Modifier.size(20.dp)
             )

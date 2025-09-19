@@ -5,6 +5,16 @@ import see.day.model.record.RecordType
 import see.day.ui.R
 
 @DrawableRes
+fun RecordType.getBigIcon(): Int {
+    return when (this) {
+        RecordType.DAILY -> see.day.designsystem.R.drawable.record_daily
+        RecordType.EXERCISE -> see.day.designsystem.R.drawable.record_exercise
+        RecordType.SCHEDULE -> see.day.designsystem.R.drawable.record_schedule
+        RecordType.HABIT -> see.day.designsystem.R.drawable.record_habit
+    }
+}
+
+@DrawableRes
 fun RecordType.getIcon() : Int {
     return when(this) {
         RecordType.DAILY -> R.drawable.filter_daily
