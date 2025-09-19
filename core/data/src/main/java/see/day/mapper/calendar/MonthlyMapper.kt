@@ -12,7 +12,7 @@ fun MonthlyRecordResponse.toModel(): MonthlyRecord {
     return MonthlyRecord(
         year = year,
         month = month,
-        dailyRecords = dailyRecords.toDailyRecordsList()
+        dailyRecords = monthlyRecords.toDailyRecordsList()
     )
 }
 
