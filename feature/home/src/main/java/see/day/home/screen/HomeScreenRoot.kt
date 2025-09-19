@@ -108,6 +108,7 @@ fun HomeScreen(
     val onDownBottomSheet: () -> Unit = {
         coroutineScope.launch {
             bottomSheetState.partialExpand()
+            toolbarAlpha = 0f
         }
     }
 
@@ -123,6 +124,9 @@ fun HomeScreen(
                 if (min != null && max != null) {
                     // 0f ~ 1f 사이로 정규화해서 알파 계산
                     toolbarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
+                    if(bottomSheetState.currentValue == SheetValue.Expanded) {
+                        toolbarAlpha = 1f
+                    }
                 }
             }
     }

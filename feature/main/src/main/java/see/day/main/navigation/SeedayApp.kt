@@ -33,7 +33,10 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
             homeNavigation(
                 onClickAddRecord = navigationState::navigateAddRecord
             )
-            dailyNavigation()
+            dailyNavigation(
+                onClickBackButton = navigationState.navController::popBackStack
+            )
+
         }
     }
 }

@@ -14,8 +14,8 @@ fun NavController.navigateDaily(navOptions: NavOptions? = null) {
     navigate(Daily,navOptions)
 }
 
-fun NavGraphBuilder.dailyNavigation() {
+fun NavGraphBuilder.dailyNavigation(onClickBackButton : () -> Unit) {
     composable<Daily> {
-        DailyScreenRoot()
+        DailyScreenRoot(onClickBackButton = onClickBackButton)
     }
 }
