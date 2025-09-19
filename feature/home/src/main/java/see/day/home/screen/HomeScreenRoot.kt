@@ -45,11 +45,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import see.day.home.R
 import see.day.home.component.HomeTopBar
 import see.day.home.component.SelectedDateComponent
 import see.day.home.component.SelectedFilterRecordType
+import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
@@ -60,9 +62,21 @@ import see.day.ui.calendar.CustomCalendar
 @Composable
 fun HomeScreenRoot(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onClickAddRecord: (RecordType) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is HomeUiEffect.onGoAddRecord -> {
+                    onClickAddRecord(effect.recordType)
+                }
+            }
+        }
+    }
+
     HomeScreen(
         modifier,
         uiState = uiState,
@@ -172,7 +186,7 @@ fun HomeScreen(
         ) { innerPadding ->
         }
         FloatingActionButton(
-            onClick = {},
+            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(RecordType.DAILY))},
             modifier = modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 16.dp, bottom = 20.dp)

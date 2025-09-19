@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -13,6 +16,7 @@ import see.day.domain.usecase.calendar.GetDetailDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.user.GetUserRecordTypeUseCase
 import see.day.home.screen.toRecordType
+import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
@@ -32,6 +36,9 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    private val _uiEffect: MutableSharedFlow<HomeUiEffect> = MutableSharedFlow()
+    val uiEffect: SharedFlow<HomeUiEffect> = _uiEffect.asSharedFlow()
 
     private val monthlyRecord: MutableStateFlow<List<CalendarDayInfo>> = MutableStateFlow(listOf())
 
@@ -76,6 +83,10 @@ class HomeViewModel @Inject constructor(
 
             is HomeUiEvent.OnClickCell -> {
                 onClickCell(uiEvent.year, uiEvent.month, uiEvent.day)
+            }
+
+            is HomeUiEvent.OnClickAddButton -> {
+                onClickAddRecord(uiEvent.recordType)
             }
         }
     }
@@ -145,7 +156,12 @@ class HomeViewModel @Inject constructor(
                 }
 
         }
+    }
 
+    private fun onClickAddRecord(recordType: RecordType) {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.onGoAddRecord(recordType))
+        }
     }
 
     private fun List<CalendarDayInfo>.filterMonthlyRecords(recordType: RecordType): List<CalendarDayInfo> {
