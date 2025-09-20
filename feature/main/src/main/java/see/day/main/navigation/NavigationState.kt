@@ -10,6 +10,9 @@ import androidx.navigation.navOptions
 import record.daily.login.navigation.navigateLogin
 import see.day.daily.navigation.navigateDaily
 import see.day.home.navigation.navigateHome
+import see.day.main.navigation.graph.navigateExercise
+import see.day.main.navigation.graph.navigateHabit
+import see.day.main.navigation.graph.navigateSchedule
 import see.day.model.record.RecordType
 import see.day.onboarding.navigation.navigateOnboarding
 import see.day.onboarding.navigation.navigateOnboardingComplete
@@ -47,7 +50,7 @@ class NavigationState(
         val navOptions : NavOptions? = if(deleteBackStack) {
             navOptions {
                 popUpTo(navController.previousBackStackEntry?.destination?.id ?: -1) {
-                    inclusive = true
+                    inclusive = false
                 }
             }
         } else null
@@ -55,7 +58,15 @@ class NavigationState(
             RecordType.DAILY -> {
                 navController.navigateDaily(navOptions)
             }
-            else -> { }
+            RecordType.EXERCISE -> {
+                navController.navigateExercise(navOptions)
+            }
+            RecordType.HABIT -> {
+                navController.navigateHabit(navOptions)
+            }
+            RecordType.SCHEDULE -> {
+                navController.navigateSchedule(navOptions)
+            }
         }
     }
 }

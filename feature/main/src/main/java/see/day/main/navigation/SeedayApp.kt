@@ -12,6 +12,9 @@ import record.daily.login.navigation.loginNavigation
 import see.day.daily.navigation.dailyNavigation
 import see.day.main.navigation.graph.mainNavigation
 import see.day.home.navigation.homeNavigation
+import see.day.main.navigation.graph.exerciseNavigation
+import see.day.main.navigation.graph.habitNavigation
+import see.day.main.navigation.graph.scheduleNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
 @Composable
@@ -34,7 +37,17 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
                 onClickAddRecord = navigationState::navigateAddRecord
             )
             dailyNavigation(
-                onClickBackButton = navigationState.navController::popBackStack
+                onClickBackButton = navigationState.navController::popBackStack,
+                onClickChangeRecordType = navigationState::navigateAddRecord
+            )
+            exerciseNavigation(
+                onClickChangeRecordType = navigationState::navigateAddRecord
+            )
+            habitNavigation(
+                onClickChangeRecordType = navigationState::navigateAddRecord
+            )
+            scheduleNavigation(
+                onClickChangeRecordType = navigationState::navigateAddRecord
             )
 
         }
