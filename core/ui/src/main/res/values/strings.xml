@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="change_record_title">어떤 하루로 변경할까요?</string>
+    <string name="change_record">변경하기</string>
+</resources>
