@@ -44,19 +44,7 @@ import see.day.util.getGrayIcon
 import see.day.util.getIcon
 
 @Composable
-fun DayCell(
-    modifier: Modifier = Modifier,
-    isSameMonth: Boolean = true,
-    isSelected: Boolean = false,
-    year: Int,
-    month: Int,
-    day: Int,
-    filterType: RecordType?,
-    mainRecordType: RecordType,
-    records: List<RecordType>,
-    schedules: List<String>,
-    onClickItem: (Int, Int, Int) -> Unit
-) {
+fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType, records: List<RecordType>, schedules: List<String>, onClickItem: (Int, Int, Int) -> Unit) {
     Column(
         modifier = modifier
             .heightIn(min = 80.dp)
@@ -83,8 +71,8 @@ fun DayCell(
             return
         }
         // 아이콘이 정상적인 색상으로 나오는 것
-        if(mainRecordType != SCHEDULE) {
-            if(filterType == null && records.contains(mainRecordType)) {
+        if (mainRecordType != SCHEDULE) {
+            if (filterType == null && records.contains(mainRecordType)) {
                 Box(
                     modifier = modifier
                         .height(25.dp)
@@ -100,7 +88,7 @@ fun DayCell(
                         Image(
                             painter = painterResource(mainRecordType.getIcon()),
                             modifier = modifier.size(24.dp),
-                            contentDescription = "이미지",
+                            contentDescription = "이미지"
                         )
                     }
                     // 점이 찍히는 조건
@@ -111,11 +99,11 @@ fun DayCell(
                                 .size(6.dp)
                                 .align(Alignment.TopCenter)
                                 .offset(x = (14.5).dp),
-                            contentDescription = "선택된 버튼",
+                            contentDescription = "선택된 버튼"
                         )
                     }
                 }
-            } else if(filterType == null && !records.contains(mainRecordType)) {
+            } else if (filterType == null && !records.contains(mainRecordType)) {
                 Box(
                     modifier = modifier
                         .height(25.dp)
@@ -131,7 +119,7 @@ fun DayCell(
                         Image(
                             painter = painterResource(mainRecordType.getGrayIcon()),
                             modifier = modifier.size(24.dp),
-                            contentDescription = "이미지",
+                            contentDescription = "이미지"
                         )
                     }
                     // 점이 찍히는 조건
@@ -142,11 +130,11 @@ fun DayCell(
                                 .size(6.dp)
                                 .align(Alignment.TopCenter)
                                 .offset(x = (14.5).dp),
-                            contentDescription = "선택된 버튼",
+                            contentDescription = "선택된 버튼"
                         )
                     }
                 }
-            } else if(filterType != null && records.contains(filterType)) {
+            } else if (filterType != null && records.contains(filterType)) {
                 Box(
                     modifier = modifier
                         .height(25.dp)
@@ -162,7 +150,7 @@ fun DayCell(
                         Image(
                             painter = painterResource(filterType.getIcon()),
                             modifier = modifier.size(24.dp),
-                            contentDescription = "이미지",
+                            contentDescription = "이미지"
                         )
                     }
                 }
@@ -232,7 +220,7 @@ private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
-                isSameMonth = true,
+                isSameMonth = true
             )
         }
     }
@@ -259,7 +247,7 @@ private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
-                isSameMonth = true,
+                isSameMonth = true
             )
         }
     }
@@ -286,7 +274,7 @@ private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
-                isSameMonth = true,
+                isSameMonth = true
             )
         }
     }
@@ -313,7 +301,7 @@ private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
-                isSameMonth = true,
+                isSameMonth = true
             )
         }
     }
@@ -340,7 +328,7 @@ private fun DayCellFilterTypeScheduleOneRecordNoSchedulePreview() {
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
-                isSameMonth = true,
+                isSameMonth = true
             )
         }
     }

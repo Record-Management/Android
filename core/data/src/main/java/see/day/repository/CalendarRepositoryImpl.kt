@@ -1,5 +1,6 @@
 package see.day.repository
 
+import javax.inject.Inject
 import see.day.domain.repository.CalendarRepository
 import see.day.mapper.calendar.toModel
 import see.day.model.calendar.DailyDetailRecord
@@ -7,8 +8,6 @@ import see.day.model.calendar.MonthlyRecord
 import see.day.model.exception.NoDataException
 import see.day.network.CalendarService
 import see.day.utils.ErrorUtils.createResult
-import javax.inject.Inject
-
 
 class CalendarRepositoryImpl @Inject constructor(
     private val calendarService: CalendarService
@@ -21,5 +20,4 @@ class CalendarRepositoryImpl @Inject constructor(
     override suspend fun getDailyDetailRecords(date: String): Result<DailyDetailRecord> {
         return createResult { calendarService.getDailyRecordData(date).data?.toModel() ?: throw NoDataException() }
     }
-
 }

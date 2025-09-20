@@ -9,8 +9,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
-import see.day.main.navigation.graph.mainNavigation
+import see.day.daily.navigation.dailyNavigation
+import see.day.daily.navigation.navigateDailyWrite
 import see.day.home.navigation.homeNavigation
+import see.day.main.navigation.graph.exerciseNavigation
+import see.day.main.navigation.graph.habitNavigation
+import see.day.main.navigation.graph.mainNavigation
+import see.day.main.navigation.graph.scheduleNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
 @Composable
@@ -29,7 +34,23 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
                 onGoOnboardingComplete = navigationState::navigateOnboardingComplete,
                 onGoHome = navigationState::navigateHome
             )
-            homeNavigation()
+            homeNavigation(
+                onClickAddRecord = navigationState::navigateAddRecord
+            )
+            dailyNavigation(
+                onClickBackButton = navigationState.navController::popBackStack,
+                onClickChangeRecordType = navigationState::navigateAddRecord,
+                onClickEmotion = navigationState.navController::navigateDailyWrite
+            )
+            exerciseNavigation(
+                onClickChangeRecordType = navigationState::navigateAddRecord
+            )
+            habitNavigation(
+                onClickChangeRecordType = navigationState::navigateAddRecord
+            )
+            scheduleNavigation(
+                onClickChangeRecordType = navigationState::navigateAddRecord
+            )
         }
     }
 }

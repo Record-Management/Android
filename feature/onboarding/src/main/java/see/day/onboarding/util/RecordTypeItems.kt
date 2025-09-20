@@ -8,10 +8,10 @@ import see.day.onboarding.R
 @DrawableRes
 fun RecordType.getIcon(): Int {
     return when (this) {
-        RecordType.DAILY -> R.drawable.record_daily
-        RecordType.EXERCISE -> R.drawable.record_exercise
-        RecordType.SCHEDULE -> R.drawable.record_schedule
-        RecordType.HABIT -> R.drawable.record_habit
+        RecordType.DAILY -> see.day.designsystem.R.drawable.record_daily
+        RecordType.EXERCISE -> see.day.designsystem.R.drawable.record_exercise
+        RecordType.SCHEDULE -> see.day.designsystem.R.drawable.record_schedule
+        RecordType.HABIT -> see.day.designsystem.R.drawable.record_habit
     }
 }
 

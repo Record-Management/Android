@@ -11,9 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
-import see.day.data.api.calendarService.json.getMonthlyRecordResponse
 import see.day.data.api.userService.json.getUserResponse
-import see.day.network.CalendarService
 import see.day.network.UserService
 
 class UserTest {
@@ -60,7 +58,7 @@ class UserTest {
 
         // then
         // 요청 검증
-        assertEquals("/api/users/me",recordedRequest.path)
+        assertEquals("/api/users/me", recordedRequest.path)
 
         // 응답 body 검증
         assertEquals(200, response.statusCode)

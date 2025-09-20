@@ -1,6 +1,7 @@
 plugins {
     id("youth.android.library")
     id("youth.android.compose")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -9,7 +10,10 @@ android {
 
 dependencies {
 
+    implementation(project(":core:model"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    implementation(libs.kotlinx.serialization.json)
 }

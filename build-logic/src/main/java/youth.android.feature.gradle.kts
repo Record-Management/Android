@@ -4,6 +4,7 @@ import com.youth.app.libs
 plugins {
     id("youth.android.library")
     id("youth.android.compose")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -40,4 +41,5 @@ dependencies {
 
     implementation(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
     implementation(libs.findLibrary("androidx.lifecycle.runtime.ktx").get())
+    implementation(libs.findLibrary("kotlinx.serialization.json").get())
 }

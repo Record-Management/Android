@@ -38,5 +38,6 @@ include(
     "feature:main",
     "feature:login",
     "feature:onboarding",
-    "feature:home"
+    "feature:home",
+    "feature:daily"
 )

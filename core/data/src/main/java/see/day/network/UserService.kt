@@ -13,5 +13,5 @@ interface UserService {
     suspend fun postOnboardComplete(@Body requestBody: RequestBody): CommonResponse<FullUserResponse>
 
     @GET("api/users/me")
-    suspend fun getUser() : CommonResponse<FullUserResponse>
+    suspend fun getUser(): CommonResponse<FullUserResponse>
 }

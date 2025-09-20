@@ -36,11 +36,7 @@ import see.day.home.state.HomeUiEvent
 import see.day.home.util.RecordFilterType
 
 @Composable
-internal fun SelectedFilterRecordType(
-    modifier: Modifier = Modifier,
-    selectedFilterType: RecordFilterType,
-    uiEvent: (HomeUiEvent) -> Unit
-) {
+internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFilterType: RecordFilterType, uiEvent: (HomeUiEvent) -> Unit) {
     val builder = rememberBalloonBuilder {
         setArrowSize(19)
         setArrowPosition(0.8f)
@@ -54,7 +50,6 @@ internal fun SelectedFilterRecordType(
     }
 
     var balloonWindow: BalloonWindow? by remember { mutableStateOf(null) }
-
 
     Balloon(
         builder = builder,

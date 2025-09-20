@@ -1,11 +1,10 @@
 package see.day.home.state
 
+import java.time.LocalDate
 import see.day.home.util.RecordFilterType
 import see.day.model.calendar.DailyDetailRecord
-import see.day.model.calendar.DailyRecords
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
-import java.time.LocalDate
 
 data class HomeUiState(
     val currentYear: Int,

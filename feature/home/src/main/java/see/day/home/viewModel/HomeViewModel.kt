@@ -3,9 +3,13 @@ package see.day.home.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -13,15 +17,12 @@ import see.day.domain.usecase.calendar.GetDetailDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.user.GetUserRecordTypeUseCase
 import see.day.home.screen.toRecordType
+import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
-import see.day.model.date.CalendarDay
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
-import timber.log.Timber
-import java.util.Calendar
-import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -32,6 +33,9 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    private val _uiEffect: MutableSharedFlow<HomeUiEffect> = MutableSharedFlow()
+    val uiEffect: SharedFlow<HomeUiEffect> = _uiEffect.asSharedFlow()
 
     private val monthlyRecord: MutableStateFlow<List<CalendarDayInfo>> = MutableStateFlow(listOf())
 
@@ -56,11 +60,8 @@ class HomeViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-
             }
-
         }
-
     }
 
     // 얘는 날짜 정보와 월간
@@ -76,6 +77,10 @@ class HomeViewModel @Inject constructor(
 
             is HomeUiEvent.OnClickCell -> {
                 onClickCell(uiEvent.year, uiEvent.month, uiEvent.day)
+            }
+
+            is HomeUiEvent.OnClickAddButton -> {
+                onClickAddRecord(uiEvent.recordType)
             }
         }
     }
@@ -97,7 +102,6 @@ class HomeViewModel @Inject constructor(
                     }
                 }
         }
-
     }
 
     private fun onClickFilterType(filterType: RecordFilterType) {
@@ -141,18 +145,27 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }.onFailure {
-
                 }
-
         }
+    }
 
+    private fun onClickAddRecord(recordType: RecordType) {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+        }
     }
 
     private fun List<CalendarDayInfo>.filterMonthlyRecords(recordType: RecordType): List<CalendarDayInfo> {
         return this.map {
-            CalendarDayInfo(it.year, it.month, it.day, it.records.filter {
-                it == recordType
-            }, it.schedules)
+            CalendarDayInfo(
+                it.year,
+                it.month,
+                it.day,
+                it.records.filter {
+                    it == recordType
+                },
+                it.schedules
+            )
         }
     }
 }

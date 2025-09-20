@@ -1,7 +1,7 @@
 package see.day.repository
 
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -65,6 +65,5 @@ class LoginRepositoryImpl @Inject constructor(
                     return@flow emit(AppStartState.LOGIN)
                 }
         }
-
     }
 }

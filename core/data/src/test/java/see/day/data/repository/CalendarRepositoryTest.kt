@@ -1,8 +1,6 @@
 package see.day.data.repository
 
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -15,7 +13,6 @@ import see.day.data.response.successCommonResponse
 import see.day.domain.repository.CalendarRepository
 import see.day.model.record.RecordType
 import see.day.network.CalendarService
-import see.day.network.dto.CommonResponse
 import see.day.network.dto.calendar.DailyDetailRecordResponse
 import see.day.network.dto.calendar.DailyRecordResponse
 import see.day.network.dto.calendar.DailyRecordsResponse
@@ -48,7 +45,7 @@ class CalendarRepositoryTest {
                 response = MonthlyRecordResponse(
                     year,
                     month,
-                    dailyRecords = listOf(DailyRecordsResponse(date = "", records = listOf(DailyRecordResponse("", "DAILY"))))
+                    monthlyRecords = listOf(DailyRecordsResponse(date = "", records = listOf(DailyRecordResponse("", "DAILY"))))
                 )
             )
             whenever(calendarService.getMonthlyRecords(year, month, types)).thenReturn(response)

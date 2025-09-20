@@ -14,9 +14,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.home.R
 
 @Composable
-internal fun BoxScope.HomeImage(
-    modifier: Modifier = Modifier
-) {
+internal fun BoxScope.HomeImage(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(R.drawable.home_screen_background),
         contentDescription = "홈 화면 이미지",
@@ -31,7 +29,7 @@ internal fun BoxScope.HomeImage(
 @Composable
 private fun HomeImagePreview() {
     SeeDayTheme {
-        Box() {
+        Box {
             HomeImage()
         }
     }

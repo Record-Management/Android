@@ -20,8 +20,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 import record.daily.login.navigation.LOGIN_ROUTE
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.main.navigation.SeedayApp
 import see.day.home.navigation.HOME_ROUTE
+import see.day.main.navigation.SeedayApp
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
 import see.day.onboarding.navigation.ONBOARDING_ROUTE
@@ -44,14 +44,14 @@ class MainActivity : ComponentActivity() {
                     appStartDestination = when (appStartState) {
                         AppStartState.LOGIN -> LOGIN_ROUTE
                         AppStartState.HOME -> {
-                            if(appStartDestination == null) {
+                            if (appStartDestination == null) {
                                 HOME_ROUTE
                             } else {
                                 appStartDestination
                             }
                         }
                         AppStartState.ONBOARDING -> {
-                            if(appStartDestination == null) {
+                            if (appStartDestination == null) {
                                 ONBOARDING_ROUTE
                             } else {
                                 appStartDestination

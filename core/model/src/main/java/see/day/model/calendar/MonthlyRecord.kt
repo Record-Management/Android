@@ -15,6 +15,5 @@ data class DailyRecords(
 
 data class DailyRecord(
     val id: String,
-    val type: RecordType,
-    val emotion: String
+    val type: RecordType
 )

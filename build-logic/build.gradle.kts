@@ -7,6 +7,7 @@ dependencies {
     implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
+    implementation("org.jetbrains.kotlin:kotlin-serialization:1.8.0")
 }
 
 gradlePlugin {
