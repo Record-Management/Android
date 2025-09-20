@@ -11,10 +11,10 @@ import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
 import see.day.daily.navigation.dailyNavigation
 import see.day.daily.navigation.navigateDailyWrite
-import see.day.main.navigation.graph.mainNavigation
 import see.day.home.navigation.homeNavigation
 import see.day.main.navigation.graph.exerciseNavigation
 import see.day.main.navigation.graph.habitNavigation
+import see.day.main.navigation.graph.mainNavigation
 import see.day.main.navigation.graph.scheduleNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
@@ -51,7 +51,6 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
             scheduleNavigation(
                 onClickChangeRecordType = navigationState::navigateAddRecord
             )
-
         }
     }
 }

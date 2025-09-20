@@ -18,7 +18,6 @@ import see.day.model.record.RecordType
 
 @Serializable data class DailyDetail(val id: String)
 
-
 fun NavController.navigateDaily(navOptions: NavOptions? = null) {
     navigate(Daily, navOptions)
 }

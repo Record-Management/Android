@@ -15,8 +15,8 @@ fun RecordType.getBigIcon(): Int {
 }
 
 @DrawableRes
-fun RecordType.getIcon() : Int {
-    return when(this) {
+fun RecordType.getIcon(): Int {
+    return when (this) {
         RecordType.DAILY -> R.drawable.filter_daily
         RecordType.EXERCISE -> R.drawable.filter_exercise
         RecordType.HABIT -> R.drawable.filter_habit
@@ -25,8 +25,8 @@ fun RecordType.getIcon() : Int {
 }
 
 @DrawableRes
-fun RecordType.getGrayIcon() : Int {
-    return when(this) {
+fun RecordType.getGrayIcon(): Int {
+    return when (this) {
         RecordType.DAILY -> R.drawable.filter_daily_gray
         RecordType.EXERCISE -> R.drawable.filter_exercise_gray
         RecordType.HABIT -> R.drawable.filter_habit_gray

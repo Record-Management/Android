@@ -30,7 +30,9 @@ fun NavGraphBuilder.mainNavigation(onClickLogin: () -> Unit) {
 }
 
 @Serializable data object Exercise
+
 @Serializable data object Habit
+
 @Serializable data object Schedule
 
 fun NavController.navigateExercise(navOptions: NavOptions? = null) {
@@ -55,11 +57,10 @@ fun NavGraphBuilder.exerciseNavigation(onClickChangeRecordType: (RecordType, Boo
             }
 
             Button(
-                {isOpenRecordTypePickerDialog = true}
+                { isOpenRecordTypePickerDialog = true }
             ) {
                 Text("기록 변경")
             }
-
         }
     }
 }
@@ -86,11 +87,10 @@ fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolea
             }
 
             Button(
-                {isOpenRecordTypePickerDialog = true}
+                { isOpenRecordTypePickerDialog = true }
             ) {
                 Text("기록 변경")
             }
-
         }
     }
 }
@@ -117,11 +117,10 @@ fun NavGraphBuilder.scheduleNavigation(onClickChangeRecordType: (RecordType, Boo
             }
 
             Button(
-                {isOpenRecordTypePickerDialog = true}
+                { isOpenRecordTypePickerDialog = true }
             ) {
                 Text("기록 변경")
             }
-
         }
     }
 }

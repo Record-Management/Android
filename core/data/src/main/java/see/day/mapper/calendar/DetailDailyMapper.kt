@@ -13,11 +13,11 @@ fun DailyDetailRecordResponse.toModel(): DailyDetailRecord {
     )
 }
 
-fun List<DetailRecordResponse>.toModel() : List<DetailRecord> {
+fun List<DetailRecordResponse>.toModel(): List<DetailRecord> {
     return this.map { it.toModel() }
 }
 
-fun DetailRecordResponse.toModel() : DetailRecord {
+fun DetailRecordResponse.toModel(): DetailRecord {
     return DetailRecord(
         id = id,
         type = RecordType.valueOf(type),

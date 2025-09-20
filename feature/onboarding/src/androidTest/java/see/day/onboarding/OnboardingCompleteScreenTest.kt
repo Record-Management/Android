@@ -51,7 +51,7 @@ class OnboardingCompleteScreenTest {
             .assertIsDisplayed()
 
         composeTestRule.mainClock.advanceTimeBy(700)
-        
+
         composeTestRule
             .onNodeWithText("시작하기")
             .assertIsDisplayed()

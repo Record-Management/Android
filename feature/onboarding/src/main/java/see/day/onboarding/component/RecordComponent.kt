@@ -81,7 +81,9 @@ internal fun RecordComponent(modifier: Modifier = Modifier, recordType: RecordTy
             }
             Spacer(modifier = modifier.weight(1f))
             Image(
-                painter = painterResource(if (isClicked) see.day.designsystem.R.drawable.ic_checked else see.day.designsystem.R.drawable.ic_unchecked),
+                painter = painterResource(
+                    if (isClicked) see.day.designsystem.R.drawable.ic_checked else see.day.designsystem.R.drawable.ic_unchecked
+                ),
                 contentDescription = if (isClicked) "checked" else "unChecked"
             )
         }

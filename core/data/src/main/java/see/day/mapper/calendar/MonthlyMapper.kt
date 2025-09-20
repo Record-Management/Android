@@ -16,22 +16,22 @@ fun MonthlyRecordResponse.toModel(): MonthlyRecord {
     )
 }
 
-fun List<DailyRecordsResponse>.toDailyRecordsList() : List<DailyRecords> {
+fun List<DailyRecordsResponse>.toDailyRecordsList(): List<DailyRecords> {
     return this.map { it.toModel() }
 }
 
-fun DailyRecordsResponse.toModel() : DailyRecords {
+fun DailyRecordsResponse.toModel(): DailyRecords {
     return DailyRecords(
         date = date,
         records = records.toDailyRecordList()
     )
 }
 
-fun List<DailyRecordResponse>.toDailyRecordList() : List<DailyRecord> {
+fun List<DailyRecordResponse>.toDailyRecordList(): List<DailyRecord> {
     return this.map { it.toModel() }
 }
 
-fun DailyRecordResponse.toModel() : DailyRecord {
+fun DailyRecordResponse.toModel(): DailyRecord {
     return DailyRecord(
         id = id,
         type = RecordType.valueOf(type)

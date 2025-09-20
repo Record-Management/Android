@@ -18,15 +18,10 @@ import see.day.home.R
 import see.day.home.state.HomeUiEvent
 
 @Composable
-internal fun SelectedDateComponent(
-    modifier: Modifier = Modifier,
-    currentYear: Int,
-    currentMonth: Int,
-    uiEvent: (HomeUiEvent) -> Unit
-) {
+internal fun SelectedDateComponent(modifier: Modifier = Modifier, currentYear: Int, currentMonth: Int, uiEvent: (HomeUiEvent) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { uiEvent(HomeUiEvent.OnClickSelectedDate(currentYear,currentMonth)) }
+        modifier = modifier.clickable { uiEvent(HomeUiEvent.OnClickSelectedDate(currentYear, currentMonth)) }
     ) {
         Text(
             text = "$currentYear.$currentMonth",
@@ -37,7 +32,7 @@ internal fun SelectedDateComponent(
             contentDescription = "아래꺽쇠 아이콘",
             modifier = modifier
                 .size(20.dp)
-                .padding(start = 2.dp),
+                .padding(start = 2.dp)
         )
     }
 }
@@ -49,7 +44,7 @@ private fun SelectedDateComponentPreview() {
         SelectedDateComponent(
             currentYear = 2025,
             currentMonth = 10,
-            uiEvent = { },
+            uiEvent = { }
         )
     }
 }

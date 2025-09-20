@@ -24,5 +24,5 @@ data class DetailRecordResponse(
     val updatedAt: String,
     val imageUrls: List<String>,
     val emotion: String,
-    val content: String,
+    val content: String
 )

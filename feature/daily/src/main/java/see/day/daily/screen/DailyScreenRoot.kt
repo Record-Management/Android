@@ -39,32 +39,21 @@ import see.day.model.record.RecordType
 import see.day.ui.dialog.RecordTypePickerDialog
 
 @Composable
-internal fun DailyScreenRoot(
-    modifier: Modifier = Modifier,
-    onClickBackButton: () -> Unit,
-    onChangedRecordType: (RecordType, Boolean) -> Unit,
-    onClickEmotion: (DailyEmotion) -> Unit
-) {
+internal fun DailyScreenRoot(modifier: Modifier = Modifier, onClickBackButton: () -> Unit, onChangedRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit) {
     DailyScreen(modifier, onClickBackButton, onChangedRecordType, onClickEmotion)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyScreen(
-    modifier: Modifier = Modifier,
-    onClickBackButton : () -> Unit,
-    onChangedRecordType: (RecordType, Boolean) -> Unit,
-    onClickEmotion: (DailyEmotion) -> Unit
-) {
+internal fun DailyScreen(modifier: Modifier = Modifier, onClickBackButton: () -> Unit, onChangedRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit) {
     var openChangeRecordDialog by remember { mutableStateOf(false) }
-    if(openChangeRecordDialog) {
+    if (openChangeRecordDialog) {
         RecordTypePickerDialog(
             currentRecordType = RecordType.DAILY,
-            onDismiss = {openChangeRecordDialog = false},
+            onDismiss = { openChangeRecordDialog = false },
             onCompleteRecordType = { changedType ->
                 onChangedRecordType(changedType, true)
                 openChangeRecordDialog = false
-
             }
         )
     }
@@ -102,7 +91,7 @@ internal fun DailyScreen(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = modifier.padding(top = 40.dp).padding(horizontal = 43.dp).fillMaxWidth()
             ) {
-                items(items = DailyEmotion.entries.toList(), key = {it}) { emotion ->
+                items(items = DailyEmotion.entries.toList(), key = { it }) { emotion ->
                     Image(
                         painter = painterResource(emotion.largeIconRes),
                         contentDescription = "emotion ${emotion.name}",

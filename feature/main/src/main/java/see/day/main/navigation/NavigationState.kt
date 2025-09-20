@@ -46,15 +46,17 @@ class NavigationState(
         navController.navigateOnboardingComplete(cleanBackstackNavOptions())
     }
 
-    fun navigateAddRecord(recordType: RecordType, deleteBackStack : Boolean = false) {
-        val navOptions : NavOptions? = if(deleteBackStack) {
+    fun navigateAddRecord(recordType: RecordType, deleteBackStack: Boolean = false) {
+        val navOptions: NavOptions? = if (deleteBackStack) {
             navOptions {
                 popUpTo(navController.previousBackStackEntry?.destination?.id ?: -1) {
                     inclusive = false
                 }
             }
-        } else null
-        when(recordType) {
+        } else {
+            null
+        }
+        when (recordType) {
             RecordType.DAILY -> {
                 navController.navigateDaily(navOptions)
             }

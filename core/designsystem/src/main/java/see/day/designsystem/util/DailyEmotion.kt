@@ -13,12 +13,12 @@ enum class DailyEmotion {
     FRUSTRATION,
     HUM,
     SAD,
-    ANGRY,
+    ANGRY
 }
 
 // DrawbleRes는 런타임에 결정되므로 직렬화가 불가능
 val DailyEmotion.largeIconRes: Int
-    get() = when(this) {
+    get() = when (this) {
         DailyEmotion.SHY -> R.drawable.emotion_shy_large
         DailyEmotion.WINK -> R.drawable.emotion_wink_large
         DailyEmotion.NORMAL -> R.drawable.emotion_normal_large

@@ -89,8 +89,7 @@ class ApiModule {
     @Provides
     @Singleton
     @Main
-    fun provideTokenAuthenticator(dataSource: DataStoreDataSource, @Auth authService: AuthService): TokenAuthenticator =
-        TokenAuthenticator(dataSource, authService)
+    fun provideTokenAuthenticator(dataSource: DataStoreDataSource, @Auth authService: AuthService): TokenAuthenticator = TokenAuthenticator(dataSource, authService)
 
     @Provides
     @Singleton

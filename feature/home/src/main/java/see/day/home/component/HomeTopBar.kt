@@ -22,12 +22,7 @@ import see.day.home.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopBar(
-    modifier: Modifier = Modifier,
-    alpha: Float,
-    isFullExpand: Boolean,
-    onClickBackButton : () -> Unit,
-) {
+internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpand: Boolean, onClickBackButton: () -> Unit) {
     TopAppBar(
         title = {
             Row(
@@ -56,13 +51,12 @@ internal fun HomeTopBar(
             containerColor = Color.White.copy(alpha = alpha)
         ),
         navigationIcon = {
-            if(isFullExpand) {
+            if (isFullExpand) {
                 IconButton(
                     onClick = {
                         onClickBackButton()
                     }
                 ) {
-
                     Icon(
                         painter = painterResource(R.drawable.arrow_left),
                         contentDescription = "뒤로 가기 버튼",
@@ -70,10 +64,9 @@ internal fun HomeTopBar(
                     )
                 }
             }
+        }
 
-        },
-
-        )
+    )
 }
 
 @Preview

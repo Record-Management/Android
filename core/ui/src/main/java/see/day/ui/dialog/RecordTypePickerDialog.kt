@@ -1,20 +1,14 @@
 package see.day.ui.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,12 +31,7 @@ import see.day.ui.R
 import see.day.ui.component.RecordTypeSmallComponent
 
 @Composable
-fun RecordTypePickerDialog(
-    modifier: Modifier = Modifier,
-    currentRecordType: RecordType,
-    onDismiss: () -> Unit,
-    onCompleteRecordType: (RecordType) -> Unit
-) {
+fun RecordTypePickerDialog(modifier: Modifier = Modifier, currentRecordType: RecordType, onDismiss: () -> Unit, onCompleteRecordType: (RecordType) -> Unit) {
     var selectedRecordType by remember { mutableStateOf<RecordType?>(null) }
     Dialog(
         onDismissRequest = onDismiss,
@@ -53,7 +42,7 @@ fun RecordTypePickerDialog(
         )
     ) {
         Surface(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Column(
                 modifier = modifier
@@ -89,7 +78,7 @@ fun RecordTypePickerDialog(
                     enabled = selectedRecordType != null,
                     colors = ButtonDefaults.buttonColors().copy(
                         disabledContainerColor = MaterialTheme.colorScheme.onSecondary,
-                        containerColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
                     modifier = modifier
                         .fillMaxWidth(),

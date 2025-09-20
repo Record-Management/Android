@@ -7,10 +7,7 @@ import androidx.compose.ui.Modifier
 import see.day.daily.util.DailyDetailType
 
 @Composable
-internal fun DailyDetailScreenRoot(
-    modifier: Modifier = Modifier,
-    dailyDetailType: DailyDetailType
-) {
+internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, dailyDetailType: DailyDetailType) {
     DailyDetailScreen(
         modifier = modifier,
         dailyDetailType = dailyDetailType
@@ -18,12 +15,9 @@ internal fun DailyDetailScreenRoot(
 }
 
 @Composable
-internal fun DailyDetailScreen(
-    modifier: Modifier = Modifier,
-    dailyDetailType: DailyDetailType
-) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, dailyDetailType: DailyDetailType) {
     Column {
-        when(dailyDetailType) {
+        when (dailyDetailType) {
             is DailyDetailType.WriteDailyDetail -> {
                 Text("쓰기 ${dailyDetailType.emotion}")
             }

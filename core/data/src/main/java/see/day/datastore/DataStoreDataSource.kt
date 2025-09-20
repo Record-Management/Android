@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import see.day.datastore.DataStoreDataSource.PreferencesKey.ACCESS_TOKEN
 import see.day.datastore.DataStoreDataSource.PreferencesKey.REFRESH_TOKEN
-import see.day.model.navigation.AppStartState
 
 class DataStoreDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>
