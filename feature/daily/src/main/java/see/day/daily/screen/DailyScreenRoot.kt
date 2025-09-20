@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,7 +68,9 @@ internal fun DailyScreen(modifier: Modifier = Modifier, onClickBackButton: () ->
                     ) {
                         Spacer(modifier = modifier.weight(1f))
                         Image(
-                            modifier = modifier.padding(top = 16.dp, end = 16.dp).clickable { onClickBackButton() },
+                            modifier = modifier
+                                .padding(top = 16.dp, end = 16.dp)
+                                .clickable { onClickBackButton() },
                             painter = painterResource(R.drawable.ic_close),
                             contentDescription = "뒤로가기 버튼"
                         )
@@ -77,38 +80,49 @@ internal fun DailyScreen(modifier: Modifier = Modifier, onClickBackButton: () ->
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier.padding(innerPadding).fillMaxHeight().fillMaxWidth(),
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxHeight()
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = modifier.padding(top = 60.dp),
-                text = "오늘의 감정을 선택해주세요",
+                text = stringResource(R.string.select_daily_emotion),
                 style = MaterialTheme.typography.bodySmall
             )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = modifier.padding(top = 40.dp).padding(horizontal = 43.dp).fillMaxWidth()
+                modifier = modifier
+                    .padding(top = 40.dp)
+                    .padding(horizontal = 43.dp)
+                    .fillMaxWidth()
             ) {
                 items(items = DailyEmotion.entries.toList(), key = { it }) { emotion ->
                     Image(
                         painter = painterResource(emotion.largeIconRes),
                         contentDescription = "emotion ${emotion.name}",
-                        modifier = modifier.size(80.dp).clickable { onClickEmotion(emotion) },
+                        modifier = modifier
+                            .size(80.dp)
+                            .clickable { onClickEmotion(emotion) },
                         contentScale = ContentScale.FillBounds
                     )
                 }
             }
             Spacer(modifier = modifier.weight(1f))
             Text(
-                text = "기록 방식을 바꿀래요",
+                text = stringResource(R.string.change_record_type),
                 style = MaterialTheme.typography.labelMedium.copy(
                     textDecoration = TextDecoration.Underline
                 ),
-                modifier = modifier.padding(bottom = 52.dp).systemBarsPadding().clickable {
-                    openChangeRecordDialog = true
-                }
+                modifier = modifier
+                    .padding(bottom = 52.dp)
+                    .systemBarsPadding()
+                    .clickable {
+                        openChangeRecordDialog = true
+                    }
             )
         }
     }
