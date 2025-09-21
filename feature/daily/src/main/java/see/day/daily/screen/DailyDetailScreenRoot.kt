@@ -4,8 +4,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.daily.R
 import see.day.daily.component.EmotionAndDate
+import see.day.daily.component.EmotionSelectBottomSheet
 import see.day.daily.util.DailyDetailType
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.util.DailyEmotion
@@ -25,6 +28,7 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.topbar.DetailRecordTopBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, dailyDetailType: DailyDetailType, onClickPopHome: () -> Unit) {
     var openBackDialog by remember { mutableStateOf(false) }
@@ -42,22 +46,41 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, dailyDetailTyp
     BackHandler {
         openBackDialog = true
     }
-    val emotion = when (dailyDetailType) {
-        is DailyDetailType.WriteDailyDetail -> {
-            dailyDetailType.emotion
-        }
 
-        is DailyDetailType.EditDailyDetail -> {
-            DailyEmotion.LOVE
-        }
+    var openSelectEmotionDialog by remember { mutableStateOf(false) }
+    var emotion by remember {
+        mutableStateOf(
+            when (dailyDetailType) {
+                is DailyDetailType.WriteDailyDetail -> {
+                    dailyDetailType.emotion
+                }
+
+                is DailyDetailType.EditDailyDetail -> {
+                    DailyEmotion.LOVE
+                }
+            }
+        )
+    }
+    val onClickChangeEmotion: (DailyEmotion) -> Unit = { selectedEmotion ->
+        emotion = selectedEmotion
+    }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    if (openSelectEmotionDialog) {
+        EmotionSelectBottomSheet(
+            modifier = modifier,
+            sheetState = sheetState,
+            onDismiss = { openSelectEmotionDialog = false },
+            onClickChangeEmotion = onClickChangeEmotion
+        )
     }
     DailyDetailScreen(
         modifier = modifier,
         dailyDetailType = dailyDetailType,
-        onClickBackButton = { openBackDialog = true },
         emotion = emotion,
         currentDate = timeFormatter.formatDate(),
-        currentTime = timeFormatter.formatTime()
+        currentTime = timeFormatter.formatTime(),
+        onClickBackButton = { openBackDialog = true },
+        onClickEmotion = { openSelectEmotionDialog = true }
     )
 }
 
@@ -65,10 +88,11 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, dailyDetailTyp
 internal fun DailyDetailScreen(
     modifier: Modifier = Modifier,
     dailyDetailType: DailyDetailType,
-    onClickBackButton: () -> Unit,
     emotion: DailyEmotion,
     currentDate: String,
-    currentTime: String
+    currentTime: String,
+    onClickBackButton: () -> Unit,
+    onClickEmotion: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.systemBarsPadding(),
@@ -86,7 +110,7 @@ internal fun DailyDetailScreen(
                 .padding(innerPadding)
                 .padding(start = 16.dp)
         ) {
-            EmotionAndDate(modifier, emotion, currentDate, currentTime,{})
+            EmotionAndDate(modifier, emotion, currentDate, currentTime, onClickEmotion)
             when (dailyDetailType) {
                 is DailyDetailType.WriteDailyDetail -> {
                     Text("쓰기 ${dailyDetailType.emotion}")
@@ -106,10 +130,11 @@ private fun DailyDetailWriteScreen() {
     SeeDayTheme {
         DailyDetailScreen(
             dailyDetailType = DailyDetailType.WriteDailyDetail(DailyEmotion.FRUSTRATION),
-            onClickBackButton = {},
             emotion = DailyEmotion.FRUSTRATION,
             currentDate = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatDate(),
-            currentTime = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatTime()
+            currentTime = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatTime(),
+            onClickBackButton = { },
+            onClickEmotion = { }
         )
     }
 }
