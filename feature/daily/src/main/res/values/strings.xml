@@ -2,4 +2,6 @@
 <resources>
     <string name="select_daily_emotion">오늘의 감정을 선택해주세요</string>
     <string name="change_record_type">기록 방식을 바꿀래요</string>
+    <string name="record_close_dialog_title">기록을 남기지 않고 나갈까요?</string>
+    <string name="record_close_dialog_body">작성 중인 기록은 저장되지 않아요.</string>
 </resources>

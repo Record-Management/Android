@@ -2,4 +2,9 @@
 <resources>
     <string name="change_record_title">어떤 하루로 변경할까요?</string>
     <string name="change_record">변경하기</string>
+
+    <string name="test_title">테스트용 타이틀</string>
+    <string name="test_body">테스트용 바디</string>
+    <string name="exit_dialog">나가기</string>
+    <string name="write_dialog">작성하기</string>
 </resources>

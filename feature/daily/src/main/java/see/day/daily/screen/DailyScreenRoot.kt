@@ -71,7 +71,7 @@ internal fun DailyScreen(modifier: Modifier = Modifier, onClickBackButton: () ->
                             modifier = modifier
                                 .padding(top = 16.dp, end = 16.dp)
                                 .clickable { onClickBackButton() },
-                            painter = painterResource(R.drawable.ic_close),
+                            painter = painterResource(see.day.ui.R.drawable.ic_close),
                             contentDescription = "뒤로가기 버튼"
                         )
                     }
