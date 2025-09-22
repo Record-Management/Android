@@ -1,6 +1,10 @@
 package see.day.ui.dialog
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,65 +44,75 @@ fun RecordDetailBackDialog(
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
         )
     ) {
-        Surface(
-            shape = RoundedCornerShape(10.dp)
+        DialogBackground(
+            modifier = modifier,
+            onDismiss = onDismiss
         ) {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 33.dp)
+                    .background(Color.White, shape = RoundedCornerShape(10.dp))
+                    .clickable(onClick = {}, indication = null, interactionSource = remember { MutableInteractionSource() })
             ) {
-                Text(
-                    text = stringResource(title),
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Text(
-                    modifier = modifier.padding(top = 8.dp),
-                    text = stringResource(body),
-                    style = MaterialTheme.typography.labelSmall,
-                )
-                Row(
+                Column(
                     modifier = modifier
-                        .padding(top = 16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = {
-                            onBackRecordDetail()
-                            onDismiss()
-                        },
+                    Text(
+                        text = stringResource(title),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Text(
+                        modifier = modifier.padding(top = 8.dp),
+                        text = stringResource(body),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                    Row(
                         modifier = modifier
-                            .weight(1f)
-                            .heightIn(min = 52.dp)
-                            .padding(end = 5.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors().copy(
-                            containerColor = gray20
-                        )
+                            .padding(top = 16.dp)
+                            .fillMaxWidth(),
                     ) {
-                        Text(
-                            stringResource(R.string.exit_dialog),
-                            color = gray50,
-                            style = MaterialTheme.typography.displayLarge
-                        )
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        modifier = modifier
-                            .weight(1f)
-                            .heightIn(min = 52.dp)
-                            .padding(start = 5.dp),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.write_dialog),
-                            color = Color.White,
-                            style = MaterialTheme.typography.displayLarge
-                        )
+                        Button(
+                            onClick = {
+                                onBackRecordDetail()
+                                onDismiss()
+                            },
+                            modifier = modifier
+                                .weight(1f)
+                                .heightIn(min = 52.dp)
+                                .padding(end = 5.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors().copy(
+                                containerColor = gray20
+                            )
+                        ) {
+                            Text(
+                                stringResource(R.string.exit_dialog),
+                                color = gray50,
+                                style = MaterialTheme.typography.displayLarge
+                            )
+                        }
+                        Button(
+                            onClick = onDismiss,
+                            modifier = modifier
+                                .weight(1f)
+                                .heightIn(min = 52.dp)
+                                .padding(start = 5.dp),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                stringResource(R.string.write_dialog),
+                                color = Color.White,
+                                style = MaterialTheme.typography.displayLarge
+                            )
+                        }
                     }
                 }
             }
