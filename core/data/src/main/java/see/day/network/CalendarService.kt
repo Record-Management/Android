@@ -9,7 +9,7 @@ import see.day.network.dto.calendar.MonthlyRecordResponse
 
 interface CalendarService {
 
-    @GET("api/records/calendar/{year}/{month}")
+    @GET("/api/calendar/{year}/{month}")
     suspend fun getMonthlyRecords(@Path("year") year: Int, @Path("month") month: Int, @Query("types") types: Array<String>): CommonResponse<MonthlyRecordResponse>
 
     @GET("api/records/date/{date}")
