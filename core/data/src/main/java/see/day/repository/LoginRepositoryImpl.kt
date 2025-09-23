@@ -47,7 +47,7 @@ class LoginRepositoryImpl @Inject constructor(
 
     override fun getLoginState(): Flow<AppStartState> = flow {
         if (!dataSource.hasToken().first()) {
-            AppStartState.LOGIN
+            return@flow emit(AppStartState.LOGIN)
         } else {
             val refreshToken = (RefreshTokenRequest(dataSource.getRefreshToken().first() ?: return@flow emit(AppStartState.LOGIN)))
             runCatching { authService.refresh(refreshToken.toRequestBody()) }
