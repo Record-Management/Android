@@ -1,9 +1,12 @@
 package see.day.home.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,9 +29,10 @@ internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpan
     TopAppBar(
         title = {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
-                Spacer(modifier = modifier.weight(1f))
                 Icon(
                     painter = painterResource(R.drawable.ic_notification),
                     contentDescription = "알람 창",
@@ -48,7 +52,7 @@ internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpan
             }
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(
-            containerColor = Color.White.copy(alpha = alpha)
+            containerColor = if(isFullExpand) Color.White.copy(alpha = 1.0f) else Color.White.copy(alpha = alpha)
         ),
         navigationIcon = {
             if (isFullExpand) {
@@ -63,9 +67,10 @@ internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpan
                         tint = gray100
                     )
                 }
+            } else {
+                Spacer(modifier = Modifier.size(24.dp))
             }
         }
-
     )
 }
 
