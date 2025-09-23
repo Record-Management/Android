@@ -81,7 +81,6 @@ internal fun EmotionSelectBottomSheet(
                             onClickChangeEmotion(emotion)
                             onDismiss()
                         },
-                    contentScale = ContentScale.FillBounds
                 )
             }
         }
