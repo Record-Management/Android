@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.daily.state.DailyDetailUiEffect
@@ -17,10 +18,14 @@ import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.designsystem.util.DailyEmotion
+import see.day.domain.usecase.photo.InsertPhotosUseCase
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class DailyDetailViewModel @Inject constructor() : ViewModel() {
+class DailyDetailViewModel @Inject constructor(
+    private val insertPhotosUseCase: InsertPhotosUseCase
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
     val uiState: StateFlow<DailyDetailUiState> = _uiState.asStateFlow()
@@ -54,15 +59,19 @@ class DailyDetailViewModel @Inject constructor() : ViewModel() {
             is DailyDetailUiEvent.OnAddPhotos -> {
                 onAddPhotos(photos = uiEvent.photos)
             }
+
             is DailyDetailUiEvent.OnChangeDailyEmotion -> {
                 onChangedEmotion(uiEvent.emotion)
             }
+
             is DailyDetailUiEvent.OnChangedText -> {
                 onChangedText(uiEvent.text)
             }
+
             is DailyDetailUiEvent.OnRemovePhoto -> {
                 onRemovePhoto(uiEvent.photo)
             }
+
             is DailyDetailUiEvent.OnSaveRecord -> {
                 onSaveRecord()
             }
@@ -96,7 +105,7 @@ class DailyDetailViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun onChangedText(text : String) {
+    private fun onChangedText(text: String) {
         _uiState.update {
             it.copy(
                 text = text
@@ -104,7 +113,7 @@ class DailyDetailViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun onRemovePhoto(photo : String) {
+    private fun onRemovePhoto(photo: String) {
         _uiState.update {
             it.copy(
                 photos = it.photos.filter {
@@ -115,6 +124,18 @@ class DailyDetailViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun onSaveRecord() {
+        viewModelScope.launch {
+            if (uiState.value.photos.isNotEmpty()) {
+                val photos = uiState.value.photos
+
+                insertPhotosUseCase(photos)
+                    .onSuccess {
+
+                    }.onFailure {
+
+                    }
+            }
+        }
         // 사진 저장
         // 저장 후 데이터 저장
     }
