@@ -18,9 +18,9 @@ import see.day.designsystem.theme.SeeDayTheme
 fun RecordDetailPhotoRow(
     modifier: Modifier = Modifier,
     context: Context,
-    uris: List<Uri>,
-    onRemovePhotos: (Uri) -> Unit,
-    onClickAddPhotos: (List<Uri>) -> Unit
+    uris: List<String>,
+    onRemovePhotos: (String) -> Unit,
+    onClickAddPhotos: (List<String>) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -29,10 +29,10 @@ fun RecordDetailPhotoRow(
     ) {
         uris.forEach { uri ->
             PhotoComponent(
-                uri = uri.toString(),
+                uri = uri,
                 isRemovable = true,
                 onClickDeleteButton = {
-                    onRemovePhotos(it.toUri())
+                    onRemovePhotos(it)
                 }
             )
         }

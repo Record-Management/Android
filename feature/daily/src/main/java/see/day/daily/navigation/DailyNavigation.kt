@@ -8,7 +8,7 @@ import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import see.day.daily.screen.DailyDetailScreenRoot
 import see.day.daily.screen.DailyScreenRoot
-import see.day.daily.util.DailyDetailType
+import see.day.daily.util.DailyRecordPostType
 import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
 
@@ -38,7 +38,7 @@ fun NavGraphBuilder.dailyNavigation(
     composable<DailyWrite> { backStackEntry ->
         val dailyWrite = backStackEntry.toRoute<DailyWrite>()
         DailyDetailScreenRoot(
-            dailyDetailType = DailyDetailType.WriteDailyDetail(dailyWrite.emotion),
+            dailyRecordPostType = DailyRecordPostType.WriteDailyRecordPost(dailyWrite.emotion),
             onClickPopHome = onClickPopHome
         )
     }

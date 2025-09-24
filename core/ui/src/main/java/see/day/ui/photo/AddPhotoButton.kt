@@ -42,7 +42,7 @@ fun AddPhotoButton(
     modifier: Modifier = Modifier,
     context: Context,
     currentPhotoCount: Int,
-    onClickPhotoAddButton: (List<Uri>) -> Unit
+    onClickPhotoAddButton: (List<String>) -> Unit
 ) {
     var hasPermissionsPreApi33 by remember { mutableStateOf(hasPhotoPermissions(context)) }
 
@@ -62,7 +62,7 @@ fun AddPhotoButton(
             contract = ActivityResultContracts.PickVisualMedia()
         ) { uri ->
             if(uri != null) {
-                onClickPhotoAddButton(listOf(uri))
+                onClickPhotoAddButton(listOf(uri.toString()))
             }
         }
     } else {
@@ -70,7 +70,7 @@ fun AddPhotoButton(
             contract = PickMultipleVisualMedia(maxItems = 3 - currentPhotoCount)
         ) { selectedUris ->
             if (selectedUris.isNotEmpty()) {
-                onClickPhotoAddButton(selectedUris)
+                onClickPhotoAddButton(selectedUris.map { it.toString() })
             }
         }
     }

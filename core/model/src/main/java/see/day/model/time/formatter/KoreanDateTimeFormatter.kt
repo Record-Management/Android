@@ -5,7 +5,7 @@ import see.day.model.time.DateTimeFormatter
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-class KoreanDateTimeFormatter(private val dateTime: DateTime) : DateTimeFormatter {
+class KoreanDateTimeFormatter(val dateTime: DateTime) : DateTimeFormatter {
 
     private fun getDayOfWeekKorean(): String {
         val zonedDateTime = ZonedDateTime.of(
