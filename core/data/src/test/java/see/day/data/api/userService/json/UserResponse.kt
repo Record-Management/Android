@@ -12,11 +12,11 @@ val getUserResponse = """
         "email": "user@example.com",
         "socialType": "KAKAO",
         "mainRecordType": "EXERCISE",
-        "birthDate": "1998-06-02",
+        "birthDate": [1998, 6, 2],
         "goalDays": 20,
         "notificationEnabled": true,
         "onboardingCompleted": true,
-        "createdAt": "2025-09-02T02:46:41.454753"
+        "createdAt": [2025, 9, 2, 2, 46, 41, 12321]
       }
     }
 """.trimIndent()

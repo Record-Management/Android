@@ -11,7 +11,7 @@ internal val createLoginResponse = """
           "name": "홍길동",
           "email": "hong@example.com",
           "socialType": "KAKAO",
-          "createdAt": "2025-09-02T02:46:41.454753",
+          "createdAt": [2025, 9, 2, 2, 46, 41],
           "onboardingCompleted": false
         },
         "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -32,7 +32,7 @@ internal val oldLoginResponse = """
           "name": "홍길동",
           "email": "hong@example.com",
           "socialType": "KAKAO",
-          "createdAt": "2025-09-02T02:46:41.454753",
+          "createdAt": [2025,9, 2, 2, 46, 41],
           "onboardingCompleted": true
         },
         "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
