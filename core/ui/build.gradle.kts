@@ -32,4 +32,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    implementation(libs.coil3.coil.network.okttp)
+    implementation(libs.coil3.coil.compose)
 }

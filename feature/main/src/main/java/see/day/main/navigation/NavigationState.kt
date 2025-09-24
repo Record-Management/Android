@@ -49,9 +49,7 @@ class NavigationState(
     fun navigateAddRecord(recordType: RecordType, deleteBackStack: Boolean = false) {
         val navOptions: NavOptions? = if (deleteBackStack) {
             navOptions {
-                popUpTo(navController.previousBackStackEntry?.destination?.id ?: -1) {
-                    inclusive = false
-                }
+                popUpTo(navController.previousBackStackEntry?.destination?.id ?: -1)
             }
         } else {
             null

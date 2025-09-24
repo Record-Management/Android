@@ -1,0 +1,42 @@
+package see.day.daily.state
+
+import see.day.daily.navigation.DailyDetail
+import see.day.designsystem.util.DailyEmotion
+import see.day.model.record.daily.DailyRecordDetail
+import see.day.model.time.DateTime
+import see.day.model.time.DateTimeFormatter
+import see.day.model.time.formatter.KoreanDateTimeFormatter
+
+data class DailyDetailUiState(
+    val emotion: DailyEmotion,
+    val text: String,
+    val dateTime: DateTimeFormatter,
+    val photos: List<String>,
+    val editMode: EditMode
+) {
+    sealed class EditMode {
+        data object Create : EditMode()
+        data class Edit(val originalRecord: DailyRecordDetail) : EditMode()
+    }
+
+    val canSubmit: Boolean = when (editMode) {
+        is EditMode.Create -> text.isNotEmpty()
+        is EditMode.Edit -> {
+            val original = editMode.originalRecord
+            (emotion.name != original.emotion ||
+                text != original.content ||
+                photos != original.imageUrls) && text.isNotEmpty()
+        }
+    }
+
+    companion object {
+        val init = DailyDetailUiState(
+            emotion = DailyEmotion.LOVE,
+            text = "",
+            dateTime = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)),
+            photos = listOf(),
+            editMode = EditMode.Create
+        )
+    }
+
+}

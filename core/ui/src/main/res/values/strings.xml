@@ -2,4 +2,12 @@
 <resources>
     <string name="change_record_title">어떤 하루로 변경할까요?</string>
     <string name="change_record">변경하기</string>
+
+    <string name="test_title">테스트용 타이틀</string>
+    <string name="test_body">테스트용 바디</string>
+    <string name="exit_dialog">나가기</string>
+    <string name="write_dialog">작성하기</string>
+    <string name="daily_place_holder">나의 하루는 어땠나요?</string>
+    <string name="add_photo_description">+사진 올리기></string>
+    <string name="write_record_text">작성하기</string>
 </resources>

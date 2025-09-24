@@ -35,7 +35,7 @@ fun RecordTypeSmallComponent(modifier: Modifier = Modifier, currentRecordType: R
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(1.dp, color = if (currentRecordType == selectedRecordType) MaterialTheme.colorScheme.primary else gray20),
         shadowElevation = if (currentRecordType == selectedRecordType) 2.dp else 0.dp,
-        modifier = if (currentRecordType == selectedRecordType) modifier.bottomShadow(2f).padding(8.dp) else modifier.padding(8.dp)
+        modifier = if (currentRecordType == selectedRecordType) modifier.bottomShadow(2f).padding(vertical = 8.dp) else modifier.padding(vertical = 8.dp)
     ) {
         Row(
             modifier = modifier

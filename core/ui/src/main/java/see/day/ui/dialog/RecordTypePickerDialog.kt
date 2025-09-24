@@ -1,8 +1,13 @@
 package see.day.ui.dialog
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,13 +15,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -38,57 +43,68 @@ fun RecordTypePickerDialog(modifier: Modifier = Modifier, currentRecordType: Rec
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
         )
     ) {
-        Surface(
-            shape = RoundedCornerShape(16.dp)
+        DialogBackground(
+            modifier = modifier,
+            onDismiss = onDismiss
         ) {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(24.dp)
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 33.dp)
+                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+                    .clickable(onClick = {}, indication = null, interactionSource = remember { MutableInteractionSource() })
             ) {
-                Text(
-                    stringResource(R.string.change_record_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-                LazyColumn(
+                Column(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(top = 24.dp, bottom = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    items(items = RecordType.entries.toList()) { type ->
-                        if (type != currentRecordType) {
-                            RecordTypeSmallComponent(
-                                currentRecordType = type,
-                                selectedRecordType = selectedRecordType,
-                                onClickRecordType = { clickedType ->
-                                    selectedRecordType = clickedType
-                                }
-                            )
-                        }
-                    }
-                }
-                Button(
-                    onClick = { onCompleteRecordType(selectedRecordType!!) },
-                    enabled = selectedRecordType != null,
-                    colors = ButtonDefaults.buttonColors().copy(
-                        disabledContainerColor = MaterialTheme.colorScheme.onSecondary,
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp)
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.change_record),
-                        style = MaterialTheme.typography.displayLarge,
-                        color = if (selectedRecordType != null) Color.White else MaterialTheme.colorScheme.onPrimary
+                        stringResource(R.string.change_record_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
                     )
+                    LazyColumn(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp, bottom = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        items(items = RecordType.entries.toList()) { type ->
+                            if (type != currentRecordType) {
+                                RecordTypeSmallComponent(
+                                    currentRecordType = type,
+                                    selectedRecordType = selectedRecordType,
+                                    onClickRecordType = { clickedType ->
+                                        selectedRecordType = clickedType
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    Button(
+                        onClick = { onCompleteRecordType(selectedRecordType!!) },
+                        enabled = selectedRecordType != null,
+                        colors = ButtonDefaults.buttonColors().copy(
+                            disabledContainerColor = MaterialTheme.colorScheme.onSecondary,
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 52.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.change_record),
+                            style = MaterialTheme.typography.displayLarge,
+                            color = if (selectedRecordType != null) Color.White else MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
         }

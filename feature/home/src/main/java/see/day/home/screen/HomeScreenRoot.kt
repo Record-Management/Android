@@ -115,9 +115,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                 if (min != null && max != null) {
                     // 0f ~ 1f 사이로 정규화해서 알파 계산
                     toolbarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
-                    if (bottomSheetState.currentValue == SheetValue.Expanded) {
-                        toolbarAlpha = 1f
-                    }
                 }
             }
     }
@@ -201,7 +198,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
 
 fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings: PaddingValues): Float {
     val screenHeight = configuration.screenHeightDp.dp
-    val topBarHeight = 60.dp
+    val topBarHeight = 56.dp
     return (screenHeight - statusBarPaddings.calculateTopPadding() - topBarHeight) / screenHeight
 }
 

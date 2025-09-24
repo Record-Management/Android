@@ -12,6 +12,7 @@ import record.daily.login.navigation.loginNavigation
 import see.day.daily.navigation.dailyNavigation
 import see.day.daily.navigation.navigateDailyWrite
 import see.day.home.navigation.homeNavigation
+import see.day.home.navigation.navigateBackToHome
 import see.day.main.navigation.graph.exerciseNavigation
 import see.day.main.navigation.graph.habitNavigation
 import see.day.main.navigation.graph.mainNavigation
@@ -40,7 +41,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,
                 onClickChangeRecordType = navigationState::navigateAddRecord,
-                onClickEmotion = navigationState.navController::navigateDailyWrite
+                onClickEmotion = navigationState.navController::navigateDailyWrite,
+                onClickPopHome = navigationState.navController::navigateBackToHome
             )
             exerciseNavigation(
                 onClickChangeRecordType = navigationState::navigateAddRecord

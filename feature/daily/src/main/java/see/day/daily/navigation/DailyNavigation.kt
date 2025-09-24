@@ -6,9 +6,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import see.day.daily.screen.DailyDetailScreen
+import see.day.daily.screen.DailyDetailScreenRoot
 import see.day.daily.screen.DailyScreenRoot
-import see.day.daily.util.DailyDetailType
+import see.day.daily.util.DailyRecordPostType
 import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
 
@@ -26,14 +26,20 @@ fun NavController.navigateDailyWrite(emotion: DailyEmotion, navOptions: NavOptio
     navigate(DailyWrite(emotion), navOptions)
 }
 
-fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChangeRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit) {
+fun NavGraphBuilder.dailyNavigation(
+    onClickBackButton: () -> Unit,
+    onClickChangeRecordType: (RecordType, Boolean) -> Unit,
+    onClickEmotion: (DailyEmotion) -> Unit,
+    onClickPopHome: () -> Unit
+) {
     composable<Daily> {
         DailyScreenRoot(onClickBackButton = onClickBackButton, onChangedRecordType = onClickChangeRecordType, onClickEmotion = onClickEmotion)
     }
     composable<DailyWrite> { backStackEntry ->
         val dailyWrite = backStackEntry.toRoute<DailyWrite>()
-        DailyDetailScreen(
-            dailyDetailType = DailyDetailType.WriteDailyDetail(dailyWrite.emotion)
+        DailyDetailScreenRoot(
+            dailyRecordPostType = DailyRecordPostType.WriteDailyRecordPost(dailyWrite.emotion),
+            onClickPopHome = onClickPopHome
         )
     }
 }
