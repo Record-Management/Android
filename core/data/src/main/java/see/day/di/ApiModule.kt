@@ -18,6 +18,7 @@ import see.day.datastore.DataStoreDataSource
 import see.day.network.AuthService
 import see.day.network.CalendarService
 import see.day.network.LoginService
+import see.day.network.PhotoService
 import see.day.network.UserService
 
 @Module
@@ -127,5 +128,11 @@ class ApiModule {
     @Singleton
     fun provideCalendarService(@Main retrofit: Retrofit): CalendarService {
         return retrofit.create(CalendarService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePhotoService(@Main retrofit: Retrofit) : PhotoService {
+        return retrofit.create(PhotoService::class.java)
     }
 }
