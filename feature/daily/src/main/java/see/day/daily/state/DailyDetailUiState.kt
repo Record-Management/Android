@@ -1,6 +1,5 @@
 package see.day.daily.state
 
-import see.day.daily.navigation.DailyDetail
 import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.daily.DailyRecordDetail
 import see.day.model.time.DateTime
@@ -31,7 +30,7 @@ data class DailyDetailUiState(
 
     companion object {
         val init = DailyDetailUiState(
-            emotion = DailyEmotion.LOVE,
+            emotion = DailyEmotion.Love,
             text = "",
             dateTime = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)),
             photos = listOf(),
