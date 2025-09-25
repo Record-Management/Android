@@ -1,7 +1,7 @@
 package see.day.daily.state
 
 import see.day.designsystem.util.DailyEmotion
-import see.day.model.record.daily.DailyRecordDetail
+import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.time.DateTime
 import see.day.model.time.DateTimeFormatter
 import see.day.model.time.formatter.KoreanDateTimeFormatter
@@ -15,7 +15,7 @@ data class DailyDetailUiState(
 ) {
     sealed class EditMode {
         data object Create : EditMode()
-        data class Edit(val originalRecord: DailyRecordDetail) : EditMode()
+        data class Edit(val originalRecord: CreateDailyRecord) : EditMode()
     }
 
     val canSubmit: Boolean = when (editMode) {
