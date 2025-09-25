@@ -8,19 +8,17 @@ val getMonthlyRecordResponse = """
       "data": {
         "year": 2025,
         "month": 1,
-        "dailyRecords": [
+        "monthlyRecords": [
           {
-            "date": "2025-01-07",
+            "date": [2025, 1, 7],
             "records": [
               {
                 "id": "550e8400-e29b-41d4-a716-446655440000",
-                "type": "DAILY",
-                "emotion": "😊"
+                "type": "DAILY"
               },
               {
                 "id": "550e8400-e29b-41d4-a716-446655440001",
-                "type": "EXERCISE",
-                "emotion": "💪"
+                "type": "EXERCISE"
               }
             ]
           }
@@ -35,7 +33,7 @@ val getDetailRecordsResponse = """
       "code": "S200",
       "message": "일일 기록이 성공적으로 조회되었습니다",
       "data": {
-        "date": "2025-01-07",
+        "date": [2025, 1,7],
         "records": [
           {
             "id": "550e8400-e29b-41d4-a716-446655440000",
@@ -46,10 +44,10 @@ val getDetailRecordsResponse = """
               "https://example.com/image1.jpg",
               "https://example.com/image2.jpg"
             ],
-            "recordDate": "2025-01-07",
-            "recordTime": "15:21",
-            "createdAt": "2025-01-07T15:21:00",
-            "updatedAt": "2025-01-07T15:21:00"
+            "recordDate": [2025, 1, 7],
+            "recordTime": [15, 21],
+            "createdAt": [2025, 1, 7, 15, 21, 0],
+            "updatedAt": [2025, 1, 7, 15, 21, 0]
           }
         ]
       }

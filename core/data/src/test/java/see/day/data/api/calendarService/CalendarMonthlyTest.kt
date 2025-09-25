@@ -63,7 +63,7 @@ class CalendarMonthlyTest {
 
         // then
         // 요청 검증
-        assertEquals("/api/records/calendar/$year/$month", recordedRequest.path)
+        assertEquals("/api/calendar/$year/$month", recordedRequest.path)
 
         // 응답 body 검증
         assertEquals(200, response.statusCode)
@@ -92,7 +92,7 @@ class CalendarMonthlyTest {
 
         // then
         // 요청 검증
-        assertEquals("/api/records/daily/$date", recordedRequest.path)
+        assertEquals("/api/records/date/$date", recordedRequest.path)
 
         // 응답 body 검증
         assertEquals(200, response.statusCode)

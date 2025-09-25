@@ -46,6 +46,15 @@ object FlexibleDateTimeArraySerializer : KSerializer<String> {
                 val second = jsonArray[5].jsonPrimitive.int
                 String.format("%04d-%02d-%02d:%02d:%02d:%02d", year, month, day, hour, minute, second)
             }
+            7 -> { // 밀리초까지 포함된 경우
+                val year = jsonArray[0].jsonPrimitive.int
+                val month = jsonArray[1].jsonPrimitive.int
+                val day = jsonArray[2].jsonPrimitive.int
+                val hour = jsonArray[3].jsonPrimitive.int
+                val minute = jsonArray[4].jsonPrimitive.int
+                val second = jsonArray[5].jsonPrimitive.int
+                String.format("%04d-%02d-%02d:%02d:%02d:%02d", year, month, day, hour, minute, second)
+            }
             else -> error("Unexpected date array length: ${jsonArray.size}")
         }
     }
