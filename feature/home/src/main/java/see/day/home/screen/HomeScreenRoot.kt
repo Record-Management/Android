@@ -2,6 +2,7 @@ package see.day.home.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,18 +13,25 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -85,12 +93,14 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState)
+    val scrollState = rememberScrollState()
 
     val configuration = LocalConfiguration.current
     val bottomSheetPeekHeight = (configuration.screenHeightDp.dp) * 0.6f
     val statusBarPadding = WindowInsets.statusBars
         .asPaddingValues()
     val topPaddingFraction = calculateTopPaddingFraction(configuration, statusBarPadding)
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     var minOffset by remember { mutableStateOf<Float?>(null) }
     var maxOffset by remember { mutableStateOf<Float?>(null) }
@@ -140,6 +150,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     modifier = modifier
                         .fillMaxHeight(fraction = topPaddingFraction)
                         .fillMaxWidth()
+                        .verticalScroll(scrollState, bottomSheetState.currentValue == SheetValue.Expanded)
                 ) {
                     Row(
                         modifier = modifier.padding(horizontal = 16.dp),
