@@ -9,7 +9,7 @@ data class DailyRecordDetailResponse(
     val type: String,
     val emotion: String,
     val content: String,
-    val imageUrls: String,
+    val imageUrls: List<String>,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val recordDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)

@@ -5,7 +5,7 @@ data class RegisteredDailyRecord(
     val type: String,
     val emotion: String,
     val content: String,
-    val imageUrls: String,
+    val imageUrls: List<String>,
     val recordDate: String,
     val recordTime: String,
     val createdAt: String,
