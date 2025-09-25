@@ -19,12 +19,15 @@ import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.designsystem.util.DailyEmotion
 import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
+import see.day.model.record.daily.CreateDailyRecord
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DailyDetailViewModel @Inject constructor(
-    private val insertPhotosUseCase: InsertPhotosUseCase
+    private val insertPhotosUseCase: InsertPhotosUseCase,
+    private val insertDailyRecordUseCase: InsertDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -125,19 +128,44 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onSaveRecord() {
         viewModelScope.launch {
-            if (uiState.value.photos.isNotEmpty()) {
-                val photos = uiState.value.photos
-
-                insertPhotosUseCase(photos)
-                    .onSuccess {
-
-                    }.onFailure {
-
-                    }
+            when (uiState.value.editMode) {
+                is DailyDetailUiState.EditMode.Create -> saveDailyRecordForCreateMode()
+                is DailyDetailUiState.EditMode.Edit -> saveDailyRecordForEditMode()
             }
         }
-        // 사진 저장
-        // 저장 후 데이터 저장
     }
 
+    private suspend fun saveDailyRecordForCreateMode() {
+        val photos = uiState.value.photos
+        if (photos.isNotEmpty()) {
+            insertPhotosUseCase(photos).fold(
+                onSuccess = { photoUrls -> saveDailyRecord(photoUrls) },
+                onFailure = { handleSaveError(it) }
+            )
+        } else {
+            saveDailyRecord(emptyList())
+        }
+    }
+
+    private suspend fun saveDailyRecord(photoUrls: List<String>) {
+        insertDailyRecordUseCase(
+            CreateDailyRecord(
+                uiState.value.text,
+                uiState.value.emotion.name,
+                uiState.value.dateTime,
+                photoUrls
+            )
+        ).fold(
+            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome) },
+            onFailure = { handleSaveError(it) }
+        )
+    }
+
+    private fun handleSaveError(error: Throwable) {
+        // 실패 처리 로직 추가 (예: Toast, 로그, UI 에러 상태 반영)
+    }
+
+    private suspend fun saveDailyRecordForEditMode() {
+        // Edit 모드 저장 로직 구현
+    }
 }

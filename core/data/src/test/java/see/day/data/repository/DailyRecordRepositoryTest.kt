@@ -1,0 +1,102 @@
+package see.day.data.repository
+
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+import retrofit2.HttpException
+import retrofit2.Response
+import see.day.domain.repository.DailyRecordRepository
+import see.day.model.exception.BadRequestException
+import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.RegisteredDailyRecord
+import see.day.model.time.DateTime
+import see.day.model.time.formatter.KoreanDateTimeFormatter
+import see.day.network.DailyRecordService
+import see.day.network.dto.CommonResponse
+import see.day.network.dto.dailyRecord.DailyRecordDetailResponse
+import see.day.network.dto.toResponseBody
+import see.day.repository.DailyRecordRepositoryImpl
+
+@RunWith(MockitoJUnitRunner::class)
+class DailyRecordRepositoryTest {
+
+    private lateinit var sut: DailyRecordRepository
+
+    @Mock
+    private lateinit var dailyRecordService: DailyRecordService
+
+    @Before
+    fun setUp() {
+        sut = DailyRecordRepositoryImpl(dailyRecordService)
+    }
+
+    @Test
+    fun givenCreateDailyRecord_whenInsertDailyRecord_thenReturnsRegisteredDailyRecord() {
+        runTest {
+            // given
+            val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
+            val createDailyRecord = CreateDailyRecord("","", timeFormatter, listOf())
+            val registeredDailyRecordResponse = DailyRecordDetailResponse("","","","", listOf(),"","","","")
+
+            whenever(dailyRecordService.postDailyRecord(any())).thenReturn(
+                CommonResponse(
+                    201,
+                    "S201",
+                    "하루 기록이 정상적으로 작성되었습니다",
+                    registeredDailyRecordResponse
+                )
+            )
+
+            // when
+            val result = sut.insertRecord(createDailyRecord).getOrThrow()
+
+            // then
+            assertEquals(createDailyRecord.content, result.content)
+            assertEquals(createDailyRecord.imageUrls, result.imageUrls)
+
+            verify(dailyRecordService).postDailyRecord(any())
+        }
+    }
+
+    @Test
+    fun givenOverTwoCreateDailyRecord_whenInsertDailyRecord_thenThrows400Exception() {
+        runTest {
+            // given
+            val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
+            val createDailyRecord = CreateDailyRecord("","", timeFormatter, listOf())
+
+            whenever(dailyRecordService.postDailyRecord(any())).thenThrow(
+                HttpException(
+                    Response.error<Any?>(
+                        400,
+                        toResponseBody<Unit?>(CommonResponse(400, "E40407", "하루에 등록할 수 있는 일상 기록은 최대 2개입니다.", null))
+                    )
+                )
+            )
+
+            // when
+            assertThrows(BadRequestException::class.java) {
+                runBlocking {
+                    sut.insertRecord(createDailyRecord)
+                        .onFailure {
+                            assertEquals("하루에 등록할 수 있는 일상 기록은 최대 2개입니다.", it.message)
+                        }.getOrThrow()
+                }
+            }
+
+            // then
+            verify(dailyRecordService).postDailyRecord(any())
+        }
+    }
+}
