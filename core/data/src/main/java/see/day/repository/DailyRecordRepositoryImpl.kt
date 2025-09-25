@@ -7,6 +7,7 @@ import see.day.model.exception.NoDataException
 import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.RegisteredDailyRecord
 import see.day.network.DailyRecordService
+import see.day.utils.ErrorUtils.createResult
 import javax.inject.Inject
 
 class DailyRecordRepositoryImpl @Inject constructor(
@@ -14,7 +15,7 @@ class DailyRecordRepositoryImpl @Inject constructor(
 ) : DailyRecordRepository {
 
     override suspend fun insertRecord(createDailyRecord: CreateDailyRecord): Result<RegisteredDailyRecord> {
-        return runCatching {
+        return createResult {
             dailyRecordService.postDailyRecord(createDailyRecord.toDto().toRequestBody()).data?.toModel() ?: throw NoDataException()
         }
     }
