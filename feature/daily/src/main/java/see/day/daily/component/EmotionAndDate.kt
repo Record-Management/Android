@@ -67,8 +67,8 @@ private fun EmotionAndDatePreview() {
     SeeDayTheme {
         EmotionAndDate(
             emotion = DailyEmotion.Tired,
-            currentDate = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatDate(),
-            currentTime = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatTime(),
+            currentDate = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatFullDate(),
+            currentTime = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatFullTime(),
             onClickEmotion = {}
         )
     }

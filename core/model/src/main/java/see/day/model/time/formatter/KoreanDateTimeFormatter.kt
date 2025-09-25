@@ -25,7 +25,7 @@ class KoreanDateTimeFormatter(val dateTime: DateTime) : DateTimeFormatter {
         }
     }
 
-    override fun formatDate(): String {
+    override fun formatFullDate(): String {
         val yearStr = (dateTime.year % 100).toString().padStart(2, '0')
         val monthStr = dateTime.month.toString().padStart(2, '0')
         val dayStr = dateTime.day.toString().padStart(2, '0')
@@ -34,7 +34,7 @@ class KoreanDateTimeFormatter(val dateTime: DateTime) : DateTimeFormatter {
         return "$yearStr.$monthStr.$dayStr ($dayOfWeek)"
     }
 
-    override fun formatTime(): String {
+    override fun formatFullTime(): String {
         val amPm = if (dateTime.hour < 12) "오전" else "오후"
         val displayHour = when {
             dateTime.hour == 0 -> 12
@@ -45,5 +45,20 @@ class KoreanDateTimeFormatter(val dateTime: DateTime) : DateTimeFormatter {
         val minuteStr = dateTime.minute.toString().padStart(2, '0')
 
         return "$amPm $hourStr:$minuteStr"
+    }
+
+    override fun formatDate(): String {
+        val yearStr = dateTime.year.toString()
+        val monthStr = dateTime.month.toString().padStart(2, '0')
+        val dayStr = dateTime.day.toString().padStart(2, '0')
+
+        return "$yearStr-$monthStr-$dayStr"
+    }
+
+    override fun formatTime(): String {
+        val hourStr = dateTime.hour.toString().padStart(2, '0')
+        val minuteStr = dateTime.minute.toString().padStart(2, '0')
+
+        return "$hourStr:$minuteStr"
     }
 }
