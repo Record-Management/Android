@@ -1,6 +1,5 @@
 package see.day.daily.screen
 
-import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,8 +37,6 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray60
 import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
-import see.day.model.time.DateTime
-import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.ui.button.CompleteButtonNoHorizontalPadding
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
@@ -136,8 +132,8 @@ internal fun DailyDetailScreen(
             EmotionAndDate(
                 modifier = modifier,
                 emotion = uiState.emotion,
-                currentDate = uiState.dateTime.formatDate(),
-                currentTime = uiState.dateTime.formatTime(),
+                currentDate = uiState.dateTime.formatFullDate(),
+                currentTime = uiState.dateTime.formatFullTime(),
                 onClickEmotion = onClickEmotion
             )
             Spacer(modifier = modifier.padding(top = 24.dp))
