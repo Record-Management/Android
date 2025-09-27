@@ -1,7 +1,9 @@
 package see.day.home.screen
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,12 +14,15 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -45,7 +50,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.designsystem.theme.gray30
 import see.day.home.R
+import see.day.home.component.CalendarDetail
 import see.day.home.component.HomeImage
 import see.day.home.component.HomeTopBar
 import see.day.home.component.SelectedDateComponent
@@ -54,6 +61,7 @@ import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
+import see.day.home.util.rememberNavigationBarHeight
 import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
@@ -79,27 +87,32 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
     )
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (HomeUiEvent) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState)
-
+    val scrollState = rememberScrollState()
     val configuration = LocalConfiguration.current
-    val bottomSheetPeekHeight = (configuration.screenHeightDp.dp) * 0.6f
+    val screenHeightDp = configuration.screenHeightDp.dp
+
+    val bottomSheetPeekHeight = screenHeightDp * 0.6f
     val statusBarPadding = WindowInsets.statusBars
         .asPaddingValues()
     val topPaddingFraction = calculateTopPaddingFraction(configuration, statusBarPadding)
 
+    val navigationBarSize = rememberNavigationBarHeight()
+
     var minOffset by remember { mutableStateOf<Float?>(null) }
     var maxOffset by remember { mutableStateOf<Float?>(null) }
     var toolbarAlpha by remember { mutableStateOf(0f) }
+    var floatingButtonPadding by remember { mutableStateOf(70f + navigationBarSize.value) }
 
     val onDownBottomSheet: () -> Unit = {
         coroutineScope.launch {
             bottomSheetState.partialExpand()
-            toolbarAlpha = 0f
         }
     }
 
@@ -115,8 +128,18 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                 if (min != null && max != null) {
                     // 0f ~ 1f 사이로 정규화해서 알파 계산
                     toolbarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
+
+                    floatingButtonPadding = (70f + navigationBarSize.value) * ((offset - min) / (max - min)).coerceIn(0f, 1f)
                 }
             }
+    }
+
+    LaunchedEffect(bottomSheetState.currentValue) {
+        if(bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
+            if(scrollState.value != 0) {
+                scrollState.animateScrollTo(0)
+            }
+        }
     }
 
     Box(
@@ -140,6 +163,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     modifier = modifier
                         .fillMaxHeight(fraction = topPaddingFraction)
                         .fillMaxWidth()
+                        .verticalScroll(scrollState, bottomSheetState.currentValue == SheetValue.Expanded)
                 ) {
                     Row(
                         modifier = modifier.padding(horizontal = 16.dp),
@@ -150,22 +174,53 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                         SelectedFilterRecordType(modifier, uiState.selectedFilterType, uiEvent)
                     }
                     Spacer(modifier = modifier.padding(top = 10.dp))
-                    CustomCalendar(
-                        modifier = modifier,
-                        currentYear = uiState.currentYear,
-                        currentMonth = uiState.currentMonth,
-                        selectedMonth = uiState.selectedMonth,
-                        selectedDay = uiState.selectedDay,
-                        calendarDayInfo = uiState.monthlyRecords,
-                        currentFilterType = uiState.selectedFilterType.toRecordType(),
-                        mainRecordType = uiState.mainRecordType,
-                        onClickCell = { year, month, day ->
-                            uiEvent(HomeUiEvent.OnClickCell(year, month, day))
-                        },
-                        onSwipeCalendar = { year, month ->
-                            uiEvent(HomeUiEvent.OnClickSelectedDate(year, month))
+                    Box {
+                        CustomCalendar(
+                            modifier = modifier,
+                            currentYear = uiState.currentYear,
+                            currentMonth = uiState.currentMonth,
+                            selectedMonth = uiState.selectedMonth,
+                            selectedDay = uiState.selectedDay,
+                            calendarDayInfo = uiState.monthlyRecords,
+                            currentFilterType = uiState.selectedFilterType.toRecordType(),
+                            mainRecordType = uiState.mainRecordType,
+                            onClickCell = { year, month, day ->
+                                uiEvent(HomeUiEvent.OnClickCell(year, month, day))
+                            },
+                            onSwipeCalendar = { year, month ->
+                                uiEvent(HomeUiEvent.OnClickSelectedDate(year, month))
+                            }
+                        )
+                        FloatingActionButton(
+                            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(RecordType.DAILY)) },
+                            modifier = modifier
+                                .padding(
+                                    end = 16.dp, bottom = floatingButtonPadding.dp
+                                )
+                                .align(Alignment.BottomEnd),
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            shape = CircleShape,
+                            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.image_edit),
+                                contentDescription = "추가하기 버튼",
+                                modifier = modifier.size(24.dp)
+                            )
                         }
-                    )
+                    }
+                    Spacer(modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+                        .height(1.dp)
+                        .background(gray30))
+                    if(uiState.dailyDetailRecords.records.isNotEmpty()) {
+                        CalendarDetail(
+                            dailyDetailRecord = uiState.dailyDetailRecords,
+                            onClickOverview = {}
+                        )
+                        Spacer(modifier = modifier.systemBarsPadding())
+                    }
                 }
             },
             sheetPeekHeight = bottomSheetPeekHeight,
@@ -176,22 +231,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             },
             sheetContainerColor = Color.White
         ) { innerPadding ->
-        }
-        FloatingActionButton(
-            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(RecordType.DAILY)) },
-            modifier = modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 20.dp)
-                .systemBarsPadding(),
-            containerColor = MaterialTheme.colorScheme.primary,
-            shape = CircleShape,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.image_edit),
-                contentDescription = "추가하기 버튼",
-                modifier = modifier.size(24.dp)
-            )
         }
     }
 }
@@ -211,6 +250,7 @@ fun RecordFilterType.toRecordType(): RecordType? {
         RecordFilterType.HABIT -> RecordType.HABIT
     }
 }
+
 
 @Preview
 @Composable

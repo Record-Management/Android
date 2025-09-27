@@ -58,13 +58,13 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             textAlign = TextAlign.Center,
             color = if (isSelected) Color.White else if (isSameMonth) gray100 else gray40,
             modifier = if (isSelected) {
-                modifier
+                Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 17.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .background(MaterialTheme.colorScheme.primary)
             } else {
-                modifier.fillMaxWidth()
+                Modifier.fillMaxWidth()
             }
         )
         if (!isSameMonth) {
@@ -74,20 +74,20 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
         if (mainRecordType != SCHEDULE) {
             if (filterType == null && records.contains(mainRecordType)) {
                 Box(
-                    modifier = modifier
+                    modifier = Modifier
                         .height(25.dp)
                         .padding(horizontal = (5.5).dp)
                         .fillMaxWidth()
                 ) {
                     Row(
-                        modifier = modifier
+                        modifier = Modifier
                             .padding(top = 1.dp)
                             .align(Alignment.Center)
                     ) {
                         // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
                         Image(
                             painter = painterResource(mainRecordType.getIcon()),
-                            modifier = modifier.size(24.dp),
+                            modifier = Modifier.size(24.dp),
                             contentDescription = "이미지"
                         )
                     }
@@ -105,20 +105,20 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                 }
             } else if (filterType == null && !records.contains(mainRecordType)) {
                 Box(
-                    modifier = modifier
+                    modifier = Modifier
                         .height(25.dp)
                         .padding(horizontal = (5.5).dp)
                         .fillMaxWidth()
                 ) {
                     Row(
-                        modifier = modifier
+                        modifier = Modifier
                             .padding(top = 1.dp)
                             .align(Alignment.Center)
                     ) {
                         // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
                         Image(
                             painter = painterResource(mainRecordType.getGrayIcon()),
-                            modifier = modifier.size(24.dp),
+                            modifier = Modifier.size(24.dp),
                             contentDescription = "이미지"
                         )
                     }
@@ -126,7 +126,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                     if (records.isNotEmpty()) {
                         Image(
                             painter = painterResource(R.drawable.ic_red_dot),
-                            modifier = modifier
+                            modifier = Modifier
                                 .size(6.dp)
                                 .align(Alignment.TopCenter)
                                 .offset(x = (14.5).dp),
@@ -136,20 +136,20 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                 }
             } else if (filterType != null && records.contains(filterType)) {
                 Box(
-                    modifier = modifier
+                    modifier = Modifier
                         .height(25.dp)
                         .padding(horizontal = (5.5).dp)
                         .fillMaxWidth()
                 ) {
                     Row(
-                        modifier = modifier
+                        modifier = Modifier
                             .padding(top = 1.dp)
                             .align(Alignment.Center)
                     ) {
                         // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
                         Image(
                             painter = painterResource(filterType.getIcon()),
-                            modifier = modifier.size(24.dp),
+                            modifier = Modifier.size(24.dp),
                             contentDescription = "이미지"
                         )
                     }
@@ -158,9 +158,9 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
         }
 
         if (schedules.isNotEmpty() && (filterType == null || filterType == SCHEDULE)) {
-            Spacer(modifier = modifier.size(6.dp))
+            Spacer(modifier = Modifier.size(6.dp))
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .clip(RoundedCornerShape(2.dp))
                     .background(gray20)
                     .fillMaxWidth()
@@ -171,7 +171,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             ) {
                 // 색상
                 Spacer(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(2.dp)
                         .size(width = 2.dp, height = 10.dp)
                         .background(gray50)
@@ -187,7 +187,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             if (schedules.size >= 2) {
                 Text(
                     text = "+${schedules.size - 1}",
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(2.dp)
                         .clip(RoundedCornerShape(4.dp))
                         .background(gray20)

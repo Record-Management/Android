@@ -2,16 +2,15 @@ package see.day.ui.calendar
 
 import android.widget.Toast
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,9 +44,8 @@ fun CustomCalendar(
             generateCalendarDays(currentYear, currentMonth)
         )
     }
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(7),
-        userScrollEnabled = false,
+
+    Column(
         modifier = modifier
             .pointerInput(currentYear, currentMonth) {
                 var totalDragAmount = 0f
@@ -80,33 +78,49 @@ fun CustomCalendar(
                 }
             }
     ) {
-        items(dayOfWeekList, key = { it }) { dayOfWeek ->
-            Text(
-                text = dayOfWeek,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 9.dp),
-                style = MaterialTheme.typography.labelMedium,
-                textAlign = TextAlign.Center
-            )
+        // 요일 헤더
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            dayOfWeekList.forEach { dayOfWeek ->
+                Text(
+                    text = dayOfWeek,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 9.dp),
+                    style = MaterialTheme.typography.labelMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
-        items(generateCalendarDay) { date ->
-            DayCell(
-                year = date.year,
-                month = date.month,
-                day = date.day,
-                isSameMonth = date.isCurrentMonth,
-                filterType = currentFilterType,
-                isSelected = currentYear == date.year && selectedDay == date.day && selectedMonth == date.month,
-                mainRecordType = mainRecordType,
-                records = calendarDayInfo.firstOrNull {
-                    it.day == date.day && it.month == date.month && it.year == date.year
-                }?.records ?: listOf(),
-                schedules = calendarDayInfo.firstOrNull {
-                    it.day == date.day && it.month == date.month && it.year == date.year
-                }?.schedules ?: listOf(),
-                onClickItem = onClickCell
-            )
+
+        // 캘린더 날짜들을 주 단위로 나누어 표시
+        generateCalendarDay.chunked(7).forEach { weekData ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                weekData.forEach { date ->
+                    DayCell(
+                        modifier = modifier.weight(1f),
+                        year = date.year,
+                        month = date.month,
+                        day = date.day,
+                        isSameMonth = date.isCurrentMonth,
+                        filterType = currentFilterType,
+                        isSelected = currentYear == date.year && selectedDay == date.day && selectedMonth == date.month,
+                        mainRecordType = mainRecordType,
+                        records = calendarDayInfo.firstOrNull {
+                            it.day == date.day && it.month == date.month && it.year == date.year
+                        }?.records ?: listOf(),
+                        schedules = calendarDayInfo.firstOrNull {
+                            it.day == date.day && it.month == date.month && it.year == date.year
+                        }?.schedules ?: listOf(),
+                        onClickItem = onClickCell,
+                    )
+                }
+            }
         }
     }
 }
