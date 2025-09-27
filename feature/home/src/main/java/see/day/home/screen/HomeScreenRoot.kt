@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -52,6 +52,7 @@ import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
 import see.day.home.R
+import see.day.home.component.CalendarDetail
 import see.day.home.component.HomeImage
 import see.day.home.component.HomeTopBar
 import see.day.home.component.SelectedDateComponent
@@ -108,7 +109,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     var maxOffset by remember { mutableStateOf<Float?>(null) }
     var toolbarAlpha by remember { mutableStateOf(0f) }
     var floatingButtonPadding by remember { mutableStateOf(70f + navigationBarSize.value) }
-    var isInitialized by remember { mutableStateOf(false) }
 
     val onDownBottomSheet: () -> Unit = {
         coroutineScope.launch {
@@ -132,6 +132,14 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     floatingButtonPadding = (70f + navigationBarSize.value) * ((offset - min) / (max - min)).coerceIn(0f, 1f)
                 }
             }
+    }
+
+    LaunchedEffect(bottomSheetState.currentValue) {
+        if(bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
+            if(scrollState.value != 0) {
+                scrollState.animateScrollTo(0)
+            }
+        }
     }
 
     Box(
@@ -203,13 +211,16 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     }
                     Spacer(modifier = modifier
                         .fillMaxWidth()
-                        .padding(top = 20.dp, start = 16.dp, end = 16.dp)
+                        .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
                         .height(1.dp)
                         .background(gray30))
-                    Text(
-                        modifier = modifier.padding(top = 24.dp),
-                        text = "asdasd"
-                    )
+                    if(uiState.dailyDetailRecords.records.isNotEmpty()) {
+                        CalendarDetail(
+                            dailyDetailRecord = uiState.dailyDetailRecords,
+                            onClickOverview = {}
+                        )
+                        Spacer(modifier = modifier.systemBarsPadding())
+                    }
                 }
             },
             sheetPeekHeight = bottomSheetPeekHeight,
