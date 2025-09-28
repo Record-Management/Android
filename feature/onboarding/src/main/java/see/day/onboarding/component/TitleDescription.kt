@@ -17,13 +17,13 @@ import see.day.onboarding.state.onboarding.OnboardingUiState
 @Composable
 internal fun TitleDescription(modifier: Modifier = Modifier, uiState: OnboardingUiState) {
     Image(
-        modifier = modifier.padding(top = 30.dp, start = 16.dp).size(30.dp),
+        modifier = modifier.padding(top = 30.dp).size(30.dp),
         painter = painterResource(uiState.onboardingScreenState.iconRes),
         contentDescription = "온보딩 ${uiState.onboardingScreenState.ordinal} 번째 아이콘"
     )
 
     Text(
-        modifier = modifier.padding(top = 10.dp, start = 16.dp),
+        modifier = modifier.padding(top = 10.dp),
         text = stringResource(uiState.onboardingScreenState.titleRes),
         style = MaterialTheme.typography.bodyLarge
     )
