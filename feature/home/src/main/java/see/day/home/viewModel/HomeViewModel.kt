@@ -122,7 +122,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedFilterType = filterType,
-                monthlyRecords = it.monthlyRecords.filterMonthlyRecords(filterType.toRecordType() ?: throw IllegalStateException())
+                monthlyRecords = monthlyRecord.value.filterMonthlyRecords(filterType.toRecordType() ?: throw IllegalStateException())
             )
         }
     }
@@ -161,8 +161,8 @@ class HomeViewModel @Inject constructor(
                 it.year,
                 it.month,
                 it.day,
-                it.records.filter {
-                    it == recordType
+                it.records.filter { record ->
+                    record == recordType
                 },
                 it.schedules
             )
