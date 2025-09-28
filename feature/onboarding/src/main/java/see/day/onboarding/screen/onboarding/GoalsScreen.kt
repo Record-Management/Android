@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,16 +27,13 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
 
     Column(
         modifier = modifier
-            .padding(top = 16.dp)
             .fillMaxWidth()
     ) {
-        Row(
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        LazyRow(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            listOf(10, 20, 30).forEach { goal ->
+            items(listOf(10, 20, 30)) { goal ->
                 GoalsComponent(
                     goals = goal,
                     currentGoals = currentGoals,
@@ -48,6 +47,15 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
                 )
             }
         }
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(16.dp)
+//        ) {
+//            listOf(10, 20, 30).forEach { goal ->
+//
+//            }
+//        }
         Spacer(modifier = modifier.weight(1f))
 
         CompleteButton(
