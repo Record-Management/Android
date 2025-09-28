@@ -33,15 +33,12 @@ internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onC
 
     Column(
         modifier = modifier
-            .padding(top = 16.dp)
             .fillMaxWidth()
     ) {
         WheelDatePicker(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .height(210.dp),
-            rowCount = 7,
+                .fillMaxWidth(),
+            rowCount = 5,
             selectorProperties = WheelPickerDefaults.selectorProperties(
                 color = gray40,
                 shape = RoundedCornerShape(0),
