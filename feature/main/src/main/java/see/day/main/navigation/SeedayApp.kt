@@ -18,9 +18,10 @@ import see.day.main.navigation.graph.habitNavigation
 import see.day.main.navigation.graph.mainNavigation
 import see.day.main.navigation.graph.scheduleNavigation
 import see.day.onboarding.navigation.onboardingNavigation
+import kotlin.reflect.KClass
 
 @Composable
-fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appStartDestination: String) {
+fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appStartDestination: Any) {
     Column(modifier = Modifier.fillMaxSize()) {
         NavHost(navigationState.navController, startDestination = appStartDestination) {
             mainNavigation(

@@ -18,13 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
-import record.daily.login.navigation.LOGIN_ROUTE
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.home.navigation.HOME_ROUTE
 import see.day.main.navigation.SeedayApp
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
-import see.day.onboarding.navigation.ONBOARDING_ROUTE
+import see.day.navigation.home.Home
+import see.day.navigation.login.Login
+import see.day.navigation.onboarding.OnboardingRoute
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -38,21 +38,21 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { true }
 
         setContent {
-            var appStartDestination by rememberSaveable { mutableStateOf<String?>(null) }
+            var appStartDestination by rememberSaveable { mutableStateOf<AppStartDestination?>(null) }
             LaunchedEffect(Unit) {
                 viewModel.uiEffect.collect { appStartState ->
                     appStartDestination = when (appStartState) {
-                        AppStartState.LOGIN -> LOGIN_ROUTE
+                        AppStartState.LOGIN -> AppStartDestination.Login
                         AppStartState.HOME -> {
                             if (appStartDestination == null) {
-                                HOME_ROUTE
+                                AppStartDestination.Home
                             } else {
                                 appStartDestination
                             }
                         }
                         AppStartState.ONBOARDING -> {
                             if (appStartDestination == null) {
-                                ONBOARDING_ROUTE
+                                AppStartDestination.Onboarding
                             } else {
                                 appStartDestination
                             }
@@ -64,7 +64,12 @@ class MainActivity : ComponentActivity() {
             SeeDayTheme {
                 appStartDestination?.let { destination ->
                     splashScreen.setKeepOnScreenCondition { false }
-                    SeedayApp(appStartDestination = destination)
+                    val appStartRoute = when(destination) {
+                        AppStartDestination.Login -> Login
+                        AppStartDestination.Home -> Home
+                        AppStartDestination.Onboarding -> OnboardingRoute.Onboarding
+                    }
+                    SeedayApp(appStartDestination = appStartRoute)
                 }
             }
         }
@@ -82,4 +87,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier, onClickLogin: () -> Un
             Text("로그인 화면으로 이동")
         }
     }
+}
+
+enum class AppStartDestination {
+    Login, Home, Onboarding
 }
