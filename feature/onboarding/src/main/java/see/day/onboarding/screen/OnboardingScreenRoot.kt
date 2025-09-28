@@ -3,6 +3,7 @@ package see.day.onboarding.screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -74,7 +75,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),
+            modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp).fillMaxSize(),
         ) {
             TitleDescription(modifier, uiState)
             Spacer(modifier = modifier.height(50.dp))
