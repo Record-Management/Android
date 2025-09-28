@@ -12,9 +12,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
 import see.day.main.Greeting
 import see.day.model.record.RecordType
+import see.day.navigation.exercise.ExerciseRoute.Exercise
+import see.day.navigation.habit.HabitRoute.*
+import see.day.navigation.schedule.ScheduleRoute.Schedule
 import see.day.ui.dialog.RecordTypePickerDialog
 
 const val MAIN_ROUTE = "MAIN"
@@ -28,12 +30,6 @@ fun NavGraphBuilder.mainNavigation(onClickLogin: () -> Unit) {
         )
     }
 }
-
-@Serializable data object Exercise
-
-@Serializable data object Habit
-
-@Serializable data object Schedule
 
 fun NavController.navigateExercise(navOptions: NavOptions? = null) {
     navigate(Exercise, navOptions)

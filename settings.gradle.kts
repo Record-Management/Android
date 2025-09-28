@@ -41,3 +41,4 @@ include(
     "feature:home",
     "feature:daily"
 )
+include(":core:navigation")

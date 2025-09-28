@@ -5,15 +5,15 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import record.daily.login.screen.LoginScreenRoot
+import see.day.navigation.login.Login
 
-const val LOGIN_ROUTE = "LOGIN"
 
 fun NavController.navigateLogin(navOptions: NavOptions? = null) {
-    navigate(LOGIN_ROUTE, navOptions)
+    navigate(Login, navOptions)
 }
 
 fun NavGraphBuilder.loginNavigation(onGoHome: () -> Unit, onGoOnboarding: () -> Unit) {
-    composable(LOGIN_ROUTE) {
+    composable<Login> {
         LoginScreenRoot(
             onGoOnboarding = onGoOnboarding,
             onGoHome = onGoHome
