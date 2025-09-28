@@ -29,8 +29,8 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray10
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray80
-import see.day.designsystem.util.DailyEmotion
 import see.day.designsystem.util.largeIconRes
+import see.day.model.record.daily.DailyEmotion
 
 @Composable
 fun DailyRecordOverview(

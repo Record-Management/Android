@@ -34,9 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.daily.R
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.designsystem.util.DailyEmotion
 import see.day.designsystem.util.largeIconRes
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
 import see.day.ui.dialog.RecordTypePickerDialog
 
 @Composable

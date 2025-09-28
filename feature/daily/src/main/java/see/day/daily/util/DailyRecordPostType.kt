@@ -1,6 +1,7 @@
 package see.day.daily.util
 
-import see.day.designsystem.util.DailyEmotion
+import see.day.model.record.daily.DailyEmotion
+
 
 sealed interface DailyRecordPostType {
     data class EditDailyRecordPost(val id: String) : DailyRecordPostType

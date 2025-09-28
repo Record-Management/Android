@@ -1,6 +1,7 @@
 package see.day.daily.state
 
-import see.day.designsystem.util.DailyEmotion
+import see.day.model.record.daily.DailyEmotion
+
 
 sealed interface DailyDetailUiEvent {
 

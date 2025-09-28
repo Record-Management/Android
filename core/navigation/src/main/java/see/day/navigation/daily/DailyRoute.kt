@@ -1,7 +1,7 @@
 package see.day.navigation.daily
 
 import kotlinx.serialization.Serializable
-import see.day.designsystem.util.DailyEmotion
+import see.day.model.record.daily.DailyEmotion
 
 sealed interface DailyRoute {
 

@@ -10,18 +10,16 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.daily.state.DailyDetailUiEffect
 import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
-import see.day.designsystem.util.DailyEmotion
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
 import see.day.model.record.daily.CreateDailyRecord
-import timber.log.Timber
+import see.day.model.record.daily.DailyEmotion
 import javax.inject.Inject
 
 @HiltViewModel

@@ -8,8 +8,8 @@ import androidx.navigation.toRoute
 import see.day.daily.screen.DailyDetailScreenRoot
 import see.day.daily.screen.DailyScreenRoot
 import see.day.daily.util.DailyRecordPostType
-import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
 import see.day.navigation.daily.DailyRoute.Daily
 import see.day.navigation.daily.DailyRoute.DailyWrite
 

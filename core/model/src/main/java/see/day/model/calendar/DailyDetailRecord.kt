@@ -1,6 +1,7 @@
 package see.day.model.calendar
 
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import java.time.LocalDate
@@ -24,7 +25,7 @@ data class DailyDetailRecord(
 data class DetailRecord(
     val id: String,
     val type: RecordType,
-    val emotion: String,
+    val emotion: DailyEmotion,
     val content: String,
     val imageUrls: List<String>,
     val recordDate: String,
