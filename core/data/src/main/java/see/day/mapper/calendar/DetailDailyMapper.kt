@@ -3,6 +3,7 @@ package see.day.mapper.calendar
 import see.day.model.calendar.DailyDetailRecord
 import see.day.model.calendar.DetailRecord
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
 import see.day.network.dto.calendar.DailyDetailRecordResponse
 import see.day.network.dto.calendar.DetailRecordResponse
 
@@ -21,7 +22,7 @@ fun DetailRecordResponse.toModel(): DetailRecord {
     return DetailRecord(
         id = id,
         type = RecordType.valueOf(type),
-        emotion = emotion,
+        emotion = DailyEmotion.valueOf(emotion),
         content = content,
         imageUrls = imageUrls,
         recordDate = recordDate,

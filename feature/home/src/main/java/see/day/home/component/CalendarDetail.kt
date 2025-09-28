@@ -12,10 +12,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
-import see.day.designsystem.util.DailyEmotion
 import see.day.model.calendar.DailyDetailRecord
 import see.day.model.calendar.DetailRecord
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
 import see.day.ui.component.record.overview.DailyRecordOverview
 
 @Composable
@@ -41,7 +41,7 @@ fun CalendarDetail(
             dailyDetailRecord.records.forEach { record ->
                 DailyRecordOverview(
                     recordId = record.id,
-                    dailyEmotion = DailyEmotion.valueOf(record.emotion),
+                    dailyEmotion = record.emotion,
                     recordDate = record.fullRecordTime,
                     content = record.content,
                     photoUrls = record.imageUrls,
@@ -57,7 +57,7 @@ fun CalendarDetail(
 private fun CalendarDetailPreview() {
     SeeDayTheme {
         CalendarDetail(
-            dailyDetailRecord = DailyDetailRecord("2025-09-12", listOf(DetailRecord("", RecordType.DAILY, DailyEmotion.Love.name, "asdasdasd", listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), "", "13:30", "", "")))
+            dailyDetailRecord = DailyDetailRecord("2025-09-12", listOf(DetailRecord("", RecordType.DAILY, DailyEmotion.Love, "asdasdasd", listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), "", "13:30", "", "")))
         ) { }
     }
 }

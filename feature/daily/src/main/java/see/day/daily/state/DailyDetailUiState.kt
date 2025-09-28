@@ -1,7 +1,7 @@
 package see.day.daily.state
 
-import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.DateTimeFormatter
 import see.day.model.time.formatter.KoreanDateTimeFormatter

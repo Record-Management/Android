@@ -35,8 +35,8 @@ import see.day.daily.util.DailyRecordPostType
 import see.day.daily.viewModel.DailyDetailViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray60
-import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
 import see.day.ui.button.CompleteButton
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow

@@ -17,8 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.designsystem.util.DailyEmotion
 import see.day.designsystem.util.largeIconRes
+import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 
