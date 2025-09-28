@@ -1,6 +1,5 @@
 package see.day.daily.state
 
-import see.day.daily.navigation.DailyDetail
 import see.day.designsystem.util.DailyEmotion
 
 sealed interface DailyDetailUiEvent {

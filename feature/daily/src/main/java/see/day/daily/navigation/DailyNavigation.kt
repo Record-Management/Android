@@ -5,18 +5,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import kotlinx.serialization.Serializable
 import see.day.daily.screen.DailyDetailScreenRoot
 import see.day.daily.screen.DailyScreenRoot
 import see.day.daily.util.DailyRecordPostType
 import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
+import see.day.navigation.daily.Daily
+import see.day.navigation.daily.DailyWrite
 
-@Serializable data object Daily
-
-@Serializable data class DailyWrite(val emotion: DailyEmotion)
-
-@Serializable data class DailyDetail(val id: String)
 
 fun NavController.navigateDaily(navOptions: NavOptions? = null) {
     navigate(Daily, navOptions)
