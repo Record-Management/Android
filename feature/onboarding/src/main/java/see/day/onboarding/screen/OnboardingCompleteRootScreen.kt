@@ -6,12 +6,17 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.R
 import see.day.onboarding.component.OnboardingCompleteLabel
@@ -51,13 +58,16 @@ internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, onGoHom
 
 @Composable
 internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
-    Column {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = modifier.padding(horizontal = 16.dp).fillMaxHeight().verticalScroll(scrollState)
+    ) {
         Image(
             modifier = modifier
                 .padding(top = 66.dp)
                 .systemBarsPadding()
                 .height(height = 216.dp)
-                .padding(horizontal = 47.dp)
+                .padding(horizontal = 31.dp)
                 .fillMaxWidth(),
             painter = painterResource(R.drawable.onboard_complete),
             contentDescription = "온보딩 완료 이미지",
@@ -72,16 +82,22 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: (
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = modifier.height(37.dp))
-        labelList().forEachIndexed { index, labelText ->
-            FadeInLabel(
-                labelText = labelText,
-                delayMills = index * WAIT_TIME
-            )
+        Spacer(modifier = modifier.height(51.dp))
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            labelList().forEachIndexed { index, labelText ->
+                FadeInLabel(
+                    labelText = labelText,
+                    delayMills = index * WAIT_TIME
+                )
+            }
         }
 
+
         Spacer(modifier = modifier.weight(1f))
-        FadeEffect(2100) { modifier ->
+        FadeEffect(2100,scrollState = scrollState) { modifier ->
             CompleteButton(
                 modifier = modifier,
                 isEnabled = true,
@@ -114,18 +130,23 @@ fun FadeInLabel(@StringRes labelText: Int, delayMills: Int) {
 }
 
 @Composable
-fun FadeEffect(delayMills: Int, content: @Composable (modifier: Modifier) -> Unit) {
+fun FadeEffect(delayMills: Int,scrollState: ScrollState, content: @Composable (modifier: Modifier) -> Unit) {
     val alpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
         delay(delayMills.toLong())
-        alpha.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(
-                durationMillis = WAIT_TIME,
-                easing = LinearEasing
+        withContext(Dispatchers.Main){
+            scrollState.animateScrollTo(scrollState.maxValue)
+        }
+        withContext(Dispatchers.Main) {
+            alpha.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(
+                    durationMillis = WAIT_TIME,
+                    easing = LinearEasing
+                )
             )
-        )
+        }
     }
 
     content(Modifier.alpha(alpha.value))

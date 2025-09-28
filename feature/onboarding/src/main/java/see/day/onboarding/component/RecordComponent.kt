@@ -40,10 +40,7 @@ import see.day.onboarding.util.title
 internal fun RecordComponent(modifier: Modifier = Modifier, recordType: RecordType, isClicked: Boolean, onClickItem: (RecordType) -> Unit) {
     Surface(
         modifier = Modifier
-            .padding(top = 16.dp)
-            .height(82.dp)
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
             .clickable { onClickItem(recordType) },
         border = if (isClicked) {
             BorderStroke(1.dp, MaterialTheme.colorScheme.primary)

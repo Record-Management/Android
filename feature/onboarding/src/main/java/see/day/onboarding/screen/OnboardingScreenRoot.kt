@@ -3,9 +3,12 @@ package see.day.onboarding.screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -72,10 +75,10 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp).fillMaxSize(),
         ) {
             TitleDescription(modifier, uiState)
-            Spacer(modifier = modifier.height(34.dp))
+            Spacer(modifier = modifier.height(50.dp))
             when (uiState.onboardingScreenState) {
                 RECORD -> {
                     RecordTypeScreen(
@@ -118,7 +121,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
 private fun OnboardingScreenPreview() {
     SeeDayTheme {
         OnboardingScreen(
-            uiState = OnboardingUiState.init.copy(onboardingScreenState = ALERT),
+            uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY),
             uiEvent = {}
         )
     }
