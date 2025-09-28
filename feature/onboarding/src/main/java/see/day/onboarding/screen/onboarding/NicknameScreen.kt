@@ -3,6 +3,7 @@ package see.day.onboarding.screen.onboarding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,7 +38,6 @@ internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onC
     val isError = nicknameValue.isNotValidNickname()
     Column(
         modifier = modifier
-            .padding(top = 16.dp)
             .fillMaxWidth()
     ) {
         OutlinedTextField(
@@ -47,9 +47,7 @@ internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onC
             },
             textStyle = MaterialTheme.typography.displayLarge,
             modifier = modifier
-                .fillMaxWidth()
-                .height(52.dp)
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.colors().copy(
                 unfocusedContainerColor = gray20,
@@ -87,7 +85,7 @@ internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onC
         )
 
         Text(
-            modifier = modifier.padding(top = 10.dp).padding(horizontal = 16.dp),
+            modifier = modifier.padding(top = 10.dp),
             text = stringResource(R.string.nickname_description),
             style = MaterialTheme.typography.headlineMedium,
             color = if (isError) MaterialTheme.colorScheme.onError else gray60
