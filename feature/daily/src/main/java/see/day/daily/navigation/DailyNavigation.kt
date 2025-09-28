@@ -10,8 +10,8 @@ import see.day.daily.screen.DailyScreenRoot
 import see.day.daily.util.DailyRecordPostType
 import see.day.designsystem.util.DailyEmotion
 import see.day.model.record.RecordType
-import see.day.navigation.daily.Daily
-import see.day.navigation.daily.DailyWrite
+import see.day.navigation.daily.DailyRoute.Daily
+import see.day.navigation.daily.DailyRoute.DailyWrite
 
 
 fun NavController.navigateDaily(navOptions: NavOptions? = null) {

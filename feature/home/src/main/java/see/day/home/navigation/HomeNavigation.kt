@@ -4,22 +4,21 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
 import see.day.home.screen.HomeScreenRoot
 import see.day.model.record.RecordType
+import see.day.navigation.home.Home
 
-const val HOME_ROUTE = "HOME"
 
 fun NavController.navigateHome(navOptions: NavOptions? = null) {
-    navigate(HOME_ROUTE, navOptions)
+    navigate(Home, navOptions)
 }
 
 fun NavController.navigateBackToHome() {
-    popBackStack(HOME_ROUTE, inclusive = false)
+    popBackStack(Home, inclusive = false)
 }
 
 fun NavGraphBuilder.homeNavigation(onClickAddRecord: (RecordType) -> Unit) {
-    composable(HOME_ROUTE) {
+    composable<Home> {
         HomeScreenRoot(
             onClickAddRecord = onClickAddRecord
         )
