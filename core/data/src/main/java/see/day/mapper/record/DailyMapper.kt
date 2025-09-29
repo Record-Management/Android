@@ -5,7 +5,7 @@ import see.day.model.record.daily.RegisteredDailyRecord
 import see.day.network.dto.dailyRecord.DailyRecordDetailRequest
 import see.day.network.dto.dailyRecord.DailyRecordDetailResponse
 
-fun CreateDailyRecord.toDto() : DailyRecordDetailRequest {
+fun CreateDailyRecord.toDto(): DailyRecordDetailRequest {
     return DailyRecordDetailRequest(
         content = content,
         emotion = emotion,
@@ -15,7 +15,7 @@ fun CreateDailyRecord.toDto() : DailyRecordDetailRequest {
     )
 }
 
-fun DailyRecordDetailResponse.toModel() : RegisteredDailyRecord {
+fun DailyRecordDetailResponse.toModel(): RegisteredDailyRecord {
     return RegisteredDailyRecord(
         id = id,
         type = type,
@@ -25,6 +25,6 @@ fun DailyRecordDetailResponse.toModel() : RegisteredDailyRecord {
         recordDate = recordDate,
         recordTime = recordTime,
         createdAt = createdAt,
-        updatedAt = updatedAt,
+        updatedAt = updatedAt
     )
 }

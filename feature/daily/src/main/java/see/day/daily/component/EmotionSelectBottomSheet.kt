@@ -27,13 +27,7 @@ import see.day.model.record.daily.DailyEmotion
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun EmotionSelectBottomSheet(
-    modifier: Modifier = Modifier,
-    sheetState: SheetState,
-    onDismiss: () -> Unit,
-    onClickChangeEmotion: (DailyEmotion) -> Unit
-
-) {
+internal fun EmotionSelectBottomSheet(modifier: Modifier = Modifier, sheetState: SheetState, onDismiss: () -> Unit, onClickChangeEmotion: (DailyEmotion) -> Unit) {
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = { onDismiss() },
@@ -48,7 +42,7 @@ internal fun EmotionSelectBottomSheet(
                 Text(
                     "감정 선택",
                     style = MaterialTheme.typography.titleSmall,
-                    modifier = modifier.align(Alignment.Center),
+                    modifier = modifier.align(Alignment.Center)
                 )
                 Image(
                     modifier = Modifier
@@ -79,7 +73,7 @@ internal fun EmotionSelectBottomSheet(
                         .clickable {
                             onClickChangeEmotion(emotion)
                             onDismiss()
-                        },
+                        }
                 )
             }
         }

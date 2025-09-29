@@ -45,12 +45,7 @@ import see.day.ui.topbar.DetailRecordTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreenRoot(
-    modifier: Modifier = Modifier,
-    viewModel: DailyDetailViewModel = hiltViewModel(),
-    dailyRecordPostType: DailyRecordPostType,
-    onClickPopHome: () -> Unit
-) {
+internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: () -> Unit) {
     LaunchedEffect(dailyRecordPostType) {
         viewModel.fetchData(dailyRecordPostType)
     }
@@ -63,7 +58,6 @@ internal fun DailyDetailScreenRoot(
             }
         }
     }
-
 
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
     var openBackDialog by remember { mutableStateOf(false) }
@@ -78,7 +72,7 @@ internal fun DailyDetailScreenRoot(
             onDismiss = { openBackDialog = false },
             onBackRecordDetail = onClickPopHome,
             title = R.string.record_close_dialog_title,
-            body = R.string.record_close_dialog_body,
+            body = R.string.record_close_dialog_body
         )
     }
     val onClickChangeEmotion: (DailyEmotion) -> Unit = { emotion ->
@@ -104,13 +98,7 @@ internal fun DailyDetailScreenRoot(
 }
 
 @Composable
-internal fun DailyDetailScreen(
-    modifier: Modifier = Modifier,
-    uiState: DailyDetailUiState,
-    onClickBackButton: () -> Unit,
-    onClickEmotion: () -> Unit,
-    uiEvent: (DailyDetailUiEvent) -> Unit
-) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickEmotion: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
     Scaffold(
         modifier = modifier
@@ -151,9 +139,11 @@ internal fun DailyDetailScreen(
                 uris = uiState.photos,
                 onRemovePhotos = { photo ->
                     uiEvent(DailyDetailUiEvent.OnRemovePhoto(photo))
-                }, { photos ->
+                },
+                { photos ->
                     uiEvent(DailyDetailUiEvent.OnAddPhotos(photos))
-                })
+                }
+            )
             Text(
                 modifier = modifier.padding(top = 10.dp),
                 text = stringResource(R.string.photo_limit_text),
@@ -161,7 +151,7 @@ internal fun DailyDetailScreen(
                 style = MaterialTheme.typography.labelSmall
             )
             Spacer(modifier = modifier.weight(1f))
-            CompleteButton (
+            CompleteButton(
                 text = stringResource(see.day.ui.R.string.write_record_text),
                 isEnabled = uiState.canSubmit,
                 onClick = {

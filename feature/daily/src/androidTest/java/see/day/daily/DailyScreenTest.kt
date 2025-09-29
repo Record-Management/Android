@@ -44,7 +44,6 @@ class DailyScreenTest {
             .onNodeWithText(context.getString(R.string.change_record_type))
             .performClick()
 
-
         composeTestRule
             .onNodeWithText(context.getString(see.day.ui.R.string.change_record_title))
             .assertIsDisplayed()
@@ -70,7 +69,7 @@ class DailyScreenTest {
             .assertIsNotEnabled()
 
         RecordType.entries.forEach { type ->
-            if(currentType != type) {
+            if (currentType != type) {
                 composeTestRule
                     .onNodeWithText(type.title)
                     .performClick()
@@ -79,7 +78,6 @@ class DailyScreenTest {
                     .onNodeWithText(context.getString(see.day.ui.R.string.change_record))
                     .assertIsEnabled()
             }
-
         }
     }
 }

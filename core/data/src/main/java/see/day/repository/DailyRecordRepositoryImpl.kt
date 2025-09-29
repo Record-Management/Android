@@ -1,5 +1,6 @@
 package see.day.repository
 
+import javax.inject.Inject
 import see.day.domain.repository.DailyRecordRepository
 import see.day.mapper.record.toDto
 import see.day.mapper.record.toModel
@@ -8,7 +9,6 @@ import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.RegisteredDailyRecord
 import see.day.network.DailyRecordService
 import see.day.utils.ErrorUtils.createResult
-import javax.inject.Inject
 
 class DailyRecordRepositoryImpl @Inject constructor(
     private val dailyRecordService: DailyRecordService

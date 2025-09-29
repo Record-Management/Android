@@ -2,7 +2,6 @@ package see.day.ui.photo
 
 import android.Manifest
 import android.content.Context
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -38,12 +37,7 @@ import see.day.util.permission.hasPhotoPermissions
 import see.day.util.permission.isPhotoPickerSupported
 
 @Composable
-fun AddPhotoButton(
-    modifier: Modifier = Modifier,
-    context: Context,
-    currentPhotoCount: Int,
-    onClickPhotoAddButton: (List<String>) -> Unit
-) {
+fun AddPhotoButton(modifier: Modifier = Modifier, context: Context, currentPhotoCount: Int, onClickPhotoAddButton: (List<String>) -> Unit) {
     var hasPermissionsPreApi33 by remember { mutableStateOf(hasPhotoPermissions(context)) }
 
     val photoPermissionLauncher = rememberLauncherForActivityResult(
@@ -57,11 +51,11 @@ fun AddPhotoButton(
         }
     }
 
-    val pickMediaLauncher = if(currentPhotoCount == 2) {
+    val pickMediaLauncher = if (currentPhotoCount == 2) {
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia()
         ) { uri ->
-            if(uri != null) {
+            if (uri != null) {
                 onClickPhotoAddButton(listOf(uri.toString()))
             }
         }
@@ -88,7 +82,6 @@ fun AddPhotoButton(
                 } else {
                     photoPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
-
             }
             .padding(vertical = 23.dp, horizontal = 17.dp),
         verticalArrangement = Arrangement.Center,
@@ -109,7 +102,6 @@ fun AddPhotoButton(
             color = gray50
         )
     }
-
 }
 
 @Preview

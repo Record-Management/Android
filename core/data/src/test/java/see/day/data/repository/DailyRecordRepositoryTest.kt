@@ -2,13 +2,11 @@ package see.day.data.repository
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
@@ -19,7 +17,6 @@ import retrofit2.Response
 import see.day.domain.repository.DailyRecordRepository
 import see.day.model.exception.BadRequestException
 import see.day.model.record.daily.CreateDailyRecord
-import see.day.model.record.daily.RegisteredDailyRecord
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.DailyRecordService
@@ -46,8 +43,8 @@ class DailyRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val createDailyRecord = CreateDailyRecord("","", timeFormatter, listOf())
-            val registeredDailyRecordResponse = DailyRecordDetailResponse("","","","", listOf(),"","","","")
+            val createDailyRecord = CreateDailyRecord("", "", timeFormatter, listOf())
+            val registeredDailyRecordResponse = DailyRecordDetailResponse("", "", "", "", listOf(), "", "", "", "")
 
             whenever(dailyRecordService.postDailyRecord(any())).thenReturn(
                 CommonResponse(
@@ -74,7 +71,7 @@ class DailyRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val createDailyRecord = CreateDailyRecord("","", timeFormatter, listOf())
+            val createDailyRecord = CreateDailyRecord("", "", timeFormatter, listOf())
 
             whenever(dailyRecordService.postDailyRecord(any())).thenThrow(
                 HttpException(

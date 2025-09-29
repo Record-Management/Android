@@ -20,7 +20,7 @@ fun WheelTextPicker(
     style: TextStyle = MaterialTheme.typography.titleMedium,
     color: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onScrollFinished: (snappedIndex: Int) -> Int? = { null },
+    onScrollFinished: (snappedIndex: Int) -> Int? = { null }
 ) {
     WheelPicker(
         modifier = modifier,
@@ -30,7 +30,7 @@ fun WheelTextPicker(
         rowCount = rowCount,
         selectorProperties = selectorProperties,
         onScrollFinished = onScrollFinished
-    ){ index ->
+    ) { index ->
         Text(
             text = texts[index],
             style = style,

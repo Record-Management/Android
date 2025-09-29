@@ -10,5 +10,4 @@ sealed interface DailyRoute {
     @Serializable data class DailyWrite(val emotion: DailyEmotion) : DailyRoute
 
     @Serializable data class DailyDetail(val id: String) : DailyRoute
-
 }

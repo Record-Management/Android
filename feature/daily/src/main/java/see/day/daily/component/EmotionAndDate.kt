@@ -23,13 +23,7 @@ import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 
 @Composable
-internal fun EmotionAndDate(
-    modifier: Modifier = Modifier,
-    emotion: DailyEmotion,
-    currentDate: String,
-    currentTime: String,
-    onClickEmotion : () -> Unit
-) {
+internal fun EmotionAndDate(modifier: Modifier = Modifier, emotion: DailyEmotion, currentDate: String, currentTime: String, onClickEmotion: () -> Unit) {
     Row(
         modifier = modifier.padding(top = 10.dp),
         verticalAlignment = Alignment.Bottom
@@ -50,7 +44,7 @@ internal fun EmotionAndDate(
         ) {
             Text(
                 text = currentDate,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = currentTime,

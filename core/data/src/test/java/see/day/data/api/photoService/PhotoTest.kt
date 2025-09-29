@@ -58,14 +58,16 @@ class PhotoTest {
 
         // when
         val response = sut.uploadPhotos(
-            listOf(MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(
-                    "file", // 서버에서 받는 파라미터 이름
-                    "test.jpg", // 파일 이름
-                    "dummy content".toRequestBody("image/jpeg".toMediaType()) // 더미 파일 내용
-                )
-                .build().part(0))
+            listOf(
+                MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(
+                        "file", // 서버에서 받는 파라미터 이름
+                        "test.jpg", // 파일 이름
+                        "dummy content".toRequestBody("image/jpeg".toMediaType()) // 더미 파일 내용
+                    )
+                    .build().part(0)
+            )
 
         )
         val recordedRequest = mockWebServer.takeRequest()
@@ -81,5 +83,4 @@ class PhotoTest {
         assertEquals("S200", response.code)
         assertNotNull(response.data)
     }
-
 }

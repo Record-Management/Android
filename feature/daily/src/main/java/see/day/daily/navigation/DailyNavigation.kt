@@ -13,7 +13,6 @@ import see.day.model.record.daily.DailyEmotion
 import see.day.navigation.daily.DailyRoute.Daily
 import see.day.navigation.daily.DailyRoute.DailyWrite
 
-
 fun NavController.navigateDaily(navOptions: NavOptions? = null) {
     navigate(Daily, navOptions)
 }
@@ -22,12 +21,7 @@ fun NavController.navigateDailyWrite(emotion: DailyEmotion, navOptions: NavOptio
     navigate(DailyWrite(emotion), navOptions)
 }
 
-fun NavGraphBuilder.dailyNavigation(
-    onClickBackButton: () -> Unit,
-    onClickChangeRecordType: (RecordType, Boolean) -> Unit,
-    onClickEmotion: (DailyEmotion) -> Unit,
-    onClickPopHome: () -> Unit
-) {
+fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChangeRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit, onClickPopHome: () -> Unit) {
     composable<Daily> {
         DailyScreenRoot(onClickBackButton = onClickBackButton, onChangedRecordType = onClickChangeRecordType, onClickEmotion = onClickEmotion)
     }

@@ -3,12 +3,12 @@ package see.day.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.core.graphics.scale
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
-import androidx.core.graphics.scale
 
 class UriFileConverter @Inject constructor(
     @ApplicationContext private val context: Context

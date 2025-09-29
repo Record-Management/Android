@@ -79,7 +79,7 @@ fun CustomCalendar(
             }
     ) {
         // 요일 헤더
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -117,7 +117,7 @@ fun CustomCalendar(
                         schedules = calendarDayInfo.firstOrNull {
                             it.day == date.day && it.month == date.month && it.year == date.year
                         }?.schedules ?: listOf(),
-                        onClickItem = onClickCell,
+                        onClickItem = onClickCell
                     )
                 }
             }

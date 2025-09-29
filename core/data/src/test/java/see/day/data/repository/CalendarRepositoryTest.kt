@@ -69,7 +69,7 @@ class CalendarRepositoryTest {
             val response = successCommonResponse(
                 response = DailyDetailRecordResponse(
                     date = date,
-                    records = listOf(DetailRecordResponse("", "HABIT", "", "", "", "", listOf(), "", ""))
+                    records = listOf(DetailRecordResponse("", "HABIT", "", "", "", "", listOf(), "Love", ""))
                 )
             )
             whenever(calendarService.getDailyRecordData(date)).thenReturn(response)

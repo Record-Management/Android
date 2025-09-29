@@ -34,8 +34,8 @@ abstract class DataModule {
     abstract fun bindsCalendarRepository(calendarRepositoryImpl: CalendarRepositoryImpl): CalendarRepository
 
     @Binds
-    abstract fun bindsPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl) : PhotoRepository
+    abstract fun bindsPhotoRepository(photoRepositoryImpl: PhotoRepositoryImpl): PhotoRepository
 
     @Binds
-    abstract fun bindsDailyRecordRepository(dailyRecordRepositoryImpl: DailyRecordRepositoryImpl) : DailyRecordRepository
+    abstract fun bindsDailyRecordRepository(dailyRecordRepositoryImpl: DailyRecordRepositoryImpl): DailyRecordRepository
 }

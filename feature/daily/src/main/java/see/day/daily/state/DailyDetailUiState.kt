@@ -22,9 +22,11 @@ data class DailyDetailUiState(
         is EditMode.Create -> text.isNotEmpty()
         is EditMode.Edit -> {
             val original = editMode.originalRecord
-            (emotion.name != original.emotion ||
-                text != original.content ||
-                photos != original.imageUrls) && text.isNotEmpty()
+            (
+                emotion.name != original.emotion ||
+                    text != original.content ||
+                    photos != original.imageUrls
+                ) && text.isNotEmpty()
         }
     }
 
@@ -37,5 +39,4 @@ data class DailyDetailUiState(
             editMode = EditMode.Create
         )
     }
-
 }

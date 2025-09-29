@@ -13,5 +13,5 @@ val DailyEmotion.largeIconRes: Int
         DailyEmotion.Tired -> R.drawable.emotion_tired_large
         DailyEmotion.Panic -> R.drawable.emotion_panic_large
         DailyEmotion.Sad -> R.drawable.emotion_sad_large
-        DailyEmotion.Angry  -> R.drawable.emotion_angry_large
+        DailyEmotion.Angry -> R.drawable.emotion_angry_large
     }

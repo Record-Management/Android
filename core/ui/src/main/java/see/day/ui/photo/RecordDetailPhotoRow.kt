@@ -1,27 +1,18 @@
 package see.day.ui.photo
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import see.day.designsystem.theme.SeeDayTheme
 
 @Composable
-fun RecordDetailPhotoRow(
-    modifier: Modifier = Modifier,
-    context: Context,
-    uris: List<String>,
-    onRemovePhotos: (String) -> Unit,
-    onClickAddPhotos: (List<String>) -> Unit
-) {
+fun RecordDetailPhotoRow(modifier: Modifier = Modifier, context: Context, uris: List<String>, onRemovePhotos: (String) -> Unit, onClickAddPhotos: (List<String>) -> Unit) {
     Row(
         modifier = modifier
             .padding(top = 18.dp),

@@ -9,5 +9,5 @@ import see.day.network.dto.dailyRecord.DailyRecordDetailResponse
 interface DailyRecordService {
 
     @POST("api/daily-records")
-    suspend fun postDailyRecord(@Body requestBody: RequestBody) : CommonResponse<DailyRecordDetailResponse>
+    suspend fun postDailyRecord(@Body requestBody: RequestBody): CommonResponse<DailyRecordDetailResponse>
 }

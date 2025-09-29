@@ -9,7 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
 
-fun requiredPhotoPermissionsPreApi33(): String{
+fun requiredPhotoPermissionsPreApi33(): String  {
     return Manifest.permission.READ_EXTERNAL_STORAGE
 }
 
@@ -27,7 +27,6 @@ fun hasPhotoPermissions(context: Context): Boolean {
 fun isPhotoPickerSupported(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 }
-
 
 fun openAppSettings(context: Context) {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {

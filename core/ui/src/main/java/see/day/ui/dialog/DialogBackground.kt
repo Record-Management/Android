@@ -12,11 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-internal fun DialogBackground(
-    modifier: Modifier,
-    onDismiss: () -> Unit,
-    content: @Composable BoxScope.() -> Unit,
-) {
+internal fun DialogBackground(modifier: Modifier, onDismiss: () -> Unit, content: @Composable BoxScope.() -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()

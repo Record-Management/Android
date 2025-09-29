@@ -6,5 +6,4 @@ sealed interface ExerciseRoute {
 
     @Serializable
     data object Exercise : ExerciseRoute
-
 }

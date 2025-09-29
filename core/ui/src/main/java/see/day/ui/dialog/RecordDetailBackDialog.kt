@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,13 +31,7 @@ import see.day.designsystem.theme.gray50
 import see.day.ui.R
 
 @Composable
-fun RecordDetailBackDialog(
-    modifier: Modifier = Modifier,
-    onDismiss: () -> Unit,
-    onBackRecordDetail: () -> Unit,
-    @StringRes title: Int,
-    @StringRes body: Int
-) {
+fun RecordDetailBackDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit, onBackRecordDetail: () -> Unit, @StringRes title: Int, @StringRes body: Int) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -72,12 +65,12 @@ fun RecordDetailBackDialog(
                     Text(
                         modifier = modifier.padding(top = 8.dp),
                         text = stringResource(body),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall
                     )
                     Row(
                         modifier = modifier
                             .padding(top = 16.dp)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
                     ) {
                         Button(
                             onClick = {

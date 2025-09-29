@@ -33,15 +33,7 @@ import see.day.designsystem.util.largeIconRes
 import see.day.model.record.daily.DailyEmotion
 
 @Composable
-fun DailyRecordOverview(
-    modifier: Modifier = Modifier,
-    recordId: String,
-    dailyEmotion: DailyEmotion,
-    recordDate: String,
-    content: String,
-    photoUrls: List<String>,
-    onClickItem: (String) -> Unit
-) {
+fun DailyRecordOverview(modifier: Modifier = Modifier, recordId: String, dailyEmotion: DailyEmotion, recordDate: String, content: String, photoUrls: List<String>, onClickItem: (String) -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -89,7 +81,7 @@ fun DailyRecordOverview(
                         modifier = modifier
                             .size(100.dp)
                             .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.Crop
                     )
                 }
             }

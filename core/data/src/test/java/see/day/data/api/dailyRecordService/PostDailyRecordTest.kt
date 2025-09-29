@@ -6,7 +6,6 @@ import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertThrows
@@ -70,12 +69,12 @@ class PostDailyRecordTest {
 
         // then
         // 요청 검증
-        assertEquals("/api/daily-records",recordedRequest.path)
+        assertEquals("/api/daily-records", recordedRequest.path)
 
         // 응답 body 검증
         assertEquals(201, response.statusCode)
-        assertEquals("하루 기록이 성공적으로 작성되었습니다",response.message)
-        assertEquals("S201",response.code)
+        assertEquals("하루 기록이 성공적으로 작성되었습니다", response.message)
+        assertEquals("S201", response.code)
         assertNotNull(response.data)
     }
 

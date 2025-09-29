@@ -1,5 +1,6 @@
 package see.day.repository
 
+import javax.inject.Inject
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -7,7 +8,6 @@ import see.day.domain.repository.PhotoRepository
 import see.day.model.exception.NoDataException
 import see.day.network.PhotoService
 import see.day.utils.UriFileConverter
-import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
     private val uriFileConverter: UriFileConverter,
@@ -19,7 +19,6 @@ class PhotoRepositoryImpl @Inject constructor(
             val photoFiles = uris.map { uri ->
                 uriFileConverter.convert(uri)
             }
-
 
             val request = photoFiles.map { file ->
                 val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())

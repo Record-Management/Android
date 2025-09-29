@@ -2,7 +2,6 @@ package see.day.daily.state
 
 import see.day.model.record.daily.DailyEmotion
 
-
 sealed interface DailyDetailUiEvent {
 
     data object OnPopHome : DailyDetailUiEvent
@@ -16,5 +15,4 @@ sealed interface DailyDetailUiEvent {
     data class OnRemovePhoto(val photo: String) : DailyDetailUiEvent
 
     data object OnSaveRecord : DailyDetailUiEvent
-
 }

@@ -28,12 +28,7 @@ import see.day.designsystem.theme.gray60
 import see.day.ui.R
 
 @Composable
-fun RecordWriteTextField(
-    modifier: Modifier = Modifier,
-    text: String,
-    @StringRes placeHolder: Int,
-    onChangedText: (String) -> Unit
-) {
+fun RecordWriteTextField(modifier: Modifier = Modifier, text: String, @StringRes placeHolder: Int, onChangedText: (String) -> Unit) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -49,7 +44,7 @@ fun RecordWriteTextField(
             textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
             modifier = modifier.fillMaxSize().padding(horizontal = 14.dp).padding(top = 14.dp, bottom = 45.dp),
             decorationBox = { innerTextField ->
-                if(text.isEmpty()) {
+                if (text.isEmpty()) {
                     Text(
                         text = stringResource(placeHolder),
                         style = MaterialTheme.typography.displayMedium,

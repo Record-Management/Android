@@ -11,7 +11,5 @@ interface PhotoService {
 
     @Multipart
     @POST("/api/files/upload")
-    suspend fun uploadPhotos(
-        @Part files: List<MultipartBody.Part>
-    ) : CommonResponse<PhotoResponse>
+    suspend fun uploadPhotos(@Part files: List<MultipartBody.Part>): CommonResponse<PhotoResponse>
 }
