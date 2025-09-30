@@ -1,12 +1,11 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -28,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -94,20 +95,18 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState)
-    val scrollState = rememberScrollState()
+    val bottomSheetContentScroll = rememberScrollState()
     val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp.dp
-
-    val bottomSheetPeekHeight = screenHeightDp * 0.6f
+    val bottomSheetMinHeight by remember(configuration) { mutableStateOf((configuration.screenHeightDp * 0.6f).dp) }
     val statusBarPadding = WindowInsets.statusBars
         .asPaddingValues()
-    val topPaddingFraction = calculateTopPaddingFraction(configuration, statusBarPadding)
+    val topPaddingFraction = calculateTopPaddingFraction(configuration.screenHeightDp.dp, statusBarPadding.calculateTopPadding())
 
     val navigationBarSize = rememberNavigationBarHeight()
 
-    var minOffset by remember { mutableStateOf<Float?>(null) }
-    var maxOffset by remember { mutableStateOf<Float?>(null) }
-    var toolbarAlpha by remember { mutableStateOf(0f) }
+    var bottomSheetStateMinOffset by remember { mutableStateOf<Float?>(null) }
+    var bottomSheetStateMaxOffset by remember { mutableStateOf<Float?>(null) }
+    var topAppBarAlpha by remember { mutableStateOf(0f) }
     var floatingButtonPadding by remember { mutableStateOf(70f + navigationBarSize.value) }
 
     val onDownBottomSheet: () -> Unit = {
@@ -120,14 +119,14 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         snapshotFlow { bottomSheetState.requireOffset() }
             .collect { offset ->
                 // 최초 수집 시 최소/최대 값 기억
-                if (minOffset == null || offset < minOffset!!) minOffset = offset
-                if (maxOffset == null || offset > maxOffset!!) maxOffset = offset
+                if (bottomSheetStateMinOffset == null || offset < bottomSheetStateMinOffset!!) bottomSheetStateMinOffset = offset
+                if (bottomSheetStateMaxOffset == null || offset > bottomSheetStateMaxOffset!!) bottomSheetStateMaxOffset = offset
 
-                val min = minOffset
-                val max = maxOffset
+                val min = bottomSheetStateMinOffset
+                val max = bottomSheetStateMaxOffset
                 if (min != null && max != null) {
                     // 0f ~ 1f 사이로 정규화해서 알파 계산
-                    toolbarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
+                    topAppBarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
 
                     floatingButtonPadding = (70f + navigationBarSize.value) * ((offset - min) / (max - min)).coerceIn(0f, 1f)
                 }
@@ -135,9 +134,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     }
 
     LaunchedEffect(bottomSheetState.currentValue) {
-        if(bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
-            if(scrollState.value != 0) {
-                scrollState.animateScrollTo(0)
+        if (bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
+            if (bottomSheetContentScroll.value != 0) {
+                bottomSheetContentScroll.animateScrollTo(0)
             }
         }
     }
@@ -151,7 +150,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             topBar = {
                 HomeTopBar(
                     modifier = modifier,
-                    alpha = toolbarAlpha,
+                    alpha = topAppBarAlpha,
                     isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
                     onClickBackButton = {
                         onDownBottomSheet()
@@ -159,71 +158,17 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                 )
             },
             sheetContent = {
-                Column(
-                    modifier = modifier
-                        .fillMaxHeight(fraction = topPaddingFraction)
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState, bottomSheetState.currentValue == SheetValue.Expanded)
-                ) {
-                    Row(
-                        modifier = modifier.padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        SelectedDateComponent(modifier, uiState.currentYear, uiState.currentMonth, uiEvent)
-                        Spacer(modifier = modifier.weight(1f))
-                        SelectedFilterRecordType(modifier, uiState.selectedFilterType, uiEvent)
-                    }
-                    Spacer(modifier = modifier.padding(top = 10.dp))
-                    Box {
-                        CustomCalendar(
-                            modifier = modifier,
-                            currentYear = uiState.currentYear,
-                            currentMonth = uiState.currentMonth,
-                            selectedMonth = uiState.selectedMonth,
-                            selectedDay = uiState.selectedDay,
-                            calendarDayInfo = uiState.monthlyRecords,
-                            currentFilterType = uiState.selectedFilterType.toRecordType(),
-                            mainRecordType = uiState.mainRecordType,
-                            onClickCell = { year, month, day ->
-                                uiEvent(HomeUiEvent.OnClickCell(year, month, day))
-                            },
-                            onSwipeCalendar = { year, month ->
-                                uiEvent(HomeUiEvent.OnClickSelectedDate(year, month))
-                            }
-                        )
-                        FloatingActionButton(
-                            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(RecordType.DAILY)) },
-                            modifier = modifier
-                                .padding(
-                                    end = 16.dp, bottom = floatingButtonPadding.dp
-                                )
-                                .align(Alignment.BottomEnd),
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            shape = CircleShape,
-                            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.image_edit),
-                                contentDescription = "추가하기 버튼",
-                                modifier = modifier.size(24.dp)
-                            )
-                        }
-                    }
-                    Spacer(modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
-                        .height(1.dp)
-                        .background(gray30))
-                    if(uiState.dailyDetailRecords.records.isNotEmpty()) {
-                        CalendarDetail(
-                            dailyDetailRecord = uiState.dailyDetailRecords,
-                            onClickOverview = {}
-                        )
-                        Spacer(modifier = modifier.systemBarsPadding())
-                    }
-                }
+                HomeBottomSheetContent(
+                    modifier,
+                    topPaddingFraction,
+                    bottomSheetContentScroll,
+                    bottomSheetState,
+                    uiState,
+                    uiEvent,
+                    floatingButtonPadding
+                )
             },
-            sheetPeekHeight = bottomSheetPeekHeight,
+            sheetPeekHeight = bottomSheetMinHeight,
             sheetShape = if (bottomSheetState.currentValue == SheetValue.Expanded) {
                 RoundedCornerShape(0.dp)
             } else {
@@ -235,10 +180,86 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     }
 }
 
-fun calculateTopPaddingFraction(configuration: Configuration, statusBarPaddings: PaddingValues): Float {
-    val screenHeight = configuration.screenHeightDp.dp
-    val topBarHeight = 56.dp
-    return (screenHeight - statusBarPaddings.calculateTopPadding() - topBarHeight) / screenHeight
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun HomeBottomSheetContent(
+    modifier: Modifier,
+    topPaddingFraction: Float,
+    bottomSheetContentScroll: ScrollState,
+    bottomSheetState: SheetState,
+    uiState: HomeUiState,
+    uiEvent: (HomeUiEvent) -> Unit,
+    floatingButtonPadding: Float
+) {
+    Column(
+        modifier = modifier
+            .fillMaxHeight(fraction = topPaddingFraction)
+            .fillMaxWidth()
+            .verticalScroll(bottomSheetContentScroll, bottomSheetState.currentValue == SheetValue.Expanded)
+    ) {
+        Row(
+            modifier = modifier.padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SelectedDateComponent(modifier, uiState.currentYear, uiState.currentMonth, uiEvent)
+            Spacer(modifier = modifier.weight(1f))
+            SelectedFilterRecordType(modifier, uiState.selectedFilterType, uiEvent)
+        }
+        Spacer(modifier = modifier.padding(top = 10.dp))
+        Box {
+            CustomCalendar(
+                modifier = modifier,
+                currentYear = uiState.currentYear,
+                currentMonth = uiState.currentMonth,
+                selectedMonth = uiState.selectedMonth,
+                selectedDay = uiState.selectedDay,
+                calendarDayInfo = uiState.monthlyRecords,
+                currentFilterType = uiState.selectedFilterType.toRecordType(),
+                mainRecordType = uiState.mainRecordType,
+                onClickCell = { year, month, day ->
+                    uiEvent(HomeUiEvent.OnClickCell(year, month, day))
+                },
+                onSwipeCalendar = { year, month ->
+                    uiEvent(HomeUiEvent.OnClickSelectedDate(year, month))
+                }
+            )
+            FloatingActionButton(
+                onClick = { uiEvent(HomeUiEvent.OnClickAddButton(RecordType.DAILY)) },
+                modifier = modifier
+                    .padding(
+                        end = 16.dp, bottom = floatingButtonPadding.dp
+                    )
+                    .align(Alignment.BottomEnd),
+                containerColor = MaterialTheme.colorScheme.primary,
+                shape = CircleShape,
+                elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.image_edit),
+                    contentDescription = "추가하기 버튼",
+                    modifier = modifier.size(24.dp)
+                )
+            }
+        }
+        Spacer(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+                .height(1.dp)
+                .background(gray30)
+        )
+        if (uiState.dailyDetailRecords.records.isNotEmpty()) {
+            CalendarDetail(
+                dailyDetailRecord = uiState.dailyDetailRecords,
+                onClickOverview = {}
+            )
+            Spacer(modifier = modifier.systemBarsPadding())
+        }
+    }
+}
+
+fun calculateTopPaddingFraction(screenHeight: Dp, appTopBarHeight: Dp): Float {
+    return (screenHeight - appTopBarHeight - topBarHeight) / screenHeight
 }
 
 fun RecordFilterType.toRecordType(): RecordType? {
@@ -262,3 +283,5 @@ private fun HomeScreenPreview() {
         )
     }
 }
+
+val topBarHeight = 56.dp
