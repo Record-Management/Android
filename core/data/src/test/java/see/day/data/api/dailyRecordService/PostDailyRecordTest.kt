@@ -18,6 +18,7 @@ import see.day.data.api.dailyRecordService.json.dailyRecordDetailResponse
 import see.day.mapper.record.toDto
 import see.day.model.exception.BadRequestException
 import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.DailyRecordService
@@ -54,7 +55,7 @@ class PostDailyRecordTest {
     @Test
     fun givenCreateDailyRecord_whenPost_thenReturnsDetailDailyRecord() = runTest {
         // given
-        val createDailyRecord = CreateDailyRecord("", "", KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
+        val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
         val responseJson = dailyRecordDetailResponse
 
         mockWebServer.enqueue(
@@ -81,7 +82,7 @@ class PostDailyRecordTest {
     @Test
     fun givenOverCreateDailyRecord_whenPost_thenThrows400Exception() = runTest {
         // given
-        val createDailyRecord = CreateDailyRecord("", "", KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
+        val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
         val responseJson = dailyRecordDetailOverResponse
 
         mockWebServer.enqueue(

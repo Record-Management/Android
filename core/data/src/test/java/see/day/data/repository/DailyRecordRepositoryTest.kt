@@ -17,6 +17,7 @@ import retrofit2.Response
 import see.day.domain.repository.DailyRecordRepository
 import see.day.model.exception.BadRequestException
 import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.DailyRecordService
@@ -43,8 +44,8 @@ class DailyRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val createDailyRecord = CreateDailyRecord("", "", timeFormatter, listOf())
-            val registeredDailyRecordResponse = DailyRecordDetailResponse("", "", "", "", listOf(), "", "", "", "")
+            val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, timeFormatter, listOf())
+            val registeredDailyRecordResponse = DailyRecordDetailResponse("", "", "Sad", "", listOf(), "", "", "", "")
 
             whenever(dailyRecordService.postDailyRecord(any())).thenReturn(
                 CommonResponse(
@@ -71,7 +72,7 @@ class DailyRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val createDailyRecord = CreateDailyRecord("", "", timeFormatter, listOf())
+            val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, timeFormatter, listOf())
 
             whenever(dailyRecordService.postDailyRecord(any())).thenThrow(
                 HttpException(
