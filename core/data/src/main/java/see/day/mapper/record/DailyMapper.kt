@@ -3,8 +3,10 @@ package see.day.mapper.record
 import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.daily.DailyRecordDetail
+import see.day.model.record.daily.ModifyDailyRecord
 import see.day.network.dto.record.daily.DailyRecordDetailRequest
 import see.day.network.dto.record.daily.DailyRecordDetailResponse
+import see.day.network.dto.record.daily.ModifyDailyRecordRequest
 
 fun CreateDailyRecord.toDto(): DailyRecordDetailRequest {
     return DailyRecordDetailRequest(
@@ -27,5 +29,13 @@ fun DailyRecordDetailResponse.toModel(): DailyRecordDetail {
         recordTime = recordTime,
         createdAt = createdAt,
         updatedAt = updatedAt
+    )
+}
+
+fun ModifyDailyRecord.toDto() : ModifyDailyRecordRequest {
+    return ModifyDailyRecordRequest(
+        content = content,
+        emotion = emotion.name,
+        imageUrls = imageUrls
     )
 }
