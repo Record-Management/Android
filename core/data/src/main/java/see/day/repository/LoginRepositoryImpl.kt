@@ -3,8 +3,10 @@ package see.day.repository
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,6 +18,7 @@ import see.day.model.exception.NoDataException
 import see.day.model.login.SocialLogin
 import see.day.model.navigation.AppStartState
 import see.day.model.navigation.AppStartState.HOME
+import see.day.model.navigation.AppStartState.LOGIN
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
 import see.day.network.dto.auth.LogoutRequest
@@ -56,24 +59,40 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getLoginState(): Flow<AppStartState> = flow {
-        if (!dataSource.hasToken().first()) {
-            return@flow emit(AppStartState.LOGIN)
-        } else {
-            val refreshToken = (RefreshTokenRequest(dataSource.getRefreshToken().first() ?: return@flow emit(AppStartState.LOGIN)))
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getLoginState(): Flow<AppStartState> = dataSource.hasToken().flatMapLatest { hasToken ->
+        flow {
+            if (!hasToken) {
+                emit(LOGIN)
+                return@flow
+            }
+            val refreshTokenValue = dataSource.getRefreshToken().first()
+            if(refreshTokenValue.isNullOrEmpty()) {
+                emit(LOGIN)
+                return@flow
+            }
+
+            val refreshToken = RefreshTokenRequest(refreshTokenValue)
+
             runCatching { authService.refresh(refreshToken.toRequestBody()) }
-                .onSuccess {
-                    val response = it.data ?: return@flow emit(AppStartState.LOGIN)
+                .onSuccess { result ->
+                    val response = result.data
+                    if(response == null) {
+                        emit(LOGIN)
+                        return@flow
+                    }
+
                     CoroutineScope(Dispatchers.IO).launch {
                         dataSource.saveAccessToken(response.accessToken)
                     }
+                    
                     return@flow if (response.user.onboardingCompleted) {
                         emit(HOME)
                     } else {
                         emit(ONBOARDING)
                     }
                 }.onFailure {
-                    return@flow emit(AppStartState.LOGIN)
+                    return@flow emit(LOGIN)
                 }
         }
     }
