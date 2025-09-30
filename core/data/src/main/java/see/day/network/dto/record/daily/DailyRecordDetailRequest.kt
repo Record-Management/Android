@@ -1,4 +1,4 @@
-package see.day.network.dto.dailyRecord
+package see.day.network.dto.record.daily
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json

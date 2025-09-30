@@ -4,7 +4,7 @@ import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 import see.day.network.dto.CommonResponse
-import see.day.network.dto.dailyRecord.DailyRecordDetailResponse
+import see.day.network.dto.record.daily.DailyRecordDetailResponse
 
 interface DailyRecordService {
 
