@@ -10,11 +10,13 @@ import see.day.domain.repository.CalendarRepository
 import see.day.domain.repository.DailyRecordRepository
 import see.day.domain.repository.LoginRepository
 import see.day.domain.repository.PhotoRepository
+import see.day.domain.repository.RecordRepository
 import see.day.domain.repository.UserRepository
 import see.day.repository.CalendarRepositoryImpl
 import see.day.repository.DailyRecordRepositoryImpl
 import see.day.repository.LoginRepositoryImpl
 import see.day.repository.PhotoRepositoryImpl
+import see.day.repository.RecordRepositoryImpl
 import see.day.repository.UserRepositoryImpl
 
 @Module
@@ -38,4 +40,7 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsDailyRecordRepository(dailyRecordRepositoryImpl: DailyRecordRepositoryImpl): DailyRecordRepository
+
+    @Binds
+    abstract fun bindsRecordRepository(recordRepositoryImpl: RecordRepositoryImpl): RecordRepository
 }

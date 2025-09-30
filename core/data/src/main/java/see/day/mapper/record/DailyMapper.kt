@@ -1,7 +1,7 @@
 package see.day.mapper.record
 
 import see.day.model.record.daily.CreateDailyRecord
-import see.day.model.record.daily.RegisteredDailyRecord
+import see.day.model.record.daily.DailyRecordDetail
 import see.day.network.dto.record.daily.DailyRecordDetailRequest
 import see.day.network.dto.record.daily.DailyRecordDetailResponse
 
@@ -15,8 +15,8 @@ fun CreateDailyRecord.toDto(): DailyRecordDetailRequest {
     )
 }
 
-fun DailyRecordDetailResponse.toModel(): RegisteredDailyRecord {
-    return RegisteredDailyRecord(
+fun DailyRecordDetailResponse.toModel(): DailyRecordDetail {
+    return DailyRecordDetail(
         id = id,
         type = type,
         emotion = emotion,

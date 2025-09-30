@@ -1,10 +1,10 @@
 package see.day.domain.repository
 
 import see.day.model.record.daily.CreateDailyRecord
-import see.day.model.record.daily.RegisteredDailyRecord
+import see.day.model.record.daily.DailyRecordDetail
 
 interface DailyRecordRepository {
 
-    suspend fun insertRecord(createDailyRecord: CreateDailyRecord) : Result<RegisteredDailyRecord>
+    suspend fun insertRecord(createDailyRecord: CreateDailyRecord) : Result<DailyRecordDetail>
 
 }
