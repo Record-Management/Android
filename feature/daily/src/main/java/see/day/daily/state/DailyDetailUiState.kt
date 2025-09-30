@@ -23,7 +23,7 @@ data class DailyDetailUiState(
         is EditMode.Edit -> {
             val original = editMode.originalRecord
             (
-                emotion.name != original.emotion ||
+                emotion != original.emotion ||
                     text != original.content ||
                     photos != original.imageUrls
                 ) && text.isNotEmpty()

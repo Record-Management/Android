@@ -17,14 +17,18 @@ import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
 import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.time.DateTime
+import see.day.model.time.formatter.KoreanDateTimeFormatter
 
 @HiltViewModel
 class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
-    private val insertDailyRecordUseCase: InsertDailyRecordUseCase
+    private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
+    private val getDetailRecordUseCase: GetDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -45,6 +49,26 @@ class DailyDetailViewModel @Inject constructor(
             }
 
             is DailyRecordPostType.EditDailyRecordPost -> {
+                viewModelScope.launch {
+                    getDetailRecordUseCase(type.id).onSuccess {  record ->
+                        _uiState.update {
+                            it.copy(
+                                emotion = record.emotion,
+                                text = record.content,
+                                dateTime = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
+                                photos = record.imageUrls,
+                                editMode = DailyDetailUiState.EditMode.Edit(
+                                    originalRecord = CreateDailyRecord(
+                                        content = record.content,
+                                        emotion = record.emotion,
+                                        recordDate = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
+                                        imageUrls = record.imageUrls,
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -147,7 +171,7 @@ class DailyDetailViewModel @Inject constructor(
         insertDailyRecordUseCase(
             CreateDailyRecord(
                 uiState.value.text,
-                uiState.value.emotion.name,
+                uiState.value.emotion,
                 uiState.value.dateTime,
                 photoUrls
             )
