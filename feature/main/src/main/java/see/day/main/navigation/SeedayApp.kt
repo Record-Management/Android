@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
 import see.day.daily.navigation.dailyNavigation
+import see.day.daily.navigation.navigateDailyDetail
 import see.day.daily.navigation.navigateDailyWrite
 import see.day.home.navigation.homeNavigation
 import see.day.home.navigation.navigateBackToHome
@@ -37,7 +38,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
                 onGoHome = navigationState::navigateHome
             )
             homeNavigation(
-                onClickAddRecord = navigationState::navigateAddRecord
+                onClickAddRecord = navigationState::navigateAddRecord,
+                onClickDetailRecord = navigationState::navigateDetailRecord
             )
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,

@@ -1,9 +1,9 @@
 package see.day.model.record.daily
 
-data class RegisteredDailyRecord(
+data class DailyRecordDetail(
     val id: String,
     val type: String,
-    val emotion: String,
+    val emotion: DailyEmotion,
     val content: String,
     val imageUrls: List<String>,
     val recordDate: String,

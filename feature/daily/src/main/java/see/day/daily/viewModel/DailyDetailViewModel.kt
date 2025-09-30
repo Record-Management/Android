@@ -17,14 +17,21 @@ import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
+import see.day.domain.usecase.record.daily.PutDailyRecordUseCase
 import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.daily.ModifyDailyRecord
+import see.day.model.time.DateTime
+import see.day.model.time.formatter.KoreanDateTimeFormatter
 
 @HiltViewModel
 class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
-    private val insertDailyRecordUseCase: InsertDailyRecordUseCase
+    private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
+    private val getDetailRecordUseCase: GetDailyRecordUseCase,
+    private val putDetailRecordUseCase : PutDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -45,6 +52,27 @@ class DailyDetailViewModel @Inject constructor(
             }
 
             is DailyRecordPostType.EditDailyRecordPost -> {
+                viewModelScope.launch {
+                    getDetailRecordUseCase(type.id).onSuccess {  record ->
+                        _uiState.update {
+                            it.copy(
+                                emotion = record.emotion,
+                                text = record.content,
+                                dateTime = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
+                                photos = record.imageUrls,
+                                editMode = DailyDetailUiState.EditMode.Edit(
+                                    recordId = record.id,
+                                    originalRecord = CreateDailyRecord(
+                                        content = record.content,
+                                        emotion = record.emotion,
+                                        recordDate = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
+                                        imageUrls = record.imageUrls,
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -79,7 +107,7 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onPopHome() {
         viewModelScope.launch {
-            _uiEffect.emit(DailyDetailUiEffect.OnPopHome)
+            _uiEffect.emit(DailyDetailUiEffect.OnPopHome(false))
         }
     }
 
@@ -124,9 +152,9 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onSaveRecord() {
         viewModelScope.launch {
-            when (uiState.value.editMode) {
+            when (val mode = uiState.value.editMode) {
                 is DailyDetailUiState.EditMode.Create -> saveDailyRecordForCreateMode()
-                is DailyDetailUiState.EditMode.Edit -> saveDailyRecordForEditMode()
+                is DailyDetailUiState.EditMode.Edit -> modifyRecord(mode.recordId)
             }
         }
     }
@@ -136,7 +164,7 @@ class DailyDetailViewModel @Inject constructor(
         if (photos.isNotEmpty()) {
             insertPhotosUseCase(photos).fold(
                 onSuccess = { photoUrls -> saveDailyRecord(photoUrls) },
-                onFailure = { handleSaveError(it) }
+                onFailure = {  }
             )
         } else {
             saveDailyRecord(emptyList())
@@ -147,21 +175,42 @@ class DailyDetailViewModel @Inject constructor(
         insertDailyRecordUseCase(
             CreateDailyRecord(
                 uiState.value.text,
-                uiState.value.emotion.name,
+                uiState.value.emotion,
                 uiState.value.dateTime,
                 photoUrls
             )
         ).fold(
-            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome) },
-            onFailure = { handleSaveError(it) }
+            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true)) },
+            onFailure = {  }
         )
     }
 
-    private fun handleSaveError(error: Throwable) {
-        // 실패 처리 로직 추가 (예: Toast, 로그, UI 에러 상태 반영)
+    private suspend fun modifyRecord(recordId: String) {
+        val urls = processPhotoUrls(uiState.value.photos)
+
+        putDetailRecordUseCase(
+            ModifyDailyRecord(
+                recordId,
+                uiState.value.text,
+                uiState.value.emotion,
+                urls
+            )
+        ).onSuccess {
+            _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true))
+        }
     }
 
-    private suspend fun saveDailyRecordForEditMode() {
-        // Edit 모드 저장 로직 구현
+    private suspend fun processPhotoUrls(photoUrls: List<String>): List<String> {
+        return if (photoUrls.all { it.contains("http") }) {
+            photoUrls
+        } else {
+            photoUrls.map { url ->
+                if (url.contains("content")) {
+                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                } else {
+                    url
+                }
+            }.filter { it.isNotEmpty() }
+        }
     }
 }

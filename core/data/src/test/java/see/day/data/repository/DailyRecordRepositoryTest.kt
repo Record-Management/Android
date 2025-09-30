@@ -21,7 +21,7 @@ import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.DailyRecordService
 import see.day.network.dto.CommonResponse
-import see.day.network.dto.dailyRecord.DailyRecordDetailResponse
+import see.day.network.dto.record.daily.DailyRecordDetailResponse
 import see.day.network.dto.toResponseBody
 import see.day.repository.DailyRecordRepositoryImpl
 

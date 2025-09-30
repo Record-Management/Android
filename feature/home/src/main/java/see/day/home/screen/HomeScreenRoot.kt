@@ -1,6 +1,7 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.snap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -68,14 +69,27 @@ import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 
 @Composable
-fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), onClickAddRecord: (RecordType) -> Unit) {
+fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit, onClickDetailRecord: (RecordType, String) -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { isRefresh }
+            .collect { refresh ->
+                if(refresh) {
+                    viewModel.onEvent(HomeUiEvent.OnRefresh)
+                }
+            }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is HomeUiEffect.OnGoAddRecord -> {
                     onClickAddRecord(effect.recordType)
+                }
+
+                is HomeUiEffect.OnGoDetailRecord -> {
+                    onClickDetailRecord(effect.recordType, effect.recordId)
                 }
             }
         }
@@ -251,7 +265,9 @@ private fun HomeBottomSheetContent(
         if (uiState.dailyDetailRecords.records.isNotEmpty()) {
             CalendarDetail(
                 dailyDetailRecord = uiState.dailyDetailRecords,
-                onClickOverview = {}
+                onClickOverview = { recordType, recordId ->
+                    uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
+                }
             )
             Spacer(modifier = modifier.systemBarsPadding())
         }

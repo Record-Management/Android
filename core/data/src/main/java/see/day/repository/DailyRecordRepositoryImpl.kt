@@ -6,7 +6,8 @@ import see.day.mapper.record.toDto
 import see.day.mapper.record.toModel
 import see.day.model.exception.NoDataException
 import see.day.model.record.daily.CreateDailyRecord
-import see.day.model.record.daily.RegisteredDailyRecord
+import see.day.model.record.daily.DailyRecordDetail
+import see.day.model.record.daily.ModifyDailyRecord
 import see.day.network.DailyRecordService
 import see.day.utils.ErrorUtils.createResult
 
@@ -14,9 +15,15 @@ class DailyRecordRepositoryImpl @Inject constructor(
     private val dailyRecordService: DailyRecordService
 ) : DailyRecordRepository {
 
-    override suspend fun insertRecord(createDailyRecord: CreateDailyRecord): Result<RegisteredDailyRecord> {
+    override suspend fun insertRecord(createDailyRecord: CreateDailyRecord): Result<DailyRecordDetail> {
         return createResult {
             dailyRecordService.postDailyRecord(createDailyRecord.toDto().toRequestBody()).data?.toModel() ?: throw NoDataException()
+        }
+    }
+
+    override suspend fun putRecord(modifyDailyRecord: ModifyDailyRecord) : Result<DailyRecordDetail> {
+        return createResult {
+            dailyRecordService.putDailyRecord(modifyDailyRecord.recordId, modifyDailyRecord.toDto().toRequestBody()).data?.toModel() ?: throw NoDataException()
         }
     }
 }

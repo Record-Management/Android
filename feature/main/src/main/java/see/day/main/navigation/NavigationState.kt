@@ -9,6 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import record.daily.login.navigation.navigateLogin
 import see.day.daily.navigation.navigateDaily
+import see.day.daily.navigation.navigateDailyDetail
 import see.day.home.navigation.navigateHome
 import see.day.main.navigation.graph.navigateExercise
 import see.day.main.navigation.graph.navigateHabit
@@ -66,6 +67,23 @@ class NavigationState(
             }
             RecordType.SCHEDULE -> {
                 navController.navigateSchedule(navOptions)
+            }
+        }
+    }
+
+    fun navigateDetailRecord(recordType: RecordType, recordId: String) {
+        when(recordType) {
+            RecordType.DAILY -> {
+                navController.navigateDailyDetail(recordId)
+            }
+            RecordType.EXERCISE -> {
+
+            }
+            RecordType.HABIT -> {
+
+            }
+            RecordType.SCHEDULE -> {
+
             }
         }
     }

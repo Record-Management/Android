@@ -67,6 +67,9 @@ class HomeViewModel @Inject constructor(
     // 얘는 날짜 정보와 월간
     fun onEvent(uiEvent: HomeUiEvent) {
         when (uiEvent) {
+            is HomeUiEvent.OnRefresh -> {
+                onRefresh()
+            }
             is HomeUiEvent.OnClickSelectedDate -> {
                 onClickSelectedDate(uiEvent.year, uiEvent.month)
             }
@@ -82,6 +85,36 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickAddButton -> {
                 onClickAddRecord(uiEvent.recordType)
             }
+            is HomeUiEvent.OnClickDetailButton -> {
+                onClickDetailRecord(uiEvent.recordType, uiEvent.recordId)
+            }
+        }
+    }
+
+    private fun onRefresh() {
+        viewModelScope.launch {
+            if(uiState.value == HomeUiState.init) {
+                return@launch
+            }
+            try {
+                val monthlyRecords = async { getMonthlyRecordsUseCase(uiState.value.currentYear, uiState.value.currentMonth, arrayOf()).getOrThrow() }
+                val detailDailyRecords = getDetailDailyRecordsUseCase(uiState.value.todayFormat()).getOrThrow()
+
+                val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
+                monthlyRecord.update {
+                    calendarDayInfos
+                }
+
+                _uiState.update {
+                    it.copy(
+                        monthlyRecords = calendarDayInfos,
+                        dailyDetailRecords = detailDailyRecords
+                    )
+                }
+            } catch (e : Exception) {
+
+            }
+
         }
     }
 
@@ -152,6 +185,12 @@ class HomeViewModel @Inject constructor(
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+        }
+    }
+
+    private fun onClickDetailRecord(recordType: RecordType, recordId: String) {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.OnGoDetailRecord(recordType, recordId))
         }
     }
 

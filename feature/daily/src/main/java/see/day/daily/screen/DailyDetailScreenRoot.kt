@@ -45,15 +45,15 @@ import see.day.ui.topbar.DetailRecordTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: () -> Unit) {
+internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: (Boolean) -> Unit) {
     LaunchedEffect(dailyRecordPostType) {
         viewModel.fetchData(dailyRecordPostType)
     }
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect {
-            when (it) {
-                DailyDetailUiEffect.OnPopHome -> {
-                    onClickPopHome()
+            when (val effect = it) {
+                is DailyDetailUiEffect.OnPopHome -> {
+                    onClickPopHome(effect.isUpdated)
                 }
             }
         }
@@ -70,9 +70,25 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         RecordDetailBackDialog(
             modifier = modifier,
             onDismiss = { openBackDialog = false },
-            onBackRecordDetail = onClickPopHome,
-            title = R.string.record_close_dialog_title,
-            body = R.string.record_close_dialog_body
+            onBackRecordDetail = { onClickPopHome(false) },
+            title = when (uiState.editMode) {
+                is DailyDetailUiState.EditMode.Create -> {
+                    R.string.record_close_dialog_title
+                }
+
+                is DailyDetailUiState.EditMode.Edit -> {
+                    R.string.record_close_detail_dialog_title
+                }
+            },
+            body = when (uiState.editMode) {
+                is DailyDetailUiState.EditMode.Create -> {
+                    R.string.record_close_dialog_body
+                }
+
+                is DailyDetailUiState.EditMode.Edit -> {
+                    R.string.record_close_detail_dialog_body
+                }
+            }
         )
     }
     val onClickChangeEmotion: (DailyEmotion) -> Unit = { emotion ->
@@ -152,7 +168,17 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
             )
             Spacer(modifier = modifier.weight(1f))
             CompleteButton(
-                text = stringResource(see.day.ui.R.string.write_record_text),
+                text = stringResource(
+                    when (uiState.editMode) {
+                        is DailyDetailUiState.EditMode.Create -> {
+                            see.day.ui.R.string.write_record_text
+                        }
+
+                        is DailyDetailUiState.EditMode.Edit -> {
+                            R.string.modifiy_record_text
+                        }
+                    }
+                ),
                 isEnabled = uiState.canSubmit,
                 onClick = {
                     uiEvent(DailyDetailUiEvent.OnSaveRecord)

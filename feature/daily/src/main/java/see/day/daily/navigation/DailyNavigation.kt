@@ -10,7 +10,9 @@ import see.day.daily.screen.DailyScreenRoot
 import see.day.daily.util.DailyRecordPostType
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
+import see.day.navigation.daily.DailyRoute
 import see.day.navigation.daily.DailyRoute.Daily
+import see.day.navigation.daily.DailyRoute.DailyDetail
 import see.day.navigation.daily.DailyRoute.DailyWrite
 
 fun NavController.navigateDaily(navOptions: NavOptions? = null) {
@@ -21,7 +23,11 @@ fun NavController.navigateDailyWrite(emotion: DailyEmotion, navOptions: NavOptio
     navigate(DailyWrite(emotion), navOptions)
 }
 
-fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChangeRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit, onClickPopHome: () -> Unit) {
+fun NavController.navigateDailyDetail(recordId: String, navOptions: NavOptions? = null) {
+    navigate(DailyDetail(recordId), navOptions)
+}
+
+fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChangeRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit, onClickPopHome: (Boolean) -> Unit) {
     composable<Daily> {
         DailyScreenRoot(onClickBackButton = onClickBackButton, onChangedRecordType = onClickChangeRecordType, onClickEmotion = onClickEmotion)
     }
@@ -29,6 +35,13 @@ fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChange
         val dailyWrite = backStackEntry.toRoute<DailyWrite>()
         DailyDetailScreenRoot(
             dailyRecordPostType = DailyRecordPostType.WriteDailyRecordPost(dailyWrite.emotion),
+            onClickPopHome = onClickPopHome
+        )
+    }
+    composable<DailyDetail> { backStackEntry ->
+        val recordId = backStackEntry.toRoute<DailyDetail>().id
+        DailyDetailScreenRoot(
+            dailyRecordPostType = DailyRecordPostType.EditDailyRecordPost(recordId),
             onClickPopHome = onClickPopHome
         )
     }

@@ -33,4 +33,8 @@ data class HomeUiState(
             return "${now.year}-${now.monthValue.toString().padStart(2, '0')}-${now.dayOfMonth.toString().padStart(2, '0')}"
         }
     }
+
+    fun todayFormat(): String {
+        return "${currentYear}-${selectedMonth.toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}"
+    }
 }
