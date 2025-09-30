@@ -2,6 +2,7 @@ package see.day.model.time
 
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import kotlin.math.min
 
 data class DateTime(
     val year: Int,
@@ -32,6 +33,12 @@ data class DateTime(
          */
         fun of(year: Int, month: Int, day: Int, hour: Int, minute: Int): DateTime {
             return DateTime(year, month, day, hour, minute)
+        }
+
+        fun of(recordDate: String, recordTime: String) : DateTime {
+            val (year, month, dayOfMonth) = recordDate.split("-").map { it.toInt() }
+            val (hour, minute) = recordTime.split(":").map { it.toInt() }
+            return DateTime(year, month, dayOfMonth, hour, minute)
         }
     }
 }
