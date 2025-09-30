@@ -1,7 +1,10 @@
 package see.day.data.repository
 
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import okio.IOException
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,11 +13,16 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import retrofit2.HttpException
+import retrofit2.Response
+import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.UserRepository
+import see.day.model.exception.BadRequestException
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.network.UserService
 import see.day.network.dto.CommonResponse
+import see.day.network.dto.toResponseBody
 import see.day.network.dto.user.FullUserResponse
 import see.day.repository.UserRepositoryImpl
 
@@ -26,9 +34,12 @@ class UserRepositoryTest {
     @Mock
     private lateinit var userService: UserService
 
+    @Mock
+    private lateinit var dataSource: DataStoreDataSource
+
     @Before
     fun setUp() {
-        sut = UserRepositoryImpl(userService)
+        sut = UserRepositoryImpl(userService, dataSource)
     }
 
     @Test
@@ -105,6 +116,49 @@ class UserRepositoryTest {
             // then
             assertEquals(recordType, result)
             verify(userService).getUser()
+        }
+    }
+
+    @Test
+    fun given_whenDeleteUser_thenClearData() {
+        runTest {
+            // given
+            whenever(userService.deleteUser()).thenReturn(Unit)
+            whenever(dataSource.clearData()).thenReturn(Unit)
+
+            // when
+            val result = sut.deleteUser().getOrThrow()
+
+            // then
+            verify(userService).deleteUser()
+            verify(dataSource).clearData()
+        }
+    }
+
+    @Test
+    fun given_whenDeleteUserThrowException_thenClearData() {
+        runTest {
+            // given
+            whenever(userService.deleteUser()).thenThrow(
+                HttpException(
+                Response.error<Any?>(
+                    400,
+                    toResponseBody<Unit?>(CommonResponse(400, "E40001", "잘못된 입력 값입니다.", null))
+                )
+            )
+            )
+            whenever(dataSource.clearData()).thenReturn(Unit)
+
+            // when
+            assertThrows(BadRequestException::class.java) {
+                runBlocking {
+                    sut.deleteUser().getOrThrow()
+                }
+            }
+
+            // then
+            verify(userService).deleteUser()
+            verify(dataSource).clearData()
         }
     }
 }
