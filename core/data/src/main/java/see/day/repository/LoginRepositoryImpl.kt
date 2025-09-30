@@ -18,6 +18,7 @@ import see.day.model.navigation.AppStartState
 import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
+import see.day.network.dto.auth.LogoutRequest
 import see.day.network.dto.auth.RefreshTokenRequest
 import see.day.utils.ErrorUtils.createResult
 
@@ -40,6 +41,18 @@ class LoginRepositoryImpl @Inject constructor(
             } else {
                 ONBOARDING
             }
+        }
+    }
+
+    override suspend fun logout(allDevices: Boolean): Result<Unit> {
+        return createResult {
+            val refreshToken = dataSource.getRefreshToken().first() ?: throw NoDataException()
+            val logoutRequest = LogoutRequest(refreshToken, allDevices)
+
+            authService.logout(requestBody = logoutRequest.toRequestBody())
+            dataSource.clearData()
+        }.onFailure {
+            dataSource.clearData()
         }
     }
 

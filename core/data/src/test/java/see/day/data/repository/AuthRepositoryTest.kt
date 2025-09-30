@@ -1,5 +1,6 @@
 package see.day.data.repository
 
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -23,6 +24,7 @@ import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
 import see.day.network.dto.CommonResponse
+import see.day.network.dto.auth.LogoutRequest
 import see.day.network.dto.common.UserDto
 import see.day.network.dto.login.LoginResponse
 import see.day.network.dto.toResponseBody
@@ -133,6 +135,28 @@ class AuthRepositoryTest {
 
             // then
             verify(authService).signIn(any())
+        }
+    }
+
+    @Test
+    fun givenRefreshToken_whenLogout_thenTokensClear() {
+        runTest {
+            // given
+            val refreshToken = "asdasdasd"
+            val allDevices = false
+            val logoutRequest = LogoutRequest(refreshToken, allDevices)
+
+            whenever(dataSource.getRefreshToken()).thenReturn(flowOf(refreshToken))
+            whenever(authService.logout(any())).thenReturn(CommonResponse(200, "S200", "로그아웃되었습니다.", null))
+            whenever(dataSource.clearData()).thenReturn(Unit)
+
+            // when
+            val result = sut.logout(allDevices).getOrThrow()
+
+            // then
+            verify(dataSource).getRefreshToken()
+            verify(authService).logout(any())
+            verify(dataSource).clearData()
         }
     }
 }
