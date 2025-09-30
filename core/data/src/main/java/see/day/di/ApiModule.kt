@@ -20,6 +20,7 @@ import see.day.network.CalendarService
 import see.day.network.DailyRecordService
 import see.day.network.LoginService
 import see.day.network.PhotoService
+import see.day.network.RecordService
 import see.day.network.UserService
 
 @Module
@@ -141,5 +142,11 @@ class ApiModule {
     @Singleton
     fun provideDailyRecordService(@Main retrofit: Retrofit): DailyRecordService {
         return retrofit.create(DailyRecordService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecordService(@Main retrofit: Retrofit) : RecordService {
+        return retrofit.create(RecordService::class.java)
     }
 }
