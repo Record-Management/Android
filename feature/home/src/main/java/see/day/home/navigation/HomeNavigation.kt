@@ -17,10 +17,11 @@ fun NavController.navigateBackToHome() {
     popBackStack(Home, inclusive = false)
 }
 
-fun NavGraphBuilder.homeNavigation(onClickAddRecord: (RecordType) -> Unit) {
+fun NavGraphBuilder.homeNavigation(onClickAddRecord: (RecordType) -> Unit,onClickDetailRecord: (RecordType, String) -> Unit) {
     composable<Home> {
         HomeScreenRoot(
-            onClickAddRecord = onClickAddRecord
+            onClickAddRecord = onClickAddRecord,
+            onClickDetailRecord = onClickDetailRecord
         )
     }
 }

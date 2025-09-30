@@ -22,7 +22,7 @@ import see.day.ui.component.record.overview.DailyRecordOverview
 fun CalendarDetail(
     modifier: Modifier = Modifier,
     dailyDetailRecord: DailyDetailRecord,
-    onClickOverview: (String) -> Unit
+    onClickOverview: (RecordType, String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -58,6 +58,6 @@ private fun CalendarDetailPreview() {
     SeeDayTheme {
         CalendarDetail(
             dailyDetailRecord = DailyDetailRecord("2025-09-12", listOf(DetailRecord("", RecordType.DAILY, DailyEmotion.Love, "asdasdasd", listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), "", "13:30", "", "")))
-        ) { }
+        ) { recordType, recordId -> }
     }
 }

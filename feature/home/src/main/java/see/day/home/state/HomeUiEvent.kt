@@ -8,4 +8,5 @@ sealed interface HomeUiEvent {
     data class OnClickFilterType(val filterType: RecordFilterType) : HomeUiEvent
     data class OnClickCell(val year: Int, val month: Int, val day: Int) : HomeUiEvent
     data class OnClickAddButton(val recordType: RecordType) : HomeUiEvent
+    data class OnClickDetailButton(val recordType: RecordType, val recordId: String) : HomeUiEvent
 }
