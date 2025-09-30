@@ -45,15 +45,15 @@ import see.day.ui.topbar.DetailRecordTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: () -> Unit) {
+internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: (Boolean) -> Unit) {
     LaunchedEffect(dailyRecordPostType) {
         viewModel.fetchData(dailyRecordPostType)
     }
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect {
-            when (it) {
-                DailyDetailUiEffect.OnPopHome -> {
-                    onClickPopHome()
+            when (val effect = it) {
+                is DailyDetailUiEffect.OnPopHome -> {
+                    onClickPopHome(effect.isUpdated)
                 }
             }
         }
@@ -70,7 +70,7 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         RecordDetailBackDialog(
             modifier = modifier,
             onDismiss = { openBackDialog = false },
-            onBackRecordDetail = onClickPopHome,
+            onBackRecordDetail = { onClickPopHome(false) },
             title = when (uiState.editMode) {
                 is DailyDetailUiState.EditMode.Create -> {
                     R.string.record_close_dialog_title

@@ -19,8 +19,10 @@ import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
+import see.day.domain.usecase.record.daily.PutDailyRecordUseCase
 import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.daily.ModifyDailyRecord
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 
@@ -28,7 +30,8 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
-    private val getDetailRecordUseCase: GetDailyRecordUseCase
+    private val getDetailRecordUseCase: GetDailyRecordUseCase,
+    private val putDetailRecordUseCase : PutDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -58,6 +61,7 @@ class DailyDetailViewModel @Inject constructor(
                                 dateTime = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
                                 photos = record.imageUrls,
                                 editMode = DailyDetailUiState.EditMode.Edit(
+                                    recordId = record.id,
                                     originalRecord = CreateDailyRecord(
                                         content = record.content,
                                         emotion = record.emotion,
@@ -103,7 +107,7 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onPopHome() {
         viewModelScope.launch {
-            _uiEffect.emit(DailyDetailUiEffect.OnPopHome)
+            _uiEffect.emit(DailyDetailUiEffect.OnPopHome(false))
         }
     }
 
@@ -148,9 +152,9 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onSaveRecord() {
         viewModelScope.launch {
-            when (uiState.value.editMode) {
+            when (val mode = uiState.value.editMode) {
                 is DailyDetailUiState.EditMode.Create -> saveDailyRecordForCreateMode()
-                is DailyDetailUiState.EditMode.Edit -> saveDailyRecordForEditMode()
+                is DailyDetailUiState.EditMode.Edit -> saveDailyRecordForEditMode(mode.recordId)
             }
         }
     }
@@ -176,7 +180,7 @@ class DailyDetailViewModel @Inject constructor(
                 photoUrls
             )
         ).fold(
-            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome) },
+            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true)) },
             onFailure = { handleSaveError(it) }
         )
     }
@@ -185,7 +189,16 @@ class DailyDetailViewModel @Inject constructor(
         // 실패 처리 로직 추가 (예: Toast, 로그, UI 에러 상태 반영)
     }
 
-    private suspend fun saveDailyRecordForEditMode() {
-        // Edit 모드 저장 로직 구현
+    private suspend fun saveDailyRecordForEditMode(recordId: String) {
+        putDetailRecordUseCase(
+            ModifyDailyRecord(
+                recordId,
+                uiState.value.text,
+                uiState.value.emotion,
+                uiState.value.photos
+            )
+        ).onSuccess {
+            _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true))
+        }
     }
 }

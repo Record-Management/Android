@@ -27,7 +27,7 @@ fun NavController.navigateDailyDetail(recordId: String, navOptions: NavOptions? 
     navigate(DailyDetail(recordId), navOptions)
 }
 
-fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChangeRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit, onClickPopHome: () -> Unit) {
+fun NavGraphBuilder.dailyNavigation(onClickBackButton: () -> Unit, onClickChangeRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit, onClickPopHome: (Boolean) -> Unit) {
     composable<Daily> {
         DailyScreenRoot(onClickBackButton = onClickBackButton, onChangedRecordType = onClickChangeRecordType, onClickEmotion = onClickEmotion)
     }

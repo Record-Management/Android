@@ -15,7 +15,7 @@ data class DailyDetailUiState(
 ) {
     sealed class EditMode {
         data object Create : EditMode()
-        data class Edit(val originalRecord: CreateDailyRecord) : EditMode()
+        data class Edit(val originalRecord: CreateDailyRecord,val recordId: String) : EditMode()
     }
 
     val canSubmit: Boolean = when (editMode) {
