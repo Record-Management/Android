@@ -154,7 +154,7 @@ class DailyDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (val mode = uiState.value.editMode) {
                 is DailyDetailUiState.EditMode.Create -> saveDailyRecordForCreateMode()
-                is DailyDetailUiState.EditMode.Edit -> saveDailyRecordForEditMode(mode.recordId)
+                is DailyDetailUiState.EditMode.Edit -> modifyRecord(mode.recordId)
             }
         }
     }
@@ -164,7 +164,7 @@ class DailyDetailViewModel @Inject constructor(
         if (photos.isNotEmpty()) {
             insertPhotosUseCase(photos).fold(
                 onSuccess = { photoUrls -> saveDailyRecord(photoUrls) },
-                onFailure = { handleSaveError(it) }
+                onFailure = {  }
             )
         } else {
             saveDailyRecord(emptyList())
@@ -181,24 +181,36 @@ class DailyDetailViewModel @Inject constructor(
             )
         ).fold(
             onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true)) },
-            onFailure = { handleSaveError(it) }
+            onFailure = {  }
         )
     }
 
-    private fun handleSaveError(error: Throwable) {
-        // 실패 처리 로직 추가 (예: Toast, 로그, UI 에러 상태 반영)
-    }
+    private suspend fun modifyRecord(recordId: String) {
+        val urls = processPhotoUrls(uiState.value.photos)
 
-    private suspend fun saveDailyRecordForEditMode(recordId: String) {
         putDetailRecordUseCase(
             ModifyDailyRecord(
                 recordId,
                 uiState.value.text,
                 uiState.value.emotion,
-                uiState.value.photos
+                urls
             )
         ).onSuccess {
             _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true))
+        }
+    }
+
+    private suspend fun processPhotoUrls(photoUrls: List<String>): List<String> {
+        return if (photoUrls.all { it.contains("http") }) {
+            photoUrls
+        } else {
+            photoUrls.map { url ->
+                if (url.contains("content")) {
+                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                } else {
+                    url
+                }
+            }.filter { it.isNotEmpty() }
         }
     }
 }
