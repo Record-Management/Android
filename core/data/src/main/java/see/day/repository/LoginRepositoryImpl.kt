@@ -85,7 +85,7 @@ class LoginRepositoryImpl @Inject constructor(
                     CoroutineScope(Dispatchers.IO).launch {
                         dataSource.saveAccessToken(response.accessToken)
                     }
-                    
+
                     return@flow if (response.user.onboardingCompleted) {
                         emit(HOME)
                     } else {

@@ -5,16 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,19 +67,6 @@ class MainActivity : ComponentActivity() {
                     SeedayApp(appStartDestination = appStartRoute)
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier, onClickLogin: () -> Unit) {
-    Column {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-        Button(onClickLogin) {
-            Text("로그인 화면으로 이동")
         }
     }
 }

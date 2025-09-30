@@ -10,24 +10,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
 import see.day.daily.navigation.dailyNavigation
-import see.day.daily.navigation.navigateDailyDetail
 import see.day.daily.navigation.navigateDailyWrite
 import see.day.home.navigation.homeNavigation
 import see.day.home.navigation.navigateBackToHome
 import see.day.main.navigation.graph.exerciseNavigation
 import see.day.main.navigation.graph.habitNavigation
-import see.day.main.navigation.graph.mainNavigation
 import see.day.main.navigation.graph.scheduleNavigation
 import see.day.onboarding.navigation.onboardingNavigation
-import kotlin.reflect.KClass
 
 @Composable
 fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appStartDestination: Any) {
     Column(modifier = Modifier.fillMaxSize()) {
         NavHost(navigationState.navController, startDestination = appStartDestination) {
-            mainNavigation(
-                onClickLogin = navigationState::navigateLogin
-            )
             loginNavigation(
                 onGoOnboarding = navigationState::navigateOnboarding,
                 onGoHome = navigationState::navigateHome
