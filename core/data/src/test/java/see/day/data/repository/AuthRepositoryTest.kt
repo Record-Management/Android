@@ -22,7 +22,6 @@ import see.day.domain.repository.LoginRepository
 import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
-import see.day.network.LoginService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.common.UserDto
 import see.day.network.dto.login.LoginResponse
@@ -35,9 +34,6 @@ class AuthRepositoryTest {
     private lateinit var sut: LoginRepository
 
     @Mock
-    private lateinit var loginService: LoginService
-
-    @Mock
     private lateinit var dataSource: DataStoreDataSource
 
     @Mock
@@ -45,7 +41,7 @@ class AuthRepositoryTest {
 
     @Before
     fun setUp() {
-        sut = LoginRepositoryImpl(dataSource, loginService, authService)
+        sut = LoginRepositoryImpl(dataSource, authService)
     }
 
     @Test
@@ -56,7 +52,7 @@ class AuthRepositoryTest {
             val accessToken = "Asdasda"
             val refreshToken = "asdijasdlkajs"
 
-            whenever(loginService.signIn(any())).thenReturn(
+            whenever(authService.signIn(any())).thenReturn(
                 CommonResponse(
                     200,
                     "S200",
@@ -75,7 +71,7 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(loginService).signIn(any())
+            verify(authService).signIn(any())
         }
     }
 
@@ -87,7 +83,7 @@ class AuthRepositoryTest {
             val accessToken = "Asdasda"
             val refreshToken = "asdijasdlkajs"
 
-            whenever(loginService.signIn(any())).thenReturn(
+            whenever(authService.signIn(any())).thenReturn(
                 CommonResponse(
                     201,
                     "S201",
@@ -106,7 +102,7 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(loginService).signIn(any())
+            verify(authService).signIn(any())
         }
     }
 
@@ -116,7 +112,7 @@ class AuthRepositoryTest {
             // given
             val oldSocialLogin = SocialLogin(SocialType.KAKAO, "Incorrect")
 
-            whenever(loginService.signIn(any())).thenThrow(
+            whenever(authService.signIn(any())).thenThrow(
                 HttpException(
                     Response.error<Any?>(
                         400,
@@ -136,7 +132,7 @@ class AuthRepositoryTest {
             }
 
             // then
-            verify(loginService).signIn(any())
+            verify(authService).signIn(any())
         }
     }
 }

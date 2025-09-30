@@ -14,14 +14,14 @@ import see.day.model.exception.NetworkErrorException
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.data.api.error.json.errorResponse
-import see.day.network.LoginService
+import see.day.network.AuthService
 import see.day.network.dto.login.LoginRequest
 import see.day.utils.ErrorUtils.createResult
 
 class ErrorTest {
 
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var sut: LoginService
+    private lateinit var sut: AuthService
     private lateinit var okHttpClient: OkHttpClient
 
     @Before
@@ -38,7 +38,7 @@ class ErrorTest {
             client = okHttpClient
         )
 
-        sut = retrofit.create(LoginService::class.java)
+        sut = retrofit.create(AuthService::class.java)
     }
 
     @After
