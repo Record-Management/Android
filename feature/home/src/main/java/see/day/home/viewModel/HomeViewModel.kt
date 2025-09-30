@@ -88,6 +88,9 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickDetailButton -> {
                 onClickDetailRecord(uiEvent.recordType, uiEvent.recordId)
             }
+            is HomeUiEvent.OnClickSetting -> {
+                onClickSetting()
+            }
         }
     }
 
@@ -191,6 +194,12 @@ class HomeViewModel @Inject constructor(
     private fun onClickDetailRecord(recordType: RecordType, recordId: String) {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.OnGoDetailRecord(recordType, recordId))
+        }
+    }
+
+    private fun onClickSetting() {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.OnGoSetting)
         }
     }
 
