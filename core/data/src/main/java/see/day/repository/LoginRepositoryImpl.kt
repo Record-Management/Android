@@ -49,7 +49,11 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun logout(allDevices: Boolean): Result<Unit> {
         return createResult {
-            val refreshToken = dataSource.getRefreshToken().first() ?: throw NoDataException()
+            val refreshToken = dataSource.getRefreshToken().first()
+            if(refreshToken.isNullOrEmpty()) {
+                dataSource.clearData()
+                throw NoDataException()
+            }
             val logoutRequest = LogoutRequest(refreshToken, allDevices)
 
             authService.logout(requestBody = logoutRequest.toRequestBody())
