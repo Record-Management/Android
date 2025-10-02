@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
+import record.daily.login.navigation.navigateLogin
 import see.day.daily.navigation.navigateDaily
 import see.day.daily.navigation.navigateDailyDetail
 import see.day.home.navigation.navigateHome
@@ -28,6 +29,10 @@ class NavigationState(
             inclusive = true
         }
         launchSingleTop = true
+    }
+
+    fun navigateLoginWithCleanBackStack() {
+        navController.navigateLogin(cleanBackstackNavOptions())
     }
 
     fun navigateOnboarding() {

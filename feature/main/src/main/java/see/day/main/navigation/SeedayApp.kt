@@ -3,8 +3,13 @@ package see.day.main.navigation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -18,10 +23,16 @@ import see.day.main.navigation.graph.habitNavigation
 import see.day.main.navigation.graph.scheduleNavigation
 import see.day.main.setting.navigateSetting
 import see.day.main.setting.settingNavigation
+import see.day.main.viewmodel.MainViewModel
+import see.day.model.navigation.AppStartState
 import see.day.onboarding.navigation.onboardingNavigation
+import timber.log.Timber
 
 @Composable
-fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appStartDestination: Any) {
+fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), viewModel: MainViewModel, appStartDestination: Any) {
+    val lifecycle = LocalLifecycleOwner.current
+
+    Timber.e("call SeedayApp $appStartDestination")
     Column(modifier = Modifier.fillMaxSize()) {
         NavHost(navigationState.navController, startDestination = appStartDestination) {
             loginNavigation(
@@ -55,6 +66,27 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), appS
             )
             settingNavigation()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.navigationEvent.collect { appState ->
+                if(appState == null) return@collect
+
+                when(appState) {
+                    AppStartState.LOGIN -> {
+                        navigationState.navigateLoginWithCleanBackStack()
+                    }
+                    AppStartState.ONBOARDING -> {
+                        navigationState.navigateOnboarding()
+                    }
+                    AppStartState.HOME -> {
+                        navigationState.navigateHome()
+                    }
+                }
+            }
+        }
+
     }
 }
 
