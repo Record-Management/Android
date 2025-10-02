@@ -18,7 +18,6 @@ import see.day.datastore.DataStoreDataSource
 import see.day.network.AuthService
 import see.day.network.CalendarService
 import see.day.network.DailyRecordService
-import see.day.network.LoginService
 import see.day.network.PhotoService
 import see.day.network.RecordService
 import see.day.network.UserService
@@ -69,12 +68,6 @@ class ApiModule {
             .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideLoginService(@Auth retrofit: Retrofit): LoginService {
-        return retrofit.create(LoginService::class.java)
     }
 
     @Singleton

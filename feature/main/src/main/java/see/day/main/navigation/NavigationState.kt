@@ -31,7 +31,7 @@ class NavigationState(
         launchSingleTop = true
     }
 
-    fun navigateLogin() {
+    fun navigateLoginWithCleanBackStack() {
         navController.navigateLogin(cleanBackstackNavOptions())
     }
 

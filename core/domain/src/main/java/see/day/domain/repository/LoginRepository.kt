@@ -6,5 +6,6 @@ import see.day.model.navigation.AppStartState
 
 interface LoginRepository {
     suspend fun login(socialLogin: SocialLogin) : Result<AppStartState>
+    suspend fun logout(allDevices: Boolean) : Result<Unit>
     fun getLoginState() : Flow<AppStartState>
 }

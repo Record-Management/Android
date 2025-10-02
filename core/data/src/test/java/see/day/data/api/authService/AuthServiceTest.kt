@@ -1,6 +1,5 @@
-package see.day.data.api.error
+package see.day.data.api.authService
 
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -10,15 +9,13 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import see.day.model.exception.NetworkErrorException
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
-import see.day.data.api.error.json.errorResponse
+import see.day.data.api.authService.json.logoutSuccessResponse
 import see.day.network.AuthService
-import see.day.network.dto.login.LoginRequest
-import see.day.utils.ErrorUtils.createResult
+import see.day.network.dto.auth.LogoutRequest
 
-class ErrorTest {
+class AuthServiceTest {
 
     private lateinit var mockWebServer: MockWebServer
     private lateinit var sut: AuthService
@@ -47,29 +44,31 @@ class ErrorTest {
     }
 
     @Test
-    fun givenLoginRequest_whenNetworkError_thenThrows500Exception() = runTest {
+    fun givenRefreshToken_whenLogout_thenWorksFine() = runTest {
         // given
-        val socialType = "kakao"
-        val accessToken = "Asdadejwlk23k4j1"
-
-        val loginRequest = LoginRequest(socialType, accessToken)
+        val refreshToken = "asdasd"
+        val allDevices = false
+        val request = LogoutRequest(refreshToken, allDevices)
+        val responseJson = logoutSuccessResponse
 
         mockWebServer.enqueue(
             MockResponse()
-                .setResponseCode(500)
-                .setBody(errorResponse)
+                .setResponseCode(200)
+                .setBody(responseJson)
         )
 
         // when
-        Assert.assertThrows(NetworkErrorException::class.java) {
-            runBlocking {
-                createResult {
-                    sut.signIn(loginRequest.toRequestBody())
-                }.onFailure {
-                    assertEquals("서버 내부 오류가 발생했습니다.", it.message)
-                }.getOrThrow()
-            }
-        }
-        Unit
+        val response = sut.logout(request.toRequestBody())
+        val recordedRequest = mockWebServer.takeRequest()
+
+        // then
+        // 요청 검증
+        Assert.assertEquals("/api/auth/logout", recordedRequest.path)
+
+        // 응답 body 검증
+        assertEquals(200, response.statusCode)
+        assertEquals("로그아웃되었습니다.", response.message)
+        assertEquals("S200", response.code)
     }
+
 }

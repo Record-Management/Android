@@ -7,29 +7,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import see.day.main.Greeting
 import see.day.model.record.RecordType
 import see.day.navigation.exercise.ExerciseRoute.Exercise
 import see.day.navigation.habit.HabitRoute.*
 import see.day.navigation.schedule.ScheduleRoute.Schedule
 import see.day.ui.dialog.RecordTypePickerDialog
-
-const val MAIN_ROUTE = "MAIN"
-
-fun NavGraphBuilder.mainNavigation(onClickLogin: () -> Unit) {
-    composable(MAIN_ROUTE) {
-        Greeting(
-            "hi",
-            modifier = Modifier,
-            onClickLogin = onClickLogin
-        )
-    }
-}
 
 fun NavController.navigateExercise(navOptions: NavOptions? = null) {
     navigate(Exercise, navOptions)

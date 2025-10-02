@@ -69,13 +69,13 @@ import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 
 @Composable
-fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit, onClickDetailRecord: (RecordType, String) -> Unit) {
+fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit, onClickDetailRecord: (RecordType, String) -> Unit, onClickSetting: () -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
         snapshotFlow { isRefresh }
             .collect { refresh ->
-                if(refresh) {
+                if (refresh) {
                     viewModel.onEvent(HomeUiEvent.OnRefresh)
                 }
             }
@@ -90,6 +90,9 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
 
                 is HomeUiEffect.OnGoDetailRecord -> {
                     onClickDetailRecord(effect.recordType, effect.recordId)
+                }
+                is HomeUiEffect.OnGoSetting -> {
+                    onClickSetting()
                 }
             }
         }
@@ -168,6 +171,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
                     onClickBackButton = {
                         onDownBottomSheet()
+                    },
+                    onClickSetting = {
+                        uiEvent(HomeUiEvent.OnClickSetting)
                     }
                 )
             },

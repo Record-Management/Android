@@ -1,5 +1,6 @@
 package see.day.data.repository
 
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -22,8 +23,8 @@ import see.day.domain.repository.LoginRepository
 import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
-import see.day.network.LoginService
 import see.day.network.dto.CommonResponse
+import see.day.network.dto.auth.LogoutRequest
 import see.day.network.dto.common.UserDto
 import see.day.network.dto.login.LoginResponse
 import see.day.network.dto.toResponseBody
@@ -35,9 +36,6 @@ class AuthRepositoryTest {
     private lateinit var sut: LoginRepository
 
     @Mock
-    private lateinit var loginService: LoginService
-
-    @Mock
     private lateinit var dataSource: DataStoreDataSource
 
     @Mock
@@ -45,7 +43,7 @@ class AuthRepositoryTest {
 
     @Before
     fun setUp() {
-        sut = LoginRepositoryImpl(dataSource, loginService, authService)
+        sut = LoginRepositoryImpl(dataSource, authService)
     }
 
     @Test
@@ -56,7 +54,7 @@ class AuthRepositoryTest {
             val accessToken = "Asdasda"
             val refreshToken = "asdijasdlkajs"
 
-            whenever(loginService.signIn(any())).thenReturn(
+            whenever(authService.signIn(any())).thenReturn(
                 CommonResponse(
                     200,
                     "S200",
@@ -75,7 +73,7 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(loginService).signIn(any())
+            verify(authService).signIn(any())
         }
     }
 
@@ -87,7 +85,7 @@ class AuthRepositoryTest {
             val accessToken = "Asdasda"
             val refreshToken = "asdijasdlkajs"
 
-            whenever(loginService.signIn(any())).thenReturn(
+            whenever(authService.signIn(any())).thenReturn(
                 CommonResponse(
                     201,
                     "S201",
@@ -106,7 +104,7 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(loginService).signIn(any())
+            verify(authService).signIn(any())
         }
     }
 
@@ -116,7 +114,7 @@ class AuthRepositoryTest {
             // given
             val oldSocialLogin = SocialLogin(SocialType.KAKAO, "Incorrect")
 
-            whenever(loginService.signIn(any())).thenThrow(
+            whenever(authService.signIn(any())).thenThrow(
                 HttpException(
                     Response.error<Any?>(
                         400,
@@ -136,7 +134,29 @@ class AuthRepositoryTest {
             }
 
             // then
-            verify(loginService).signIn(any())
+            verify(authService).signIn(any())
+        }
+    }
+
+    @Test
+    fun givenRefreshToken_whenLogout_thenTokensClear() {
+        runTest {
+            // given
+            val refreshToken = "asdasdasd"
+            val allDevices = false
+            val logoutRequest = LogoutRequest(refreshToken, allDevices)
+
+            whenever(dataSource.getRefreshToken()).thenReturn(flowOf(refreshToken))
+            whenever(authService.logout(any())).thenReturn(CommonResponse(200, "S200", "로그아웃되었습니다.", null))
+            whenever(dataSource.clearData()).thenReturn(Unit)
+
+            // when
+            val result = sut.logout(allDevices).getOrThrow()
+
+            // then
+            verify(dataSource).getRefreshToken()
+            verify(authService).logout(any())
+            verify(dataSource).clearData()
         }
     }
 }
