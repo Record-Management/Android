@@ -11,14 +11,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun SettingScreenRoot(modifier: Modifier = Modifier, viewModel: SettingViewModel = hiltViewModel()) {
     SettingScreen(
-        onClickLogout = viewModel::logout
+        onClickLogout = viewModel::logout,
+        onClickDelete = viewModel::deleteUser
     )
 }
 
 @Composable
 internal fun SettingScreen(
     modifier: Modifier = Modifier,
-    onClickLogout: () -> Unit
+    onClickLogout: () -> Unit,
+    onClickDelete: () -> Unit
 ) {
     Column(
         modifier = modifier.systemBarsPadding()
@@ -28,6 +30,11 @@ internal fun SettingScreen(
             onClickLogout
         ) {
             Text("로그아웃 하기")
+        }
+        Button(
+            onClickDelete
+        ) {
+            Text("회원 탈퇴 하기")
         }
     }
 }

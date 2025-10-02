@@ -8,6 +8,7 @@ import see.day.model.exception.NoDataException
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.network.UserService
+import see.day.network.dto.auth.DeleteUserRequest
 import see.day.utils.ErrorUtils.createResult
 
 class UserRepositoryImpl @Inject constructor(
@@ -29,7 +30,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun deleteUser(): Result<Unit> {
         return createResult {
-            userService.deleteUser()
+            userService.deleteUser(DeleteUserRequest("테스트용도").toRequestBody())
             dataSource.clearData()
         }.onFailure {
             dataSource.clearData()
