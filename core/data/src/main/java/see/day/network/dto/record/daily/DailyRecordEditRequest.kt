@@ -6,7 +6,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
 @Serializable
-data class ModifyDailyRecordRequest(
+data class DailyRecordEditRequest(
     val content: String,
     val emotion: String,
     val imageUrls: List<String>

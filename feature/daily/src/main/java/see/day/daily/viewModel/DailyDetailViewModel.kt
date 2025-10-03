@@ -19,10 +19,10 @@ import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
-import see.day.domain.usecase.record.daily.PutDailyRecordUseCase
+import see.day.domain.usecase.record.daily.EditDailyRecordUseCase
 import see.day.model.record.daily.CreateDailyRecord
 import see.day.model.record.daily.DailyEmotion
-import see.day.model.record.daily.ModifyDailyRecord
+import see.day.model.record.daily.DailyRecordEdit
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 
@@ -31,7 +31,7 @@ class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
     private val getDetailRecordUseCase: GetDailyRecordUseCase,
-    private val putDetailRecordUseCase : PutDailyRecordUseCase
+    private val putDetailRecordUseCase : EditDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -189,7 +189,7 @@ class DailyDetailViewModel @Inject constructor(
         val urls = processPhotoUrls(uiState.value.photos)
 
         putDetailRecordUseCase(
-            ModifyDailyRecord(
+            DailyRecordEdit(
                 recordId,
                 uiState.value.text,
                 uiState.value.emotion,
