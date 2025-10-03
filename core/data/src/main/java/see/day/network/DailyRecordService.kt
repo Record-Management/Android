@@ -14,7 +14,7 @@ interface DailyRecordService {
     suspend fun postDailyRecord(@Body requestBody: RequestBody): CommonResponse<DailyRecordDetailResponse>
 
     @PUT("api/daily-records/{recordId}")
-    suspend fun putDailyRecord(
+    suspend fun updateDailyRecord(
         @Path("recordId") recordId: String,
         @Body requestBody: RequestBody
     ) : CommonResponse<DailyRecordDetailResponse>

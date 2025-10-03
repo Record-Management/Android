@@ -6,9 +6,11 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
 @Serializable
-data class ModifyDailyRecordRequest(
+data class DailyRecordInputRequest(
     val content: String,
     val emotion: String,
+    val recordDate: String,
+    val recordTime: String,
     val imageUrls: List<String>
 ) {
     fun toRequestBody() = Json.encodeToString(
