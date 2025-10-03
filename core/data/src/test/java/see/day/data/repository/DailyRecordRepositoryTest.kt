@@ -16,7 +16,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 import see.day.domain.repository.DailyRecordRepository
 import see.day.model.exception.BadRequestException
-import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
@@ -44,7 +44,7 @@ class DailyRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, timeFormatter, listOf())
+            val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, timeFormatter, listOf())
             val registeredDailyRecordResponse = DailyRecordDetailResponse("", "", "Sad", "", listOf(), "", "", "", "")
 
             whenever(dailyRecordService.postDailyRecord(any())).thenReturn(
@@ -57,11 +57,11 @@ class DailyRecordRepositoryTest {
             )
 
             // when
-            val result = sut.insertRecord(createDailyRecord).getOrThrow()
+            val result = sut.insertRecord(dailyRecordInput).getOrThrow()
 
             // then
-            assertEquals(createDailyRecord.content, result.content)
-            assertEquals(createDailyRecord.imageUrls, result.imageUrls)
+            assertEquals(dailyRecordInput.content, result.content)
+            assertEquals(dailyRecordInput.imageUrls, result.imageUrls)
 
             verify(dailyRecordService).postDailyRecord(any())
         }
@@ -72,7 +72,7 @@ class DailyRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, timeFormatter, listOf())
+            val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, timeFormatter, listOf())
 
             whenever(dailyRecordService.postDailyRecord(any())).thenThrow(
                 HttpException(
@@ -86,7 +86,7 @@ class DailyRecordRepositoryTest {
             // when
             assertThrows(BadRequestException::class.java) {
                 runBlocking {
-                    sut.insertRecord(createDailyRecord)
+                    sut.insertRecord(dailyRecordInput)
                         .onFailure {
                             assertEquals("하루에 등록할 수 있는 일상 기록은 최대 2개입니다.", it.message)
                         }.getOrThrow()

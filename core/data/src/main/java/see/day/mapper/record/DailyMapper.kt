@@ -1,15 +1,15 @@
 package see.day.mapper.record
 
-import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.daily.DailyRecordDetail
 import see.day.model.record.daily.DailyRecordEdit
-import see.day.network.dto.record.daily.DailyRecordDetailRequest
+import see.day.network.dto.record.daily.DailyRecordInputRequest
 import see.day.network.dto.record.daily.DailyRecordDetailResponse
 import see.day.network.dto.record.daily.DailyRecordEditRequest
 
-fun CreateDailyRecord.toDto(): DailyRecordDetailRequest {
-    return DailyRecordDetailRequest(
+fun DailyRecordInput.toDto(): DailyRecordInputRequest {
+    return DailyRecordInputRequest(
         content = content,
         emotion = emotion.name,
         recordDate = recordDate.formatDate(),

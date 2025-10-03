@@ -19,8 +19,8 @@ import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
-import see.day.domain.usecase.record.daily.EditDailyRecordUseCase
-import see.day.model.record.daily.CreateDailyRecord
+import see.day.domain.usecase.record.daily.UpdateDailyRecordUseCase
+import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.daily.DailyRecordEdit
 import see.day.model.time.DateTime
@@ -31,7 +31,7 @@ class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
     private val getDetailRecordUseCase: GetDailyRecordUseCase,
-    private val putDetailRecordUseCase : EditDailyRecordUseCase
+    private val updateDetailRecordUseCase : UpdateDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -62,7 +62,7 @@ class DailyDetailViewModel @Inject constructor(
                                 photos = record.imageUrls,
                                 editMode = DailyDetailUiState.EditMode.Edit(
                                     recordId = record.id,
-                                    originalRecord = CreateDailyRecord(
+                                    originalRecord = DailyRecordInput(
                                         content = record.content,
                                         emotion = record.emotion,
                                         recordDate = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
@@ -154,7 +154,7 @@ class DailyDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (val mode = uiState.value.editMode) {
                 is DailyDetailUiState.EditMode.Create -> saveDailyRecordForCreateMode()
-                is DailyDetailUiState.EditMode.Edit -> modifyRecord(mode.recordId)
+                is DailyDetailUiState.EditMode.Edit -> updateRecord(mode.recordId)
             }
         }
     }
@@ -173,7 +173,7 @@ class DailyDetailViewModel @Inject constructor(
 
     private suspend fun saveDailyRecord(photoUrls: List<String>) {
         insertDailyRecordUseCase(
-            CreateDailyRecord(
+            DailyRecordInput(
                 uiState.value.text,
                 uiState.value.emotion,
                 uiState.value.dateTime,
@@ -185,10 +185,10 @@ class DailyDetailViewModel @Inject constructor(
         )
     }
 
-    private suspend fun modifyRecord(recordId: String) {
+    private suspend fun updateRecord(recordId: String) {
         val urls = processPhotoUrls(uiState.value.photos)
 
-        putDetailRecordUseCase(
+        updateDetailRecordUseCase(
             DailyRecordEdit(
                 recordId,
                 uiState.value.text,

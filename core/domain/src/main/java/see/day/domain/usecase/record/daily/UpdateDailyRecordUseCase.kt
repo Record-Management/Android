@@ -5,11 +5,11 @@ import see.day.model.record.daily.DailyRecordDetail
 import see.day.model.record.daily.DailyRecordEdit
 import javax.inject.Inject
 
-class EditDailyRecordUseCase @Inject constructor(
+class UpdateDailyRecordUseCase @Inject constructor(
     private val dailyRecordRepository: DailyRecordRepository
 ) {
 
     suspend operator fun invoke(dailyRecordEdit: DailyRecordEdit) : Result<DailyRecordDetail> {
-        return dailyRecordRepository.editRecord(dailyRecordEdit)
+        return dailyRecordRepository.updateRecord(dailyRecordEdit)
     }
 }

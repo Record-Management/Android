@@ -1,6 +1,6 @@
 package see.day.daily.state
 
-import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.DateTimeFormatter
@@ -15,7 +15,7 @@ data class DailyDetailUiState(
 ) {
     sealed class EditMode {
         data object Create : EditMode()
-        data class Edit(val originalRecord: CreateDailyRecord,val recordId: String) : EditMode()
+        data class Edit(val originalRecord: DailyRecordInput, val recordId: String) : EditMode()
     }
 
     val canSubmit: Boolean = when (editMode) {

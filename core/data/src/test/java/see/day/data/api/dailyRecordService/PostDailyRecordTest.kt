@@ -17,7 +17,7 @@ import see.day.data.api.dailyRecordService.json.dailyRecordDetailOverResponse
 import see.day.data.api.dailyRecordService.json.dailyRecordDetailResponse
 import see.day.mapper.record.toDto
 import see.day.model.exception.BadRequestException
-import see.day.model.record.daily.CreateDailyRecord
+import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
@@ -55,7 +55,7 @@ class PostDailyRecordTest {
     @Test
     fun givenCreateDailyRecord_whenPost_thenReturnsDetailDailyRecord() = runTest {
         // given
-        val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
+        val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
         val responseJson = dailyRecordDetailResponse
 
         mockWebServer.enqueue(
@@ -65,7 +65,7 @@ class PostDailyRecordTest {
         )
 
         // when
-        val response = sut.postDailyRecord(createDailyRecord.toDto().toRequestBody())
+        val response = sut.postDailyRecord(dailyRecordInput.toDto().toRequestBody())
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
@@ -82,7 +82,7 @@ class PostDailyRecordTest {
     @Test
     fun givenOverCreateDailyRecord_whenPost_thenThrows400Exception() = runTest {
         // given
-        val createDailyRecord = CreateDailyRecord("", DailyEmotion.Sad, KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
+        val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), imageUrls = listOf())
         val responseJson = dailyRecordDetailOverResponse
 
         mockWebServer.enqueue(
@@ -95,7 +95,7 @@ class PostDailyRecordTest {
         assertThrows(BadRequestException::class.java) {
             runBlocking {
                 createResult {
-                    sut.postDailyRecord(createDailyRecord.toDto().toRequestBody())
+                    sut.postDailyRecord(dailyRecordInput.toDto().toRequestBody())
                 }.onFailure {
                     assertEquals("하루에 등록할 수 있는 일상 기록은 최대 2개입니다.", it.message)
                 }.getOrThrow()
