@@ -1,33 +1,17 @@
 package see.day.mapper.calendar
 
-import see.day.model.calendar.DailyDetailRecord
-import see.day.model.calendar.DetailRecord
-import see.day.model.record.RecordType
-import see.day.model.record.daily.DailyEmotion
+import see.day.model.calendar.DailyRecordDetails
+import see.day.model.calendar.RecordDetail
 import see.day.network.dto.calendar.DailyDetailRecordResponse
-import see.day.network.dto.calendar.DetailRecordResponse
+import see.day.network.dto.record.RecordResponse
 
-fun DailyDetailRecordResponse.toModel(): DailyDetailRecord {
-    return DailyDetailRecord(
+fun DailyDetailRecordResponse.toModel(): DailyRecordDetails {
+    return DailyRecordDetails(
         date = date,
         records = records.toModel()
     )
 }
 
-fun List<DetailRecordResponse>.toModel(): List<DetailRecord> {
+fun List<RecordResponse>.toModel(): List<RecordDetail> {
     return this.map { it.toModel() }
-}
-
-fun DetailRecordResponse.toModel(): DetailRecord {
-    return DetailRecord(
-        id = id,
-        type = RecordType.valueOf(type),
-        emotion = DailyEmotion.valueOf(emotion),
-        content = content,
-        imageUrls = imageUrls,
-        recordDate = recordDate,
-        recordTime = recordTime,
-        createdAt = createdAt,
-        updatedAt = updatedAt
-    )
 }

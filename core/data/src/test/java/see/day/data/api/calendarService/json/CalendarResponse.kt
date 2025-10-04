@@ -33,22 +33,33 @@ val getDetailRecordsResponse = """
       "code": "S200",
       "message": "일일 기록이 성공적으로 조회되었습니다",
       "data": {
-        "date": [2025, 1,7],
+        "date": [2025, 1, 7],
         "records": [
-          {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "type": "DAILY",
-            "emotion": "😊",
-            "content": "오늘은 정말 좋은 하루였습니다. 아침에 운동도 하고 친구들과 맛있는 음식도 먹었어요.",
-            "imageUrls": [
-              "https://example.com/image1.jpg",
-              "https://example.com/image2.jpg"
-            ],
-            "recordDate": [2025, 1, 7],
-            "recordTime": [15, 21],
-            "createdAt": [2025, 1, 7, 15, 21, 0],
-            "updatedAt": [2025, 1, 7, 15, 21, 0]
-          }
+            {
+                "id": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "DAILY",
+                "recordDate": [2025, 1, 7],
+                "recordTime": [15, 21],
+                "createdAt": [2025,1,7,15,21,0],
+                "updatedAt": [2025,1,7,15,21,0],
+                "imageUrls": [],
+                "emotion": "😊",
+                "content": "오늘은 정말 좋은 하루였습니다."
+            },
+            {
+                "id": "660e8400-e29b-41d4-a716-446655440001",
+                "type": "EXERCISE",
+                "recordDate": [2025,1,7],
+                "recordTime": null,
+                "createdAt": [2025,1,7,16,30,0],
+                "updatedAt": [2025,1,7,16,30,0],
+                "imageUrls": [ ],
+                "exerciseType": "CARDIO",
+                "exerciseTimeMinutes": 30,
+                "stepCount": 5000,
+                "weight": 70.5,
+                "dailyNote": "오늘 운동 너무 힘들었지만 뿌듯해요!"
+            }
         ]
       }
     }

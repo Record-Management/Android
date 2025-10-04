@@ -14,6 +14,8 @@ import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.data.api.calendarService.json.getDetailRecordsResponse
 import see.day.data.api.calendarService.json.getMonthlyRecordResponse
 import see.day.network.CalendarService
+import see.day.network.dto.record.DailyRecordResponse
+import see.day.network.dto.record.ExerciseRecordResponse
 
 class CalendarMonthlyTest {
 
@@ -87,7 +89,7 @@ class CalendarMonthlyTest {
                 .setBody(responseJson)
         )
         // when
-        val response = sut.getDailyRecordData(date)
+        val response = sut.getDailyRecords(date)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
@@ -99,6 +101,8 @@ class CalendarMonthlyTest {
         assertEquals("일일 기록이 성공적으로 조회되었습니다", response.message)
         assertEquals("S200", response.code)
         assertNotNull(response.data)
+        assertEquals(1,response.data?.records?.filterIsInstance<DailyRecordResponse>()?.size ?: 0)
+        assertEquals(1,response.data?.records?.filterIsInstance<ExerciseRecordResponse>()?.size ?: 0)
         assertEquals(date, response.data?.date)
     }
 }

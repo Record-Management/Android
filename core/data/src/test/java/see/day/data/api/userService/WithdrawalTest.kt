@@ -8,9 +8,11 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.any
 import see.day.data.api.ApiTestUtils
 import see.day.data.api.ApiTestUtils.createRetrofit
 import see.day.network.UserService
+import see.day.network.dto.auth.DeleteUserRequest
 
 class WithdrawalTest {
 
@@ -51,7 +53,7 @@ class WithdrawalTest {
         )
 
         // when
-        val response = sut.deleteUser()
+        val response = sut.deleteUser(DeleteUserRequest("").toRequestBody())
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

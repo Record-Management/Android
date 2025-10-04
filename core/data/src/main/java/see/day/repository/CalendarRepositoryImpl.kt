@@ -3,7 +3,7 @@ package see.day.repository
 import javax.inject.Inject
 import see.day.domain.repository.CalendarRepository
 import see.day.mapper.calendar.toModel
-import see.day.model.calendar.DailyDetailRecord
+import see.day.model.calendar.DailyRecordDetails
 import see.day.model.calendar.MonthlyRecord
 import see.day.model.exception.NoDataException
 import see.day.network.CalendarService
@@ -17,7 +17,7 @@ class CalendarRepositoryImpl @Inject constructor(
         return createResult { calendarService.getMonthlyRecords(year, month, types).data?.toModel() ?: throw NoDataException() }
     }
 
-    override suspend fun getDailyDetailRecords(date: String): Result<DailyDetailRecord> {
-        return createResult { calendarService.getDailyRecordData(date).data?.toModel() ?: throw NoDataException() }
+    override suspend fun getDailyRecords(date: String): Result<DailyRecordDetails> {
+        return createResult { calendarService.getDailyRecords(date).data?.toModel() ?: throw NoDataException() }
     }
 }

@@ -1,8 +1,8 @@
 package see.day.domain.repository
 
-import see.day.model.record.daily.DailyRecordDetail
+import see.day.model.calendar.RecordDetail
 
 interface RecordRepository {
 
-    suspend fun getRecord(recordId: String) : Result<DailyRecordDetail>
+    suspend fun getRecord(recordId: String) : Result<RecordDetail>
 }

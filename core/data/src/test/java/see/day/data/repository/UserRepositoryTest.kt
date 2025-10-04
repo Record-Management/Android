@@ -123,14 +123,14 @@ class UserRepositoryTest {
     fun given_whenDeleteUser_thenClearData() {
         runTest {
             // given
-            whenever(userService.deleteUser()).thenReturn(Unit)
+            whenever(userService.deleteUser(any())).thenReturn(Unit)
             whenever(dataSource.clearData()).thenReturn(Unit)
 
             // when
             val result = sut.deleteUser().getOrThrow()
 
             // then
-            verify(userService).deleteUser()
+            verify(userService).deleteUser(any())
             verify(dataSource).clearData()
         }
     }
@@ -139,7 +139,7 @@ class UserRepositoryTest {
     fun given_whenDeleteUserThrowException_thenClearData() {
         runTest {
             // given
-            whenever(userService.deleteUser()).thenThrow(
+            whenever(userService.deleteUser(any())).thenThrow(
                 HttpException(
                 Response.error<Any?>(
                     400,
@@ -157,7 +157,7 @@ class UserRepositoryTest {
             }
 
             // then
-            verify(userService).deleteUser()
+            verify(userService).deleteUser(any())
             verify(dataSource).clearData()
         }
     }
