@@ -14,10 +14,9 @@ import see.day.domain.repository.CalendarRepository
 import see.day.model.record.RecordType
 import see.day.network.CalendarService
 import see.day.network.dto.calendar.DailyDetailRecordResponse
-import see.day.network.dto.calendar.DailyRecordResponse
 import see.day.network.dto.calendar.DailyRecordsResponse
-import see.day.network.dto.calendar.DetailRecordResponse
 import see.day.network.dto.calendar.MonthlyRecordResponse
+import see.day.network.dto.record.DailyRecordResponse
 import see.day.repository.CalendarRepositoryImpl
 
 @RunWith(MockitoJUnitRunner::class)
@@ -45,7 +44,7 @@ class CalendarRepositoryTest {
                 response = MonthlyRecordResponse(
                     year,
                     month,
-                    monthlyRecords = listOf(DailyRecordsResponse(date = "", records = listOf(DailyRecordResponse("", "DAILY"))))
+                    monthlyRecords = listOf(DailyRecordsResponse(date = "", records = listOf(see.day.network.dto.calendar.DailyRecordResponse("", "DAILY"))))
                 )
             )
             whenever(calendarService.getMonthlyRecords(year, month, types)).thenReturn(response)
@@ -69,7 +68,7 @@ class CalendarRepositoryTest {
             val response = successCommonResponse(
                 response = DailyDetailRecordResponse(
                     date = date,
-                    records = listOf(DetailRecordResponse("", "HABIT", "", "", "", "", listOf(), "Love", ""))
+                    records = listOf(DailyRecordResponse("", "DAILY", "", "", "", "", listOf(), "Love", ""))
                 )
             )
             whenever(calendarService.getDailyRecordData(date)).thenReturn(response)
@@ -78,7 +77,8 @@ class CalendarRepositoryTest {
             val result = sut.getDailyDetailRecords(date).getOrThrow()
 
             // then
-            assertTrue(result.records.any { it.type == RecordType.HABIT })
+            println(result.records)
+            assertTrue(result.records.any { it.type == RecordType.DAILY })
 
             verify(calendarService).getDailyRecordData(date)
         }

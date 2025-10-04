@@ -2,8 +2,6 @@ package see.day.model.calendar
 
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
-import see.day.model.time.DateTime
-import see.day.model.time.formatter.KoreanDateTimeFormatter
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -13,7 +11,7 @@ data class DailyDetailRecord(
     val date: String,
     val records: List<DetailRecord>
 ) {
-    val formatFullDate : String by lazy {
+    val formatFullDate: String by lazy {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val localDate = LocalDate.parse(date, inputFormatter)
 
@@ -22,18 +20,26 @@ data class DailyDetailRecord(
     }
 }
 
-data class DetailRecord(
-    val id: String,
-    val type: RecordType,
+sealed class DetailRecord {
+    abstract val id: String
+    abstract val type: RecordType
+    abstract val recordDate: String
+    abstract val createdAt: String
+    abstract val updatedAt: String
+}
+
+data class DetailDailyRecord(
+    override val id: String,
+    override val type: RecordType,
+    override val recordDate: String,
+    override val createdAt: String,
+    override val updatedAt: String,
     val emotion: DailyEmotion,
     val content: String,
     val imageUrls: List<String>,
-    val recordDate: String,
-    val recordTime: String,
-    val createdAt: String,
-    val updatedAt: String
-) {
-    val fullRecordTime : String by lazy {
+    val recordTime: String
+) : DetailRecord() {
+    val fullRecordTime: String by lazy {
         val inputFormatter = DateTimeFormatter.ofPattern("H:m")
         val localTime = LocalTime.parse(recordTime, inputFormatter)
 
@@ -41,3 +47,17 @@ data class DetailRecord(
         localTime.format(outputFormatter)
     }
 }
+
+data class DetailExerciseRecord(
+    override val id: String,
+    override val type: RecordType,
+    override val recordDate: String,
+    override val createdAt: String,
+    override val updatedAt: String,
+    val recordTime: String?,
+    val imageUrls: List<String>,
+    val exerciseTimeMinutes: Int,
+    val stepCount: Int,
+    val weight: Float,
+    val dailyNote: String
+) : DetailRecord()
