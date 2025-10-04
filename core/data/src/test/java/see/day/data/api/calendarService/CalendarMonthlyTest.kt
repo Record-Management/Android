@@ -89,7 +89,7 @@ class CalendarMonthlyTest {
                 .setBody(responseJson)
         )
         // when
-        val response = sut.getDailyRecordData(date)
+        val response = sut.getDailyRecords(date)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

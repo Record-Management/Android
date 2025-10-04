@@ -71,7 +71,7 @@ class CalendarRepositoryTest {
                     records = listOf(DailyRecordResponse("", "DAILY", "", "", "", "", listOf(), "Love", ""))
                 )
             )
-            whenever(calendarService.getDailyRecordData(date)).thenReturn(response)
+            whenever(calendarService.getDailyRecords(date)).thenReturn(response)
 
             // when
             val result = sut.getDailyDetailRecords(date).getOrThrow()
@@ -80,7 +80,7 @@ class CalendarRepositoryTest {
             println(result.records)
             assertTrue(result.records.any { it.type == RecordType.DAILY })
 
-            verify(calendarService).getDailyRecordData(date)
+            verify(calendarService).getDailyRecords(date)
         }
     }
 }
