@@ -17,7 +17,7 @@ class CalendarRepositoryImpl @Inject constructor(
         return createResult { calendarService.getMonthlyRecords(year, month, types).data?.toModel() ?: throw NoDataException() }
     }
 
-    override suspend fun getDailyDetailRecords(date: String): Result<DailyRecordDetails> {
+    override suspend fun getDailyRecords(date: String): Result<DailyRecordDetails> {
         return createResult { calendarService.getDailyRecords(date).data?.toModel() ?: throw NoDataException() }
     }
 }

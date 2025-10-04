@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.calendar.GetDetailDailyRecordsUseCase
+import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.user.GetUserRecordTypeUseCase
 import see.day.home.screen.toRecordType
@@ -28,7 +28,7 @@ import see.day.model.record.RecordType
 class HomeViewModel @Inject constructor(
     private val getUserRecordTypeUseCase: GetUserRecordTypeUseCase,
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
-    private val getDetailDailyRecordsUseCase: GetDetailDailyRecordsUseCase
+    private val getDailyRecordsUseCase: GetDailyRecordsUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
             try {
                 val recordType = async { getUserRecordTypeUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
-                val detailDailyRecords = getDetailDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
+                val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
                 monthlyRecord.update {
@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
             }
             try {
                 val monthlyRecords = async { getMonthlyRecordsUseCase(uiState.value.currentYear, uiState.value.currentMonth, arrayOf()).getOrThrow() }
-                val detailDailyRecords = getDetailDailyRecordsUseCase(uiState.value.todayFormat()).getOrThrow()
+                val detailDailyRecords = getDailyRecordsUseCase(uiState.value.todayFormat()).getOrThrow()
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
                 monthlyRecord.update {
@@ -169,7 +169,7 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            getDetailDailyRecordsUseCase("$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}")
+            getDailyRecordsUseCase("$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}")
                 .onSuccess { dailyRecords ->
                     _uiState.update {
                         it.copy(

@@ -74,7 +74,7 @@ class CalendarRepositoryTest {
             whenever(calendarService.getDailyRecords(date)).thenReturn(response)
 
             // when
-            val result = sut.getDailyDetailRecords(date).getOrThrow()
+            val result = sut.getDailyRecords(date).getOrThrow()
 
             // then
             println(result.records)

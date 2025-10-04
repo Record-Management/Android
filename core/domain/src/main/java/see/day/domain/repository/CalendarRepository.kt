@@ -5,5 +5,5 @@ import see.day.model.calendar.MonthlyRecord
 
 interface CalendarRepository {
     suspend fun getMonthlyRecords(year: Int,month: Int,types: Array<String>) : Result<MonthlyRecord>
-    suspend fun getDailyDetailRecords(date: String) : Result<DailyRecordDetails>
+    suspend fun getDailyRecords(date: String) : Result<DailyRecordDetails>
 }
