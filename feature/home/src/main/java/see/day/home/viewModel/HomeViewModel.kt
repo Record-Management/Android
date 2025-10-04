@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         mainRecordType = recordType.await(),
                         monthlyRecords = calendarDayInfos,
-                        dailyDetailRecords = detailDailyRecords
+                        dailyRecordDetails = detailDailyRecords
                     )
                 }
             } catch (e: Exception) {
@@ -111,7 +111,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         monthlyRecords = calendarDayInfos,
-                        dailyDetailRecords = detailDailyRecords
+                        dailyRecordDetails = detailDailyRecords
                     )
                 }
             } catch (e : Exception) {
@@ -177,7 +177,7 @@ class HomeViewModel @Inject constructor(
                             currentMonth = month,
                             selectedMonth = month,
                             selectedDay = day,
-                            dailyDetailRecords = dailyRecords
+                            dailyRecordDetails = dailyRecords
                         )
                     }
                 }.onFailure {

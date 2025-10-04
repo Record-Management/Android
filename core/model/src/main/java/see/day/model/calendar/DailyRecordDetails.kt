@@ -7,7 +7,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-data class DailyDetailRecords(
+data class DailyRecordDetails(
     val date: String,
     val records: List<RecordDetail>
 ) {

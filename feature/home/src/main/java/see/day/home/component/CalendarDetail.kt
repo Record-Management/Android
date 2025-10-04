@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
-import see.day.model.calendar.DailyDetailRecords
+import see.day.model.calendar.DailyRecordDetails
 import see.day.model.calendar.DailyRecordDetail
 import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.record.RecordType
@@ -22,7 +22,7 @@ import see.day.ui.component.record.overview.DailyRecordOverview
 @Composable
 fun CalendarDetail(
     modifier: Modifier = Modifier,
-    dailyDetailRecords: DailyDetailRecords,
+    dailyRecordDetails: DailyRecordDetails,
     onClickOverview: (RecordType, String) -> Unit
 ) {
     Column(
@@ -31,7 +31,7 @@ fun CalendarDetail(
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = dailyDetailRecords.formatFullDate,
+            text = dailyRecordDetails.formatFullDate,
             style = MaterialTheme.typography.titleLarge,
             color = gray100
         )
@@ -39,7 +39,7 @@ fun CalendarDetail(
             modifier = modifier.padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            dailyDetailRecords.records.forEach { record ->
+            dailyRecordDetails.records.forEach { record ->
                 when(record) {
                     is DailyRecordDetail -> {
                         DailyRecordOverview(
@@ -66,7 +66,7 @@ fun CalendarDetail(
 private fun CalendarDetailPreview() {
     SeeDayTheme {
         CalendarDetail(
-            dailyDetailRecords = DailyDetailRecords("2025-09-12", listOf(DailyRecordDetail(id = "", type = RecordType.DAILY,emotion =  DailyEmotion.Love,content = "asdasdasd", imageUrls =  listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime =  "", recordDate = "13:30", createdAt =  "", updatedAt =  "")))
+            dailyRecordDetails = DailyRecordDetails("2025-09-12", listOf(DailyRecordDetail(id = "", type = RecordType.DAILY,emotion =  DailyEmotion.Love,content = "asdasdasd", imageUrls =  listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime =  "", recordDate = "13:30", createdAt =  "", updatedAt =  "")))
         ) { recordType, recordId -> }
     }
 }
