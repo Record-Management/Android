@@ -12,9 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
-import see.day.model.calendar.DailyDetailRecord
-import see.day.model.calendar.DetailDailyRecord
-import see.day.model.calendar.DetailExerciseRecord
+import see.day.model.calendar.DailyDetailRecords
+import see.day.model.calendar.DailyRecordDetail
+import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.component.record.overview.DailyRecordOverview
@@ -22,7 +22,7 @@ import see.day.ui.component.record.overview.DailyRecordOverview
 @Composable
 fun CalendarDetail(
     modifier: Modifier = Modifier,
-    dailyDetailRecord: DailyDetailRecord,
+    dailyDetailRecords: DailyDetailRecords,
     onClickOverview: (RecordType, String) -> Unit
 ) {
     Column(
@@ -31,7 +31,7 @@ fun CalendarDetail(
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = dailyDetailRecord.formatFullDate,
+            text = dailyDetailRecords.formatFullDate,
             style = MaterialTheme.typography.titleLarge,
             color = gray100
         )
@@ -39,9 +39,9 @@ fun CalendarDetail(
             modifier = modifier.padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            dailyDetailRecord.records.forEach { record ->
+            dailyDetailRecords.records.forEach { record ->
                 when(record) {
-                    is DetailDailyRecord -> {
+                    is DailyRecordDetail -> {
                         DailyRecordOverview(
                             recordId = record.id,
                             dailyEmotion = record.emotion,
@@ -51,7 +51,7 @@ fun CalendarDetail(
                             onClickItem = onClickOverview
                         )
                     }
-                    is DetailExerciseRecord -> {
+                    is ExerciseRecordDetail -> {
                         Text(record.toString())
                     }
                 }
@@ -66,7 +66,7 @@ fun CalendarDetail(
 private fun CalendarDetailPreview() {
     SeeDayTheme {
         CalendarDetail(
-            dailyDetailRecord = DailyDetailRecord("2025-09-12", listOf(DetailDailyRecord(id = "", type = RecordType.DAILY,emotion =  DailyEmotion.Love,content = "asdasdasd", imageUrls =  listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime =  "", recordDate = "13:30", createdAt =  "", updatedAt =  "")))
+            dailyDetailRecords = DailyDetailRecords("2025-09-12", listOf(DailyRecordDetail(id = "", type = RecordType.DAILY,emotion =  DailyEmotion.Love,content = "asdasdasd", imageUrls =  listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime =  "", recordDate = "13:30", createdAt =  "", updatedAt =  "")))
         ) { recordType, recordId -> }
     }
 }

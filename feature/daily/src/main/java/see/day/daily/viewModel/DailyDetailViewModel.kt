@@ -20,6 +20,7 @@ import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
 import see.day.domain.usecase.record.daily.UpdateDailyRecordUseCase
+import see.day.model.calendar.DailyRecordDetail
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.daily.DailyRecordEdit
@@ -54,22 +55,24 @@ class DailyDetailViewModel @Inject constructor(
             is DailyRecordPostType.EditDailyRecordPost -> {
                 viewModelScope.launch {
                     getDetailRecordUseCase(type.id).onSuccess {  record ->
-                        _uiState.update {
-                            it.copy(
-                                emotion = record.emotion,
-                                text = record.content,
-                                dateTime = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
-                                photos = record.imageUrls,
-                                editMode = DailyDetailUiState.EditMode.Edit(
-                                    recordId = record.id,
-                                    originalRecord = DailyRecordInput(
-                                        content = record.content,
-                                        emotion = record.emotion,
-                                        recordDate = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
-                                        imageUrls = record.imageUrls,
+                        if(record is DailyRecordDetail) {
+                            _uiState.update {
+                                it.copy(
+                                    emotion = record.emotion,
+                                    text = record.content,
+                                    dateTime = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
+                                    photos = record.imageUrls,
+                                    editMode = DailyDetailUiState.EditMode.Edit(
+                                        recordId = record.id,
+                                        originalRecord = DailyRecordInput(
+                                            content = record.content,
+                                            emotion = record.emotion,
+                                            recordDate = KoreanDateTimeFormatter(DateTime.of(record.recordDate, record.recordTime)),
+                                            imageUrls = record.imageUrls,
+                                        )
                                     )
                                 )
-                            )
+                            }
                         }
                     }
                 }

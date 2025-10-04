@@ -22,7 +22,7 @@ import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.DailyRecordService
 import see.day.network.dto.CommonResponse
-import see.day.network.dto.record.daily.DailyRecordDetailResponse
+import see.day.network.dto.record.DailyRecordResponse
 import see.day.network.dto.toResponseBody
 import see.day.repository.DailyRecordRepositoryImpl
 
@@ -45,7 +45,7 @@ class DailyRecordRepositoryTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
             val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, timeFormatter, listOf())
-            val registeredDailyRecordResponse = DailyRecordDetailResponse("", "", "Sad", "", listOf(), "", "", "", "")
+            val registeredDailyRecordResponse = DailyRecordResponse(id = "", type = "DAILY", emotion = "Sad", recordTime =  "", imageUrls = listOf(), content =  "", createdAt =  "", updatedAt =  "", recordDate = "")
 
             whenever(dailyRecordService.postDailyRecord(any())).thenReturn(
                 CommonResponse(

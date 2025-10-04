@@ -2,7 +2,7 @@ package see.day.home.state
 
 import java.time.LocalDate
 import see.day.home.util.RecordFilterType
-import see.day.model.calendar.DailyDetailRecord
+import see.day.model.calendar.DailyDetailRecords
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
 
@@ -14,7 +14,7 @@ data class HomeUiState(
     val selectedFilterType: RecordFilterType,
     val mainRecordType: RecordType,
     val monthlyRecords: List<CalendarDayInfo>,
-    val dailyDetailRecords: DailyDetailRecord
+    val dailyDetailRecords: DailyDetailRecords
 ) {
     companion object {
         val init = HomeUiState(
@@ -25,7 +25,7 @@ data class HomeUiState(
             selectedFilterType = RecordFilterType.ALL,
             mainRecordType = RecordType.DAILY,
             monthlyRecords = listOf(),
-            dailyDetailRecords = DailyDetailRecord(getTodayDate(), listOf())
+            dailyDetailRecords = DailyDetailRecords(getTodayDate(), listOf())
         )
 
         fun getTodayDate(): String {

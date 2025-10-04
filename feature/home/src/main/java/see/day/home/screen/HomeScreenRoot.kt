@@ -1,7 +1,6 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.core.snap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -270,7 +269,7 @@ private fun HomeBottomSheetContent(
         )
         if (uiState.dailyDetailRecords.records.isNotEmpty()) {
             CalendarDetail(
-                dailyDetailRecord = uiState.dailyDetailRecords,
+                dailyDetailRecords = uiState.dailyDetailRecords,
                 onClickOverview = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 }

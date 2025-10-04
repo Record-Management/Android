@@ -7,9 +7,9 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-data class DailyDetailRecord(
+data class DailyDetailRecords(
     val date: String,
-    val records: List<DetailRecord>
+    val records: List<RecordDetail>
 ) {
     val formatFullDate: String by lazy {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -20,7 +20,7 @@ data class DailyDetailRecord(
     }
 }
 
-sealed class DetailRecord {
+sealed class RecordDetail {
     abstract val id: String
     abstract val type: RecordType
     abstract val recordDate: String
@@ -28,7 +28,7 @@ sealed class DetailRecord {
     abstract val updatedAt: String
 }
 
-data class DetailDailyRecord(
+data class DailyRecordDetail(
     override val id: String,
     override val type: RecordType,
     override val recordDate: String,
@@ -38,7 +38,7 @@ data class DetailDailyRecord(
     val content: String,
     val imageUrls: List<String>,
     val recordTime: String
-) : DetailRecord() {
+) : RecordDetail() {
     val fullRecordTime: String by lazy {
         val inputFormatter = DateTimeFormatter.ofPattern("H:m")
         val localTime = LocalTime.parse(recordTime, inputFormatter)
@@ -48,7 +48,7 @@ data class DetailDailyRecord(
     }
 }
 
-data class DetailExerciseRecord(
+data class ExerciseRecordDetail(
     override val id: String,
     override val type: RecordType,
     override val recordDate: String,
@@ -60,4 +60,4 @@ data class DetailExerciseRecord(
     val stepCount: Int,
     val weight: Float,
     val dailyNote: String
-) : DetailRecord()
+) : RecordDetail()

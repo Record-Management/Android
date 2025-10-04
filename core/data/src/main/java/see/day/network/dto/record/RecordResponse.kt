@@ -4,9 +4,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
-import see.day.model.calendar.DetailDailyRecord
-import see.day.model.calendar.DetailExerciseRecord
-import see.day.model.calendar.DetailRecord
+import see.day.model.calendar.DailyRecordDetail
+import see.day.model.calendar.ExerciseRecordDetail
+import see.day.model.calendar.RecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
@@ -21,7 +21,7 @@ sealed class RecordResponse {
     abstract val createdAt: String
     abstract val updatedAt: String
 
-    abstract fun toModel(): DetailRecord
+    abstract fun toModel(): RecordDetail
 }
 
 @Serializable
@@ -42,8 +42,8 @@ data class DailyRecordResponse(
     val content: String
 ) : RecordResponse() {
 
-    override fun toModel(): DetailRecord {
-        return DetailDailyRecord(
+    fun toDailyRecord() : DailyRecordDetail {
+        return DailyRecordDetail(
             id = id,
             type = RecordType.valueOf(type),
             recordDate = recordDate,
@@ -55,6 +55,11 @@ data class DailyRecordResponse(
             content = content
         )
     }
+
+    override fun toModel(): RecordDetail {
+        return toDailyRecord()
+    }
+
 }
 
 @Serializable
@@ -77,8 +82,8 @@ data class ExerciseRecordResponse(
     val dailyNote: String
 ) : RecordResponse() {
 
-    override fun toModel(): DetailRecord {
-        return DetailExerciseRecord(
+    fun toExerciseRecord() : ExerciseRecordDetail {
+        return ExerciseRecordDetail(
             id = id,
             type = RecordType.valueOf(type),
             recordDate = recordDate,
@@ -91,6 +96,10 @@ data class ExerciseRecordResponse(
             weight = weight,
             dailyNote = dailyNote
         )
+    }
+
+    override fun toModel(): RecordDetail {
+        return toExerciseRecord()
     }
 }
 
