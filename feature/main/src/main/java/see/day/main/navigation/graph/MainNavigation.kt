@@ -12,40 +12,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import see.day.model.record.RecordType
-import see.day.navigation.exercise.ExerciseRoute.Exercise
 import see.day.navigation.habit.HabitRoute.*
 import see.day.navigation.schedule.ScheduleRoute.Schedule
 import see.day.ui.dialog.RecordTypePickerDialog
 
-fun NavController.navigateExercise(navOptions: NavOptions? = null) {
-    navigate(Exercise, navOptions)
-}
-
-fun NavGraphBuilder.exerciseNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit) {
-    composable<Exercise> {
-        Column {
-            Text("Exercise")
-            var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
-
-            if (isOpenRecordTypePickerDialog) {
-                RecordTypePickerDialog(
-                    currentRecordType = RecordType.EXERCISE,
-                    onDismiss = { isOpenRecordTypePickerDialog = false },
-                    onCompleteRecordType = { selectedType ->
-                        onClickChangeRecordType(selectedType, true)
-                        isOpenRecordTypePickerDialog = false
-                    }
-                )
-            }
-
-            Button(
-                { isOpenRecordTypePickerDialog = true }
-            ) {
-                Text("기록 변경")
-            }
-        }
-    }
-}
 
 fun NavController.navigateHabit(navOptions: NavOptions? = null) {
     navigate(Habit, navOptions)

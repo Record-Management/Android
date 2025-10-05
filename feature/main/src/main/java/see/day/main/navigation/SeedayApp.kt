@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,9 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
 import see.day.daily.navigation.dailyNavigation
 import see.day.daily.navigation.navigateDailyWrite
+import see.day.exercise.navigation.exerciseNavigation
 import see.day.home.navigation.homeNavigation
 import see.day.home.navigation.navigateBackToHome
-import see.day.main.navigation.graph.exerciseNavigation
 import see.day.main.navigation.graph.habitNavigation
 import see.day.main.navigation.graph.scheduleNavigation
 import see.day.main.setting.navigateSetting
@@ -26,13 +25,11 @@ import see.day.main.setting.settingNavigation
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
 import see.day.onboarding.navigation.onboardingNavigation
-import timber.log.Timber
 
 @Composable
 fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), viewModel: MainViewModel, appStartDestination: Any) {
     val lifecycle = LocalLifecycleOwner.current
 
-    Timber.e("call SeedayApp $appStartDestination")
     Column(modifier = Modifier.fillMaxSize()) {
         NavHost(navigationState.navController, startDestination = appStartDestination) {
             loginNavigation(
@@ -56,7 +53,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onClickPopHome = navigationState.navController::navigateBackToHome
             )
             exerciseNavigation(
-                onClickChangeRecordType = navigationState::navigateAddRecord
+                onClickChangeRecordType = navigationState::navigateAddRecord,
+                onBack = navigationState.navController::popBackStack
             )
             habitNavigation(
                 onClickChangeRecordType = navigationState::navigateAddRecord

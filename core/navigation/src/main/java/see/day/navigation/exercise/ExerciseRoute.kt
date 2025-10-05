@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 sealed interface ExerciseRoute {
 
     @Serializable
-    data object Exercise : ExerciseRoute
+    data object ExerciseSelect : ExerciseRoute
 }
