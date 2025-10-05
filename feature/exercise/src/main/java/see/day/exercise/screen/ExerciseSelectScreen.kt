@@ -35,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
@@ -56,7 +58,6 @@ fun ExerciseSelectScreenRoot(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ExerciseSelectScreen(
     modifier: Modifier = Modifier,
@@ -82,7 +83,10 @@ internal fun ExerciseSelectScreen(
         }
     ) { innerPadding ->
         LazyColumn (
-            modifier = modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(ExerciseType.entries, key = { it}) { exerciseType ->
@@ -90,11 +94,22 @@ internal fun ExerciseSelectScreen(
             }
 
             item {
-                Button(
-                    { isOpenRecordTypePickerDialog = true }
-                ) {
-                    Text("기록 변경")
-                }
+                Text(
+                    text = stringResource(R.string.change_record_type),
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 14.dp)
+                        .clickable {
+                            isOpenRecordTypePickerDialog = true
+                        },
+                    textAlign = TextAlign.Center
+                )
+            }
+            item {
+                Spacer(modifier = modifier.systemBarsPadding())
             }
         }
 
