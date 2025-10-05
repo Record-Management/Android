@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -39,7 +40,9 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.exercise.R
 import see.day.exercise.component.ExerciseSelectTopBar
+import see.day.exercise.component.ExerciseTypeCard
 import see.day.model.record.RecordType
+import see.day.model.record.exercise.ExerciseType
 import see.day.ui.dialog.RecordTypePickerDialog
 
 @Composable
@@ -82,13 +85,10 @@ internal fun ExerciseSelectScreen(
             modifier = modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                Button(
-                    { isOpenRecordTypePickerDialog = true }
-                ) {
-                    Text("기록 변경")
-                }
+            items(ExerciseType.entries, key = { it}) { exerciseType ->
+                ExerciseTypeCard(exerciseType = exerciseType, onClickExerciseType = {})
             }
+
             item {
                 Button(
                     { isOpenRecordTypePickerDialog = true }
