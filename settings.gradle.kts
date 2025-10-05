@@ -42,3 +42,4 @@ include(
     "feature:daily"
 )
 include(":core:navigation")
+include(":feature:exercise")

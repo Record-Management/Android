@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exercise_type">운동 기록</string>
+    <string name="change_record_type">기록 방식을 바꿀래요</string>
+</resources>

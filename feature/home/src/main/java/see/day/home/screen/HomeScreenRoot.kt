@@ -243,7 +243,7 @@ private fun HomeBottomSheetContent(
                 }
             )
             FloatingActionButton(
-                onClick = { uiEvent(HomeUiEvent.OnClickAddButton(RecordType.DAILY)) },
+                onClick = { uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType)) },
                 modifier = modifier
                     .padding(
                         end = 16.dp, bottom = floatingButtonPadding.dp

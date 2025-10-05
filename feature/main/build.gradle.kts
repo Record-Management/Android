@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:daily"))
 
+    implementation(project(":feature:exercise"))
+
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
