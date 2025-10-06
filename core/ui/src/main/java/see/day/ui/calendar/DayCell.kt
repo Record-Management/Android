@@ -42,6 +42,8 @@ import see.day.model.record.RecordType.HABIT
 import see.day.model.record.RecordType.SCHEDULE
 import see.day.util.getGrayIcon
 import see.day.util.getIcon
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Composable
 fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType, records: List<RecordType>, schedules: List<String>, onClickItem: (Int, Int, Int) -> Unit) {
@@ -67,7 +69,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                 Modifier.fillMaxWidth()
             }
         )
-        if (!isSameMonth) {
+        if (!isSameMonth || isAfterToday(year, month, day)) {
             return
         }
         // 아이콘이 정상적인 색상으로 나오는 것
@@ -198,6 +200,13 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
         }
     }
 }
+
+private fun isAfterToday(year: Int, month: Int, day: Int): Boolean {
+    val inputDate = LocalDate.of(year, month, day)
+    return inputDate.isAfter(now)
+}
+
+private val now = LocalDate.now(ZoneId.of("Asia/Seoul"))
 
 // 두 개 이상인 경우
 @Preview
