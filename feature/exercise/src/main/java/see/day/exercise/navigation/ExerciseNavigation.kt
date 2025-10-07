@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import see.day.exercise.screen.ExerciseDetailScreenRoot
 import see.day.exercise.screen.ExerciseSelectScreenRoot
+import see.day.exercise.util.ExerciseRecordPostType
 import see.day.model.record.RecordType
 import see.day.model.record.exercise.ExerciseType
 import see.day.navigation.exercise.ExerciseRoute
@@ -27,6 +28,6 @@ fun NavGraphBuilder.exerciseNavigation(onClickChangeRecordType: (RecordType, Boo
 
     composable<ExerciseWrite> { navBackStackEntry ->
         val exerciseType = navBackStackEntry.toRoute<ExerciseWrite>().exerciseType
-        ExerciseDetailScreenRoot(exerciseType)
+        ExerciseDetailScreenRoot(ExerciseRecordPostType.Write(exerciseType))
     }
 }

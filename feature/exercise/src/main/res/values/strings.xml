@@ -2,4 +2,5 @@
 <resources>
     <string name="exercise_type">운동 기록</string>
     <string name="change_record_type">기록 방식을 바꿀래요</string>
+    <string name="max_photo_description">*최대 3장 가능</string>
 </resources>

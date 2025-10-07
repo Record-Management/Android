@@ -140,9 +140,8 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 currentTime = uiState.dateTime.formatFullTime(),
                 onClickEmotion = onClickEmotion
             )
-            Spacer(modifier = modifier.padding(top = 24.dp))
             RecordWriteTextField(
-                modifier = modifier,
+                modifier = modifier.padding(top = 24.dp),
                 text = uiState.text,
                 placeHolder = R.string.record_daily_place_holder,
                 onChangedText = { changedText ->
