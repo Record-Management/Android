@@ -42,7 +42,7 @@ fun RecordWriteTextField(modifier: Modifier = Modifier, text: String, @StringRes
                 onChangedText(newValue)
             },
             textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
-            modifier = modifier.fillMaxSize().padding(horizontal = 14.dp).padding(top = 14.dp, bottom = 45.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 14.dp).padding(top = 14.dp, bottom = 45.dp),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
                     Text(
