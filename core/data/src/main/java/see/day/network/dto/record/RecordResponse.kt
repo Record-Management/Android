@@ -18,6 +18,7 @@ sealed class RecordResponse {
     abstract val id: String
     abstract val type: String
     abstract val recordDate: String
+    abstract val recordTime: String
     abstract val createdAt: String
     abstract val updatedAt: String
 
@@ -32,7 +33,7 @@ data class DailyRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val recordDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val recordTime: String,
+    override val recordTime: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val createdAt: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
@@ -70,7 +71,7 @@ data class ExerciseRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val recordDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val recordTime: String? = null,
+    override val recordTime: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val createdAt: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
@@ -78,6 +79,7 @@ data class ExerciseRecordResponse(
     val imageUrls: List<String>,
     val exerciseTimeMinutes: Int,
     val stepCount: Int,
+    val caloriesBurned: Int,
     val weight: Float,
     val dailyNote: String
 ) : RecordResponse() {
@@ -94,6 +96,7 @@ data class ExerciseRecordResponse(
             exerciseTimeMinutes = exerciseTimeMinutes,
             stepCount = stepCount,
             weight = weight,
+            caloriesBurned = caloriesBurned,
             dailyNote = dailyNote
         )
     }

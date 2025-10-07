@@ -24,6 +24,7 @@ sealed class RecordDetail {
     abstract val id: String
     abstract val type: RecordType
     abstract val recordDate: String
+    abstract val recordTime: String
     abstract val createdAt: String
     abstract val updatedAt: String
 }
@@ -34,10 +35,10 @@ data class DailyRecordDetail(
     override val recordDate: String,
     override val createdAt: String,
     override val updatedAt: String,
+    override val recordTime: String,
     val emotion: DailyEmotion,
     val content: String,
     val imageUrls: List<String>,
-    val recordTime: String
 ) : RecordDetail() {
     val fullRecordTime: String by lazy {
         val inputFormatter = DateTimeFormatter.ofPattern("H:m")
@@ -54,10 +55,11 @@ data class ExerciseRecordDetail(
     override val recordDate: String,
     override val createdAt: String,
     override val updatedAt: String,
-    val recordTime: String?,
+    override val recordTime: String,
     val imageUrls: List<String>,
     val exerciseTimeMinutes: Int,
     val stepCount: Int,
     val weight: Float,
+    val caloriesBurned: Int,
     val dailyNote: String
 ) : RecordDetail()
