@@ -63,8 +63,16 @@ fun HealthStatInputField(
             value = if (isFocused) text else "$text ${healthStat.unit}",
             textStyle = MaterialTheme.typography.displaySmall,
             onValueChange = { newValue ->
-                if (newValue.isDigitsOnly()) {
-                    onTextChanged(newValue)
+                if(healthStat == HealthStat.Weight) {
+                    if(newValue.isNumeric()) {
+                        onTextChanged(newValue)
+                    } else if(newValue.isDigitsOnly()) {
+                        onTextChanged(newValue)
+                    }
+                } else {
+                    if(newValue.isDigitsOnly()) {
+                        onTextChanged(newValue)
+                    }
                 }
             },
             decorationBox = { innerTextField ->
@@ -90,6 +98,10 @@ fun HealthStatInputField(
             )
         )
     }
+}
+
+fun String.isNumeric(): Boolean {
+    return this.toDoubleOrNull() != null
 }
 
 enum class HealthStat(val title: String, val unit: String) {
