@@ -39,6 +39,7 @@ class ApiModule {
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
+        explicitNulls = true
     }
 
     @Provides
