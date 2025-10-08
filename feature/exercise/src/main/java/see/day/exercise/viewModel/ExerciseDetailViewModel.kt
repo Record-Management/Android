@@ -1,11 +1,14 @@
 package see.day.exercise.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
 import see.day.exercise.util.ExerciseRecordPostType
@@ -14,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
-
+    insertPhotosUseCase: InsertPhotosUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ExerciseDetailUiState> = MutableStateFlow(ExerciseDetailUiState.init)
@@ -122,6 +125,14 @@ class ExerciseDetailViewModel @Inject constructor(
     }
 
     private fun onSaveRecord() {
+        viewModelScope.launch {
+            when (val mode = uiState.value.editMode) {
+                is ExerciseDetailUiState.EditMode.Create -> {}
+                is ExerciseDetailUiState.EditMode.Edit -> {}
+            }
+        }
+    }
 
+    private suspend fun saveExerciseRecordForCreateMode() {
     }
 }
