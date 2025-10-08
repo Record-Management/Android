@@ -57,9 +57,9 @@ data class ExerciseRecordDetail(
     override val updatedAt: String,
     override val recordTime: String,
     val imageUrls: List<String>,
-    val exerciseTimeMinutes: Int,
-    val stepCount: Int,
-    val weight: Float,
-    val caloriesBurned: Int,
+    val exerciseTimeMinutes: String,
+    val stepCount: String,
+    val weight: String,
+    val caloriesBurned: String,
     val dailyNote: String
 ) : RecordDetail()

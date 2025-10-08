@@ -77,10 +77,10 @@ data class ExerciseRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val updatedAt: String,
     val imageUrls: List<String>,
-    val exerciseTimeMinutes: Int,
-    val stepCount: Int,
-    val caloriesBurned: Int,
-    val weight: Float,
+    val exerciseTimeMinutes: Int? = null,
+    val stepCount: Int? = null,
+    val caloriesBurned: Int? = null,
+    val weight: Float? = null,
     val dailyNote: String
 ) : RecordResponse() {
 
@@ -93,10 +93,10 @@ data class ExerciseRecordResponse(
             updatedAt = updatedAt,
             recordTime = recordTime,
             imageUrls = imageUrls,
-            exerciseTimeMinutes = exerciseTimeMinutes,
-            stepCount = stepCount,
-            weight = weight,
-            caloriesBurned = caloriesBurned,
+            exerciseTimeMinutes = exerciseTimeMinutes?.toString() ?: "",
+            stepCount = stepCount?.toString() ?: "",
+            weight = weight?.toString() ?: "",
+            caloriesBurned = caloriesBurned?.toString() ?: "",
             dailyNote = dailyNote
         )
     }
