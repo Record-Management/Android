@@ -2,6 +2,7 @@ package see.day.model.calendar
 
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.exercise.ExerciseType
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -56,6 +57,7 @@ data class ExerciseRecordDetail(
     override val createdAt: String,
     override val updatedAt: String,
     override val recordTime: String,
+    val exerciseType: ExerciseType,
     val imageUrls: List<String>,
     val exerciseTimeMinutes: String,
     val stepCount: String,

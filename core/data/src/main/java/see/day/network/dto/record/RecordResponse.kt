@@ -9,6 +9,7 @@ import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.calendar.RecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.exercise.ExerciseType
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -76,6 +77,7 @@ data class ExerciseRecordResponse(
     override val createdAt: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val updatedAt: String,
+    val exerciseType: String,
     val imageUrls: List<String>,
     val exerciseTimeMinutes: Int? = null,
     val stepCount: Int? = null,
@@ -92,6 +94,7 @@ data class ExerciseRecordResponse(
             createdAt = createdAt,
             updatedAt = updatedAt,
             recordTime = recordTime,
+            exerciseType = ExerciseType.valueOf(exerciseType),
             imageUrls = imageUrls,
             exerciseTimeMinutes = exerciseTimeMinutes?.toString() ?: "",
             stepCount = stepCount?.toString() ?: "",
