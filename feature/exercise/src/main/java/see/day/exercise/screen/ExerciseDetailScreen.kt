@@ -30,6 +30,7 @@ import see.day.designsystem.theme.gray60
 import see.day.exercise.R
 import see.day.exercise.component.ExerciseSelectBottomSheet
 import see.day.exercise.component.ExerciseTitle
+import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
 import see.day.exercise.util.ExerciseRecordPostType
@@ -45,11 +46,26 @@ import see.day.ui.topbar.DetailRecordTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExerciseDetailScreenRoot(editType: ExerciseRecordPostType, viewModel: ExerciseDetailViewModel = hiltViewModel()) {
+fun ExerciseDetailScreenRoot(
+    viewModel: ExerciseDetailViewModel = hiltViewModel(),
+    editType: ExerciseRecordPostType,
+    onClickPopHome: (Boolean) -> Unit
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(editType) {
         viewModel.fetchData(editType)
+    }
+
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when(effect) {
+                is ExerciseDailyUiEffect.OnPopHome -> {
+                    onClickPopHome(effect.isUpdated)
+                }
+            }
+        }
     }
 
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
