@@ -18,6 +18,7 @@ import see.day.datastore.DataStoreDataSource
 import see.day.network.AuthService
 import see.day.network.CalendarService
 import see.day.network.DailyRecordService
+import see.day.network.ExerciseRecordService
 import see.day.network.PhotoService
 import see.day.network.RecordService
 import see.day.network.UserService
@@ -39,7 +40,7 @@ class ApiModule {
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
-        explicitNulls = true
+        explicitNulls = false
     }
 
     @Provides
@@ -142,5 +143,11 @@ class ApiModule {
     @Singleton
     fun provideRecordService(@Main retrofit: Retrofit) : RecordService {
         return retrofit.create(RecordService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideExerciseRecordService(@Main retrofit: Retrofit) : ExerciseRecordService {
+        return retrofit.create(ExerciseRecordService::class.java)
     }
 }
