@@ -21,13 +21,16 @@ fun NavController.navigateExerciseWrite(exerciseType: ExerciseType, navOptions: 
     navigate(ExerciseWrite(exerciseType), navOptions)
 }
 
-fun NavGraphBuilder.exerciseNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit, onBack: () -> Unit, onClickExerciseType: (ExerciseType) -> Unit) {
+fun NavGraphBuilder.exerciseNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit, onBack: () -> Unit, onClickExerciseType: (ExerciseType) -> Unit, onClickPopHome: (Boolean) -> Unit) {
     composable<ExerciseSelect> {
         ExerciseSelectScreenRoot(onClickChangeRecordType = onClickChangeRecordType, onBack = onBack, onClickExerciseType = onClickExerciseType)
     }
 
     composable<ExerciseWrite> { navBackStackEntry ->
         val exerciseType = navBackStackEntry.toRoute<ExerciseWrite>().exerciseType
-        ExerciseDetailScreenRoot(ExerciseRecordPostType.Write(exerciseType))
+        ExerciseDetailScreenRoot(
+            editType = ExerciseRecordPostType.Write(exerciseType),
+            onClickPopHome = onClickPopHome
+        )
     }
 }

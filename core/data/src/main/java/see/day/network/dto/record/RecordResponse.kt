@@ -9,6 +9,7 @@ import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.calendar.RecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.exercise.ExerciseType
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -18,6 +19,7 @@ sealed class RecordResponse {
     abstract val id: String
     abstract val type: String
     abstract val recordDate: String
+    abstract val recordTime: String
     abstract val createdAt: String
     abstract val updatedAt: String
 
@@ -32,7 +34,7 @@ data class DailyRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val recordDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val recordTime: String,
+    override val recordTime: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val createdAt: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
@@ -70,15 +72,17 @@ data class ExerciseRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val recordDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val recordTime: String? = null,
+    override val recordTime: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val createdAt: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val updatedAt: String,
+    val exerciseType: String,
     val imageUrls: List<String>,
-    val exerciseTimeMinutes: Int,
-    val stepCount: Int,
-    val weight: Float,
+    val exerciseTimeMinutes: Int? = null,
+    val stepCount: Int? = null,
+    val caloriesBurned: Int? = null,
+    val weight: Float? = null,
     val dailyNote: String
 ) : RecordResponse() {
 
@@ -90,10 +94,12 @@ data class ExerciseRecordResponse(
             createdAt = createdAt,
             updatedAt = updatedAt,
             recordTime = recordTime,
+            exerciseType = ExerciseType.valueOf(exerciseType),
             imageUrls = imageUrls,
-            exerciseTimeMinutes = exerciseTimeMinutes,
-            stepCount = stepCount,
-            weight = weight,
+            exerciseTimeMinutes = exerciseTimeMinutes?.toString() ?: "",
+            stepCount = stepCount?.toString() ?: "",
+            weight = weight?.toString() ?: "",
+            caloriesBurned = caloriesBurned?.toString() ?: "",
             dailyNote = dailyNote
         )
     }

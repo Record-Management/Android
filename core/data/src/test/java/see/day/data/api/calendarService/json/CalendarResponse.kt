@@ -50,7 +50,7 @@ val getDetailRecordsResponse = """
                 "id": "660e8400-e29b-41d4-a716-446655440001",
                 "type": "EXERCISE",
                 "recordDate": [2025,1,7],
-                "recordTime": null,
+                "recordTime": [15, 21],
                 "createdAt": [2025,1,7,16,30,0],
                 "updatedAt": [2025,1,7,16,30,0],
                 "imageUrls": [ ],
@@ -58,6 +58,7 @@ val getDetailRecordsResponse = """
                 "exerciseTimeMinutes": 30,
                 "stepCount": 5000,
                 "weight": 70.5,
+                "caloriesBurned": 300,
                 "dailyNote": "오늘 운동 너무 힘들었지만 뿌듯해요!"
             }
         ]

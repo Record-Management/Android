@@ -13,6 +13,7 @@ object ApiTestUtils {
     private val json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
+        explicitNulls = false
     }
 
     private val converterFactory = json.asConverterFactory("application/json".toMediaType())
