@@ -11,6 +11,7 @@ import record.daily.login.navigation.navigateLogin
 import see.day.daily.navigation.navigateDaily
 import see.day.daily.navigation.navigateDailyDetail
 import see.day.exercise.navigation.navigateExercise
+import see.day.exercise.navigation.navigateExerciseDetail
 import see.day.home.navigation.navigateHome
 import see.day.main.navigation.graph.navigateHabit
 import see.day.main.navigation.graph.navigateSchedule
@@ -77,7 +78,7 @@ class NavigationState(
                 navController.navigateDailyDetail(recordId)
             }
             RecordType.EXERCISE -> {
-
+                navController.navigateExerciseDetail(recordId)
             }
             RecordType.HABIT -> {
 

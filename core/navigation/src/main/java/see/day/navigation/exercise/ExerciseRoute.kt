@@ -10,4 +10,7 @@ sealed interface ExerciseRoute {
 
     @Serializable
     data class ExerciseWrite(val exerciseType: ExerciseType) : ExerciseRoute
+
+    @Serializable
+    data class ExerciseDetail(val recordId: String) : ExerciseRoute
 }
