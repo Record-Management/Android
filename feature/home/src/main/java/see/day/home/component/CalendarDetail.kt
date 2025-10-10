@@ -18,6 +18,7 @@ import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.component.record.overview.DailyRecordOverview
+import see.day.ui.component.record.overview.ExerciseRecordOverview
 
 @Composable
 fun CalendarDetail(
@@ -52,7 +53,10 @@ fun CalendarDetail(
                         )
                     }
                     is ExerciseRecordDetail -> {
-                        Text(record.toString())
+                        ExerciseRecordOverview(
+                            exerciseRecord = record,
+                            onClickItem = onClickOverview
+                        )
                     }
                 }
 

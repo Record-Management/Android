@@ -64,4 +64,17 @@ data class ExerciseRecordDetail(
     val weight: String,
     val caloriesBurned: String,
     val dailyNote: String
-) : RecordDetail()
+) : RecordDetail() {
+    fun formatTimeTo12Hour(): String {
+        val parts = recordTime.split(":")
+        val hour = parts[0].toInt()
+        val minute = parts[1]
+
+        return when {
+            hour == 0 -> "오전 12:$minute"
+            hour < 12 -> "오전 $hour:$minute"
+            hour == 12 -> "오후 12:$minute"
+            else -> "오후 ${hour - 12}:$minute"
+        }
+    }
+}

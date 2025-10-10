@@ -10,4 +10,6 @@
     <string name="daily_place_holder">나의 하루는 어땠나요?</string>
     <string name="add_photo_description">+사진 올리기></string>
     <string name="write_record_text">작성하기</string>
+    <string name="detail_stat_title">세부 기록</string>
+    <string name="exercise_record_title">운동 기록</string>
 </resources>
