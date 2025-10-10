@@ -43,6 +43,7 @@ import see.day.ui.textField.HealthStat
 import see.day.ui.textField.HealthStatInputField
 import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
+import see.day.ui.topbar.EditMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,7 +98,14 @@ internal fun ExerciseDetailScreen(
         modifier = modifier.systemBarsPadding(),
         topBar = {
             DetailRecordTopBar(
-                recordType = RecordType.EXERCISE, onClickCloseButton = {})
+                recordType = RecordType.EXERCISE,
+                editMode = when(uiState.editMode) {
+                    ExerciseDetailUiState.EditMode.Create -> EditMode.ADD
+                    is ExerciseDetailUiState.EditMode.Edit -> EditMode.UPDATE
+                },
+                onClickCloseButton = {},
+                onClickDeleteButton = {}
+            )
         }
     ) { innerPadding ->
         Column(
