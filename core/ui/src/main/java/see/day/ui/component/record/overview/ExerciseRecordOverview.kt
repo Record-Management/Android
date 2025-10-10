@@ -44,19 +44,21 @@ fun ExerciseRecordOverview(
             exerciseType = exerciseRecord.exerciseType,
             caloriesBurned = exerciseRecord.caloriesBurned,
         )
-        Spacer(modifier = modifier
-            .padding(top = 16.dp)
-            .height(1.dp)
-            .fillMaxWidth()
-            .background(gray30))
-        if (exerciseRecord.weight.isNotEmpty() || exerciseRecord.exerciseTimeMinutes.isNotEmpty() || exerciseRecord.stepCount.isNotEmpty()) {
-            ExerciseDetailStats(modifier = modifier.padding(top = 16.dp),weight = exerciseRecord.weight, exerciseTime = exerciseRecord.exerciseTimeMinutes, stepCount = exerciseRecord.stepCount)
-        }
-        Spacer(modifier = modifier
-            .padding(top = 16.dp)
-            .height(1.dp)
-            .fillMaxWidth()
-            .background(gray30))
+        Spacer(
+            modifier = modifier
+                .padding(top = 16.dp)
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(gray30)
+        )
+        ExerciseDetailStats(modifier = modifier.padding(top = 16.dp), weight = exerciseRecord.weight, exerciseTime = exerciseRecord.exerciseTimeMinutes, stepCount = exerciseRecord.stepCount)
+        Spacer(
+            modifier = modifier
+                .padding(top = 16.dp)
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(gray30)
+        )
 
         ExerciseDailyNote(
             modifier = Modifier.padding(top = 16.dp),
