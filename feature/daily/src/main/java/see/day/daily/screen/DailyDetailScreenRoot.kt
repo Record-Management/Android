@@ -42,6 +42,7 @@ import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
 import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
+import see.day.ui.topbar.EditMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,7 +125,12 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
             DetailRecordTopBar(
                 modifier = modifier,
                 recordType = RecordType.DAILY,
-                onClickCloseButton = onClickBackButton
+                editMode = when(uiState.editMode) {
+                    DailyDetailUiState.EditMode.Create -> EditMode.ADD
+                    is DailyDetailUiState.EditMode.Edit -> EditMode.UPDATE
+                },
+                onClickCloseButton = onClickBackButton,
+                onClickDeleteButton = {}
             )
         }
     ) { innerPadding ->
