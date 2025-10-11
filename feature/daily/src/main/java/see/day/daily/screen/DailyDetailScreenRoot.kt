@@ -38,6 +38,7 @@ import see.day.designsystem.theme.gray60
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.button.CompleteButton
+import see.day.ui.dialog.DeleteRecordDialog
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
 import see.day.ui.textField.RecordWriteTextField
@@ -92,6 +93,19 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             }
         )
     }
+
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        DeleteRecordDialog(
+            onDismiss = { openDeleteDialog = false },
+            onClickDeleteButton = {
+                val editMode = uiState.editMode
+                if (editMode is DailyDetailUiState.EditMode.Edit) {
+                    viewModel.onEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
+                }
+            }
+        )
+    }
     val onClickChangeEmotion: (DailyEmotion) -> Unit = { emotion ->
         viewModel.onEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
     }
@@ -109,13 +123,14 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         modifier = modifier,
         uiState = uiState,
         onClickBackButton = { openBackDialog = true },
+        onClickDeleteButton = { openDeleteDialog = true },
         onClickEmotion = { openSelectEmotionDialog = true },
         uiEvent = viewModel::onEvent
     )
 }
 
 @Composable
-internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickEmotion: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickDeleteButton: () -> Unit, onClickEmotion: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
     Scaffold(
         modifier = modifier
@@ -125,12 +140,12 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
             DetailRecordTopBar(
                 modifier = modifier,
                 recordType = RecordType.DAILY,
-                editMode = when(uiState.editMode) {
+                editMode = when (uiState.editMode) {
                     DailyDetailUiState.EditMode.Create -> EditMode.ADD
                     is DailyDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = {}
+                onClickDeleteButton = onClickDeleteButton
             )
         }
     ) { innerPadding ->
@@ -199,6 +214,7 @@ private fun DailyDetailWriteScreen() {
     SeeDayTheme {
         DailyDetailScreen(
             onClickBackButton = { },
+            onClickDeleteButton = {},
             onClickEmotion = { },
             uiState = DailyDetailUiState.init,
             uiEvent = {}
