@@ -9,4 +9,6 @@ interface DailyRecordRepository {
     suspend fun insertRecord(dailyRecordInput: DailyRecordInput): Result<DailyRecordDetail>
 
     suspend fun updateRecord(dailyRecordEdit: DailyRecordEdit) : Result<DailyRecordDetail>
+
+    suspend fun deleteRecord(recordId: String) : Result<Unit>
 }

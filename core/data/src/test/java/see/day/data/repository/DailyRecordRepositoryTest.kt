@@ -97,4 +97,28 @@ class DailyRecordRepositoryTest {
             verify(dailyRecordService).postDailyRecord(any())
         }
     }
+
+    @Test
+    fun givenRecordId_whenDelete_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "!23123"
+
+            whenever(dailyRecordService.deleteDailyRecord(recordId)).thenReturn(
+                CommonResponse(
+                    200,
+                    "S200",
+                    "하루 기록이 정상적으로 삭제되었습니다",
+                    null
+                )
+            )
+
+            // when
+            val result = sut.deleteRecord(recordId).getOrThrow()
+
+            // then
+            assertEquals(Unit, result)
+            verify(dailyRecordService).deleteDailyRecord(recordId)
+        }
+    }
 }
