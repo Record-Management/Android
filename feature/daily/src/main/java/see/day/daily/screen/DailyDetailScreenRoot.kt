@@ -66,7 +66,11 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     BackHandler {
-        openBackDialog = true
+        if (uiState.isEditing()) {
+            openBackDialog = true
+        } else {
+            onClickPopHome(false)
+        }
     }
     if (openBackDialog) {
         RecordDetailBackDialog(
@@ -144,7 +148,13 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                     DailyDetailUiState.EditMode.Create -> EditMode.ADD
                     is DailyDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
-                onClickCloseButton = onClickBackButton,
+                onClickCloseButton = {
+                    if (uiState.isEditing()) {
+                        onClickBackButton()
+                    } else {
+                        uiEvent(DailyDetailUiEvent.OnPopHome)
+                    }
+                },
                 onClickDeleteButton = onClickDeleteButton
             )
         }

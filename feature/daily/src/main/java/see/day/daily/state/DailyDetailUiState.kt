@@ -18,15 +18,15 @@ data class DailyDetailUiState(
         data class Edit(val originalRecord: DailyRecordInput, val recordId: String) : EditMode()
     }
 
-    val canSubmit: Boolean = when (editMode) {
+    val canSubmit: Boolean = isEditing() && text.isNotEmpty()
+
+    fun isEditing(): Boolean = when (editMode) {
         is EditMode.Create -> text.isNotEmpty()
         is EditMode.Edit -> {
             val original = editMode.originalRecord
-            (
-                emotion != original.emotion ||
-                    text != original.content ||
-                    photos != original.imageUrls
-                ) && text.isNotEmpty()
+            emotion != original.emotion ||
+                text != original.content ||
+                photos != original.imageUrls
         }
     }
 
