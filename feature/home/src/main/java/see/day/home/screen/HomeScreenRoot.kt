@@ -90,6 +90,7 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
                 is HomeUiEffect.OnGoDetailRecord -> {
                     onClickDetailRecord(effect.recordType, effect.recordId)
                 }
+
                 is HomeUiEffect.OnGoSetting -> {
                     onClickSetting()
                 }
@@ -132,21 +133,29 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     }
 
     LaunchedEffect(bottomSheetState) {
-        snapshotFlow { bottomSheetState.requireOffset() }
-            .collect { offset ->
-                // 최초 수집 시 최소/최대 값 기억
-                if (bottomSheetStateMinOffset == null || offset < bottomSheetStateMinOffset!!) bottomSheetStateMinOffset = offset
-                if (bottomSheetStateMaxOffset == null || offset > bottomSheetStateMaxOffset!!) bottomSheetStateMaxOffset = offset
-
-                val min = bottomSheetStateMinOffset
-                val max = bottomSheetStateMaxOffset
-                if (min != null && max != null) {
-                    // 0f ~ 1f 사이로 정규화해서 알파 계산
-                    topAppBarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
-
-                    floatingButtonPadding = (70f + navigationBarSize.value) * ((offset - min) / (max - min)).coerceIn(0f, 1f)
-                }
+        snapshotFlow {
+            try {
+                bottomSheetState.requireOffset()
+            } catch (e: IllegalStateException) {
+                null
             }
+        }.collect { offset ->
+            if (offset == null) {
+                return@collect
+            }
+            // 최초 수집 시 최소/최대 값 기억
+            if (bottomSheetStateMinOffset == null || offset < bottomSheetStateMinOffset!!) bottomSheetStateMinOffset = offset
+            if (bottomSheetStateMaxOffset == null || offset > bottomSheetStateMaxOffset!!) bottomSheetStateMaxOffset = offset
+
+            val min = bottomSheetStateMinOffset
+            val max = bottomSheetStateMaxOffset
+            if (min != null && max != null) {
+                // 0f ~ 1f 사이로 정규화해서 알파 계산
+                topAppBarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
+
+                floatingButtonPadding = (70f + navigationBarSize.value) * ((offset - min) / (max - min)).coerceIn(0f, 1f)
+            }
+        }
     }
 
     LaunchedEffect(bottomSheetState.currentValue) {
