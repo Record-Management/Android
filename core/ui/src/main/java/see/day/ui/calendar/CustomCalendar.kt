@@ -39,7 +39,7 @@ fun CustomCalendar(
     onClickCell: (Int, Int, Int) -> Unit,
     onSwipeCalendar: (Int, Int) -> Unit
 ) {
-    val generateCalendarDay by remember(currentYear, currentMonth) {
+    val generateCalendarDay by remember(currentYear, currentMonth, calendarDayInfo) {
         mutableStateOf(
             generateCalendarDays(currentYear, currentMonth)
         )
