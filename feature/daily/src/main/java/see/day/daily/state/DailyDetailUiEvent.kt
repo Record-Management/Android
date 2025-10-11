@@ -15,4 +15,6 @@ sealed interface DailyDetailUiEvent {
     data class OnRemovePhoto(val photo: String) : DailyDetailUiEvent
 
     data object OnSaveRecord : DailyDetailUiEvent
+
+    data class DeleteRecord(val recordId: String) : DailyDetailUiEvent
 }

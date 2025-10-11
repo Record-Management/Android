@@ -17,6 +17,7 @@ import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
 import see.day.domain.usecase.record.daily.UpdateDailyRecordUseCase
@@ -32,7 +33,8 @@ class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
     private val getDetailRecordUseCase: GetDailyRecordUseCase,
-    private val updateDetailRecordUseCase : UpdateDailyRecordUseCase
+    private val updateDetailRecordUseCase : UpdateDailyRecordUseCase,
+    private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -104,6 +106,9 @@ class DailyDetailViewModel @Inject constructor(
 
             is DailyDetailUiEvent.OnSaveRecord -> {
                 onSaveRecord()
+            }
+            is DailyDetailUiEvent.DeleteRecord -> {
+                onDeleteRecord(uiEvent.recordId)
             }
         }
     }
@@ -214,6 +219,15 @@ class DailyDetailViewModel @Inject constructor(
                     url
                 }
             }.filter { it.isNotEmpty() }
+        }
+    }
+
+    private fun onDeleteRecord(recordId: String) {
+        viewModelScope.launch {
+            deleteDailyRecordUseCase(recordId)
+                .onSuccess {
+                    _uiEffect.emit(DailyDetailUiEffect.OnPopHome(isUpdated = true))
+                }
         }
     }
 }
