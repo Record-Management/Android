@@ -25,4 +25,10 @@ class DailyRecordRepositoryImpl @Inject constructor(
             dailyRecordService.updateDailyRecord(dailyRecordEdit.recordId, dailyRecordEdit.toDto().toRequestBody()).data?.toDailyRecord() ?: throw NoDataException()
         }
     }
+
+    override suspend fun deleteRecord(recordId: String): Result<Unit> {
+        return createResult {
+            dailyRecordService.deleteDailyRecord(recordId)
+        }
+    }
 }
