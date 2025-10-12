@@ -62,7 +62,6 @@ import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
-import see.day.home.util.rememberNavigationBarHeight
 import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
@@ -119,12 +118,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         .asPaddingValues()
     val topPaddingFraction = calculateTopPaddingFraction(configuration.screenHeightDp.dp, statusBarPadding.calculateTopPadding())
 
-    val navigationBarSize = rememberNavigationBarHeight()
-
     var bottomSheetStateMinOffset by remember { mutableStateOf<Float?>(null) }
     var bottomSheetStateMaxOffset by remember { mutableStateOf<Float?>(null) }
     var topAppBarAlpha by remember { mutableStateOf(0f) }
-    var floatingButtonPadding by remember { mutableStateOf(70f + navigationBarSize.value) }
 
     val onDownBottomSheet: () -> Unit = {
         coroutineScope.launch {
@@ -152,8 +148,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             if (min != null && max != null) {
                 // 0f ~ 1f 사이로 정규화해서 알파 계산
                 topAppBarAlpha = 1f - ((offset - min) / (max - min)).coerceIn(0f, 1f)
-
-                floatingButtonPadding = (70f + navigationBarSize.value) * ((offset - min) / (max - min)).coerceIn(0f, 1f)
             }
         }
     }
@@ -192,8 +186,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     bottomSheetContentScroll,
                     bottomSheetState,
                     uiState,
-                    uiEvent,
-                    floatingButtonPadding
+                    uiEvent
                 )
             },
             sheetPeekHeight = bottomSheetMinHeight,
@@ -204,6 +197,23 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             },
             sheetContainerColor = Color.White
         ) { innerPadding ->
+        }
+        FloatingActionButton(
+            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType)) },
+            modifier = modifier
+                .padding(
+                    end = 16.dp, bottom = 20.dp
+                ).systemBarsPadding()
+                .align(Alignment.BottomEnd),
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.image_edit),
+                contentDescription = "추가하기 버튼",
+                modifier = modifier.size(24.dp)
+            )
         }
     }
 }
@@ -217,7 +227,6 @@ private fun HomeBottomSheetContent(
     bottomSheetState: SheetState,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
-    floatingButtonPadding: Float
 ) {
     Column(
         modifier = modifier
@@ -251,23 +260,6 @@ private fun HomeBottomSheetContent(
                     uiEvent(HomeUiEvent.OnClickSelectedDate(year, month))
                 }
             )
-            FloatingActionButton(
-                onClick = { uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType)) },
-                modifier = modifier
-                    .padding(
-                        end = 16.dp, bottom = floatingButtonPadding.dp
-                    )
-                    .align(Alignment.BottomEnd),
-                containerColor = MaterialTheme.colorScheme.primary,
-                shape = CircleShape,
-                elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.image_edit),
-                    contentDescription = "추가하기 버튼",
-                    modifier = modifier.size(24.dp)
-                )
-            }
         }
         Spacer(
             modifier = modifier
