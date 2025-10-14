@@ -36,6 +36,16 @@ data class ExerciseDetailUiState(
         }
     }
 
+    fun isEditing(): Boolean = when(editMode) {
+        is EditMode.Create -> {
+            caloriesBurned.isNotEmpty() || exerciseTimeMinutes.isNotEmpty() || stepCount.isNotEmpty() || weight.isNotEmpty() || dailyNote.isNotEmpty()
+        }
+        is EditMode.Edit -> {
+            val origin = editMode.originalRecord
+            (dailyNote != origin.dailyNote || caloriesBurned != origin.caloriesBurned || exerciseTimeMinutes != origin.exerciseTimeMinutes || stepCount != origin.stepCount)
+        }
+    }
+
     private fun hasExerciseData(): Boolean =
         caloriesBurned.isOverZero() || exerciseTimeMinutes.isOverZero() || stepCount.isOverZero()
 

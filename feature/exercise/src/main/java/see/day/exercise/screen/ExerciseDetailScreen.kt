@@ -1,5 +1,6 @@
 package see.day.exercise.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -38,6 +39,7 @@ import see.day.exercise.viewModel.ExerciseDetailViewModel
 import see.day.model.record.RecordType
 import see.day.model.record.exercise.ExerciseType
 import see.day.ui.button.CompleteButton
+import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
 import see.day.ui.textField.HealthStat
 import see.day.ui.textField.HealthStatInputField
@@ -61,12 +63,47 @@ fun ExerciseDetailScreenRoot(
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
-            when(effect) {
+            when (effect) {
                 is ExerciseDailyUiEffect.OnPopHome -> {
                     onClickPopHome(effect.isUpdated)
                 }
             }
         }
+    }
+
+    var openBackDialog by remember { mutableStateOf(false) }
+
+    BackHandler {
+        if (uiState.isEditing()) {
+            openBackDialog = true
+        } else {
+            onClickPopHome(false)
+        }
+    }
+    if (openBackDialog) {
+        RecordDetailBackDialog(
+            modifier = Modifier,
+            onDismiss = { openBackDialog = false },
+            onBackRecordDetail = { onClickPopHome(false) },
+            title = when (uiState.editMode) {
+                is ExerciseDetailUiState.EditMode.Create -> {
+                    see.day.ui.R.string.record_close_dialog_title
+                }
+
+                is ExerciseDetailUiState.EditMode.Edit -> {
+                    see.day.ui.R.string.record_close_detail_dialog_title
+                }
+            },
+            body = when (uiState.editMode) {
+                is ExerciseDetailUiState.EditMode.Create -> {
+                    see.day.ui.R.string.record_close_dialog_body
+                }
+
+                is ExerciseDetailUiState.EditMode.Edit -> {
+                    see.day.ui.R.string.record_close_detail_dialog_body
+                }
+            }
+        )
     }
 
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
@@ -81,7 +118,18 @@ fun ExerciseDetailScreenRoot(
             }
         )
     }
-    ExerciseDetailScreen(uiState = uiState, uiEvent = viewModel::onEvent, onClickExerciseImage = { openSelectEmotionDialog = true })
+    ExerciseDetailScreen(
+        uiState = uiState,
+        uiEvent = viewModel::onEvent,
+        onClickExerciseImage = { openSelectEmotionDialog = true },
+        onClickBackButton = {
+            if (uiState.isEditing()) {
+                openBackDialog = true
+            } else {
+                onClickPopHome(false)
+            }
+        }
+    )
 }
 
 @Composable
@@ -89,7 +137,8 @@ internal fun ExerciseDetailScreen(
     modifier: Modifier = Modifier,
     uiState: ExerciseDetailUiState,
     uiEvent: (ExerciseDetailUiEvent) -> Unit,
-    onClickExerciseImage: () -> Unit
+    onClickExerciseImage: () -> Unit,
+    onClickBackButton: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -99,11 +148,11 @@ internal fun ExerciseDetailScreen(
         topBar = {
             DetailRecordTopBar(
                 recordType = RecordType.EXERCISE,
-                editMode = when(uiState.editMode) {
+                editMode = when (uiState.editMode) {
                     ExerciseDetailUiState.EditMode.Create -> EditMode.ADD
                     is ExerciseDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
-                onClickCloseButton = {},
+                onClickCloseButton = onClickBackButton,
                 onClickDeleteButton = {}
             )
         }
@@ -207,6 +256,6 @@ internal fun ExerciseDetailScreen(
 @Composable
 private fun ExerciseDetailScreenPreview() {
     SeeDayTheme {
-        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickExerciseImage = {})
+        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickExerciseImage = {}, onClickBackButton = {})
     }
 }
