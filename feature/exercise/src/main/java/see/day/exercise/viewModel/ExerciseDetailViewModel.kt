@@ -14,11 +14,13 @@ import kotlinx.coroutines.launch
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
 import see.day.domain.usecase.record.exercise.InsertExerciseRecordUseCase
+import see.day.domain.usecase.record.exercise.UpdateExerciseRecordUseCase
 import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
 import see.day.exercise.util.ExerciseRecordPostType
 import see.day.model.calendar.ExerciseRecordDetail
+import see.day.model.record.exercise.ExerciseRecordEdit
 import see.day.model.record.exercise.ExerciseRecordInput
 import see.day.model.record.exercise.ExerciseType
 import see.day.model.time.DateTime
@@ -29,7 +31,8 @@ import javax.inject.Inject
 class ExerciseDetailViewModel @Inject constructor(
     val insertPhotosUseCase: InsertPhotosUseCase,
     val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
-    val getRecordDetailUseCase: GetRecordDetailUseCase
+    val getRecordDetailUseCase: GetRecordDetailUseCase,
+    val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ExerciseDetailUiState> = MutableStateFlow(ExerciseDetailUiState.init)
@@ -177,7 +180,9 @@ class ExerciseDetailViewModel @Inject constructor(
                     saveExerciseRecordForCreateMode()
                 }
 
-                is ExerciseDetailUiState.EditMode.Edit -> {}
+                is ExerciseDetailUiState.EditMode.Edit -> {
+                    updateRecord(mode.recordId)
+                }
             }
         }
     }
@@ -208,5 +213,39 @@ class ExerciseDetailViewModel @Inject constructor(
             onSuccess = { _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(true)) },
             onFailure = {}
         )
+    }
+
+    private suspend fun updateRecord(recordId: String) {
+        val urls = processPhotoUrls(uiState.value.imageUrls)
+
+        updateExerciseRecordUseCase(
+            ExerciseRecordEdit(
+                recordId,
+                exerciseType = uiState.value.exerciseType,
+                caloriesBurned = uiState.value.caloriesBurned,
+                exerciseTimeMinutes = uiState.value.exerciseTimeMinutes,
+                stepCount = uiState.value.stepCount,
+                weight = uiState.value.weight,
+                dailyNote = uiState.value.dailyNote,
+                imageUrls = urls,
+                recordTime = uiState.value.recordDate.formatTime(),
+            )
+        ).onSuccess {
+            _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(true))
+        }
+    }
+
+    private suspend fun processPhotoUrls(photoUrls: List<String>): List<String> {
+        return if (photoUrls.all { it.contains("http") }) {
+            photoUrls
+        } else {
+            photoUrls.map { url ->
+                if (url.contains("content")) {
+                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                } else {
+                    url
+                }
+            }.filter { it.isNotEmpty() }
+        }
     }
 }
