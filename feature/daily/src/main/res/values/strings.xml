@@ -4,5 +4,4 @@
     <string name="change_record_type">기록 방식을 바꿀래요</string>
     <string name="record_daily_place_holder">나의 하루는 어땠나요?</string>
     <string name="photo_limit_text">*최대 3장 가능</string>
-    <string name="modifiy_record_text">수정하기</string>
 </resources>

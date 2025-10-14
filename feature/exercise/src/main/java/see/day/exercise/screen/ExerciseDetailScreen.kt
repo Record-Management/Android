@@ -239,7 +239,15 @@ internal fun ExerciseDetailScreen(
                     .padding(top = 80.dp)
                     .systemBarsPadding(),
                 text = stringResource(
-                    see.day.ui.R.string.write_record_text
+                    when(uiState.editMode) {
+                        is ExerciseDetailUiState.EditMode.Create -> {
+                            see.day.ui.R.string.write_record_text
+                        }
+                        is ExerciseDetailUiState.EditMode.Edit -> {
+                            see.day.ui.R.string.modifiy_record_text
+                        }
+                    }
+
                 ),
                 isEnabled = uiState.canSubmit,
                 onClick = {

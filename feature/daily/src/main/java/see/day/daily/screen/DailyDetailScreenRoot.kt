@@ -205,7 +205,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                         }
 
                         is DailyDetailUiState.EditMode.Edit -> {
-                            R.string.modifiy_record_text
+                            see.day.ui.R.string.modifiy_record_text
                         }
                     }
                 ),
