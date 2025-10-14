@@ -19,6 +19,7 @@ import see.day.mapper.record.toDto
 import see.day.model.exception.BadRequestException
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.daily.DailyRecordEdit
 import see.day.model.time.DateTime
 import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.DailyRecordService
@@ -46,7 +47,7 @@ class DailyRecordRepositoryTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
             val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, timeFormatter, listOf())
-            val registeredDailyRecordResponse = DailyRecordResponse(id = "", type = "DAILY", emotion = "Sad", recordTime =  "", imageUrls = listOf(), content =  "", createdAt =  "", updatedAt =  "", recordDate = "")
+            val registeredDailyRecordResponse = DailyRecordResponse(id = "", type = "DAILY", emotion = "Sad", recordTime = "", imageUrls = listOf(), content = "", createdAt = "", updatedAt = "", recordDate = "")
 
             whenever(dailyRecordService.postDailyRecord(dailyRecordInput.toDto())).thenReturn(
                 CommonResponse(
@@ -96,6 +97,31 @@ class DailyRecordRepositoryTest {
 
             // then
             verify(dailyRecordService).postDailyRecord(dailyRecordInput.toDto())
+        }
+    }
+
+    @Test
+    fun givenRecordEditForm_whenUpdate_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123123"
+            val dailyRecordEdit = DailyRecordEdit(recordId, "",DailyEmotion.Sad, listOf())
+            val dailyRecordResponse = DailyRecordResponse(id = "", type = "DAILY", emotion = "Sad", recordTime = "", imageUrls = listOf(), content = "", createdAt = "", updatedAt = "", recordDate = "")
+
+            whenever(dailyRecordService.updateDailyRecord(recordId, dailyRecordEdit.toDto())).thenReturn(
+                CommonResponse(
+                    200,
+                    "S200",
+                    "하루 기록이 성공적으로 수정되었습니다.",
+                    dailyRecordResponse
+                )
+            )
+
+            // when
+            val result = sut.updateRecord(dailyRecordEdit).getOrThrow()
+
+            // then
+            verify(dailyRecordService).updateDailyRecord(recordId, dailyRecordEdit.toDto())
         }
     }
 

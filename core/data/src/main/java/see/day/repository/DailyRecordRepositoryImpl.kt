@@ -22,7 +22,7 @@ class DailyRecordRepositoryImpl @Inject constructor(
 
     override suspend fun updateRecord(dailyRecordEdit: DailyRecordEdit) : Result<DailyRecordDetail> {
         return createResult {
-            dailyRecordService.updateDailyRecord(dailyRecordEdit.recordId, dailyRecordEdit.toDto().toRequestBody()).data?.toDailyRecord() ?: throw NoDataException()
+            dailyRecordService.updateDailyRecord(dailyRecordEdit.recordId, dailyRecordEdit.toDto()).data?.toDailyRecord() ?: throw NoDataException()
         }
     }
 
