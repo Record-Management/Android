@@ -79,20 +79,20 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             onBackRecordDetail = { onClickPopHome(false) },
             title = when (uiState.editMode) {
                 is DailyDetailUiState.EditMode.Create -> {
-                    R.string.record_close_dialog_title
+                    see.day.ui.R.string.record_close_dialog_title
                 }
 
                 is DailyDetailUiState.EditMode.Edit -> {
-                    R.string.record_close_detail_dialog_title
+                    see.day.ui.R.string.record_close_detail_dialog_title
                 }
             },
             body = when (uiState.editMode) {
                 is DailyDetailUiState.EditMode.Create -> {
-                    R.string.record_close_dialog_body
+                    see.day.ui.R.string.record_close_dialog_body
                 }
 
                 is DailyDetailUiState.EditMode.Edit -> {
-                    R.string.record_close_detail_dialog_body
+                    see.day.ui.R.string.record_close_detail_dialog_body
                 }
             }
         )
@@ -126,7 +126,13 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
     DailyDetailScreen(
         modifier = modifier,
         uiState = uiState,
-        onClickBackButton = { openBackDialog = true },
+        onClickBackButton = {
+            if (uiState.isEditing()) {
+                openBackDialog = true
+            } else {
+                onClickPopHome(false)
+            }
+        },
         onClickDeleteButton = { openDeleteDialog = true },
         onClickEmotion = { openSelectEmotionDialog = true },
         uiEvent = viewModel::onEvent
@@ -148,13 +154,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                     DailyDetailUiState.EditMode.Create -> EditMode.ADD
                     is DailyDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
-                onClickCloseButton = {
-                    if (uiState.isEditing()) {
-                        onClickBackButton()
-                    } else {
-                        uiEvent(DailyDetailUiEvent.OnPopHome)
-                    }
-                },
+                onClickCloseButton = onClickBackButton,
                 onClickDeleteButton = onClickDeleteButton
             )
         }
