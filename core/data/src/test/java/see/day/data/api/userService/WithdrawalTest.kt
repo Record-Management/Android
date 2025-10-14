@@ -53,7 +53,7 @@ class WithdrawalTest {
         )
 
         // when
-        val response = sut.deleteUser(DeleteUserRequest("").toRequestBody())
+        val response = sut.deleteUser(DeleteUserRequest(""))
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

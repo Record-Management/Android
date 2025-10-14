@@ -18,7 +18,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun onboardComplete(onboardingComplete: OnboardingComplete): Result<Unit> {
         return createResult {
-            userService.postOnboardComplete(onboardingComplete.toDto().toRequestBody())
+            userService.postOnboardComplete(onboardingComplete.toDto())
         }
     }
 
@@ -30,7 +30,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun deleteUser(): Result<Unit> {
         return createResult {
-            userService.deleteUser(DeleteUserRequest("테스트용도").toRequestBody())
+            userService.deleteUser(DeleteUserRequest("테스트용도"))
             dataSource.clearData()
         }.onFailure {
             dataSource.clearData()
