@@ -16,7 +16,7 @@ class DailyRecordRepositoryImpl @Inject constructor(
 
     override suspend fun insertRecord(dailyRecordInput: DailyRecordInput): Result<DailyRecordDetail> {
         return createResult {
-            dailyRecordService.postDailyRecord(dailyRecordInput.toDto().toRequestBody()).data?.toDailyRecord() ?: throw NoDataException()
+            dailyRecordService.postDailyRecord(dailyRecordInput.toDto()).data?.toDailyRecord() ?: throw NoDataException()
         }
     }
 

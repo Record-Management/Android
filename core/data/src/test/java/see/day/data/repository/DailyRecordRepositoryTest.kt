@@ -15,6 +15,7 @@ import org.mockito.kotlin.whenever
 import retrofit2.HttpException
 import retrofit2.Response
 import see.day.domain.repository.DailyRecordRepository
+import see.day.mapper.record.toDto
 import see.day.model.exception.BadRequestException
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
@@ -47,7 +48,7 @@ class DailyRecordRepositoryTest {
             val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, timeFormatter, listOf())
             val registeredDailyRecordResponse = DailyRecordResponse(id = "", type = "DAILY", emotion = "Sad", recordTime =  "", imageUrls = listOf(), content =  "", createdAt =  "", updatedAt =  "", recordDate = "")
 
-            whenever(dailyRecordService.postDailyRecord(any())).thenReturn(
+            whenever(dailyRecordService.postDailyRecord(dailyRecordInput.toDto())).thenReturn(
                 CommonResponse(
                     201,
                     "S201",
@@ -63,7 +64,7 @@ class DailyRecordRepositoryTest {
             assertEquals(dailyRecordInput.content, result.content)
             assertEquals(dailyRecordInput.imageUrls, result.imageUrls)
 
-            verify(dailyRecordService).postDailyRecord(any())
+            verify(dailyRecordService).postDailyRecord(dailyRecordInput.toDto())
         }
     }
 
@@ -74,7 +75,7 @@ class DailyRecordRepositoryTest {
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
             val dailyRecordInput = DailyRecordInput("", DailyEmotion.Sad, timeFormatter, listOf())
 
-            whenever(dailyRecordService.postDailyRecord(any())).thenThrow(
+            whenever(dailyRecordService.postDailyRecord(dailyRecordInput.toDto())).thenThrow(
                 HttpException(
                     Response.error<Any?>(
                         400,
@@ -94,7 +95,7 @@ class DailyRecordRepositoryTest {
             }
 
             // then
-            verify(dailyRecordService).postDailyRecord(any())
+            verify(dailyRecordService).postDailyRecord(dailyRecordInput.toDto())
         }
     }
 
