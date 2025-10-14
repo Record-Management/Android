@@ -4,6 +4,7 @@ import see.day.domain.repository.ExerciseRecordRepository
 import see.day.mapper.record.toDto
 import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.exception.NoDataException
+import see.day.model.record.exercise.ExerciseRecordEdit
 import see.day.model.record.exercise.ExerciseRecordInput
 import see.day.network.ExerciseRecordService
 import see.day.utils.ErrorUtils.createResult
@@ -16,6 +17,12 @@ class ExerciseRecordRepositoryImpl @Inject constructor(
     override suspend fun insertExerciseRecord(exerciseRecordInput: ExerciseRecordInput): Result<ExerciseRecordDetail> {
         return createResult {
             exerciseRecordService.postExerciseRecord(exerciseRecordInput.toDto()).data?.toExerciseRecord() ?: throw NoDataException()
+        }
+    }
+
+    override suspend fun updateExerciseRecord(exerciseRecordEdit: ExerciseRecordEdit): Result<ExerciseRecordDetail> {
+        return createResult {
+            exerciseRecordService.updateExerciseRecord(exerciseRecordEdit.recordId, exerciseRecordEdit.toDto()).data?.toExerciseRecord() ?: throw NoDataException()
         }
     }
 }
