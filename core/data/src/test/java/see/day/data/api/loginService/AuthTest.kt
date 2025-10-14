@@ -63,7 +63,7 @@ class AuthTest {
         )
 
         // when
-        val response = sut.signIn(loginRequest.toRequestBody())
+        val response = sut.signIn(loginRequest)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
@@ -97,7 +97,7 @@ class AuthTest {
         )
 
         // when
-        val response = sut.signIn(loginRequest.toRequestBody())
+        val response = sut.signIn(loginRequest)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

@@ -65,7 +65,7 @@ class PostDailyRecordTest {
         )
 
         // when
-        val response = sut.postDailyRecord(dailyRecordInput.toDto().toRequestBody())
+        val response = sut.postDailyRecord(dailyRecordInput.toDto())
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
@@ -95,7 +95,7 @@ class PostDailyRecordTest {
         assertThrows(BadRequestException::class.java) {
             runBlocking {
                 createResult {
-                    sut.postDailyRecord(dailyRecordInput.toDto().toRequestBody())
+                    sut.postDailyRecord(dailyRecordInput.toDto())
                 }.onFailure {
                     assertEquals("하루에 등록할 수 있는 일상 기록은 최대 2개입니다.", it.message)
                 }.getOrThrow()

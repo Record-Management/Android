@@ -25,7 +25,7 @@ class TokenAuthenticator @Inject constructor(
             runCatching {
                 val refreshToken = dataStore.getRefreshToken().first() ?: throw IllegalStateException("Refresh token is null")
 
-                val tokenResponse = authService.refresh(RefreshTokenRequest(refreshToken).toRequestBody())
+                val tokenResponse = authService.refresh(RefreshTokenRequest(refreshToken))
                 if (tokenResponse.statusCode != 200 && tokenResponse.data == null) {
                     throw IllegalStateException("refreshToken 발급 실패")
                 }

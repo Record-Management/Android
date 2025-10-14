@@ -32,7 +32,7 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun login(socialLogin: SocialLogin): Result<AppStartState> {
         return createResult {
-            val result = authService.signIn(socialLogin.toDto().toRequestBody()).data ?: throw NoDataException()
+            val result = authService.signIn(socialLogin.toDto()).data ?: throw NoDataException()
 
             withContext(Dispatchers.IO) {
                 dataSource.saveAccessToken(result.accessToken)
@@ -56,7 +56,7 @@ class LoginRepositoryImpl @Inject constructor(
             }
             val logoutRequest = LogoutRequest(refreshToken, allDevices)
 
-            authService.logout(requestBody = logoutRequest.toRequestBody())
+            authService.logout(logoutRequest = logoutRequest)
             dataSource.clearData()
         }.onFailure {
             dataSource.clearData()
@@ -78,7 +78,7 @@ class LoginRepositoryImpl @Inject constructor(
 
             val refreshToken = RefreshTokenRequest(refreshTokenValue)
 
-            runCatching { authService.refresh(refreshToken.toRequestBody()) }
+            runCatching { authService.refresh(refreshToken) }
                 .onSuccess { result ->
                     val response = result.data
                     if(response == null) {

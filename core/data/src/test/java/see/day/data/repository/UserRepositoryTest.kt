@@ -17,11 +17,13 @@ import retrofit2.HttpException
 import retrofit2.Response
 import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.UserRepository
+import see.day.mapper.toDto
 import see.day.model.exception.BadRequestException
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.network.UserService
 import see.day.network.dto.CommonResponse
+import see.day.network.dto.auth.DeleteUserRequest
 import see.day.network.dto.toResponseBody
 import see.day.network.dto.user.FullUserResponse
 import see.day.repository.UserRepositoryImpl
@@ -72,7 +74,7 @@ class UserRepositoryTest {
                 )
             )
 
-            whenever(userService.postOnboardComplete(any())).thenReturn(
+            whenever(userService.postOnboardComplete(request.toDto())).thenReturn(
                 response
             )
 
@@ -80,7 +82,7 @@ class UserRepositoryTest {
             val result = sut.onboardComplete(request).getOrThrow()
 
             // then
-            verify(userService).postOnboardComplete(any())
+            verify(userService).postOnboardComplete(request.toDto())
         }
     }
 
@@ -123,14 +125,15 @@ class UserRepositoryTest {
     fun given_whenDeleteUser_thenClearData() {
         runTest {
             // given
-            whenever(userService.deleteUser(any())).thenReturn(Unit)
+            val deleteUserRequest = DeleteUserRequest("테스트용도")
+            whenever(userService.deleteUser(deleteUserRequest)).thenReturn(Unit)
             whenever(dataSource.clearData()).thenReturn(Unit)
 
             // when
             val result = sut.deleteUser().getOrThrow()
 
             // then
-            verify(userService).deleteUser(any())
+            verify(userService).deleteUser(deleteUserRequest)
             verify(dataSource).clearData()
         }
     }
@@ -139,7 +142,8 @@ class UserRepositoryTest {
     fun given_whenDeleteUserThrowException_thenClearData() {
         runTest {
             // given
-            whenever(userService.deleteUser(any())).thenThrow(
+            val deleteUserRequest = DeleteUserRequest("테스트용도")
+            whenever(userService.deleteUser(deleteUserRequest)).thenThrow(
                 HttpException(
                 Response.error<Any?>(
                     400,
@@ -157,7 +161,7 @@ class UserRepositoryTest {
             }
 
             // then
-            verify(userService).deleteUser(any())
+            verify(userService).deleteUser(deleteUserRequest)
             verify(dataSource).clearData()
         }
     }

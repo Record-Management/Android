@@ -16,13 +16,13 @@ class DailyRecordRepositoryImpl @Inject constructor(
 
     override suspend fun insertRecord(dailyRecordInput: DailyRecordInput): Result<DailyRecordDetail> {
         return createResult {
-            dailyRecordService.postDailyRecord(dailyRecordInput.toDto().toRequestBody()).data?.toDailyRecord() ?: throw NoDataException()
+            dailyRecordService.postDailyRecord(dailyRecordInput.toDto()).data?.toDailyRecord() ?: throw NoDataException()
         }
     }
 
     override suspend fun updateRecord(dailyRecordEdit: DailyRecordEdit) : Result<DailyRecordDetail> {
         return createResult {
-            dailyRecordService.updateDailyRecord(dailyRecordEdit.recordId, dailyRecordEdit.toDto().toRequestBody()).data?.toDailyRecord() ?: throw NoDataException()
+            dailyRecordService.updateDailyRecord(dailyRecordEdit.recordId, dailyRecordEdit.toDto()).data?.toDailyRecord() ?: throw NoDataException()
         }
     }
 

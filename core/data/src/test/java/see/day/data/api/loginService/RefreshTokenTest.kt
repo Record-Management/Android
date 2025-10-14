@@ -56,7 +56,7 @@ class RefreshTokenTest {
                 .setBody(responseJson)
         )
         // when
-        val response = sut.refresh(refreshToken.toRequestBody())
+        val response = sut.refresh(refreshToken)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

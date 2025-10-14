@@ -64,7 +64,7 @@ class UpdateDailyRecordTest {
         )
 
         // when
-        val response = sut.updateDailyRecord(recordId,dailyRecordEdit.toRequestBody())
+        val response = sut.updateDailyRecord(recordId,dailyRecordEdit)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
@@ -95,7 +95,7 @@ class UpdateDailyRecordTest {
         assertThrows(BadRequestException::class.java) {
             runBlocking {
                 createResult {
-                    sut.updateDailyRecord(recordId,dailyRecordEdit.toRequestBody())
+                    sut.updateDailyRecord(recordId,dailyRecordEdit)
                 }.onFailure {
                     assertEquals("입력값을 확인해주세요.", it.message)
                 }.getOrThrow()
@@ -120,7 +120,7 @@ class UpdateDailyRecordTest {
         assertThrows(NotFoundException::class.java) {
             runBlocking {
                 createResult {
-                    sut.updateDailyRecord(recordId,dailyRecordEdit.toRequestBody())
+                    sut.updateDailyRecord(recordId,dailyRecordEdit)
                 }.onFailure {
                     assertEquals("존재하지 않는 기록입니다.", it.message)
                 }.getOrThrow()
