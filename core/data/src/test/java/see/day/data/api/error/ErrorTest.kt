@@ -64,7 +64,7 @@ class ErrorTest {
         Assert.assertThrows(NetworkErrorException::class.java) {
             runBlocking {
                 createResult {
-                    sut.signIn(loginRequest.toRequestBody())
+                    sut.signIn(loginRequest)
                 }.onFailure {
                     assertEquals("서버 내부 오류가 발생했습니다.", it.message)
                 }.getOrThrow()

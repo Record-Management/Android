@@ -58,7 +58,7 @@ class AuthServiceTest {
         )
 
         // when
-        val response = sut.logout(request.toRequestBody())
+        val response = sut.logout(request)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

@@ -20,6 +20,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.LoginRepository
+import see.day.mapper.toDto
 import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
@@ -54,7 +55,7 @@ class AuthRepositoryTest {
             val accessToken = "Asdasda"
             val refreshToken = "asdijasdlkajs"
 
-            whenever(authService.signIn(any())).thenReturn(
+            whenever(authService.signIn(newSocialLogin.toDto())).thenReturn(
                 CommonResponse(
                     200,
                     "S200",
@@ -73,7 +74,7 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(authService).signIn(any())
+            verify(authService).signIn(newSocialLogin.toDto())
         }
     }
 
@@ -85,7 +86,7 @@ class AuthRepositoryTest {
             val accessToken = "Asdasda"
             val refreshToken = "asdijasdlkajs"
 
-            whenever(authService.signIn(any())).thenReturn(
+            whenever(authService.signIn(oldSocialLogin.toDto())).thenReturn(
                 CommonResponse(
                     201,
                     "S201",
@@ -104,7 +105,7 @@ class AuthRepositoryTest {
 
             verify(dataSource).saveAccessToken(accessToken)
             verify(dataSource).saveRefreshToken(refreshToken)
-            verify(authService).signIn(any())
+            verify(authService).signIn(oldSocialLogin.toDto())
         }
     }
 
@@ -114,7 +115,7 @@ class AuthRepositoryTest {
             // given
             val oldSocialLogin = SocialLogin(SocialType.KAKAO, "Incorrect")
 
-            whenever(authService.signIn(any())).thenThrow(
+            whenever(authService.signIn(oldSocialLogin.toDto())).thenThrow(
                 HttpException(
                     Response.error<Any?>(
                         400,
@@ -134,7 +135,7 @@ class AuthRepositoryTest {
             }
 
             // then
-            verify(authService).signIn(any())
+            verify(authService).signIn(oldSocialLogin.toDto())
         }
     }
 
@@ -147,7 +148,7 @@ class AuthRepositoryTest {
             val logoutRequest = LogoutRequest(refreshToken, allDevices)
 
             whenever(dataSource.getRefreshToken()).thenReturn(flowOf(refreshToken))
-            whenever(authService.logout(any())).thenReturn(CommonResponse(200, "S200", "로그아웃되었습니다.", null))
+            whenever(authService.logout(logoutRequest)).thenReturn(CommonResponse(200, "S200", "로그아웃되었습니다.", null))
             whenever(dataSource.clearData()).thenReturn(Unit)
 
             // when
@@ -155,7 +156,7 @@ class AuthRepositoryTest {
 
             // then
             verify(dataSource).getRefreshToken()
-            verify(authService).logout(any())
+            verify(authService).logout(logoutRequest)
             verify(dataSource).clearData()
         }
     }
