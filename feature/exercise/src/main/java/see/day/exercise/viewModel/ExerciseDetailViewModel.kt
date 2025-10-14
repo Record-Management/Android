@@ -12,19 +12,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
 import see.day.domain.usecase.record.exercise.InsertExerciseRecordUseCase
 import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
 import see.day.exercise.util.ExerciseRecordPostType
+import see.day.model.calendar.ExerciseRecordDetail
 import see.day.model.record.exercise.ExerciseRecordInput
 import see.day.model.record.exercise.ExerciseType
+import see.day.model.time.DateTime
+import see.day.model.time.formatter.KoreanDateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
     val insertPhotosUseCase: InsertPhotosUseCase,
-    val insertExerciseRecordUseCase: InsertExerciseRecordUseCase
+    val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
+    val getRecordDetailUseCase: GetRecordDetailUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ExerciseDetailUiState> = MutableStateFlow(ExerciseDetailUiState.init)
@@ -44,6 +49,37 @@ class ExerciseDetailViewModel @Inject constructor(
             }
 
             is ExerciseRecordPostType.Edit -> {
+                viewModelScope.launch {
+                    getRecordDetailUseCase(type.id).onSuccess { record ->
+                        if(record is ExerciseRecordDetail) {
+                            _uiState.update {
+                                it.copy(
+                                    exerciseType = record.exerciseType,
+                                    dailyNote = record.dailyNote,
+                                    recordDate = KoreanDateTimeFormatter(DateTime.of(recordDate = record.recordDate, recordTime = record.recordTime)),
+                                    caloriesBurned = record.caloriesBurned,
+                                    exerciseTimeMinutes = record.exerciseTimeMinutes,
+                                    stepCount = record.stepCount,
+                                    weight = record.weight,
+                                    imageUrls = record.imageUrls,
+                                    editMode = ExerciseDetailUiState.EditMode.Edit(
+                                        originalRecord = ExerciseRecordInput(
+                                            exerciseType = record.exerciseType,
+                                            dailyNote = record.dailyNote,
+                                            recordDate = KoreanDateTimeFormatter(DateTime.of(recordDate = record.recordDate, recordTime = record.recordTime)),
+                                            caloriesBurned = record.caloriesBurned,
+                                            exerciseTimeMinutes = record.exerciseTimeMinutes,
+                                            stepCount = record.stepCount,
+                                            weight = record.weight,
+                                            imageUrls = record.imageUrls
+                                        ),
+                                        recordId = type.id
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
 
             }
         }

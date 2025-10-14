@@ -18,7 +18,7 @@ import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
-import see.day.domain.usecase.record.daily.GetDailyRecordUseCase
+import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
 import see.day.domain.usecase.record.daily.UpdateDailyRecordUseCase
 import see.day.model.calendar.DailyRecordDetail
@@ -32,7 +32,7 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
-    private val getDetailRecordUseCase: GetDailyRecordUseCase,
+    private val getDetailRecordUseCase: GetRecordDetailUseCase,
     private val updateDetailRecordUseCase : UpdateDailyRecordUseCase,
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase
 ) : ViewModel() {
