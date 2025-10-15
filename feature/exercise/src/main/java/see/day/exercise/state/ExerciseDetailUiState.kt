@@ -30,9 +30,18 @@ data class ExerciseDetailUiState(
         when (editMode) {
             is EditMode.Create -> true
             is EditMode.Edit -> {
-                val origin = editMode.originalRecord
-                (dailyNote != origin.dailyNote || caloriesBurned != origin.caloriesBurned || exerciseTimeMinutes != origin.exerciseTimeMinutes || stepCount != origin.stepCount)
+                isEditing()
             }
+        }
+    }
+
+    fun isEditing(): Boolean = when(editMode) {
+        is EditMode.Create -> {
+            caloriesBurned.isNotEmpty() || exerciseTimeMinutes.isNotEmpty() || stepCount.isNotEmpty() || weight.isNotEmpty() || dailyNote.isNotEmpty()
+        }
+        is EditMode.Edit -> {
+            val origin = editMode.originalRecord
+            (dailyNote != origin.dailyNote || caloriesBurned != origin.caloriesBurned || exerciseTimeMinutes != origin.exerciseTimeMinutes || stepCount != origin.stepCount || exerciseType != origin.exerciseType)
         }
     }
 

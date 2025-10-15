@@ -18,6 +18,7 @@ import see.day.domain.repository.ExerciseRecordRepository
 import see.day.mapper.record.toDto
 import see.day.model.exception.BadRequestException
 import see.day.model.record.RecordType
+import see.day.model.record.exercise.ExerciseRecordEdit
 import see.day.model.record.exercise.ExerciseRecordInput
 import see.day.model.record.exercise.ExerciseType
 import see.day.model.time.DateTime
@@ -27,6 +28,7 @@ import see.day.network.dto.CommonResponse
 import see.day.network.dto.record.ExerciseRecordResponse
 import see.day.network.dto.toResponseBody
 import see.day.repository.ExerciseRecordRepositoryImpl
+import java.util.Date
 
 @RunWith(MockitoJUnitRunner::class)
 class ExerciseRecordRepositoryTest {
@@ -181,6 +183,70 @@ class ExerciseRecordRepositoryTest {
 
             // then
             verify(exerciseRecordService).postExerciseRecord(exerciseRecordInput.toDto())
+        }
+    }
+
+    @Test
+    fun givenExerciseRecordEditForm_whenUpdating_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123123"
+            val exerciseRecordEdit = ExerciseRecordEdit(recordId, ExerciseType.GOLF, "100","100","100","100.5","", listOf(),"")
+            val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
+            val exerciseRecord = ExerciseRecordResponse(
+                id = recordId,
+                type = RecordType.EXERCISE.name,
+                recordDate = timeFormatter.formatDate(),
+                recordTime = timeFormatter.formatTime(),
+                createdAt = "",
+                updatedAt = "",
+                exerciseType = ExerciseType.GOLF.name,
+                imageUrls = listOf(),
+                exerciseTimeMinutes = 100,
+                stepCount = 100,
+                caloriesBurned = 100,
+                weight = 100.5f,
+                dailyNote = ""
+            )
+
+            whenever(exerciseRecordService.updateExerciseRecord(recordId, exerciseRecordEdit.toDto())).thenReturn(
+                CommonResponse(
+                    200,
+                    "S200",
+                    "운동기록이 성공적으로 수정되었습니다",
+                    exerciseRecord
+                )
+            )
+
+            // when
+            val result = sut.updateExerciseRecord(exerciseRecordEdit).getOrThrow()
+
+            // then
+            assertEquals(recordId,result.id)
+            verify(exerciseRecordService).updateExerciseRecord(recordId, exerciseRecordEdit.toDto())
+        }
+    }
+
+    @Test
+    fun givenExerciseRecordId_whenDeleting_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123"
+
+            whenever(exerciseRecordService.deleteExerciseRecord(recordId)).thenReturn(
+                CommonResponse(
+                    200,
+                    "S200",
+                    "운동기록이 성공적으로 삭제되었습니다",
+                    null
+                )
+            )
+
+            // when
+            val result = sut.deleteExerciseRecord(recordId).getOrThrow()
+
+            // then
+            verify(exerciseRecordService).deleteExerciseRecord(recordId)
         }
     }
 }

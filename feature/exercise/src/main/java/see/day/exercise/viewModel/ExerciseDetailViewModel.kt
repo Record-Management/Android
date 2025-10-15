@@ -12,19 +12,29 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
+import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.exercise.InsertExerciseRecordUseCase
+import see.day.domain.usecase.record.exercise.UpdateExerciseRecordUseCase
 import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
 import see.day.exercise.util.ExerciseRecordPostType
+import see.day.model.calendar.ExerciseRecordDetail
+import see.day.model.record.exercise.ExerciseRecordEdit
 import see.day.model.record.exercise.ExerciseRecordInput
 import see.day.model.record.exercise.ExerciseType
+import see.day.model.time.DateTime
+import see.day.model.time.formatter.KoreanDateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
     val insertPhotosUseCase: InsertPhotosUseCase,
-    val insertExerciseRecordUseCase: InsertExerciseRecordUseCase
+    val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
+    val getRecordDetailUseCase: GetRecordDetailUseCase,
+    val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase,
+    val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ExerciseDetailUiState> = MutableStateFlow(ExerciseDetailUiState.init)
@@ -44,6 +54,37 @@ class ExerciseDetailViewModel @Inject constructor(
             }
 
             is ExerciseRecordPostType.Edit -> {
+                viewModelScope.launch {
+                    getRecordDetailUseCase(type.id).onSuccess { record ->
+                        if(record is ExerciseRecordDetail) {
+                            _uiState.update {
+                                it.copy(
+                                    exerciseType = record.exerciseType,
+                                    dailyNote = record.dailyNote,
+                                    recordDate = KoreanDateTimeFormatter(DateTime.of(recordDate = record.recordDate, recordTime = record.recordTime)),
+                                    caloriesBurned = record.caloriesBurned,
+                                    exerciseTimeMinutes = record.exerciseTimeMinutes,
+                                    stepCount = record.stepCount,
+                                    weight = record.weight,
+                                    imageUrls = record.imageUrls,
+                                    editMode = ExerciseDetailUiState.EditMode.Edit(
+                                        originalRecord = ExerciseRecordInput(
+                                            exerciseType = record.exerciseType,
+                                            dailyNote = record.dailyNote,
+                                            recordDate = KoreanDateTimeFormatter(DateTime.of(recordDate = record.recordDate, recordTime = record.recordTime)),
+                                            caloriesBurned = record.caloriesBurned,
+                                            exerciseTimeMinutes = record.exerciseTimeMinutes,
+                                            stepCount = record.stepCount,
+                                            weight = record.weight,
+                                            imageUrls = record.imageUrls
+                                        ),
+                                        recordId = type.id
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
 
             }
         }
@@ -60,6 +101,7 @@ class ExerciseDetailViewModel @Inject constructor(
             is ExerciseDetailUiEvent.OnAddPhotos -> onAddPhotos(uiEvent.urls)
             is ExerciseDetailUiEvent.OnRemovePhoto -> onRemovePhoto(uiEvent.url)
             is ExerciseDetailUiEvent.OnSaveRecord -> onSaveRecord()
+            is ExerciseDetailUiEvent.DeleteRecord -> deleteRecord(uiEvent.recordId)
         }
     }
 
@@ -141,7 +183,9 @@ class ExerciseDetailViewModel @Inject constructor(
                     saveExerciseRecordForCreateMode()
                 }
 
-                is ExerciseDetailUiState.EditMode.Edit -> {}
+                is ExerciseDetailUiState.EditMode.Edit -> {
+                    updateRecord(mode.recordId)
+                }
             }
         }
     }
@@ -172,5 +216,48 @@ class ExerciseDetailViewModel @Inject constructor(
             onSuccess = { _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(true)) },
             onFailure = {}
         )
+    }
+
+    private suspend fun updateRecord(recordId: String) {
+        val urls = processPhotoUrls(uiState.value.imageUrls)
+
+        updateExerciseRecordUseCase(
+            ExerciseRecordEdit(
+                recordId,
+                exerciseType = uiState.value.exerciseType,
+                caloriesBurned = uiState.value.caloriesBurned,
+                exerciseTimeMinutes = uiState.value.exerciseTimeMinutes,
+                stepCount = uiState.value.stepCount,
+                weight = uiState.value.weight,
+                dailyNote = uiState.value.dailyNote,
+                imageUrls = urls,
+                recordTime = uiState.value.recordDate.formatTime(),
+            )
+        ).onSuccess {
+            _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(true))
+        }
+    }
+
+    private suspend fun processPhotoUrls(photoUrls: List<String>): List<String> {
+        return if (photoUrls.all { it.contains("http") }) {
+            photoUrls
+        } else {
+            photoUrls.map { url ->
+                if (url.contains("content")) {
+                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                } else {
+                    url
+                }
+            }.filter { it.isNotEmpty() }
+        }
+    }
+
+    private fun deleteRecord(recordId: String) {
+        viewModelScope.launch {
+            deleteExerciseRecordUseCase(recordId)
+                .onSuccess {
+                    _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(isUpdated = true))
+                }
+        }
     }
 }

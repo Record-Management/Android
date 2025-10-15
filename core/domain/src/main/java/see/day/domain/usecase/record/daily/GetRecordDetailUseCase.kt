@@ -4,7 +4,7 @@ import see.day.domain.repository.RecordRepository
 import see.day.model.calendar.RecordDetail
 import javax.inject.Inject
 
-class GetDailyRecordUseCase @Inject constructor(
+class GetRecordDetailUseCase @Inject constructor(
     private val recordRepository: RecordRepository
 ){
 

@@ -12,4 +12,5 @@ sealed interface ExerciseDetailUiEvent {
     data class OnAddPhotos(val urls: List<String>) : ExerciseDetailUiEvent
     data class OnRemovePhoto(val url: String) : ExerciseDetailUiEvent
     data object OnSaveRecord: ExerciseDetailUiEvent
+    data class DeleteRecord(val recordId: String): ExerciseDetailUiEvent
 }

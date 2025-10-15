@@ -16,4 +16,11 @@
     <string name="record_delete_body">삭제된 기록은 복구가 불가해요</string>
     <string name="record_delete_button_text">삭제하기</string>
     <string name="record_dismiss_button_text">유지하기</string>
+
+    <string name="record_close_dialog_title">기록을 남기지 않고 나가시겠습니까?</string>
+    <string name="record_close_dialog_body">작성 중인 기록은 저장되지 않아요.</string>
+    <string name="record_close_detail_dialog_title">수정하지 않고 나가시겠습니까?</string>
+    <string name="record_close_detail_dialog_body">변경된 내용은 저장되지 않아요.</string>
+
+    <string name="modifiy_record_text">수정하기</string>
 </resources>
