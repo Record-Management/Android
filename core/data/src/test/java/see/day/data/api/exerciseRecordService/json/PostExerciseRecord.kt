@@ -160,3 +160,12 @@ val updateExerciseRequestSuccessResponse = """
       }
     }
 """.trimIndent()
+
+val deleteExerciseSuccessResponse = """
+    {
+      "code": "S200",
+      "statusCode": 200,
+      "message": "운동기록이 성공적으로 삭제되었습니다",
+      "data": null
+    }
+""".trimIndent()
