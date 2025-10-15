@@ -43,6 +43,9 @@ class ExerciseDetailViewModel @Inject constructor(
     private val _uiEffect: MutableSharedFlow<ExerciseDailyUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<ExerciseDailyUiEffect> = _uiEffect.asSharedFlow()
 
+    private val _toastMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
+
     fun fetchData(type: ExerciseRecordPostType) {
         when (type) {
             is ExerciseRecordPostType.Write -> {
@@ -56,7 +59,7 @@ class ExerciseDetailViewModel @Inject constructor(
             is ExerciseRecordPostType.Edit -> {
                 viewModelScope.launch {
                     getRecordDetailUseCase(type.id).onSuccess { record ->
-                        if(record is ExerciseRecordDetail) {
+                        if (record is ExerciseRecordDetail) {
                             _uiState.update {
                                 it.copy(
                                     exerciseType = record.exerciseType,
@@ -259,6 +262,7 @@ class ExerciseDetailViewModel @Inject constructor(
             deleteExerciseRecordUseCase(recordId)
                 .onSuccess {
                     _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(isUpdated = true))
+                    _toastMessage.emit("기록이 삭제 되었습니다.")
                 }
         }
     }

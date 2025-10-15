@@ -1,5 +1,6 @@
 package see.day.daily.screen
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,7 @@ import see.day.ui.topbar.EditMode
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: (Boolean) -> Unit) {
+    val context = LocalContext.current
     LaunchedEffect(dailyRecordPostType) {
         viewModel.fetchData(dailyRecordPostType)
     }
@@ -58,6 +60,12 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
                     onClickPopHome(effect.isUpdated)
                 }
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 

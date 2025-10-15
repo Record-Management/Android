@@ -1,6 +1,7 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -43,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -65,9 +67,11 @@ import see.day.home.util.RecordFilterType
 import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
+import see.day.ui.dialog.DeleteRecordDialog
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit, onClickDetailRecord: (RecordType, String) -> Unit, onClickSetting: () -> Unit) {
+    val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
@@ -78,7 +82,7 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
                 }
             }
     }
-
+    var openDeleteDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
@@ -93,8 +97,27 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
                 is HomeUiEffect.OnGoSetting -> {
                     onClickSetting()
                 }
+
+                is HomeUiEffect.OnClickLongRecord -> {
+                    openDeleteDialog = Triple(true, effect.recordType, effect.recordId)
+                }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    if (openDeleteDialog.first) {
+        DeleteRecordDialog(
+            onDismiss = { openDeleteDialog = openDeleteDialog.copy(first = false) },
+            onClickDeleteButton = {
+                viewModel.onEvent(HomeUiEvent.OnClickDeleteItem(openDeleteDialog.second, openDeleteDialog.third))
+            }
+        )
     }
 
     HomeScreen(
@@ -203,7 +226,8 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             modifier = modifier
                 .padding(
                     end = 16.dp, bottom = 20.dp
-                ).systemBarsPadding()
+                )
+                .systemBarsPadding()
                 .align(Alignment.BottomEnd),
             containerColor = MaterialTheme.colorScheme.primary,
             shape = CircleShape,
@@ -274,6 +298,9 @@ private fun HomeBottomSheetContent(
                 dailyRecordDetails = uiState.dailyRecordDetails,
                 onClickOverview = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
+                },
+                onClickLongItem = { recordType, recordId ->
+                    uiEvent(HomeUiEvent.OnClickLongItem(recordType, recordId))
                 }
             )
             Spacer(modifier = modifier.systemBarsPadding())

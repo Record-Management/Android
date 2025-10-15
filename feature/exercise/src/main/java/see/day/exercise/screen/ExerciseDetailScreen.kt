@@ -1,6 +1,7 @@
 package see.day.exercise.screen
 
 import android.widget.Space
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -64,6 +65,7 @@ fun ExerciseDetailScreenRoot(
     editType: ExerciseRecordPostType,
     onClickPopHome: (Boolean) -> Unit
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(editType) {
@@ -78,6 +80,12 @@ fun ExerciseDetailScreenRoot(
                     onClickPopHome(effect.isUpdated)
                 }
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -246,7 +254,11 @@ internal fun ExerciseDetailScreen(
                 focusManager = focusManager
             )
             Spacer(
-                modifier = modifier.padding(top = 24.dp).fillMaxWidth().height(1.dp).background(gray30)
+                modifier = modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(gray30)
             )
             Text(
                 modifier = modifier.padding(top = 24.dp, bottom = 10.dp),
@@ -283,10 +295,11 @@ internal fun ExerciseDetailScreen(
                     .padding(top = 80.dp)
                     .systemBarsPadding(),
                 text = stringResource(
-                    when(uiState.editMode) {
+                    when (uiState.editMode) {
                         is ExerciseDetailUiState.EditMode.Create -> {
                             see.day.ui.R.string.write_record_text
                         }
+
                         is ExerciseDetailUiState.EditMode.Edit -> {
                             see.day.ui.R.string.modifiy_record_text
                         }

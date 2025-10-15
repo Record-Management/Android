@@ -1,7 +1,9 @@
 package see.day.ui.component.record.overview
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,19 +25,22 @@ import see.day.ui.component.record.overview.exercise.ExerciseDailyNote
 import see.day.ui.component.record.overview.exercise.ExerciseDetailStats
 import see.day.ui.component.record.overview.exercise.ExerciseTypeAndKcal
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExerciseRecordOverview(
     modifier: Modifier = Modifier,
     exerciseRecord: ExerciseRecordDetail,
-    onClickItem: (RecordType, String) -> Unit
+    onClickItem: (RecordType, String) -> Unit,
+    onClickLongItem: (RecordType, String) -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .clickable {
-                onClickItem(RecordType.EXERCISE, exerciseRecord.id)
-            }
+            .combinedClickable(
+                onClick = { onClickItem(RecordType.EXERCISE, exerciseRecord.id) },
+                onLongClick = { onClickLongItem(RecordType.EXERCISE, exerciseRecord.id) }
+            )
             .background(gray10)
             .padding(16.dp)
     ) {
@@ -88,7 +93,8 @@ private fun ExerciseRecordOverviewPreview() {
                 caloriesBurned = "100",
                 dailyNote = "너무너무 행복한 하루였다.",
             ),
-            onClickItem = { type, id -> }
+            onClickItem = { type, id -> },
+            onClickLongItem = { type, id -> }
         )
     }
 }

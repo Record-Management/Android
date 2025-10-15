@@ -43,6 +43,9 @@ class DailyDetailViewModel @Inject constructor(
     private val _uiEffect: MutableSharedFlow<DailyDetailUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<DailyDetailUiEffect> = _uiEffect.asSharedFlow()
 
+    private val _toastMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
+
     fun fetchData(type: DailyRecordPostType) {
         when (type) {
             is DailyRecordPostType.WriteDailyRecordPost -> {
@@ -227,6 +230,7 @@ class DailyDetailViewModel @Inject constructor(
             deleteDailyRecordUseCase(recordId)
                 .onSuccess {
                     _uiEffect.emit(DailyDetailUiEffect.OnPopHome(isUpdated = true))
+                    _toastMessage.emit("기록이 삭제 되었습니다.")
                 }
         }
     }
