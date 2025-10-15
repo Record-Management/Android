@@ -46,7 +46,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 @Composable
-fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType, records: List<RecordType>, schedules: List<String>, onClickItem: (Int, Int, Int) -> Unit) {
+fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType, records: List<RecordType>, schedules: List<String>, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
     Column(
         modifier = modifier
             .heightIn(min = 80.dp)
@@ -69,7 +69,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                 Modifier.fillMaxWidth()
             }
         )
-        if (!isSameMonth || isAfterToday(year, month, day)) {
+        if (!isSameMonth || isAfterToday(year, month, day) || isBeforeCreatedAt(createdAt, year, month, day)) {
             return
         }
         // 아이콘이 정상적인 색상으로 나오는 것
@@ -206,6 +206,12 @@ private fun isAfterToday(year: Int, month: Int, day: Int): Boolean {
     return inputDate.isAfter(now)
 }
 
+private fun isBeforeCreatedAt(createdAt: String, year: Int, month: Int, day: Int) : Boolean {
+    val inputDate = LocalDate.of(year, month, day)
+    val createdArray = createdAt.substringBefore(":").split("-").map { it.toInt() }
+    return inputDate.isBefore(LocalDate.of(createdArray[0], createdArray[1], createdArray[2]))
+}
+
 private val now = LocalDate.now(ZoneId.of("Asia/Seoul"))
 
 // 두 개 이상인 경우
@@ -226,6 +232,7 @@ private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
                 mainRecordType = DAILY,
                 records = listOf(DAILY, RecordType.HABIT),
                 schedules = listOf(),
+                createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
@@ -253,6 +260,7 @@ private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
                 mainRecordType = DAILY,
                 records = listOf(RecordType.HABIT),
                 schedules = listOf("hello"),
+                createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
@@ -280,6 +288,7 @@ private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
                 mainRecordType = DAILY,
                 records = listOf(DAILY, DAILY, HABIT),
                 schedules = listOf("hello"),
+                createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
@@ -307,6 +316,7 @@ private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
                 mainRecordType = DAILY,
                 records = listOf(HABIT),
                 schedules = listOf("hello"),
+                createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },
@@ -334,6 +344,7 @@ private fun DayCellFilterTypeScheduleOneRecordNoSchedulePreview() {
                 mainRecordType = DAILY,
                 records = listOf(HABIT),
                 schedules = listOf("hello"),
+                createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
                 },

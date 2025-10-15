@@ -19,6 +19,7 @@ import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.UserRepository
 import see.day.mapper.toDto
 import see.day.model.exception.BadRequestException
+import see.day.model.login.SocialType
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.network.UserService
@@ -145,11 +146,11 @@ class UserRepositoryTest {
             val deleteUserRequest = DeleteUserRequest("테스트용도")
             whenever(userService.deleteUser(deleteUserRequest)).thenThrow(
                 HttpException(
-                Response.error<Any?>(
-                    400,
-                    toResponseBody<Unit?>(CommonResponse(400, "E40001", "잘못된 입력 값입니다.", null))
+                    Response.error<Any?>(
+                        400,
+                        toResponseBody<Unit?>(CommonResponse(400, "E40001", "잘못된 입력 값입니다.", null))
+                    )
                 )
-            )
             )
             whenever(dataSource.clearData()).thenReturn(Unit)
 
@@ -163,6 +164,28 @@ class UserRepositoryTest {
             // then
             verify(userService).deleteUser(deleteUserRequest)
             verify(dataSource).clearData()
+        }
+    }
+
+    @Test
+    fun given_whenGetUser_thenWorksFine() {
+        runTest {
+            // given
+            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, true, "")
+            whenever(userService.getUser()).thenReturn(
+                CommonResponse(
+                    200,
+                    "SUCCESS",
+                    "요청이 성공적으로 처리되었습니다.",
+                    userResponse
+                )
+            )
+
+            // when
+            val result = sut.getUser().getOrThrow()
+
+            // then
+            verify(userService).getUser()
         }
     }
 }
