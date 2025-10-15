@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
-import see.day.domain.usecase.user.GetUserRecordTypeUseCase
+import see.day.domain.usecase.user.GetUserUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
@@ -26,7 +26,7 @@ import see.day.model.record.RecordType
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getUserRecordTypeUseCase: GetUserRecordTypeUseCase,
+    private val getUserUseCase: GetUserUseCase,
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase
 ) : ViewModel() {
@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val state = uiState.value
             try {
-                val recordType = async { getUserRecordTypeUseCase().getOrThrow() }
+                val user = async { getUserUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
 
@@ -54,9 +54,10 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
-                        mainRecordType = recordType.await(),
+                        mainRecordType = user.await().mainRecordType,
                         monthlyRecords = calendarDayInfos,
-                        dailyRecordDetails = detailDailyRecords
+                        dailyRecordDetails = detailDailyRecords,
+                        createdAt = user.await().createdAt
                     )
                 }
             } catch (e: Exception) {
