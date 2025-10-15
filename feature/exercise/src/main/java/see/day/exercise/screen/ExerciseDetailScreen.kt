@@ -39,6 +39,7 @@ import see.day.exercise.viewModel.ExerciseDetailViewModel
 import see.day.model.record.RecordType
 import see.day.model.record.exercise.ExerciseType
 import see.day.ui.button.CompleteButton
+import see.day.ui.dialog.DeleteRecordDialog
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
 import see.day.ui.textField.HealthStat
@@ -106,6 +107,19 @@ fun ExerciseDetailScreenRoot(
         )
     }
 
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        DeleteRecordDialog(
+            onDismiss = { openDeleteDialog = false },
+            onClickDeleteButton = {
+                val editMode = uiState.editMode
+                if (editMode is ExerciseDetailUiState.EditMode.Edit) {
+                    viewModel.onEvent(ExerciseDetailUiEvent.DeleteRecord(editMode.recordId))
+                }
+            }
+        )
+    }
+
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     if (openSelectEmotionDialog) {
@@ -128,6 +142,9 @@ fun ExerciseDetailScreenRoot(
             } else {
                 onClickPopHome(false)
             }
+        },
+        onClickDeleteButton = {
+            openDeleteDialog = true
         }
     )
 }
@@ -138,7 +155,8 @@ internal fun ExerciseDetailScreen(
     uiState: ExerciseDetailUiState,
     uiEvent: (ExerciseDetailUiEvent) -> Unit,
     onClickExerciseImage: () -> Unit,
-    onClickBackButton: () -> Unit
+    onClickBackButton: () -> Unit,
+    onClickDeleteButton: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -153,7 +171,7 @@ internal fun ExerciseDetailScreen(
                     is ExerciseDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = {}
+                onClickDeleteButton = onClickDeleteButton
             )
         }
     ) { innerPadding ->
@@ -264,6 +282,6 @@ internal fun ExerciseDetailScreen(
 @Composable
 private fun ExerciseDetailScreenPreview() {
     SeeDayTheme {
-        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickExerciseImage = {}, onClickBackButton = {})
+        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickExerciseImage = {}, onClickBackButton = {}, onClickDeleteButton = {})
     }
 }

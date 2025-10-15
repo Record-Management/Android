@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
+import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.exercise.InsertExerciseRecordUseCase
 import see.day.domain.usecase.record.exercise.UpdateExerciseRecordUseCase
 import see.day.exercise.state.ExerciseDailyUiEffect
@@ -32,7 +33,8 @@ class ExerciseDetailViewModel @Inject constructor(
     val insertPhotosUseCase: InsertPhotosUseCase,
     val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
     val getRecordDetailUseCase: GetRecordDetailUseCase,
-    val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase
+    val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase,
+    val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ExerciseDetailUiState> = MutableStateFlow(ExerciseDetailUiState.init)
@@ -99,6 +101,7 @@ class ExerciseDetailViewModel @Inject constructor(
             is ExerciseDetailUiEvent.OnAddPhotos -> onAddPhotos(uiEvent.urls)
             is ExerciseDetailUiEvent.OnRemovePhoto -> onRemovePhoto(uiEvent.url)
             is ExerciseDetailUiEvent.OnSaveRecord -> onSaveRecord()
+            is ExerciseDetailUiEvent.DeleteRecord -> deleteRecord(uiEvent.recordId)
         }
     }
 
@@ -246,6 +249,15 @@ class ExerciseDetailViewModel @Inject constructor(
                     url
                 }
             }.filter { it.isNotEmpty() }
+        }
+    }
+
+    private fun deleteRecord(recordId: String) {
+        viewModelScope.launch {
+            deleteExerciseRecordUseCase(recordId)
+                .onSuccess {
+                    _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(isUpdated = true))
+                }
         }
     }
 }
