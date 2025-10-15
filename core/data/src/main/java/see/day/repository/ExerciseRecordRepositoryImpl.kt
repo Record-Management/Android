@@ -25,4 +25,10 @@ class ExerciseRecordRepositoryImpl @Inject constructor(
             exerciseRecordService.updateExerciseRecord(exerciseRecordEdit.recordId, exerciseRecordEdit.toDto()).data?.toExerciseRecord() ?: throw NoDataException()
         }
     }
+
+    override suspend fun deleteExerciseRecord(recordId: String): Result<Unit> {
+        return createResult {
+            exerciseRecordService.deleteExerciseRecord(recordId)
+        }
+    }
 }

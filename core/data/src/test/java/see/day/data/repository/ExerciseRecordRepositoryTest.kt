@@ -226,4 +226,27 @@ class ExerciseRecordRepositoryTest {
             verify(exerciseRecordService).updateExerciseRecord(recordId, exerciseRecordEdit.toDto())
         }
     }
+
+    @Test
+    fun givenExerciseRecordId_whenDeleting_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123"
+
+            whenever(exerciseRecordService.deleteExerciseRecord(recordId)).thenReturn(
+                CommonResponse(
+                    200,
+                    "S200",
+                    "운동기록이 성공적으로 삭제되었습니다",
+                    null
+                )
+            )
+
+            // when
+            val result = sut.deleteExerciseRecord(recordId).getOrThrow()
+
+            // then
+            verify(exerciseRecordService).deleteExerciseRecord(recordId)
+        }
+    }
 }

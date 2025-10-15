@@ -9,4 +9,6 @@ interface ExerciseRecordRepository {
     suspend fun insertExerciseRecord(exerciseRecordInput: ExerciseRecordInput): Result<ExerciseRecordDetail>
 
     suspend fun updateExerciseRecord(exerciseRecordEdit: ExerciseRecordEdit): Result<ExerciseRecordDetail>
+
+    suspend fun deleteExerciseRecord(recordId: String): Result<Unit>
 }
