@@ -24,7 +24,8 @@ import see.day.ui.component.record.overview.ExerciseRecordOverview
 fun CalendarDetail(
     modifier: Modifier = Modifier,
     dailyRecordDetails: DailyRecordDetails,
-    onClickOverview: (RecordType, String) -> Unit
+    onClickOverview: (RecordType, String) -> Unit,
+    onClickLongItem: (RecordType, String) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -41,7 +42,7 @@ fun CalendarDetail(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             dailyRecordDetails.records.forEach { record ->
-                when(record) {
+                when (record) {
                     is DailyRecordDetail -> {
                         DailyRecordOverview(
                             recordId = record.id,
@@ -49,13 +50,16 @@ fun CalendarDetail(
                             recordDate = record.fullRecordTime,
                             content = record.content,
                             photoUrls = record.imageUrls,
-                            onClickItem = onClickOverview
+                            onClickItem = onClickOverview,
+                            onClickLongItem = onClickLongItem
                         )
                     }
+
                     is ExerciseRecordDetail -> {
                         ExerciseRecordOverview(
                             exerciseRecord = record,
-                            onClickItem = onClickOverview
+                            onClickItem = onClickOverview,
+                            onClickLongItem = onClickLongItem
                         )
                     }
                 }
@@ -70,7 +74,11 @@ fun CalendarDetail(
 private fun CalendarDetailPreview() {
     SeeDayTheme {
         CalendarDetail(
-            dailyRecordDetails = DailyRecordDetails("2025-09-12", listOf(DailyRecordDetail(id = "", type = RecordType.DAILY,emotion =  DailyEmotion.Love,content = "asdasdasd", imageUrls =  listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime =  "", recordDate = "13:30", createdAt =  "", updatedAt =  "")))
+            dailyRecordDetails = DailyRecordDetails(
+                "2025-09-12",
+                listOf(DailyRecordDetail(id = "", type = RecordType.DAILY, emotion = DailyEmotion.Love, content = "asdasdasd", imageUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime = "", recordDate = "13:30", createdAt = "", updatedAt = ""))
+            ),
+            onClickOverview = { recordType, recordId -> }
         ) { recordType, recordId -> }
     }
 }

@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
+import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
+import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.user.GetUserUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
@@ -28,7 +30,9 @@ import see.day.model.record.RecordType
 class HomeViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
-    private val getDailyRecordsUseCase: GetDailyRecordsUseCase
+    private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
+    private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
+    private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
@@ -36,6 +40,9 @@ class HomeViewModel @Inject constructor(
 
     private val _uiEffect: MutableSharedFlow<HomeUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<HomeUiEffect> = _uiEffect.asSharedFlow()
+
+    private val _toastMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
 
     private val monthlyRecord: MutableStateFlow<List<CalendarDayInfo>> = MutableStateFlow(listOf())
 
@@ -71,6 +78,7 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnRefresh -> {
                 onRefresh()
             }
+
             is HomeUiEvent.OnClickSelectedDate -> {
                 onClickSelectedDate(uiEvent.year, uiEvent.month)
             }
@@ -86,18 +94,27 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickAddButton -> {
                 onClickAddRecord(uiEvent.recordType)
             }
+
             is HomeUiEvent.OnClickDetailButton -> {
                 onClickDetailRecord(uiEvent.recordType, uiEvent.recordId)
             }
+
             is HomeUiEvent.OnClickSetting -> {
                 onClickSetting()
+            }
+
+            is HomeUiEvent.OnClickLongItem -> {
+                onClickItemLong(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
+            }
+            is HomeUiEvent.OnClickDeleteItem -> {
+                onClickDeleteItem(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
             }
         }
     }
 
     private fun onRefresh() {
         viewModelScope.launch {
-            if(uiState.value == HomeUiState.init) {
+            if (uiState.value == HomeUiState.init) {
                 return@launch
             }
             try {
@@ -115,7 +132,7 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords
                     )
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
 
             }
 
@@ -202,6 +219,43 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.OnGoSetting)
         }
+    }
+
+    private fun onClickItemLong(recordType: RecordType, recordId: String) {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.OnClickLongRecord(recordType, recordId))
+        }
+    }
+
+    private fun onClickDeleteItem(recordType: RecordType, recordId: String) {
+        viewModelScope.launch {
+            when (recordType) {
+                RecordType.DAILY -> {
+                    deleteDailyRecordUseCase(recordId)
+                        .onSuccess {
+                            onRefresh()
+                            _toastMessage.emit("기록이 삭제 되었습니다.")
+                        }
+                }
+
+                RecordType.EXERCISE -> {
+                    deleteExerciseRecordUseCase(recordId)
+                        .onSuccess {
+                            onRefresh()
+                            _toastMessage.emit("기록이 삭제 되었습니다.")
+                        }
+                }
+
+                RecordType.HABIT -> {
+
+                }
+
+                RecordType.SCHEDULE -> {
+
+                }
+            }
+        }
+
     }
 
     private fun List<CalendarDayInfo>.filterMonthlyRecords(recordType: RecordType): List<CalendarDayInfo> {

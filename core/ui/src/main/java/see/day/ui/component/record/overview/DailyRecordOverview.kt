@@ -1,8 +1,10 @@
 package see.day.ui.component.record.overview
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,15 +35,17 @@ import see.day.designsystem.util.largeIconRes
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DailyRecordOverview(modifier: Modifier = Modifier, recordId: String, dailyEmotion: DailyEmotion, recordDate: String, content: String, photoUrls: List<String>, onClickItem: (RecordType, String) -> Unit) {
+fun DailyRecordOverview(modifier: Modifier = Modifier, recordId: String, dailyEmotion: DailyEmotion, recordDate: String, content: String, photoUrls: List<String>, onClickItem: (RecordType, String) -> Unit, onClickLongItem: (RecordType, String) -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .clickable {
-                onClickItem(RecordType.DAILY, recordId)
-            }
+            .combinedClickable(
+                onClick = { onClickItem(RecordType.DAILY, recordId) },
+                onLongClick = { onClickLongItem(RecordType.DAILY, recordId) }
+            )
             .background(gray10)
             .padding(16.dp)
     ) {
@@ -100,7 +104,8 @@ private fun DailyRecordOverviewHasPhotoPreview() {
             recordDate = "오전 12:18",
             content = "오늘 아침에 일어나서 밥먹고 소화시키다 누워서 다시 자고 일어나서 다시 밥먹고 다시 자고나니 하루가 다 갔다.",
             photoUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"),
-            onClickItem = {recordType, recordId -> }
+            onClickItem = { recordType, recordId -> },
+            onClickLongItem = { recordType, recordId -> }
         )
     }
 }
@@ -115,7 +120,8 @@ private fun DailyRecordOverviewOversizePreview() {
             recordDate = "오전 12:18",
             content = "오늘 아침에 일어나서 밥먹고 소화시키다 누워서 다시 자고 일어나서 다시 밥먹고 다시 자고나니 하루가 다 갔다. 정말 즐거운 하루였고 내일도 즐거운 하루였으면 좋겠다 너무너무 행복하다",
             photoUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"),
-            onClickItem = {recordType, recordId -> }
+            onClickItem = { recordType, recordId -> },
+            onClickLongItem = { recordType, recordId -> }
         )
     }
 }
@@ -130,7 +136,8 @@ private fun DailyRecordOverviewPreview() {
             recordDate = "오전 12:18",
             content = "오늘 아침에 일어나서 밥먹고 소화시키다 누워서 다시 자고 일어나서 다시 밥먹고 다시 자고나니 하루가 다 갔다.",
             photoUrls = listOf(),
-            onClickItem = {recordType, recordId -> }
+            onClickItem = { recordType, recordId -> },
+            onClickLongItem = { recordType, recordId -> }
         )
     }
 }
