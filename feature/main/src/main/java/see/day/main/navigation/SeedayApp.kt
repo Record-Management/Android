@@ -70,24 +70,23 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
     }
 
     LaunchedEffect(Unit) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.navigationEvent.collect { appState ->
-                if(appState == null) return@collect
+        viewModel.navigationEvent.collect { appState ->
+            if (appState == null) return@collect
 
-                when(appState) {
-                    AppStartState.LOGIN -> {
-                        navigationState.navigateLoginWithCleanBackStack()
-                    }
-                    AppStartState.ONBOARDING -> {
-                        navigationState.navigateOnboarding()
-                    }
-                    AppStartState.HOME -> {
-                        navigationState.navigateHome()
-                    }
+            when (appState) {
+                AppStartState.LOGIN -> {
+                    navigationState.navigateLoginWithCleanBackStack()
+                }
+
+                AppStartState.ONBOARDING -> {
+                    navigationState.navigateOnboarding()
+                }
+
+                AppStartState.HOME -> {
+                    navigationState.navigateHome()
                 }
             }
         }
-
     }
 }
 

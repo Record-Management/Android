@@ -15,9 +15,8 @@ fun NavController.navigateHome(navOptions: NavOptions? = null) {
 }
 
 fun NavController.navigateBackToHome(isUpdated: Boolean = false) {
-    previousBackStackEntry
-        ?.savedStateHandle
-        ?.set("record_updated", isUpdated)
+    getBackStackEntry<Home>()
+        .savedStateHandle["record_updated"] = isUpdated
     popBackStack(Home, inclusive = false)
 }
 
