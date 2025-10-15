@@ -46,11 +46,15 @@ data class ExerciseDetailUiState(
     }
 
     private fun hasExerciseData(): Boolean =
-        caloriesBurned.isOverZero() || exerciseTimeMinutes.isOverZero() || stepCount.isOverZero()
+        caloriesBurned.isOverZero() || exerciseTimeMinutes.isOverZero() || stepCount.isOverZero() || weight.isOverZeroToFloat()
 
 
     private fun String.isOverZero(): Boolean {
         return this.isNotEmpty() && this.toInt() > 0
+    }
+
+    private fun String.isOverZeroToFloat() : Boolean {
+        return this.isNotEmpty() && this.toFloat() > 0
     }
 
     companion object {
