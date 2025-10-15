@@ -1,8 +1,13 @@
 package see.day.exercise.screen
 
+import android.widget.Space
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -11,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -27,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.designsystem.theme.gray30
+import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray60
 import see.day.exercise.R
 import see.day.exercise.component.ExerciseSelectBottomSheet
@@ -186,8 +195,22 @@ internal fun ExerciseDetailScreen(
                 exerciseType = uiState.exerciseType,
                 onClickExerciseImage = onClickExerciseImage
             )
-            HealthStatInputField(
+            Row(
                 modifier = modifier.padding(top = 24.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    "운동 기록",
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                Text(
+                    "(1개 이상 필수 입력)",
+                    style = MaterialTheme.typography.labelSmall.copy(color = gray50),
+                    modifier = modifier.padding(start = 6.dp)
+                )
+            }
+            HealthStatInputField(
+                modifier = modifier.padding(top = 16.dp),
                 healthStat = HealthStat.Kcal,
                 text = uiState.caloriesBurned,
                 onTextChanged = { newCaloriesBurned ->
@@ -221,6 +244,9 @@ internal fun ExerciseDetailScreen(
                     uiEvent(ExerciseDetailUiEvent.OnWeightChanged(newWeight))
                 },
                 focusManager = focusManager
+            )
+            Spacer(
+                modifier = modifier.padding(top = 24.dp).fillMaxWidth().height(1.dp).background(gray30)
             )
             Text(
                 modifier = modifier.padding(top = 24.dp, bottom = 10.dp),

@@ -197,6 +197,8 @@ class ExerciseDetailViewModel @Inject constructor(
                 onSuccess = { urls -> saveExerciseRecord(urls) },
                 onFailure = {}
             )
+        } else {
+            saveExerciseRecord(listOf())
         }
     }
 
