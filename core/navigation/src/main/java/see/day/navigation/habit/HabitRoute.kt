@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 sealed interface HabitRoute {
 
     @Serializable
-    data object Habit : HabitRoute
+    data object HabitSelect : HabitRoute
 }

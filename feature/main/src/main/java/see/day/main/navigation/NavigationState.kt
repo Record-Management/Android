@@ -12,8 +12,8 @@ import see.day.daily.navigation.navigateDaily
 import see.day.daily.navigation.navigateDailyDetail
 import see.day.exercise.navigation.navigateExercise
 import see.day.exercise.navigation.navigateExerciseDetail
+import see.day.habit.navigation.navigateHabit
 import see.day.home.navigation.navigateHome
-import see.day.main.navigation.graph.navigateHabit
 import see.day.main.navigation.graph.navigateSchedule
 import see.day.model.record.RecordType
 import see.day.onboarding.navigation.navigateOnboarding

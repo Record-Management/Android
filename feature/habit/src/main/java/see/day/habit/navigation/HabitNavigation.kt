@@ -1,4 +1,4 @@
-package see.day.main.navigation.graph
+package see.day.habit.navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -12,22 +12,22 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import see.day.model.record.RecordType
-import see.day.navigation.schedule.ScheduleRoute.Schedule
+import see.day.navigation.habit.HabitRoute.HabitSelect
 import see.day.ui.dialog.RecordTypePickerDialog
 
-fun NavController.navigateSchedule(navOptions: NavOptions? = null) {
-    navigate(Schedule, navOptions)
+fun NavController.navigateHabit(navOptions: NavOptions? = null) {
+    navigate(HabitSelect, navOptions)
 }
 
-fun NavGraphBuilder.scheduleNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit) {
-    composable<Schedule> {
+fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit) {
+    composable<HabitSelect> {
         Column {
-            Text("Schedule")
+            Text("Habit")
             var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
 
             if (isOpenRecordTypePickerDialog) {
                 RecordTypePickerDialog(
-                    currentRecordType = RecordType.SCHEDULE,
+                    currentRecordType = RecordType.HABIT,
                     onDismiss = { isOpenRecordTypePickerDialog = false },
                     onCompleteRecordType = { selectedType ->
                         onClickChangeRecordType(selectedType, true)
