@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,7 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.habit.R
+import see.day.habit.component.HabitTypeCard
 import see.day.model.record.RecordType
+import see.day.model.record.habit.HabitType
 import see.day.ui.dialog.RecordTypePickerDialog
 import see.day.ui.topbar.RecordSelectTopBar
 
@@ -70,6 +73,9 @@ internal fun HabitSelectScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            items(HabitType.entries, key = { it }) { habitType ->
+                HabitTypeCard(habitType = habitType, onClickHabitType = {})
+            }
             item {
                 Text(
                     text = stringResource(R.string.change_record_type),
