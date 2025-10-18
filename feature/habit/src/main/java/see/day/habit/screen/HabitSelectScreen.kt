@@ -33,11 +33,13 @@ import see.day.ui.topbar.RecordSelectTopBar
 @Composable
 fun HabitSelectScreenRoot(
     onClickChangedRecordType: (RecordType, Boolean) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onClickHabitType: (HabitType) -> Unit
 ) {
     HabitSelectScreen(
         onClickChangedRecordType = onClickChangedRecordType,
-        onBack = onBack
+        onBack = onBack,
+        onClickHabitType = onClickHabitType
     )
 }
 
@@ -45,7 +47,8 @@ fun HabitSelectScreenRoot(
 internal fun HabitSelectScreen(
     modifier: Modifier = Modifier,
     onClickChangedRecordType: (RecordType, Boolean) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onClickHabitType: (HabitType) -> Unit
 ) {
     var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
 
@@ -74,7 +77,7 @@ internal fun HabitSelectScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(HabitType.entries, key = { it }) { habitType ->
-                HabitTypeCard(habitType = habitType, onClickHabitType = {})
+                HabitTypeCard(habitType = habitType, onClickHabitType = onClickHabitType)
             }
             item {
                 Text(
@@ -104,7 +107,8 @@ private fun HabitSelectScreenPreview() {
     SeeDayTheme {
         HabitSelectScreen(
             onClickChangedRecordType = { type, boolean -> },
-            onBack = {}
+            onBack = {},
+            onClickHabitType = {}
         )
     }
 }

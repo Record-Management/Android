@@ -15,6 +15,7 @@ import see.day.daily.navigation.navigateDailyWrite
 import see.day.exercise.navigation.exerciseNavigation
 import see.day.exercise.navigation.navigateExerciseWrite
 import see.day.habit.navigation.habitNavigation
+import see.day.habit.navigation.navigateHabitWrite
 import see.day.home.navigation.homeNavigation
 import see.day.home.navigation.navigateBackToHome
 import see.day.main.navigation.graph.scheduleNavigation
@@ -57,7 +58,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
             )
             habitNavigation(
                 onClickChangeRecordType = navigationState::navigateAddRecord,
-                onBack = navigationState.navController::popBackStack
+                onBack = navigationState.navController::popBackStack,
+                onClickHabitType = navigationState.navController::navigateHabitWrite
             )
             scheduleNavigation(
                 onClickChangeRecordType = navigationState::navigateAddRecord
