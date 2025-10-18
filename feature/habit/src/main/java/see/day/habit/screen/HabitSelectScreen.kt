@@ -1,9 +1,8 @@
-package see.day.exercise.screen
+package see.day.habit.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -24,62 +23,62 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.exercise.R
-import see.day.exercise.component.ExerciseTypeCard
+import see.day.habit.R
+import see.day.habit.component.HabitTypeCard
 import see.day.model.record.RecordType
-import see.day.model.record.exercise.ExerciseType
+import see.day.model.record.habit.HabitType
 import see.day.ui.dialog.RecordTypePickerDialog
 import see.day.ui.topbar.RecordSelectTopBar
 
 @Composable
-fun ExerciseSelectScreenRoot(
-    onClickChangeRecordType: (RecordType, Boolean) -> Unit,
+fun HabitSelectScreenRoot(
+    onClickChangedRecordType: (RecordType, Boolean) -> Unit,
     onBack: () -> Unit,
-    onClickExerciseType: (ExerciseType) -> Unit
+    onClickHabitType: (HabitType) -> Unit
 ) {
-    ExerciseSelectScreen(
-        onClickChangeRecordType = onClickChangeRecordType,
+    HabitSelectScreen(
+        onClickChangedRecordType = onClickChangedRecordType,
         onBack = onBack,
-        onClickExerciseType = onClickExerciseType
+        onClickHabitType = onClickHabitType
     )
 }
 
 @Composable
-internal fun ExerciseSelectScreen(
+internal fun HabitSelectScreen(
     modifier: Modifier = Modifier,
-    onClickChangeRecordType: (RecordType, Boolean) -> Unit,
+    onClickChangedRecordType: (RecordType, Boolean) -> Unit,
     onBack: () -> Unit,
-    onClickExerciseType: (ExerciseType) -> Unit
+    onClickHabitType: (HabitType) -> Unit
 ) {
     var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
 
     if (isOpenRecordTypePickerDialog) {
         RecordTypePickerDialog(
-            currentRecordType = RecordType.EXERCISE,
+            currentRecordType = RecordType.HABIT,
             onDismiss = { isOpenRecordTypePickerDialog = false },
             onCompleteRecordType = { selectedType ->
-                onClickChangeRecordType(selectedType, true)
+                onClickChangedRecordType(selectedType, true)
                 isOpenRecordTypePickerDialog = false
             }
         )
     }
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            RecordSelectTopBar(modifier,RecordType.EXERCISE ,onBack)
+            RecordSelectTopBar(recordType = RecordType.HABIT, onBack = onBack)
         }
     ) { innerPadding ->
-        LazyColumn (
+        LazyColumn(
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(ExerciseType.entries, key = { it}) { exerciseType ->
-                ExerciseTypeCard(exerciseType = exerciseType, onClickExerciseType = onClickExerciseType)
+            items(HabitType.entries, key = { it }) { habitType ->
+                HabitTypeCard(habitType = habitType, onClickHabitType = onClickHabitType)
             }
-
             item {
                 Text(
                     text = stringResource(R.string.change_record_type),
@@ -99,18 +98,17 @@ internal fun ExerciseSelectScreen(
                 Spacer(modifier = modifier.systemBarsPadding())
             }
         }
-
     }
 }
 
 @Preview
 @Composable
-private fun ExerciseSelectScreenPreview() {
+private fun HabitSelectScreenPreview() {
     SeeDayTheme {
-        ExerciseSelectScreen(
-            onClickChangeRecordType = { type, boolean -> },
+        HabitSelectScreen(
+            onClickChangedRecordType = { type, boolean -> },
             onBack = {},
-            onClickExerciseType = {}
+            onClickHabitType = {}
         )
     }
 }

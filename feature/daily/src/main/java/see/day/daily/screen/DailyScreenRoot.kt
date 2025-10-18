@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,6 +37,7 @@ import see.day.designsystem.util.largeIconRes
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.dialog.RecordTypePickerDialog
+import see.day.ui.topbar.RecordSelectTopBar
 
 @Composable
 internal fun DailyScreenRoot(modifier: Modifier = Modifier, onClickBackButton: () -> Unit, onChangedRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit) {
@@ -63,18 +63,7 @@ internal fun DailyScreen(modifier: Modifier = Modifier, onClickBackButton: () ->
         topBar = {
             TopAppBar(
                 title = {
-                    Row(
-                        modifier = modifier.fillMaxWidth()
-                    ) {
-                        Spacer(modifier = modifier.weight(1f))
-                        Image(
-                            modifier = modifier
-                                .padding(top = 16.dp, end = 16.dp)
-                                .clickable { onClickBackButton() },
-                            painter = painterResource(see.day.ui.R.drawable.ic_close),
-                            contentDescription = "뒤로가기 버튼"
-                        )
-                    }
+                    RecordSelectTopBar(recordType = RecordType.DAILY, onBack = onClickBackButton)
                 }
             )
         }

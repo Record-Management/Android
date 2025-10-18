@@ -12,40 +12,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import see.day.model.record.RecordType
-import see.day.navigation.habit.HabitRoute.*
 import see.day.navigation.schedule.ScheduleRoute.Schedule
 import see.day.ui.dialog.RecordTypePickerDialog
-
-
-fun NavController.navigateHabit(navOptions: NavOptions? = null) {
-    navigate(Habit, navOptions)
-}
-
-fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit) {
-    composable<Habit> {
-        Column {
-            Text("Habit")
-            var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
-
-            if (isOpenRecordTypePickerDialog) {
-                RecordTypePickerDialog(
-                    currentRecordType = RecordType.HABIT,
-                    onDismiss = { isOpenRecordTypePickerDialog = false },
-                    onCompleteRecordType = { selectedType ->
-                        onClickChangeRecordType(selectedType, true)
-                        isOpenRecordTypePickerDialog = false
-                    }
-                )
-            }
-
-            Button(
-                { isOpenRecordTypePickerDialog = true }
-            ) {
-                Text("기록 변경")
-            }
-        }
-    }
-}
 
 fun NavController.navigateSchedule(navOptions: NavOptions? = null) {
     navigate(Schedule, navOptions)
