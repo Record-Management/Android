@@ -25,11 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.exercise.R
-import see.day.exercise.component.ExerciseSelectTopBar
 import see.day.exercise.component.ExerciseTypeCard
 import see.day.model.record.RecordType
 import see.day.model.record.exercise.ExerciseType
 import see.day.ui.dialog.RecordTypePickerDialog
+import see.day.ui.topbar.RecordSelectTopBar
 
 @Composable
 fun ExerciseSelectScreenRoot(
@@ -66,7 +66,7 @@ internal fun ExerciseSelectScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            ExerciseSelectTopBar(modifier, onBack)
+            RecordSelectTopBar(modifier,RecordType.EXERCISE ,onBack)
         }
     ) { innerPadding ->
         LazyColumn (

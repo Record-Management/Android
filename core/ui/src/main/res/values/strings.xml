@@ -23,4 +23,9 @@
     <string name="record_close_detail_dialog_body">변경된 내용은 저장되지 않아요.</string>
 
     <string name="modifiy_record_text">수정하기</string>
+
+    <string name="daily_select_title" />
+    <string name="exercise_select_title">운동 선택</string>
+    <string name="habit_select_title">습관 선택</string>
+    <string name="schedule_select_title" />
 </resources>
