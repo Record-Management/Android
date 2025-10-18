@@ -43,3 +43,4 @@ include(
 )
 include(":core:navigation")
 include(":feature:exercise")
+include(":feature:habit")

@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:home"))
     implementation(project(":feature:daily"))
+    implementation(project(":feature:habit"))
 
     implementation(project(":feature:exercise"))
 
