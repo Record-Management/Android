@@ -56,7 +56,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onClickPopHome = navigationState.navController::navigateBackToHome
             )
             habitNavigation(
-                onClickChangeRecordType = navigationState::navigateAddRecord
+                onClickChangeRecordType = navigationState::navigateAddRecord,
+                onBack = navigationState.navController::popBackStack
             )
             scheduleNavigation(
                 onClickChangeRecordType = navigationState::navigateAddRecord
