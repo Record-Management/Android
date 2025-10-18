@@ -293,9 +293,19 @@ private fun HomeBottomSheetContent(
                 .height(1.dp)
                 .background(gray30)
         )
-        if (uiState.dailyRecordDetails.records.isNotEmpty()) {
+
+        val filteredRecords = remember(
+            uiState.selectedFilterType,
+            uiState.dailyRecordDetails.records
+        ) {
+            uiState.selectedFilterType.toRecordType()?.let { selectedType ->
+                uiState.dailyRecordDetails.records.filter { it.type == selectedType }
+            } ?: uiState.dailyRecordDetails.records
+        }
+
+        if (filteredRecords.isNotEmpty()) {
             CalendarDetail(
-                dailyRecordDetails = uiState.dailyRecordDetails,
+                dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords),
                 onClickOverview = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 },
