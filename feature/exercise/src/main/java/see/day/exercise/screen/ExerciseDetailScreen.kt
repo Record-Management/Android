@@ -1,6 +1,5 @@
 package see.day.exercise.screen
 
-import android.widget.Space
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -17,7 +16,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,17 +36,17 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray60
+import see.day.designsystem.util.getIconRes
 import see.day.exercise.R
 import see.day.exercise.component.ExerciseSelectBottomSheet
-import see.day.exercise.component.ExerciseTitle
 import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
 import see.day.exercise.util.ExerciseRecordPostType
 import see.day.exercise.viewModel.ExerciseDetailViewModel
 import see.day.model.record.RecordType
-import see.day.model.record.exercise.ExerciseType
 import see.day.ui.button.CompleteButton
+import see.day.ui.component.TypeTitle
 import see.day.ui.dialog.DeleteRecordDialog
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
@@ -198,10 +196,11 @@ internal fun ExerciseDetailScreen(
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            ExerciseTitle(
+            TypeTitle (
                 modifier = modifier.padding(top = 10.dp),
-                exerciseType = uiState.exerciseType,
-                onClickExerciseImage = onClickExerciseImage
+                typeIcon = uiState.exerciseType.getIconRes,
+                typeName = uiState.exerciseType.displayName,
+                onClickType = onClickExerciseImage
             )
             Row(
                 modifier = modifier.padding(top = 24.dp),

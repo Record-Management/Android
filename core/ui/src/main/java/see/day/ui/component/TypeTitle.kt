@@ -1,4 +1,4 @@
-package see.day.exercise.component
+package see.day.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,26 +18,28 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.util.getIconRes
 import see.day.model.record.exercise.ExerciseType
+import see.day.model.record.habit.HabitType
 
 @Composable
-internal fun ExerciseTitle(
+fun TypeTitle(
     modifier: Modifier = Modifier,
-    exerciseType: ExerciseType,
-    onClickExerciseImage: () -> Unit
+    typeIcon: Int,
+    typeName: String,
+    onClickType: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(exerciseType.getIconRes),
-            contentDescription = exerciseType.displayName,
+            painter = painterResource(typeIcon),
+            contentDescription = typeName,
             modifier = Modifier
                 .size(100.dp)
-                .clickable { onClickExerciseImage() }
+                .clickable { onClickType() }
         )
         Text(
-            text = exerciseType.displayName,
+            text = typeName,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(top = 24.dp),
             textAlign = TextAlign.Center
@@ -47,14 +49,32 @@ internal fun ExerciseTitle(
 
 @Preview
 @Composable
-internal fun ExerciseTitlePreview() {
+private fun ExerciseTypeTitlePreview() {
+    val type = ExerciseType.GOLF
     SeeDayTheme {
-        ExerciseTitle(
+        TypeTitle(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp),
-            exerciseType = ExerciseType.GOLF,
-            onClickExerciseImage = {}
+            typeIcon = type.getIconRes,
+            typeName = type.displayName,
+            onClickType = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HabitTypeTitlePreview() {
+    val type = HabitType.SAVING
+    SeeDayTheme {
+        TypeTitle(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+            typeIcon = type.getIconRes,
+            typeName = type.displayName,
+            onClickType = {}
         )
     }
 }

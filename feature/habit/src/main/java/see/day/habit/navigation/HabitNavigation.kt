@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import see.day.habit.screen.HabitDetailScreenRoot
 import see.day.habit.screen.HabitSelectScreenRoot
+import see.day.habit.state.HabitRecordPostType
 import see.day.model.record.RecordType
 import see.day.model.record.habit.HabitType
 import see.day.navigation.habit.HabitRoute.HabitSelect
@@ -31,6 +32,6 @@ fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolea
 
     composable<HabitWrite> { navBackStackEntry ->
         val habitType = navBackStackEntry.toRoute<HabitWrite>().habitType
-        HabitDetailScreenRoot(habitType)
+        HabitDetailScreenRoot(habitRecordPostType = HabitRecordPostType.Write(habitType))
     }
 }
