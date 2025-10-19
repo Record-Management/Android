@@ -3,6 +3,7 @@ package see.day.model.calendar
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.exercise.ExerciseType
+import see.day.model.record.habit.HabitType
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -78,3 +79,17 @@ data class ExerciseRecordDetail(
         }
     }
 }
+
+data class HabitRecordDetail(
+    override val id: String,
+    override val type: RecordType,
+    override val recordDate: String,
+    override val createdAt: String,
+    override val updatedAt: String,
+    override val recordTime: String,
+    val habitType: HabitType,
+    val notificationEnabled: Boolean,
+    val notificationTime: String,
+    val memo: String,
+    val isCompleted: Boolean
+) : RecordDetail()
