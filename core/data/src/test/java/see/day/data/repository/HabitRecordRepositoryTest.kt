@@ -40,7 +40,7 @@ class HabitRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "")
+            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "","2024-10-19")
             val habitRecordResponse = HabitRecordResponse(
                 id = "0",
                 type = RecordType.HABIT.name,

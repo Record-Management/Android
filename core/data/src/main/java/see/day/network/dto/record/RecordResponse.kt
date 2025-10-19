@@ -119,7 +119,7 @@ data class HabitRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val recordDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    override val recordTime: String,
+    override val recordTime: String = "",
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     override val createdAt: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)

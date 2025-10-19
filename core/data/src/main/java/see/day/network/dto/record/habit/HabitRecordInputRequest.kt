@@ -7,5 +7,6 @@ data class HabitRecordInputRequest(
     val habitType: String,
     val notificationEnabled: Boolean,
     val notificationTime: String?,
-    val memo: String?
+    val memo: String?,
+    val recordDate: String
 )

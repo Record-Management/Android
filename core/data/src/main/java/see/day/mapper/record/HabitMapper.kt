@@ -10,6 +10,7 @@ fun HabitRecordInput.toDto() : HabitRecordInputRequest {
         habitType = habitType.name,
         notificationEnabled = notificationEnabled,
         notificationTime = if(notificationEnabled) String.format("%02d:%02d", notificationHour, notificationMinute) else null,
-        memo = memo.ifBlank { null }
+        memo = memo.ifBlank { null },
+        recordDate = recordDate
     )
 }

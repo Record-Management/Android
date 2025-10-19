@@ -15,6 +15,7 @@ import see.day.designsystem.theme.gray100
 import see.day.model.calendar.DailyRecordDetails
 import see.day.model.calendar.DailyRecordDetail
 import see.day.model.calendar.ExerciseRecordDetail
+import see.day.model.calendar.HabitRecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.component.record.overview.DailyRecordOverview
@@ -60,6 +61,12 @@ fun CalendarDetail(
                             exerciseRecord = record,
                             onClickItem = onClickOverview,
                             onClickLongItem = onClickLongItem
+                        )
+                    }
+
+                    is HabitRecordDetail -> {
+                        Text(
+                            record.toString()
                         )
                     }
                 }

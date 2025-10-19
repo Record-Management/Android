@@ -8,7 +8,7 @@ data class FullUserResponse(
     val id: String,
     val name: String,
     val nickname: String,
-    val email: String?,
+    val email: String? = null,
     val socialType: String,
     val mainRecordType: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
