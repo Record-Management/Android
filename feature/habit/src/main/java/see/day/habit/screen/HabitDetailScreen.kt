@@ -38,6 +38,7 @@ import see.day.designsystem.util.getIconRes
 import see.day.habit.R
 import see.day.habit.component.HabitAlertComponent
 import see.day.habit.component.HabitSelectBottomSheet
+import see.day.habit.state.HabitDetailUiEffect
 import see.day.habit.state.HabitDetailUiEvent
 import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
@@ -62,6 +63,16 @@ internal fun HabitDetailScreenRoot(
 
     LaunchedEffect(editType) {
         viewModel.fetchData(editType)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when(effect) {
+                is HabitDetailUiEffect.OnPopHome -> {
+                    onClickPopHome(effect.isUpdated)
+                }
+            }
+        }
     }
 
     var openSelectEmotionDialog by remember { mutableStateOf(false) }

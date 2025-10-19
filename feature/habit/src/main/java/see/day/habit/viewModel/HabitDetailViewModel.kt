@@ -2,10 +2,14 @@ package see.day.habit.viewModel
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import see.day.habit.state.HabitDetailUiEffect
 import see.day.habit.state.HabitDetailUiEvent
 import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
@@ -19,6 +23,9 @@ class HabitDetailViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<HabitDetailUiState> = MutableStateFlow(HabitDetailUiState.init)
     val uiState: StateFlow<HabitDetailUiState> = _uiState.asStateFlow()
+
+    private val _uiEffect: MutableSharedFlow<HabitDetailUiEffect> = MutableSharedFlow()
+    val uiEffect: SharedFlow<HabitDetailUiEffect> = _uiEffect.asSharedFlow()
 
     fun fetchData(type: HabitRecordPostType) {
         when(type) {
