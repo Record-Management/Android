@@ -5,7 +5,7 @@ import see.day.model.record.habit.HabitRecordInput
 import see.day.network.dto.record.habit.HabitRecordInputRequest
 
 @SuppressLint("DefaultLocale")
-fun HabitRecordInput.toRequest() : HabitRecordInputRequest {
+fun HabitRecordInput.toDto() : HabitRecordInputRequest {
     return HabitRecordInputRequest(
         habitType = habitType.name,
         notificationEnabled = notificationEnabled,

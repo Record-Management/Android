@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
-import see.day.mapper.record.toRequest
+import see.day.mapper.record.toDto
 import see.day.model.record.habit.HabitRecordInput
 import see.day.model.record.habit.HabitType
 
@@ -20,7 +20,7 @@ class HabitMapperTest {
         val habitRecordInput = HabitRecordInput(HabitType.SAVING, notificationEnabled, hour, minute, memo)
 
         // when
-        val request = habitRecordInput.toRequest()
+        val request = habitRecordInput.toDto()
 
         // then
         assertNotNull(request.notificationTime)
@@ -38,7 +38,7 @@ class HabitMapperTest {
         val habitRecordInput = HabitRecordInput(HabitType.SAVING, notificationEnabled, hour, minute, "")
 
         // when
-        val request = habitRecordInput.toRequest()
+        val request = habitRecordInput.toDto()
 
         // then
         assertNull(request.notificationTime)
@@ -51,7 +51,7 @@ class HabitMapperTest {
         val habitRecordInput = HabitRecordInput(HabitType.SAVING,false, 0, 0, memo)
 
         // when
-        val request = habitRecordInput.toRequest()
+        val request = habitRecordInput.toDto()
 
         // then
         assertNull(request.memo)
