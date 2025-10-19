@@ -21,7 +21,7 @@ fun NavController.navigateHabitWrite(habitType: HabitType, navOptions: NavOption
     navigate(HabitWrite(habitType), navOptions)
 }
 
-fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit, onBack: () -> Unit, onClickHabitType: (HabitType) -> Unit) {
+fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit, onBack: () -> Unit, onClickHabitType: (HabitType) -> Unit, onClickPopHome: (Boolean) -> Unit) {
     composable<HabitSelect> {
         HabitSelectScreenRoot(
             onClickChangedRecordType = onClickChangeRecordType,
@@ -32,6 +32,9 @@ fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolea
 
     composable<HabitWrite> { navBackStackEntry ->
         val habitType = navBackStackEntry.toRoute<HabitWrite>().habitType
-        HabitDetailScreenRoot(editType = HabitRecordPostType.Write(habitType))
+        HabitDetailScreenRoot(
+            editType = HabitRecordPostType.Write(habitType),
+            onClickPopHome = onClickPopHome
+        )
     }
 }

@@ -1,5 +1,6 @@
 package see.day.habit.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,8 @@ import see.day.habit.viewModel.HabitDetailViewModel
 import see.day.model.record.RecordType
 import see.day.ui.button.CompleteButton
 import see.day.ui.component.TypeTitle
+import see.day.ui.dialog.DeleteRecordDialog
+import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
 import see.day.ui.topbar.EditMode
@@ -53,6 +56,7 @@ import see.day.ui.topbar.EditMode
 internal fun HabitDetailScreenRoot(
     viewModel: HabitDetailViewModel = hiltViewModel(),
     editType: HabitRecordPostType,
+    onClickPopHome: (Boolean) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -72,10 +76,69 @@ internal fun HabitDetailScreenRoot(
             }
         )
     }
+
+    var openBackDialog by remember { mutableStateOf(false) }
+
+    BackHandler {
+        if (uiState.isEditing()) {
+            openBackDialog = true
+        } else {
+            onClickPopHome(false)
+        }
+    }
+
+    if (openBackDialog) {
+        RecordDetailBackDialog(
+            modifier = Modifier,
+            onDismiss = { openBackDialog = false },
+            onBackRecordDetail = { onClickPopHome(false) },
+            title = when (uiState.editMode) {
+                is HabitDetailUiState.EditMode.Create -> {
+                    see.day.ui.R.string.record_close_dialog_title
+                }
+
+                is HabitDetailUiState.EditMode.Edit -> {
+                    see.day.ui.R.string.record_close_detail_dialog_title
+                }
+            },
+            body = when (uiState.editMode) {
+                is HabitDetailUiState.EditMode.Create -> {
+                    see.day.ui.R.string.record_close_dialog_body
+                }
+
+                is HabitDetailUiState.EditMode.Edit -> {
+                    see.day.ui.R.string.record_close_detail_dialog_body
+                }
+            }
+        )
+    }
+
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        DeleteRecordDialog(
+            onDismiss = { openDeleteDialog = false },
+            onClickDeleteButton = {
+                val editMode = uiState.editMode
+                if (editMode is HabitDetailUiState.EditMode.Edit) {
+                    viewModel.onEvent(HabitDetailUiEvent.DeleteRecord(editMode.recordId))
+                }
+            }
+        )
+    }
+
+
     HabitDetailScreen(
         uiState = uiState,
         uiEvent = viewModel::onEvent,
-        onClickHabitTitle = { openSelectEmotionDialog = true }
+        onClickHabitTitle = { openSelectEmotionDialog = true },
+        onClickBackButton = {
+            if (uiState.isEditing()) {
+                openBackDialog = true
+            } else {
+                onClickPopHome(false)
+            }
+        },
+        onClickDeleteButton = { openDeleteDialog = true }
     )
 }
 
@@ -84,16 +147,21 @@ internal fun HabitDetailScreen(
     modifier: Modifier = Modifier,
     uiState: HabitDetailUiState,
     uiEvent: (HabitDetailUiEvent) -> Unit,
-    onClickHabitTitle: () -> Unit
+    onClickHabitTitle: () -> Unit,
+    onClickBackButton: () -> Unit,
+    onClickDeleteButton: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
             DetailRecordTopBar(
                 recordType = RecordType.HABIT,
-                editMode = EditMode.ADD,
-                onClickCloseButton = {},
-                onClickDeleteButton = {}
+                editMode = when (uiState.editMode) {
+                    HabitDetailUiState.EditMode.Create -> EditMode.ADD
+                    is HabitDetailUiState.EditMode.Edit -> EditMode.UPDATE
+                },
+                onClickCloseButton = onClickBackButton,
+                onClickDeleteButton = onClickDeleteButton
             )
         }
     ) { innerPadding ->
@@ -156,14 +224,17 @@ internal fun HabitDetailScreen(
                 modifier = Modifier
                     .padding(top = 80.dp)
                     .systemBarsPadding(),
-                text = stringResource(when(uiState.editMode) {
-                    is HabitDetailUiState.EditMode.Create -> {
-                        see.day.ui.R.string.write_record_text
+                text = stringResource(
+                    when (uiState.editMode) {
+                        is HabitDetailUiState.EditMode.Create -> {
+                            see.day.ui.R.string.write_record_text
+                        }
+
+                        is HabitDetailUiState.EditMode.Edit -> {
+                            see.day.ui.R.string.modifiy_record_text
+                        }
                     }
-                    is HabitDetailUiState.EditMode.Edit -> {
-                        see.day.ui.R.string.modifiy_record_text
-                    }
-                }),
+                ),
                 isEnabled = uiState.canSubmit,
                 onClick = {
                     uiEvent(HabitDetailUiEvent.OnSaveRecord)
@@ -177,6 +248,12 @@ internal fun HabitDetailScreen(
 @Composable
 private fun HabitDetailScreenPreview() {
     SeeDayTheme {
-        HabitDetailScreen(uiState = HabitDetailUiState.init, uiEvent = {},onClickHabitTitle = {})
+        HabitDetailScreen(
+            uiState = HabitDetailUiState.init,
+            uiEvent = {},
+            onClickHabitTitle = {},
+            onClickBackButton = {},
+            onClickDeleteButton = {}
+        )
     }
 }
