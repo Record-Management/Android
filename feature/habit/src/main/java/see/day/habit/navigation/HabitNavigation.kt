@@ -32,6 +32,6 @@ fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolea
 
     composable<HabitWrite> { navBackStackEntry ->
         val habitType = navBackStackEntry.toRoute<HabitWrite>().habitType
-        HabitDetailScreenRoot(habitRecordPostType = HabitRecordPostType.Write(habitType))
+        HabitDetailScreenRoot(editType = HabitRecordPostType.Write(habitType))
     }
 }

@@ -19,7 +19,14 @@ data class HabitDetailUiState(
         data class Edit(val originalRecord: HabitRecordInput, val recordId: String) : EditMode()
     }
 
-    val canSubmit: Boolean = isEditing()
+    val canSubmit: Boolean = when(editMode) {
+        is EditMode.Create -> {
+            true
+        }
+        is EditMode.Edit -> {
+            isEditing()
+        }
+    }
 
     fun isEditing(): Boolean = when (editMode) {
         is EditMode.Create -> {

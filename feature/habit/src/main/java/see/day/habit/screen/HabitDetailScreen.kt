@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,15 +29,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.util.getIconRes
 import see.day.habit.R
 import see.day.habit.component.HabitAlertComponent
 import see.day.habit.component.HabitSelectBottomSheet
+import see.day.habit.state.HabitDetailUiEvent
+import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
+import see.day.habit.viewModel.HabitDetailViewModel
 import see.day.model.record.RecordType
-import see.day.model.record.habit.HabitType
 import see.day.ui.button.CompleteButton
 import see.day.ui.component.TypeTitle
 import see.day.ui.textField.RecordWriteTextField
@@ -46,46 +51,41 @@ import see.day.ui.topbar.EditMode
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HabitDetailScreenRoot(
-    habitRecordPostType: HabitRecordPostType,
+    viewModel: HabitDetailViewModel = hiltViewModel(),
+    editType: HabitRecordPostType,
 ) {
-    if (habitRecordPostType is HabitRecordPostType.Write) {
-        var habitType by remember { mutableStateOf(habitRecordPostType.habitType) }
-        var openSelectEmotionDialog by remember { mutableStateOf(false) }
-        val sheetState = rememberModalBottomSheetState()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
-        if (openSelectEmotionDialog) {
-            HabitSelectBottomSheet(
-                sheetState = sheetState,
-                onDismiss = { openSelectEmotionDialog = false },
-                onClickHabit = { newHabitType ->
-                    habitType = newHabitType
-                }
-            )
-        }
-        HabitDetailScreen(
-            habitType = habitType,
-            onClickHabitTitle = { openSelectEmotionDialog = true }
-        )
+    LaunchedEffect(editType) {
+        viewModel.fetchData(editType)
     }
 
+    var openSelectEmotionDialog by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+
+    if (openSelectEmotionDialog) {
+        HabitSelectBottomSheet(
+            sheetState = sheetState,
+            onDismiss = { openSelectEmotionDialog = false },
+            onClickHabit = { newHabitType ->
+                viewModel.onEvent(HabitDetailUiEvent.OnHabitTypeChanged(newHabitType))
+            }
+        )
+    }
+    HabitDetailScreen(
+        uiState = uiState,
+        uiEvent = viewModel::onEvent,
+        onClickHabitTitle = { openSelectEmotionDialog = true }
+    )
 }
 
 @Composable
 internal fun HabitDetailScreen(
     modifier: Modifier = Modifier,
-    habitType: HabitType,
+    uiState: HabitDetailUiState,
+    uiEvent: (HabitDetailUiEvent) -> Unit,
     onClickHabitTitle: () -> Unit
 ) {
-    val (isChecked, onClickAlertSwitch) = remember { mutableStateOf(false) }
-    var hour by remember { mutableStateOf(10) }
-    var minute by remember { mutableStateOf(0) }
-    val onChangedSpinner: (Int, Int) -> Unit = { newHour, newMinute ->
-        hour = newHour
-        minute = newMinute
-    }
-
-    val (memo, onMemoChanged) = remember { mutableStateOf("") }
-
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
@@ -105,18 +105,22 @@ internal fun HabitDetailScreen(
         ) {
             TypeTitle(
                 modifier = modifier.padding(top = 10.dp),
-                typeIcon = habitType.getIconRes,
-                typeName = habitType.displayName,
+                typeIcon = uiState.habitType.getIconRes,
+                typeName = uiState.habitType.displayName,
                 onClickType = onClickHabitTitle
             )
             HabitAlertComponent(
                 modifier = modifier
                     .padding(top = 24.dp),
-                isChecked = isChecked,
-                hour = hour,
-                minute = minute,
-                onClickSwitch = onClickAlertSwitch,
-                onTimeChanged = onChangedSpinner
+                isChecked = uiState.notificationEnabled,
+                hour = uiState.hour,
+                minute = uiState.minute,
+                onClickSwitch = { enabled ->
+                    uiEvent(HabitDetailUiEvent.OnNotificationEnabledChanged(enabled))
+                },
+                onTimeChanged = { hour, minute ->
+                    uiEvent(HabitDetailUiEvent.OnAlertTimeChanged(hour, minute))
+                }
             )
             Spacer(
                 modifier = Modifier
@@ -143,16 +147,27 @@ internal fun HabitDetailScreen(
             RecordWriteTextField(
                 modifier = Modifier.padding(top = 10.dp),
                 placeHolder = R.string.memo,
-                text = memo,
-                onChangedText = onMemoChanged
+                text = uiState.memo,
+                onChangedText = { changedText ->
+                    uiEvent(HabitDetailUiEvent.OnMemoChanged(changedText))
+                }
             )
             CompleteButton(
                 modifier = Modifier
                     .padding(top = 80.dp)
                     .systemBarsPadding(),
-                text = "작성하기",
-                isEnabled = true,
-                onClick = {}
+                text = stringResource(when(uiState.editMode) {
+                    is HabitDetailUiState.EditMode.Create -> {
+                        see.day.ui.R.string.write_record_text
+                    }
+                    is HabitDetailUiState.EditMode.Edit -> {
+                        see.day.ui.R.string.modifiy_record_text
+                    }
+                }),
+                isEnabled = uiState.canSubmit,
+                onClick = {
+                    uiEvent(HabitDetailUiEvent.OnSaveRecord)
+                }
             )
         }
     }
@@ -162,6 +177,6 @@ internal fun HabitDetailScreen(
 @Composable
 private fun HabitDetailScreenPreview() {
     SeeDayTheme {
-        HabitDetailScreen(habitType = HabitType.SAVING, onClickHabitTitle = {})
+        HabitDetailScreen(uiState = HabitDetailUiState.init, uiEvent = {},onClickHabitTitle = {})
     }
 }
