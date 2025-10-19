@@ -13,4 +13,5 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
 }

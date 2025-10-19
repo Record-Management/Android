@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.util.getIconRes
+import see.day.habit.component.HabitAlertComponent
 import see.day.habit.component.HabitSelectBottomSheet
 import see.day.habit.state.HabitRecordPostType
 import see.day.model.record.RecordType
@@ -59,6 +60,14 @@ internal fun HabitDetailScreen(
     habitType: HabitType,
     onClickHabitTitle: () -> Unit
 ) {
+    val (isChecked, onClickAlertSwitch) = remember { mutableStateOf(false) }
+    var hour by remember { mutableStateOf(10) }
+    var minute by remember { mutableStateOf(0) }
+    val onChangedSpinner : (Int, Int) -> Unit = { newHour, newMinute ->
+        hour = newHour
+        minute = newMinute
+    }
+
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
@@ -81,6 +90,15 @@ internal fun HabitDetailScreen(
                 typeIcon = habitType.getIconRes,
                 typeName = habitType.displayName,
                 onClickType = onClickHabitTitle
+            )
+            HabitAlertComponent(
+                modifier = modifier
+                    .padding(top = 24.dp),
+                isChecked = isChecked,
+                hour = hour,
+                minute = minute,
+                onClickSwitch = onClickAlertSwitch,
+                onTimeChanged = onChangedSpinner
             )
         }
     }
