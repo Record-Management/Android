@@ -6,10 +6,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 import see.day.model.calendar.DailyRecordDetail
 import see.day.model.calendar.ExerciseRecordDetail
+import see.day.model.calendar.HabitRecordDetail
 import see.day.model.calendar.RecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.exercise.ExerciseType
+import see.day.model.record.habit.HabitType
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -109,4 +111,45 @@ data class ExerciseRecordResponse(
     }
 }
 
+@Serializable
+@SerialName("HABIT")
+data class HabitRecordResponse(
+    override val id: String,
+    override val type: String,
+    @Serializable(with = FlexibleDateTimeArraySerializer::class)
+    override val recordDate: String,
+    @Serializable(with = FlexibleDateTimeArraySerializer::class)
+    override val recordTime: String,
+    @Serializable(with = FlexibleDateTimeArraySerializer::class)
+    override val createdAt: String,
+    @Serializable(with = FlexibleDateTimeArraySerializer::class)
+    override val updatedAt: String,
+    val habitType: String,
+    val notificationEnabled: Boolean,
+    @Serializable(with = FlexibleDateTimeArraySerializer::class)
+    val notificationTime: String? = null,
+    val memo: String? = null,
+    val isCompleted: Boolean
+) : RecordResponse() {
 
+    fun toHabitRecord() : HabitRecordDetail {
+        return HabitRecordDetail(
+            id = id,
+            type = RecordType.valueOf(type),
+            recordDate = recordDate,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            recordTime = recordTime,
+            habitType = HabitType.valueOf(habitType),
+            notificationEnabled = notificationEnabled,
+            notificationTime = notificationTime ?: "10:00",
+            memo = memo ?: "",
+            isCompleted = isCompleted
+        )
+    }
+
+    override fun toModel(): RecordDetail {
+        return toHabitRecord()
+    }
+
+}

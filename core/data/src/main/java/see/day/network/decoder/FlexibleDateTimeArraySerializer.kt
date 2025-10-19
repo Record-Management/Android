@@ -31,12 +31,21 @@ object FlexibleDateTimeArraySerializer : KSerializer<String> {
                 val minute = jsonArray[1].jsonPrimitive.int
                 String.format("%02d:%02d", hour, minute)
             }
+
             3 -> { // [year, month, day]
-                val year = jsonArray[0].jsonPrimitive.int
-                val month = jsonArray[1].jsonPrimitive.int
-                val day = jsonArray[2].jsonPrimitive.int
-                String.format("%04d-%02d-%02d", year, month, day)
+                if (jsonArray[0].jsonPrimitive.int < 24) {
+                    val hour = jsonArray[0].jsonPrimitive.int
+                    val minute = jsonArray[1].jsonPrimitive.int
+                    val second = jsonArray[2].jsonPrimitive.int
+                    String.format("%02d:%02d:%02d", hour, minute, second)
+                } else {
+                    val year = jsonArray[0].jsonPrimitive.int
+                    val month = jsonArray[1].jsonPrimitive.int
+                    val day = jsonArray[2].jsonPrimitive.int
+                    String.format("%04d-%02d-%02d", year, month, day)
+                }
             }
+
             5 -> { // [year, month, day, hour, minute]
                 val year = jsonArray[0].jsonPrimitive.int
                 val month = jsonArray[1].jsonPrimitive.int
@@ -45,6 +54,7 @@ object FlexibleDateTimeArraySerializer : KSerializer<String> {
                 val minute = jsonArray[4].jsonPrimitive.int
                 String.format("%04d-%02d-%02d:%02d:%02d", year, month, day, hour, minute)
             }
+
             6 -> { // [year, month, day, hour, minute, second]
                 val year = jsonArray[0].jsonPrimitive.int
                 val month = jsonArray[1].jsonPrimitive.int
@@ -54,6 +64,7 @@ object FlexibleDateTimeArraySerializer : KSerializer<String> {
                 val second = jsonArray[5].jsonPrimitive.int
                 String.format("%04d-%02d-%02d:%02d:%02d:%02d", year, month, day, hour, minute, second)
             }
+
             7 -> { // 밀리초까지 포함된 경우
                 val year = jsonArray[0].jsonPrimitive.int
                 val month = jsonArray[1].jsonPrimitive.int
@@ -63,6 +74,7 @@ object FlexibleDateTimeArraySerializer : KSerializer<String> {
                 val second = jsonArray[5].jsonPrimitive.int
                 String.format("%04d-%02d-%02d:%02d:%02d:%02d", year, month, day, hour, minute, second)
             }
+
             else -> error("Unexpected date array length: ${jsonArray.size}")
         }
     }
