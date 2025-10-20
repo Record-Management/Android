@@ -13,4 +13,5 @@ sealed interface HomeUiEvent {
     data object OnClickSetting : HomeUiEvent
     data class OnClickLongItem(val recordType: RecordType, val recordId: String) : HomeUiEvent
     data class OnClickDeleteItem(val recordType: RecordType, val recordId: String) : HomeUiEvent
+    data class OnClickUpdateHabitIsComplete(val recordId: String, val isCompleted: Boolean) : HomeUiEvent
 }

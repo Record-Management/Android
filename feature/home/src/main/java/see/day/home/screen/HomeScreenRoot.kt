@@ -311,6 +311,9 @@ private fun HomeBottomSheetContent(
                 },
                 onClickLongItem = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickLongItem(recordType, recordId))
+                },
+                onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted ->
+                    uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted))
                 }
             )
             Spacer(modifier = modifier.systemBarsPadding())
