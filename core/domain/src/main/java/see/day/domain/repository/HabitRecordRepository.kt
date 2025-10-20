@@ -8,4 +8,6 @@ interface HabitRecordRepository {
     suspend fun insertHabitRecord(habitRecordInput: HabitRecordInput): Result<HabitRecordDetail>
 
     suspend fun deleteHabitRecord(recordId: String) : Result<Unit>
+
+    suspend fun updateHabitRecordIsCompleted(recordId: String,isCompleted: Boolean) : Result<Boolean>
 }
