@@ -13,6 +13,7 @@ import org.mockito.kotlin.whenever
 import see.day.domain.repository.HabitRecordRepository
 import see.day.mapper.record.toDto
 import see.day.model.record.RecordType
+import see.day.model.record.habit.HabitRecordEdit
 import see.day.model.record.habit.HabitRecordInput
 import see.day.model.record.habit.HabitType
 import see.day.model.time.DateTime
@@ -135,6 +136,48 @@ class HabitRecordRepositoryTest {
             // then
             assertEquals(result, isCompleted)
             verify(habitRecordService).updateHabitRecordComplete(recordId, HabitRecordCompleteRequest(isCompleted))
+        }
+    }
+
+    @Test
+    fun givenRecordIdAndHabitRecordEditForm_whenUpdating_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123-123"
+            val habitType = HabitType.SAVING
+            val habitRecordEdit = HabitRecordEdit(habitType = habitType, notificationEnabled = false, hour = 9, minute = 0, memo = "")
+
+            val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
+            val habitRecordResponse = HabitRecordResponse(
+                id = "0",
+                type = RecordType.HABIT.name,
+                recordDate = timeFormatter.formatDate(),
+                recordTime = timeFormatter.formatTime(),
+                createdAt = "",
+                updatedAt = "",
+                habitType = habitType.name,
+                notificationEnabled = false,
+                notificationTime = "90:00:00",
+                memo = "",
+                isCompleted = true
+            )
+
+            whenever(habitRecordService.updateHabitRecord(recordId, habitRecordEdit.toDto())).thenReturn(
+                CommonResponse(
+                    200,
+                    "S20000",
+                    "정상적으로 처리되었습니다.",
+                    habitRecordResponse
+                )
+            )
+
+            // when
+            val result = sut.updateHabitRecord(recordId, habitRecordEdit).getOrThrow()
+
+            // when
+            assertEquals(result.habitType, habitRecordEdit.habitType)
+
+            verify(habitRecordService).updateHabitRecord(recordId, habitRecordEdit.toDto())
         }
     }
 }

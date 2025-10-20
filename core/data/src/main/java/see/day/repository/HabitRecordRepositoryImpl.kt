@@ -4,6 +4,7 @@ import see.day.domain.repository.HabitRecordRepository
 import see.day.mapper.record.toDto
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.exception.NoDataException
+import see.day.model.record.habit.HabitRecordEdit
 import see.day.model.record.habit.HabitRecordInput
 import see.day.network.HabitRecordService
 import see.day.network.dto.record.habit.HabitRecordCompleteRequest
@@ -29,6 +30,12 @@ class HabitRecordRepositoryImpl @Inject constructor(
     override suspend fun updateHabitRecordIsCompleted(recordId: String, isCompleted: Boolean): Result<Boolean> {
         return createResult {
             habitRecordService.updateHabitRecordComplete(recordId, HabitRecordCompleteRequest(isCompleted)).data?.isCompleted ?: throw NoDataException()
+        }
+    }
+
+    override suspend fun updateHabitRecord(recordId: String, habitRecordEdit: HabitRecordEdit): Result<HabitRecordDetail> {
+        return createResult {
+            habitRecordService.updateHabitRecord(recordId, habitRecordEdit.toDto()).data?.toHabitRecord() ?: throw NoDataException()
         }
     }
 }
