@@ -202,6 +202,7 @@ internal fun HabitDetailScreen(
                 modifier = modifier
                     .padding(top = 24.dp),
                 isChecked = uiState.notificationEnabled,
+                timeSpinnerDisplayed = uiState.isTimeSpinnerDisplayed,
                 hour = uiState.hour,
                 minute = uiState.minute,
                 onClickSwitch = { enabled ->
@@ -209,6 +210,9 @@ internal fun HabitDetailScreen(
                 },
                 onTimeChanged = { hour, minute ->
                     uiEvent(HabitDetailUiEvent.OnAlertTimeChanged(hour, minute))
+                },
+                onTimeSpinnerDisplayed = { displayed ->
+                    uiEvent(HabitDetailUiEvent.OnTimeSpinnerDisplay(displayed))
                 }
             )
             Spacer(

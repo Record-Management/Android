@@ -12,6 +12,7 @@ data class HabitDetailUiState(
     val minute: Int,
     val memo: String,
     val recordDate: String,
+    val isTimeSpinnerDisplayed: Boolean,
     val editMode: EditMode
 ) {
     sealed class EditMode {
@@ -47,6 +48,7 @@ data class HabitDetailUiState(
             minute = 0,
             memo = "",
             recordDate = KoreanDateTimeFormatter(DateTime.now(DateTime.korea)).formatDate(),
+            isTimeSpinnerDisplayed = false,
             editMode = EditMode.Create
         )
     }

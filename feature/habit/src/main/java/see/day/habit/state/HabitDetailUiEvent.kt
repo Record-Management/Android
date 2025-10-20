@@ -9,4 +9,5 @@ sealed interface HabitDetailUiEvent {
     data class OnAlertTimeChanged(val hour: Int, val minute: Int) : HabitDetailUiEvent
     data object OnSaveRecord : HabitDetailUiEvent
     data class DeleteRecord(val recordId: String) : HabitDetailUiEvent
+    data class OnTimeSpinnerDisplay(val displayed : Boolean) : HabitDetailUiEvent
 }

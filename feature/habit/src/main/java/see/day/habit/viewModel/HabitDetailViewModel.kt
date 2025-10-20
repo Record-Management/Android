@@ -111,6 +111,11 @@ class HabitDetailViewModel @Inject constructor(
             is HabitDetailUiEvent.DeleteRecord -> {
                 deleteRecord(uiEvent.recordId)
             }
+            is HabitDetailUiEvent.OnTimeSpinnerDisplay -> {
+                _uiState.update {
+                    it.copy(isTimeSpinnerDisplayed = uiEvent.displayed)
+                }
+            }
         }
     }
 
@@ -125,7 +130,8 @@ class HabitDetailViewModel @Inject constructor(
     private fun onNotificationEnabledChanged(enabled: Boolean) {
         _uiState.update {
             it.copy(
-                notificationEnabled = enabled
+                notificationEnabled = enabled,
+                isTimeSpinnerDisplayed = enabled
             )
         }
     }
