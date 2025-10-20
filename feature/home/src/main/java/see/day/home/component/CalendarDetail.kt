@@ -69,7 +69,7 @@ fun CalendarDetail(
                         HabitRecordOverView(
                             habitRecord = record,
                             onClickItem = { type, id -> },
-                            onClickLongItem = { type, id -> },
+                            onClickLongItem = onClickLongItem,
                             onClickChecked = { id, checked -> }
                         )
                     }

@@ -17,6 +17,7 @@ import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
+import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.user.GetUserUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
@@ -32,7 +33,8 @@ class HomeViewModel @Inject constructor(
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
-    private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase
+    private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
+    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
@@ -247,7 +249,11 @@ class HomeViewModel @Inject constructor(
                 }
 
                 RecordType.HABIT -> {
-
+                    deleteHabitRecordUseCase(recordId)
+                        .onSuccess {
+                            onRefresh()
+                            _toastMessage.emit("기록이 삭제 되었습니다.")
+                        }
                 }
 
                 RecordType.SCHEDULE -> {
