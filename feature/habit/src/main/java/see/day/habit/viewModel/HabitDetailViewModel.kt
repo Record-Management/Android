@@ -38,6 +38,9 @@ class HabitDetailViewModel @Inject constructor(
     private val _uiEffect: MutableSharedFlow<HabitDetailUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<HabitDetailUiEffect> = _uiEffect.asSharedFlow()
 
+    private val _toastMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
+
     fun fetchData(type: HabitRecordPostType) {
         when (type) {
             is HabitRecordPostType.Write -> {
@@ -105,7 +108,7 @@ class HabitDetailViewModel @Inject constructor(
             }
 
             is HabitDetailUiEvent.DeleteRecord -> {
-
+                deleteRecord(uiEvent.recordId)
             }
         }
     }
@@ -171,6 +174,16 @@ class HabitDetailViewModel @Inject constructor(
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
         }.onFailure {
 
+        }
+    }
+
+    private fun deleteRecord(recordId: String) {
+        viewModelScope.launch {
+            deleteHabitRecordUseCase(recordId)
+                .onSuccess {
+                    _uiEffect.emit(HabitDetailUiEffect.OnPopHome(isUpdated = true))
+                    _toastMessage.emit("기록이 삭제 되었습니다.")
+                }
         }
     }
 

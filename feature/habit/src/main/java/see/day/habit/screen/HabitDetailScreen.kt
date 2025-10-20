@@ -1,5 +1,6 @@
 package see.day.habit.screen
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +61,7 @@ internal fun HabitDetailScreenRoot(
     editType: HabitRecordPostType,
     onClickPopHome: (Boolean) -> Unit
 ) {
+    val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(editType) {
@@ -74,6 +77,13 @@ internal fun HabitDetailScreenRoot(
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
