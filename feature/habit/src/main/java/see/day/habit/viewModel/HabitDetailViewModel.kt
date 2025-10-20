@@ -11,18 +11,26 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
+import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.InsertHabitRecordUseCase
+import see.day.domain.usecase.record.habit.UpdateHabitRecordUseCase
 import see.day.habit.state.HabitDetailUiEffect
 import see.day.habit.state.HabitDetailUiEvent
 import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
+import see.day.model.calendar.HabitRecordDetail
+import see.day.model.record.habit.HabitRecordEdit
 import see.day.model.record.habit.HabitRecordInput
 import see.day.model.record.habit.HabitType
 import javax.inject.Inject
 
 @HiltViewModel
 class HabitDetailViewModel @Inject constructor(
-    private val insertHabitRecordUseCase: InsertHabitRecordUseCase
+    private val insertHabitRecordUseCase: InsertHabitRecordUseCase,
+    private val getRecordDetailUseCase: GetRecordDetailUseCase,
+    private val updateHabitRecordUseCase: UpdateHabitRecordUseCase,
+    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HabitDetailUiState> = MutableStateFlow(HabitDetailUiState.init)
@@ -30,6 +38,9 @@ class HabitDetailViewModel @Inject constructor(
 
     private val _uiEffect: MutableSharedFlow<HabitDetailUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<HabitDetailUiEffect> = _uiEffect.asSharedFlow()
+
+    private val _toastMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
 
     fun fetchData(type: HabitRecordPostType) {
         when (type) {
@@ -42,6 +53,34 @@ class HabitDetailViewModel @Inject constructor(
             }
 
             is HabitRecordPostType.Edit -> {
+                viewModelScope.launch {
+                    getRecordDetailUseCase(type.id).onSuccess { habitRecord ->
+                        if(habitRecord is HabitRecordDetail) {
+                            val hour = habitRecord.notificationTime.split(":")[0].toInt()
+                            val minute = habitRecord.notificationTime.split(":")[1].toInt()
+                            _uiState.update {
+                                it.copy(
+                                    habitType = habitRecord.habitType,
+                                    notificationEnabled = habitRecord.notificationEnabled,
+                                    hour = hour,
+                                    minute = minute,
+                                    memo = habitRecord.memo,
+                                    editMode = HabitDetailUiState.EditMode.Edit(
+                                        recordId = habitRecord.id,
+                                        originalRecord = HabitRecordInput(
+                                            habitType = habitRecord.habitType,
+                                            notificationEnabled = habitRecord.notificationEnabled,
+                                            notificationHour = hour,
+                                            notificationMinute = minute,
+                                            memo = habitRecord.memo,
+                                            recordDate = habitRecord.recordDate,
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
 
             }
         }
@@ -70,7 +109,7 @@ class HabitDetailViewModel @Inject constructor(
             }
 
             is HabitDetailUiEvent.DeleteRecord -> {
-
+                deleteRecord(uiEvent.recordId)
             }
         }
     }
@@ -116,7 +155,7 @@ class HabitDetailViewModel @Inject constructor(
                 }
 
                 is HabitDetailUiState.EditMode.Edit -> {
-
+                    updateHabitRecord(mode.recordId)
                 }
             }
         }
@@ -136,6 +175,31 @@ class HabitDetailViewModel @Inject constructor(
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
         }.onFailure {
 
+        }
+    }
+
+    private suspend fun updateHabitRecord(recordId: String) {
+        updateHabitRecordUseCase(
+            recordId = recordId,
+            habitRecordEdit = HabitRecordEdit(
+                habitType = uiState.value.habitType,
+                notificationEnabled = uiState.value.notificationEnabled,
+                hour = uiState.value.hour,
+                minute = uiState.value.minute,
+                memo = uiState.value.memo,
+            )
+        ).onSuccess {
+            _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
+        }
+    }
+
+    private fun deleteRecord(recordId: String) {
+        viewModelScope.launch {
+            deleteHabitRecordUseCase(recordId)
+                .onSuccess {
+                    _uiEffect.emit(HabitDetailUiEffect.OnPopHome(isUpdated = true))
+                    _toastMessage.emit("기록이 삭제 되었습니다.")
+                }
         }
     }
 
