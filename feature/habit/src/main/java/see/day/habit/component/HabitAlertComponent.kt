@@ -47,12 +47,13 @@ import java.time.LocalTime
 internal fun HabitAlertComponent(
     modifier: Modifier = Modifier,
     isChecked: Boolean,
+    timeSpinnerDisplayed: Boolean,
     hour: Int,
     minute: Int,
     onClickSwitch: (Boolean) -> Unit,
-    onTimeChanged: (hour: Int, minute: Int) -> Unit
+    onTimeChanged: (hour: Int, minute: Int) -> Unit,
+    onTimeSpinnerDisplayed: (Boolean) -> Unit,
 ) {
-    var isSpinnerDisplay by remember(isChecked) { mutableStateOf(isChecked) }
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -87,14 +88,15 @@ internal fun HabitAlertComponent(
                 ),
             )
         }
-        if(isChecked) {
+        if (isChecked) {
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
                     .border(1.dp, gray20)
-                    .heightIn(min = 44.dp),
+                    .heightIn(min = 44.dp)
+                    .clickable { onTimeSpinnerDisplayed(true) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -104,7 +106,7 @@ internal fun HabitAlertComponent(
                 )
             }
         }
-        if(isSpinnerDisplay) {
+        if (timeSpinnerDisplayed) {
             WheelTimePicker(
                 timeFormat = TimeFormat.AM_PM,
                 startTime = LocalTime.of(hour, minute),
@@ -128,9 +130,11 @@ internal fun HabitAlertComponent(
             Text(
                 "완료",
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.align(Alignment.End).clickable {
-                    isSpinnerDisplay = false
-                }
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .clickable {
+                        onTimeSpinnerDisplayed(false)
+                    }
             )
         }
 
@@ -150,7 +154,8 @@ private fun formatTime(hour: Int, minute: Int): String {
 @Preview
 @Composable
 private fun HabitAlertComponentPreview() {
-    val (isChecked, onClickSwitch) = remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(false) }
+
     var hour by remember { mutableStateOf(10) }
     var minute by remember { mutableStateOf(0) }
 
@@ -158,16 +163,25 @@ private fun HabitAlertComponentPreview() {
         hour = currentHour
         minute = currentMinute
     }
+
+    var timeSpinnerDisplayed by remember { mutableStateOf(false) }
+
+    val onClickSwitch: (Boolean) -> Unit = { newChecked ->
+        isChecked = newChecked
+        timeSpinnerDisplayed = newChecked
+    }
     SeeDayTheme {
         HabitAlertComponent(
             modifier = Modifier
                 .padding(top = 24.dp)
                 .padding(horizontal = 16.dp),
             isChecked = isChecked,
+            timeSpinnerDisplayed = timeSpinnerDisplayed,
             hour = hour,
             minute = minute,
             onClickSwitch = onClickSwitch,
-            onTimeChanged = onTimeChanged
+            onTimeChanged = onTimeChanged,
+            onTimeSpinnerDisplayed = { displayed -> timeSpinnerDisplayed = displayed }
         )
     }
 }
