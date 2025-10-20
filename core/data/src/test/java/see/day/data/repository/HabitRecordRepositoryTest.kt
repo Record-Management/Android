@@ -20,6 +20,7 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 import see.day.network.HabitRecordService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.record.HabitRecordResponse
+import see.day.network.dto.record.habit.HabitRecordCompleteRequest
 import see.day.repository.HabitRecordRepositoryImpl
 
 @RunWith(MockitoJUnitRunner::class)
@@ -40,7 +41,7 @@ class HabitRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "","2024-10-19")
+            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "", "2024-10-19")
             val habitRecordResponse = HabitRecordResponse(
                 id = "0",
                 type = RecordType.HABIT.name,
@@ -71,6 +72,69 @@ class HabitRecordRepositoryTest {
             assertEquals(habitRecordInput.habitType, result.habitType)
 
             verify(habitRecordService).postHabitRecord(habitRecordInput.toDto())
+        }
+    }
+
+    @Test
+    fun givenRecordId_whenDeleting_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123213-123"
+
+            whenever(habitRecordService.deleteHabitRecord(recordId)).thenReturn(
+                CommonResponse(
+                    200,
+                    "S20000",
+                    "정상적으로 처리되었습니다.",
+                    null
+                )
+            )
+
+            // when
+            val result = sut.deleteHabitRecord(recordId).getOrThrow()
+
+            // then
+            verify(habitRecordService).deleteHabitRecord(recordId)
+        }
+    }
+
+    @Test
+    fun givenRecordIdAndIsCompleted_whenUpdateIsCompleted_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123-123"
+            val isCompleted = true
+
+            val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
+            val habitRecordResponse = HabitRecordResponse(
+                id = "0",
+                type = RecordType.HABIT.name,
+                recordDate = timeFormatter.formatDate(),
+                recordTime = timeFormatter.formatTime(),
+                createdAt = "",
+                updatedAt = "",
+                habitType = HabitType.SAVING.name,
+                notificationEnabled = true,
+                notificationTime = "10:00:00",
+                memo = "",
+                isCompleted = true
+            )
+
+            whenever(habitRecordService.updateHabitRecordComplete(recordId, HabitRecordCompleteRequest(isCompleted))).thenReturn(
+                CommonResponse(
+                    200,
+                    "S20000",
+                    "정상적으로 처리되었습니다.",
+                    habitRecordResponse
+                )
+            )
+
+            // when
+            val result = sut.updateHabitRecordIsCompleted(recordId, isCompleted).getOrThrow()
+
+            // then
+            assertEquals(result, isCompleted)
+            verify(habitRecordService).updateHabitRecordComplete(recordId, HabitRecordCompleteRequest(isCompleted))
         }
     }
 }

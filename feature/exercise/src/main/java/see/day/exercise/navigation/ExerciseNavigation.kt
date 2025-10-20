@@ -10,7 +10,6 @@ import see.day.exercise.screen.ExerciseSelectScreenRoot
 import see.day.exercise.util.ExerciseRecordPostType
 import see.day.model.record.RecordType
 import see.day.model.record.exercise.ExerciseType
-import see.day.navigation.exercise.ExerciseRoute
 import see.day.navigation.exercise.ExerciseRoute.*
 
 fun NavController.navigateExercise(navOptions: NavOptions? = null) {

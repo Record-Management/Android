@@ -6,4 +6,8 @@ import see.day.model.record.habit.HabitRecordInput
 interface HabitRecordRepository {
 
     suspend fun insertHabitRecord(habitRecordInput: HabitRecordInput): Result<HabitRecordDetail>
+
+    suspend fun deleteHabitRecord(recordId: String) : Result<Unit>
+
+    suspend fun updateHabitRecordIsCompleted(recordId: String,isCompleted: Boolean) : Result<Boolean>
 }

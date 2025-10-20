@@ -11,18 +11,23 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
+import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
+import see.day.domain.usecase.record.habit.UpdateHabitRecordIsCompletedUseCase
 import see.day.domain.usecase.user.GetUserUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
+import see.day.model.calendar.HabitRecordDetail
+import see.day.model.calendar.RecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
 
@@ -32,7 +37,9 @@ class HomeViewModel @Inject constructor(
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
-    private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase
+    private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
+    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
+    private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
@@ -108,6 +115,9 @@ class HomeViewModel @Inject constructor(
             }
             is HomeUiEvent.OnClickDeleteItem -> {
                 onClickDeleteItem(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
+            }
+            is HomeUiEvent.OnClickUpdateHabitIsComplete -> {
+                onClickHabitRecordIsCompleted(recordId = uiEvent.recordId, isCompleted = uiEvent.isCompleted)
             }
         }
     }
@@ -247,7 +257,11 @@ class HomeViewModel @Inject constructor(
                 }
 
                 RecordType.HABIT -> {
-
+                    deleteHabitRecordUseCase(recordId)
+                        .onSuccess {
+                            onRefresh()
+                            _toastMessage.emit("기록이 삭제 되었습니다.")
+                        }
                 }
 
                 RecordType.SCHEDULE -> {
@@ -269,6 +283,27 @@ class HomeViewModel @Inject constructor(
                 },
                 it.schedules
             )
+        }
+    }
+
+    private fun onClickHabitRecordIsCompleted(recordId: String, isCompleted: Boolean) {
+        viewModelScope.launch {
+            updateHabitRecordIsCompletedUseCase(recordId, isCompleted)
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            dailyRecordDetails = it.dailyRecordDetails.copy(
+                                records = it.dailyRecordDetails.records.map { record ->
+                                    when {
+                                        record.id == recordId && record is HabitRecordDetail ->
+                                            record.copy(isCompleted = isCompleted)
+                                        else -> record
+                                    }
+                                }
+                            )
+                        )
+                    }
+                }
         }
     }
 }

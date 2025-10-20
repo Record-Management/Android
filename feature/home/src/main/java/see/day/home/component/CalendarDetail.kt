@@ -20,6 +20,7 @@ import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.component.record.overview.DailyRecordOverview
 import see.day.ui.component.record.overview.ExerciseRecordOverview
+import see.day.ui.component.record.overview.HabitRecordOverView
 
 @Composable
 fun CalendarDetail(
@@ -27,6 +28,7 @@ fun CalendarDetail(
     dailyRecordDetails: DailyRecordDetails,
     onClickOverview: (RecordType, String) -> Unit,
     onClickLongItem: (RecordType, String) -> Unit,
+    onClickUpdateHabitRecordIsCompleted: (String, Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -65,8 +67,11 @@ fun CalendarDetail(
                     }
 
                     is HabitRecordDetail -> {
-                        Text(
-                            record.toString()
+                        HabitRecordOverView(
+                            habitRecord = record,
+                            onClickItem = onClickOverview,
+                            onClickLongItem = onClickLongItem,
+                            onClickChecked = onClickUpdateHabitRecordIsCompleted
                         )
                     }
                 }
@@ -85,7 +90,9 @@ private fun CalendarDetailPreview() {
                 "2025-09-12",
                 listOf(DailyRecordDetail(id = "", type = RecordType.DAILY, emotion = DailyEmotion.Love, content = "asdasdasd", imageUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime = "", recordDate = "13:30", createdAt = "", updatedAt = ""))
             ),
-            onClickOverview = { recordType, recordId -> }
-        ) { recordType, recordId -> }
+            onClickOverview = { recordType, recordId -> },
+            onClickLongItem = { recordType, recordId -> },
+            onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted -> }
+        )
     }
 }
