@@ -40,7 +40,7 @@ class HabitRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "","2024-10-19")
+            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "", "2024-10-19")
             val habitRecordResponse = HabitRecordResponse(
                 id = "0",
                 type = RecordType.HABIT.name,
@@ -71,6 +71,29 @@ class HabitRecordRepositoryTest {
             assertEquals(habitRecordInput.habitType, result.habitType)
 
             verify(habitRecordService).postHabitRecord(habitRecordInput.toDto())
+        }
+    }
+
+    @Test
+    fun givenRecordId_whenDeleting_thenWorksFine() {
+        runTest {
+            // given
+            val recordId = "123213-123"
+
+            whenever(habitRecordService.deleteHabitRecord(recordId)).thenReturn(
+                CommonResponse(
+                    200,
+                    "S20000",
+                    "정상적으로 처리되었습니다.",
+                    null
+                )
+            )
+
+            // when
+            val result = sut.deleteHabitRecord(recordId).getOrThrow()
+
+            // then
+            verify(habitRecordService).deleteHabitRecord(recordId)
         }
     }
 }

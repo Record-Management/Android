@@ -18,4 +18,10 @@ class HabitRecordRepositoryImpl @Inject constructor(
             habitRecordService.postHabitRecord(habitRecordInput.toDto()).data?.toHabitRecord() ?: throw NoDataException()
         }
     }
+
+    override suspend fun deleteHabitRecord(recordId: String): Result<Unit> {
+        return createResult {
+            habitRecordService.deleteHabitRecord(recordId)
+        }
+    }
 }
