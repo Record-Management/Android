@@ -20,6 +20,7 @@ import see.day.habit.state.HabitDetailUiEvent
 import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
 import see.day.model.calendar.HabitRecordDetail
+import see.day.model.record.habit.HabitRecordEdit
 import see.day.model.record.habit.HabitRecordInput
 import see.day.model.record.habit.HabitType
 import javax.inject.Inject
@@ -154,7 +155,7 @@ class HabitDetailViewModel @Inject constructor(
                 }
 
                 is HabitDetailUiState.EditMode.Edit -> {
-
+                    updateHabitRecord(mode.recordId)
                 }
             }
         }
@@ -174,6 +175,21 @@ class HabitDetailViewModel @Inject constructor(
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
         }.onFailure {
 
+        }
+    }
+
+    private suspend fun updateHabitRecord(recordId: String) {
+        updateHabitRecordUseCase(
+            recordId = recordId,
+            habitRecordEdit = HabitRecordEdit(
+                habitType = uiState.value.habitType,
+                notificationEnabled = uiState.value.notificationEnabled,
+                hour = uiState.value.hour,
+                minute = uiState.value.minute,
+                memo = uiState.value.memo,
+            )
+        ).onSuccess {
+            _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
         }
     }
 
