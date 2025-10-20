@@ -1,7 +1,9 @@
 package see.day.mapper.record
 
 import android.annotation.SuppressLint
+import see.day.model.record.habit.HabitRecordEdit
 import see.day.model.record.habit.HabitRecordInput
+import see.day.network.dto.record.habit.HabitRecordEditRequest
 import see.day.network.dto.record.habit.HabitRecordInputRequest
 
 @SuppressLint("DefaultLocale")
@@ -12,5 +14,15 @@ fun HabitRecordInput.toDto() : HabitRecordInputRequest {
         notificationTime = if(notificationEnabled) String.format("%02d:%02d", notificationHour, notificationMinute) else null,
         memo = memo.ifBlank { null },
         recordDate = recordDate
+    )
+}
+
+@SuppressLint("DefaultLocale")
+fun HabitRecordEdit.toDto() : HabitRecordEditRequest {
+    return HabitRecordEditRequest(
+        habitType = habitType.name,
+        notificationEnabled = notificationEnabled,
+        notificationTime = if(notificationEnabled) String.format("%02d:%02d", hour, minute) else null,
+        memo = memo.ifBlank { null }
     )
 }
