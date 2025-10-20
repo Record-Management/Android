@@ -10,6 +10,7 @@ import see.day.habit.screen.HabitSelectScreenRoot
 import see.day.habit.state.HabitRecordPostType
 import see.day.model.record.RecordType
 import see.day.model.record.habit.HabitType
+import see.day.navigation.habit.HabitRoute.HabitDetail
 import see.day.navigation.habit.HabitRoute.HabitSelect
 import see.day.navigation.habit.HabitRoute.HabitWrite
 
@@ -19,6 +20,10 @@ fun NavController.navigateHabit(navOptions: NavOptions? = null) {
 
 fun NavController.navigateHabitWrite(habitType: HabitType, navOptions: NavOptions? = null) {
     navigate(HabitWrite(habitType), navOptions)
+}
+
+fun NavController.navigateHabitDetail(recordId: String, navOptions: NavOptions? = null) {
+    navigate(HabitDetail(recordId), navOptions)
 }
 
 fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit, onBack: () -> Unit, onClickHabitType: (HabitType) -> Unit, onClickPopHome: (Boolean) -> Unit) {
@@ -34,6 +39,14 @@ fun NavGraphBuilder.habitNavigation(onClickChangeRecordType: (RecordType, Boolea
         val habitType = navBackStackEntry.toRoute<HabitWrite>().habitType
         HabitDetailScreenRoot(
             editType = HabitRecordPostType.Write(habitType),
+            onClickPopHome = onClickPopHome
+        )
+    }
+
+    composable<HabitDetail> { navBackStackEntry ->
+        val recordId = navBackStackEntry.toRoute<HabitDetail>().recordId
+        HabitDetailScreenRoot(
+            editType = HabitRecordPostType.Edit(recordId),
             onClickPopHome = onClickPopHome
         )
     }

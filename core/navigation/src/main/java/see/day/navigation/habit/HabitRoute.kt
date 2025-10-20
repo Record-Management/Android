@@ -10,4 +10,7 @@ sealed interface HabitRoute {
 
     @Serializable
     data class HabitWrite(val habitType: HabitType) : HabitRoute
+
+    @Serializable
+    data class HabitDetail(val recordId: String) : HabitRoute
 }
