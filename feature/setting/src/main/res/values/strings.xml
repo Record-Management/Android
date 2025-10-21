@@ -3,4 +3,5 @@
     <string name="setting">설정</string>
     <string name="my_information">내 정보</string>
     <string name="nickname">닉네임</string>
+    <string name="birthday">생일</string>
 </resources>

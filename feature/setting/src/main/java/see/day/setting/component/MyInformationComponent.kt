@@ -4,11 +4,14 @@ import android.graphics.ColorFilter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,12 +56,15 @@ internal fun MyInformationComponent(
                 .padding(top = 10.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.White)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             NicknameComponent(modifier, nickname, {})
+            BirthdayComponent(modifier, birthDate, {})
         }
     }
 }
+
 
 @Composable
 private fun NicknameComponent(modifier: Modifier, nickname: String, onClick: () -> Unit) {
@@ -76,11 +82,38 @@ private fun NicknameComponent(modifier: Modifier, nickname: String, onClick: () 
         Text(
             text = nickname,
             style = MaterialTheme.typography.labelSmall.copy(color = gray60),
-            modifier = Modifier.padding(end = (1).dp)
+            modifier = Modifier.padding(end = 1.dp)
         )
         Image(
             painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
-            contentDescription = "선택 버튼",
+            contentDescription = "닉네임 선택 버튼",
+            modifier = Modifier.size(12.dp),
+            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(gray50)
+        )
+    }
+}
+
+@Composable
+private fun BirthdayComponent(modifier: Modifier, birthDate: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(R.string.birthday),
+            style = MaterialTheme.typography.labelMedium.copy(color = gray90)
+        )
+        Spacer(modifier = modifier.weight(1f))
+        Text(
+            text = birthDate,
+            style = MaterialTheme.typography.labelSmall.copy(color = gray60),
+            modifier = Modifier.padding(end = 1.dp)
+        )
+        Image(
+            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+            contentDescription = "생일 선택 버튼",
             modifier = Modifier.size(12.dp),
             colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(gray50)
         )
@@ -92,7 +125,7 @@ private fun NicknameComponent(modifier: Modifier, nickname: String, onClick: () 
 private fun MyInformationComponentPreview() {
     SeeDayTheme {
         MyInformationComponent(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             nickname = "네즈코",
             birthDate = "1995/09/23",
             socialType = SocialType.KAKAO,
