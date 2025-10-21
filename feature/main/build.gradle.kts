@@ -13,8 +13,8 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:daily"))
     implementation(project(":feature:habit"))
-
     implementation(project(":feature:exercise"))
+    implementation(project(":feature:setting"))
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)

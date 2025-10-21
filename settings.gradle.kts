@@ -31,7 +31,8 @@ include(
     "core:data",
     "core:model",
     "core:designsystem",
-    "core:ui"
+    "core:ui",
+    "core:navigation"
 )
 
 include(
@@ -39,8 +40,8 @@ include(
     "feature:login",
     "feature:onboarding",
     "feature:home",
-    "feature:daily"
+    "feature:daily",
+    "feature:exercise",
+    "feature:habit",
+    "feature:setting"
 )
-include(":core:navigation")
-include(":feature:exercise")
-include(":feature:habit")
