@@ -64,7 +64,9 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
 //            scheduleNavigation(
 //                onClickChangeRecordType = navigationState::navigateAddRecord
 //            )
-            settingNavigation()
+            settingNavigation(
+                onBack = navigationState.navController::popBackStack
+            )
         }
     }
 

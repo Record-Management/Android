@@ -10,8 +10,10 @@ import see.day.setting.screen.SettingScreenRoot
 fun NavController.navigateSetting(navOptions: NavOptions? = null) {
     navigate(Setting, navOptions)
 }
-fun NavGraphBuilder.settingNavigation() {
+fun NavGraphBuilder.settingNavigation(onBack: () -> Unit) {
     composable<Setting> {
-        SettingScreenRoot()
+        SettingScreenRoot(
+            onBack = onBack
+        )
     }
 }
