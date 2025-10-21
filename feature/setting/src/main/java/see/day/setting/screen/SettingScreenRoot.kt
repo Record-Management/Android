@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
@@ -49,6 +50,7 @@ internal fun SettingScreen(
         Column(
             modifier = modifier
                 .padding(innerPadding)
+                .padding(horizontal = 16.dp)
                 .fillMaxSize()
                 .background(gray20)
         ) {
