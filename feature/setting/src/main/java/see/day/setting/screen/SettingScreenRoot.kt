@@ -1,4 +1,4 @@
-package see.day.main.setting
+package see.day.setting.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import see.day.setting.viewModel.SettingViewModel
 
 @Composable
 fun SettingScreenRoot(modifier: Modifier = Modifier, viewModel: SettingViewModel = hiltViewModel()) {
