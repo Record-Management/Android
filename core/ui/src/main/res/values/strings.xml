@@ -28,4 +28,7 @@
     <string name="exercise_select_title">운동 선택</string>
     <string name="habit_select_title">습관 선택</string>
     <string name="schedule_select_title" />
+
+    <string name="today_records_over_title">오늘의 기록 2개가 모두 채워졌어요.</string>
+    <string name="today_records_over_body">내일 다시 시도해 주세요.</string>
 </resources>
