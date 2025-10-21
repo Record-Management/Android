@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.model.login.SocialType
+import see.day.setting.component.AlertSettingComponent
 import see.day.setting.component.MyInformationComponent
 import see.day.setting.component.SettingTopBar
 import see.day.setting.viewModel.SettingViewModel
@@ -63,6 +64,11 @@ internal fun SettingScreen(
                 socialType = SocialType.KAKAO,
                 onNicknameChanged = {},
                 onBirthdayChanged = {}
+            )
+            AlertSettingComponent(
+                modifier = Modifier.padding(top = 24.dp),
+                onClickAppAlert = {},
+                onClickRecordsAlert = {}
             )
         }
     }
