@@ -5,4 +5,6 @@
     <string name="nickname">닉네임</string>
     <string name="birthday">생일</string>
     <string name="socal_account">소셜 계정</string>
+    <string name="alert_setting">알림 설정</string>
+    <string name="app_alert">앱 알림</string>
 </resources>
