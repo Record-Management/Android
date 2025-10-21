@@ -146,7 +146,7 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords
                     )
                 }
-                if(detailDailyRecords.date == HomeUiState.getTodayDate()) {
+                if (detailDailyRecords.date == HomeUiState.getTodayDate()) {
                     todayRecords.emit(detailDailyRecords)
                 } else {
                     getDailyRecordsUseCase(HomeUiState.getTodayDate()).onSuccess { todayRecord ->
@@ -227,7 +227,12 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+            if (todayRecords.value.records.size >= 2) {
+                _uiEffect.emit(HomeUiEffect.TodayRecordOver)
+            } else {
+                _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+            }
+
         }
     }
 

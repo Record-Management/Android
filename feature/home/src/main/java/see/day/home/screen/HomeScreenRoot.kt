@@ -68,6 +68,7 @@ import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 import see.day.ui.dialog.DeleteRecordDialog
+import see.day.ui.dialog.OneButtonDialog
 
 @Composable
 fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit, onClickDetailRecord: (RecordType, String) -> Unit, onClickSetting: () -> Unit) {
@@ -83,6 +84,7 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
             }
     }
     var openDeleteDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
+    var openTodayRecordOverDialog by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
@@ -101,6 +103,9 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
                 is HomeUiEffect.OnClickLongRecord -> {
                     openDeleteDialog = Triple(true, effect.recordType, effect.recordId)
                 }
+                is HomeUiEffect.TodayRecordOver -> {
+                    openTodayRecordOverDialog = true
+                }
             }
         }
     }
@@ -109,6 +114,15 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
         viewModel.toastMessage.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    if (openTodayRecordOverDialog) {
+        OneButtonDialog(
+            titleRes = see.day.ui.R.string.today_records_over_title,
+            bodyRes = see.day.ui.R.string.today_records_over_body,
+            onDismiss = { openTodayRecordOverDialog = false },
+            onClickAcceptButton = { openTodayRecordOverDialog = false }
+        )
     }
 
     if (openDeleteDialog.first) {
