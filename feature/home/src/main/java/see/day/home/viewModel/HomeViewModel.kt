@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
@@ -26,8 +25,8 @@ import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
+import see.day.model.calendar.DailyRecordDetails
 import see.day.model.calendar.HabitRecordDetail
-import see.day.model.calendar.RecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
 
@@ -44,6 +43,8 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    private val todayRecords: MutableStateFlow<DailyRecordDetails> = MutableStateFlow(DailyRecordDetails(HomeUiState.getTodayDate(), listOf()))
 
     private val _uiEffect: MutableSharedFlow<HomeUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<HomeUiEffect> = _uiEffect.asSharedFlow()
@@ -74,6 +75,7 @@ class HomeViewModel @Inject constructor(
                         createdAt = user.await().createdAt
                     )
                 }
+                todayRecords.emit(detailDailyRecords)
             } catch (e: Exception) {
             }
         }
@@ -113,9 +115,11 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickLongItem -> {
                 onClickItemLong(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
             }
+
             is HomeUiEvent.OnClickDeleteItem -> {
                 onClickDeleteItem(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
             }
+
             is HomeUiEvent.OnClickUpdateHabitIsComplete -> {
                 onClickHabitRecordIsCompleted(recordId = uiEvent.recordId, isCompleted = uiEvent.isCompleted)
             }
@@ -142,6 +146,14 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords
                     )
                 }
+                if (detailDailyRecords.date == HomeUiState.getTodayDate()) {
+                    todayRecords.emit(detailDailyRecords)
+                } else {
+                    getDailyRecordsUseCase(HomeUiState.getTodayDate()).onSuccess { todayRecord ->
+                        todayRecords.emit(todayRecord)
+                    }
+                }
+
             } catch (e: Exception) {
 
             }
@@ -215,7 +227,12 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+            if (todayRecords.value.records.size >= 2) {
+                _uiEffect.emit(HomeUiEffect.TodayRecordOver)
+            } else {
+                _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+            }
+
         }
     }
 
@@ -297,6 +314,7 @@ class HomeViewModel @Inject constructor(
                                     when {
                                         record.id == recordId && record is HabitRecordDetail ->
                                             record.copy(isCompleted = isCompleted)
+
                                         else -> record
                                     }
                                 }
