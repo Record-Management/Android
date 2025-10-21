@@ -63,6 +63,6 @@ internal fun RecordType.selectTopBarTitle() : Int{
         RecordType.DAILY -> R.string.daily_select_title
         RecordType.EXERCISE -> R.string.exercise_select_title
         RecordType.HABIT -> R.string.habit_select_title
-        RecordType.SCHEDULE -> R.string.schedule_select_title
+//        RecordType.SCHEDULE -> R.string.schedule_select_title
     }
 }

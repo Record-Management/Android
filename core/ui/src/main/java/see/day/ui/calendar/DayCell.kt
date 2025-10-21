@@ -39,7 +39,6 @@ import see.day.designsystem.theme.gray50
 import see.day.model.record.RecordType
 import see.day.model.record.RecordType.DAILY
 import see.day.model.record.RecordType.HABIT
-import see.day.model.record.RecordType.SCHEDULE
 import see.day.util.getGrayIcon
 import see.day.util.getIcon
 import java.time.LocalDate
@@ -73,7 +72,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             return
         }
         // 아이콘이 정상적인 색상으로 나오는 것
-        if (mainRecordType != SCHEDULE) {
+//        if (mainRecordType != SCHEDULE) {
             if (filterType == null && records.contains(mainRecordType)) {
                 Box(
                     modifier = Modifier
@@ -157,47 +156,47 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                     }
                 }
             }
-        }
+//        }
 
-        if (schedules.isNotEmpty() && (filterType == null || filterType == SCHEDULE)) {
-            Spacer(modifier = Modifier.size(6.dp))
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(2.dp))
-                    .background(gray20)
-                    .fillMaxWidth()
-                    .padding(end = 4.dp)
-                    .align(Alignment.Start),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                // 색상
-                Spacer(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .size(width = 2.dp, height = 10.dp)
-                        .background(gray50)
-                )
-                Text(
-                    text = schedules[0],
-                    style = MaterialTheme.typography.headlineSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = modifier.padding(bottom = 1.dp)
-                )
-            }
-            if (schedules.size >= 2) {
-                Text(
-                    text = "+${schedules.size - 1}",
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(gray20)
-                        .align(Alignment.Start),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
-        }
+//        if (schedules.isNotEmpty() && (filterType == null || filterType == SCHEDULE)) {
+//            Spacer(modifier = Modifier.size(6.dp))
+//            Row(
+//                modifier = Modifier
+//                    .clip(RoundedCornerShape(2.dp))
+//                    .background(gray20)
+//                    .fillMaxWidth()
+//                    .padding(end = 4.dp)
+//                    .align(Alignment.Start),
+//                horizontalArrangement = Arrangement.Start,
+//                verticalAlignment = Alignment.Bottom
+//            ) {
+//                // 색상
+//                Spacer(
+//                    modifier = Modifier
+//                        .padding(2.dp)
+//                        .size(width = 2.dp, height = 10.dp)
+//                        .background(gray50)
+//                )
+//                Text(
+//                    text = schedules[0],
+//                    style = MaterialTheme.typography.headlineSmall,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis,
+//                    modifier = modifier.padding(bottom = 1.dp)
+//                )
+//            }
+//            if (schedules.size >= 2) {
+//                Text(
+//                    text = "+${schedules.size - 1}",
+//                    modifier = Modifier
+//                        .padding(2.dp)
+//                        .clip(RoundedCornerShape(4.dp))
+//                        .background(gray20)
+//                        .align(Alignment.Start),
+//                    style = MaterialTheme.typography.headlineSmall
+//                )
+//            }
+//        }
     }
 }
 
@@ -327,30 +326,30 @@ private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
 }
 
 // 타입이 스케줄이고 본인에 해당하는 타입이 없으며 record가 다른게 하나 존재하는 경우
-@Preview
-@Composable
-private fun DayCellFilterTypeScheduleOneRecordNoSchedulePreview() {
-    val context = LocalContext.current
-    SeeDayTheme {
-        Column(
-            modifier = Modifier.width(49.dp)
-        ) {
-            DayCell(
-                year = 2025,
-                month = 9,
-                day = 13,
-                filterType = SCHEDULE,
-                isSelected = true,
-                mainRecordType = DAILY,
-                records = listOf(HABIT),
-                schedules = listOf("hello"),
-                createdAt = "2025-10-10",
-                onClickItem = { year, month, day ->
-                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
-                },
-                isSameMonth = true
-            )
-        }
-    }
-}
+//@Preview
+//@Composable
+//private fun DayCellFilterTypeScheduleOneRecordNoSchedulePreview() {
+//    val context = LocalContext.current
+//    SeeDayTheme {
+//        Column(
+//            modifier = Modifier.width(49.dp)
+//        ) {
+//            DayCell(
+//                year = 2025,
+//                month = 9,
+//                day = 13,
+//                filterType = SCHEDULE,
+//                isSelected = true,
+//                mainRecordType = DAILY,
+//                records = listOf(HABIT),
+//                schedules = listOf("hello"),
+//                createdAt = "2025-10-10",
+//                onClickItem = { year, month, day ->
+//                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+//                },
+//                isSameMonth = true
+//            )
+//        }
+//    }
+//}
 // 상황별 분리
