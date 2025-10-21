@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
+import see.day.model.login.SocialType
+import see.day.setting.component.MyInformationComponent
 import see.day.setting.component.SettingTopBar
 import see.day.setting.viewModel.SettingViewModel
 
@@ -50,21 +52,18 @@ internal fun SettingScreen(
         Column(
             modifier = modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
                 .fillMaxSize()
                 .background(gray20)
+                .padding(horizontal = 16.dp)
         ) {
-            Text("세팅화면")
-            Button(
-                onClickLogout
-            ) {
-                Text("로그아웃 하기")
-            }
-            Button(
-                onClickDelete
-            ) {
-                Text("회원 탈퇴 하기")
-            }
+            MyInformationComponent(
+                modifier = Modifier.padding(top = 10.dp),
+                nickname = "네즈코",
+                birthDate = "2000/01/16",
+                socialType = SocialType.KAKAO,
+                onNicknameChanged = {},
+                onBirthdayChanged = {}
+            )
         }
     }
 }

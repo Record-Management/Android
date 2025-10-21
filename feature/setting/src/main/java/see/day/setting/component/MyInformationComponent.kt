@@ -1,6 +1,5 @@
 package see.day.setting.component
 
-import android.graphics.ColorFilter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,14 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +26,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray60
 import see.day.designsystem.theme.gray90
+import see.day.designsystem.util.getIconRes
 import see.day.model.login.SocialType
 import see.day.setting.R
 
@@ -45,7 +40,7 @@ internal fun MyInformationComponent(
     onBirthdayChanged: (String) -> Unit,
 ) {
     Column(
-        modifier = modifier.padding(top = 10.dp)
+        modifier = modifier
     ) {
         Text(
             text = stringResource(R.string.my_information),
@@ -59,11 +54,13 @@ internal fun MyInformationComponent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            NicknameComponent(modifier, nickname, {})
-            BirthdayComponent(modifier, birthDate, {})
+            NicknameComponent(Modifier, nickname, {})
+            BirthdayComponent(Modifier, birthDate, {})
+            SocialTypeComponent(Modifier, socialType)
         }
     }
 }
+
 
 
 @Composable
@@ -120,12 +117,37 @@ private fun BirthdayComponent(modifier: Modifier, birthDate: String, onClick: ()
     }
 }
 
+@Composable
+private fun SocialTypeComponent(
+    modifier: Modifier,
+    socialType: SocialType
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(R.string.socal_account),
+            style = MaterialTheme.typography.labelMedium.copy(color = gray90)
+        )
+        Spacer(modifier = modifier.weight(1f))
+        Image(
+            painter = painterResource(socialType.getIconRes()),
+            contentDescription = "소셜 계정 ${socialType.name}",
+            modifier = Modifier.size(16.dp)
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun MyInformationComponentPreview() {
     SeeDayTheme {
         MyInformationComponent(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             nickname = "네즈코",
             birthDate = "1995/09/23",
             socialType = SocialType.KAKAO,
