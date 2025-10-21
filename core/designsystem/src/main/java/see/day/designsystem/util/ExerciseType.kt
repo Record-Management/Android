@@ -13,6 +13,6 @@ val ExerciseType.getIconRes : Int
         ExerciseType.SOCCER -> R.drawable.exercise_soccer
         ExerciseType.SWIMMING -> R.drawable.exercise_swimming
         ExerciseType.TENNIS -> R.drawable.exercise_tennis
-        ExerciseType.WEIGHTS -> R.drawable.exercise_weights
+        ExerciseType.WEIGHT_TRAINING -> R.drawable.exercise_weights
         ExerciseType.YOGA -> R.drawable.exercise_yoga
     }
