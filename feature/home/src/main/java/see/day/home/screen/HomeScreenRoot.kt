@@ -345,7 +345,7 @@ fun RecordFilterType.toRecordType(): RecordType? {
         RecordFilterType.ALL -> null
         RecordFilterType.DAILY -> RecordType.DAILY
         RecordFilterType.EXERCISE -> RecordType.EXERCISE
-        RecordFilterType.SCHEDULE -> RecordType.SCHEDULE
+//        RecordFilterType.SCHEDULE -> RecordType.SCHEDULE
         RecordFilterType.HABIT -> RecordType.HABIT
     }
 }

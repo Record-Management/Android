@@ -19,28 +19,28 @@ fun NavController.navigateSchedule(navOptions: NavOptions? = null) {
     navigate(Schedule, navOptions)
 }
 
-fun NavGraphBuilder.scheduleNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit) {
-    composable<Schedule> {
-        Column {
-            Text("Schedule")
-            var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
-
-            if (isOpenRecordTypePickerDialog) {
-                RecordTypePickerDialog(
-                    currentRecordType = RecordType.SCHEDULE,
-                    onDismiss = { isOpenRecordTypePickerDialog = false },
-                    onCompleteRecordType = { selectedType ->
-                        onClickChangeRecordType(selectedType, true)
-                        isOpenRecordTypePickerDialog = false
-                    }
-                )
-            }
-
-            Button(
-                { isOpenRecordTypePickerDialog = true }
-            ) {
-                Text("기록 변경")
-            }
-        }
-    }
-}
+//fun NavGraphBuilder.scheduleNavigation(onClickChangeRecordType: (RecordType, Boolean) -> Unit) {
+//    composable<Schedule> {
+//        Column {
+//            Text("Schedule")
+//            var isOpenRecordTypePickerDialog by remember { mutableStateOf(false) }
+//
+//            if (isOpenRecordTypePickerDialog) {
+//                RecordTypePickerDialog(
+//                    currentRecordType = RecordType.SCHEDULE,
+//                    onDismiss = { isOpenRecordTypePickerDialog = false },
+//                    onCompleteRecordType = { selectedType ->
+//                        onClickChangeRecordType(selectedType, true)
+//                        isOpenRecordTypePickerDialog = false
+//                    }
+//                )
+//            }
+//
+//            Button(
+//                { isOpenRecordTypePickerDialog = true }
+//            ) {
+//                Text("기록 변경")
+//            }
+//        }
+//    }
+//}

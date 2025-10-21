@@ -14,14 +14,15 @@ data class CalendarDayInfo(
         fun of(monthlyRecord: MonthlyRecord): List<CalendarDayInfo> {
             return monthlyRecord.dailyRecords.map { dailyRecord ->
                 val (year, month, day) = dailyRecord.date.split("-").map { it.toInt() }
-                val (scheduleRecords, otherRecords) = dailyRecord.records.partition { it.type == RecordType.SCHEDULE }
+//                val (scheduleRecords, otherRecords) = dailyRecord.records.partition { it.type == RecordType.SCHEDULE }
+                val otherRecords = dailyRecord.records
 
                 CalendarDayInfo(
                     year = year,
                     month = month,
                     day = day,
                     records = otherRecords.map { it.type },
-                    schedules = scheduleRecords.map { it.toString() }
+                    schedules = listOf()
                 )
             }
         }

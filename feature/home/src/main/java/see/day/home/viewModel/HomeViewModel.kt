@@ -281,9 +281,9 @@ class HomeViewModel @Inject constructor(
                         }
                 }
 
-                RecordType.SCHEDULE -> {
-
-                }
+//                RecordType.SCHEDULE -> {
+//
+//                }
             }
         }
 
