@@ -330,6 +330,7 @@ private fun HomeBottomSheetContent(
                     uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted))
                 }
             )
+            Spacer(modifier = Modifier.height(100.dp))
             Spacer(modifier = modifier.systemBarsPadding())
         }
     }
