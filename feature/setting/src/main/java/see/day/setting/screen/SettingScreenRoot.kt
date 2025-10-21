@@ -19,6 +19,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.model.login.SocialType
 import see.day.setting.component.AlertSettingComponent
+import see.day.setting.component.ExtSettingComponent
 import see.day.setting.component.MyInformationComponent
 import see.day.setting.component.SettingTopBar
 import see.day.setting.viewModel.SettingViewModel
@@ -69,6 +70,13 @@ internal fun SettingScreen(
                 modifier = Modifier.padding(top = 24.dp),
                 onClickAppAlert = {},
                 onClickRecordsAlert = {}
+            )
+            ExtSettingComponent(
+                modifier = Modifier.padding(top = 24.dp),
+                onClickPolicy = {},
+                onClickInquiry = {},
+                onClickLogout = {},
+                onClickWithdrawal = {}
             )
         }
     }
