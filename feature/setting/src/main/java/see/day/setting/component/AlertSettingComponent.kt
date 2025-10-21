@@ -48,7 +48,8 @@ internal fun AlertSettingComponent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AppAlertComponent(Modifier,onClickAppAlert)
+            AppAlertComponent(Modifier, onClickAppAlert)
+            RecordsAlertComponent(Modifier, onClickRecordsAlert)
         }
     }
 }
@@ -68,7 +69,32 @@ private fun AppAlertComponent(
             text = stringResource(R.string.app_alert),
             style = MaterialTheme.typography.labelMedium.copy(color = gray90)
         )
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
+        Image(
+            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+            contentDescription = "앱 알림 선택 버튼",
+            modifier = Modifier.size(12.dp),
+            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(gray50)
+        )
+    }
+}
+
+@Composable
+private fun RecordsAlertComponent(
+    modifier: Modifier = Modifier,
+    onClickRecordsAlert: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClickRecordsAlert() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(R.string.records_alert),
+            style = MaterialTheme.typography.labelMedium.copy(color = gray90)
+        )
+        Spacer(modifier = Modifier.weight(1f))
         Image(
             painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
             contentDescription = "앱 알림 선택 버튼",
