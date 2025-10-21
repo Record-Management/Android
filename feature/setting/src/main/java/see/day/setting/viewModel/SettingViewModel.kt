@@ -1,4 +1,4 @@
-package see.day.main.setting
+package see.day.setting.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -18,8 +18,8 @@ import see.day.habit.navigation.habitNavigation
 import see.day.habit.navigation.navigateHabitWrite
 import see.day.home.navigation.homeNavigation
 import see.day.home.navigation.navigateBackToHome
-import see.day.main.setting.navigateSetting
-import see.day.main.setting.settingNavigation
+import see.day.setting.navigation.navigateSetting
+import see.day.setting.navigation.settingNavigation
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
 import see.day.onboarding.navigation.onboardingNavigation
@@ -64,7 +64,9 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
 //            scheduleNavigation(
 //                onClickChangeRecordType = navigationState::navigateAddRecord
 //            )
-            settingNavigation()
+            settingNavigation(
+                onBack = navigationState.navController::popBackStack
+            )
         }
     }
 
