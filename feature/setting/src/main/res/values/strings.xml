@@ -12,4 +12,5 @@
     <string name="inquiry">문의하기</string>
     <string name="logout">로그아웃</string>
     <string name="withdrawal">탈퇴하기</string>
+    <string name="change_nickname">닉네임 변경</string>
 </resources>

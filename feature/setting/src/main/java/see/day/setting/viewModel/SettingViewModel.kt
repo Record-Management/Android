@@ -35,6 +35,9 @@ class SettingViewModel @Inject constructor(
     private val _uiEffect: MutableSharedFlow<SettingUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<SettingUiEffect> = _uiEffect.asSharedFlow()
 
+    private val _toastMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
+
     init {
         viewModelScope.launch {
             getUserUseCase()
@@ -82,6 +85,7 @@ class SettingViewModel @Inject constructor(
                             nickname = user.nickname
                         )
                     }
+                    _toastMessage.emit("닉네임이 변경되었습니다.")
                 }
         }
     }

@@ -1,18 +1,16 @@
 package see.day.setting.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +29,7 @@ import see.day.setting.viewModel.SettingViewModel
 
 @Composable
 fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () -> Unit) {
+    val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
@@ -40,6 +39,12 @@ fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () 
                     onBack()
                 }
             }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -78,8 +83,12 @@ internal fun SettingScreen(
                 nickname = uiState.nickname,
                 birthDate = uiState.birthDate,
                 socialType = SocialType.KAKAO,
-                onNicknameChanged = {},
-                onBirthdayChanged = {}
+                onNicknameChanged = { nickname ->
+                    uiEvent(SettingUiEvent.OnChangedNickname(nickname))
+                },
+                onBirthDateChanged = { birthdate ->
+                    uiEvent(SettingUiEvent.OnChangedBirthDate(birthdate))
+                }
             )
             AlertSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
