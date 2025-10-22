@@ -99,8 +99,12 @@ internal fun SettingScreen(
                 modifier = Modifier.padding(top = 24.dp),
                 onClickPolicy = {},
                 onClickInquiry = {},
-                onClickLogout = {},
-                onClickWithdrawal = {}
+                onClickLogout = {
+                    uiEvent(SettingUiEvent.OnClickLogout)
+                },
+                onClickWithdrawal = {
+                    uiEvent(SettingUiEvent.OnClickWithdrawal)
+                }
             )
         }
     }

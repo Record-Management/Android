@@ -4,4 +4,6 @@ sealed interface SettingUiEvent {
     data object OnPopBack: SettingUiEvent
     data class OnChangedNickname(val nickname: String) : SettingUiEvent
     data class OnChangedBirthDate(val birthDate: String) : SettingUiEvent
+    data object OnClickLogout: SettingUiEvent
+    data object OnClickWithdrawal: SettingUiEvent
 }

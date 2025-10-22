@@ -34,4 +34,14 @@
 
     <string name="nickname_hint">닉네임 혹은 이름을 입력해 주세요.</string>
     <string name="nickname_description">한글, 영문 최대 6글자 / 공백, 특수기호 입력 불가</string>
+
+    <string name="logout_title">로그아웃 하시겠습니까?</string>
+    <string name="logout_body">뭐라 말할까</string>
+    <string name="logout_cancel">닫기</string>
+    <string name="logout_confirm">로그아웃</string>
+
+    <string name="withdrawal_title">탈퇴를 진행 하시겠습니까?</string>
+    <string name="withdrawal_body">탈퇴 시 모든 정보가 삭제되며, 복구가 불가능합니다.</string>
+    <string name="withdrawal_cancel">닫기</string>
+    <string name="withdrawal_confirm">탈퇴하기</string>
 </resources>

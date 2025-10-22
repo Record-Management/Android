@@ -67,7 +67,7 @@ import see.day.home.util.RecordFilterType
 import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
-import see.day.ui.dialog.DeleteRecordDialog
+import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.OneButtonDialog
 
 @Composable
@@ -126,9 +126,9 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
     }
 
     if (openDeleteDialog.first) {
-        DeleteRecordDialog(
+        ConfirmDialog(
             onDismiss = { openDeleteDialog = openDeleteDialog.copy(first = false) },
-            onClickDeleteButton = {
+            onClickConfirmButton = {
                 viewModel.onEvent(HomeUiEvent.OnClickDeleteItem(openDeleteDialog.second, openDeleteDialog.third))
             }
         )

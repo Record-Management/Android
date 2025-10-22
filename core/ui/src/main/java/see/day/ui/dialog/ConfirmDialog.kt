@@ -1,5 +1,6 @@
 package see.day.ui.dialog
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,10 +28,21 @@ import androidx.compose.ui.window.DialogProperties
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray50
+import see.day.designsystem.theme.gray70
+import see.day.designsystem.theme.primaryColor
 import see.day.ui.R
 
 @Composable
-fun DeleteRecordDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit, onClickDeleteButton: () -> Unit) {
+fun ConfirmDialog(
+    modifier: Modifier = Modifier,
+    @StringRes title: Int = R.string.record_delete_title,
+    @StringRes body: Int = R.string.record_delete_body,
+    @StringRes cancel: Int = R.string.record_dismiss_button_text,
+    @StringRes confirm: Int = R.string.record_delete_button_text,
+    onDismiss: () -> Unit,
+    onClickConfirmButton: () -> Unit,
+    confirmButtonColor: Color = primaryColor
+) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -58,13 +70,13 @@ fun DeleteRecordDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit, onC
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.record_delete_title),
+                        text = stringResource(title),
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
                         modifier = modifier.padding(top = 8.dp),
-                        text = stringResource(R.string.record_delete_body),
-                        style = MaterialTheme.typography.labelSmall
+                        text = stringResource(body),
+                        style = MaterialTheme.typography.labelSmall.copy(color = gray70)
                     )
                     Row(
                         modifier = modifier
@@ -85,24 +97,27 @@ fun DeleteRecordDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit, onC
                             )
                         ) {
                             Text(
-                                stringResource(R.string.record_dismiss_button_text),
+                                stringResource(cancel),
                                 color = gray50,
                                 style = MaterialTheme.typography.displayLarge
                             )
                         }
                         Button(
                             onClick = {
-                                onClickDeleteButton()
+                                onClickConfirmButton()
                                 onDismiss()
                             },
                             modifier = modifier
                                 .weight(1f)
                                 .heightIn(min = 52.dp)
                                 .padding(start = 5.dp),
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors().copy(
+                                containerColor = confirmButtonColor
+                            )
                         ) {
                             Text(
-                                stringResource(R.string.record_delete_button_text),
+                                stringResource(confirm),
                                 color = Color.White,
                                 style = MaterialTheme.typography.displayLarge
                             )
@@ -116,11 +131,11 @@ fun DeleteRecordDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit, onC
 
 @Preview
 @Composable
-private fun DeleteRecordDialogPreview() {
+private fun ConfirmDialogPreview() {
     SeeDayTheme {
-        DeleteRecordDialog(
+        ConfirmDialog(
             onDismiss = {},
-            onClickDeleteButton = {}
+            onClickConfirmButton = {}
         )
     }
 }
