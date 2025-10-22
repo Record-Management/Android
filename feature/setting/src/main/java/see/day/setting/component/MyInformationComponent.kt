@@ -14,6 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,7 +41,7 @@ internal fun MyInformationComponent(
     birthDate: String,
     socialType: SocialType,
     onNicknameChanged: (String) -> Unit,
-    onBirthdayChanged: (String) -> Unit,
+    onBirthDateChanged: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -54,8 +58,8 @@ internal fun MyInformationComponent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            NicknameComponent(Modifier, nickname, {})
-            BirthdayComponent(Modifier, birthDate, {})
+            NicknameComponent(Modifier, nickname, onNicknameChanged)
+            BirthDateComponent(Modifier, birthDate, onBirthDateChanged)
             SocialTypeComponent(Modifier, socialType)
         }
     }
@@ -64,11 +68,25 @@ internal fun MyInformationComponent(
 
 
 @Composable
-private fun NicknameComponent(modifier: Modifier, nickname: String, onClick: () -> Unit) {
+private fun NicknameComponent(modifier: Modifier, nickname: String, onNicknameChanged: (String) -> Unit) {
+    var openNicknameChangeBottomSheet by remember { mutableStateOf(false) }
+
+    if(openNicknameChangeBottomSheet) {
+        NicknameChangedBottomSheet(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            nickname = nickname,
+            onDismiss = { openNicknameChangeBottomSheet = false},
+            onNicknameChanged = { newNickname ->
+                onNicknameChanged(newNickname)
+                openNicknameChangeBottomSheet = false
+            }
+        )
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable { openNicknameChangeBottomSheet = true },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -91,11 +109,23 @@ private fun NicknameComponent(modifier: Modifier, nickname: String, onClick: () 
 }
 
 @Composable
-private fun BirthdayComponent(modifier: Modifier, birthDate: String, onClick: () -> Unit) {
+private fun BirthDateComponent(modifier: Modifier, birthDate: String, onBirthDateChanged: (String) -> Unit) {
+    var openBirthDateDialog by remember { mutableStateOf(false) }
+
+    if(openBirthDateDialog) {
+        BirthDateChangedDialog(
+            birthDate = birthDate,
+            onDismiss = { openBirthDateDialog = false},
+            onBirthDateChanged = { newBirthDate ->
+                openBirthDateDialog = false
+                onBirthDateChanged(newBirthDate)
+            }
+        )
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable { openBirthDateDialog = true },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -104,7 +134,7 @@ private fun BirthdayComponent(modifier: Modifier, birthDate: String, onClick: ()
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
-            text = birthDate,
+            text = birthDate.replace('-','/'),
             style = MaterialTheme.typography.labelSmall.copy(color = gray60),
             modifier = Modifier.padding(end = 1.dp)
         )
@@ -152,7 +182,7 @@ private fun MyInformationComponentPreview() {
             birthDate = "1995/09/23",
             socialType = SocialType.KAKAO,
             onNicknameChanged = {},
-            onBirthdayChanged = {}
+            onBirthDateChanged = {}
         )
     }
 }

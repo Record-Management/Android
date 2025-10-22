@@ -1,20 +1,20 @@
 package see.day.setting.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.model.login.SocialType
@@ -22,23 +22,43 @@ import see.day.setting.component.AlertSettingComponent
 import see.day.setting.component.ExtSettingComponent
 import see.day.setting.component.MyInformationComponent
 import see.day.setting.component.SettingTopBar
+import see.day.setting.state.SettingUiEffect
+import see.day.setting.state.SettingUiEvent
+import see.day.setting.state.SettingUiState
 import see.day.setting.viewModel.SettingViewModel
 
 @Composable
 fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () -> Unit) {
+    val context = LocalContext.current
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { uiEffect ->
+            when (uiEffect) {
+                SettingUiEffect.OnPopBack -> {
+                    onBack()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     SettingScreen(
-        onClickLogout = viewModel::logout,
-        onClickDelete = viewModel::deleteUser,
-        onClickBackButton = onBack,
+        uiState = uiState,
+        uiEvent = viewModel::onEvent,
     )
 }
 
 @Composable
 internal fun SettingScreen(
     modifier: Modifier = Modifier,
-    onClickLogout: () -> Unit,
-    onClickDelete: () -> Unit,
-    onClickBackButton: () -> Unit
+    uiState: SettingUiState,
+    uiEvent: (SettingUiEvent) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -47,7 +67,7 @@ internal fun SettingScreen(
         topBar = {
             SettingTopBar(
                 modifier = Modifier,
-                onClickBackButton = onClickBackButton
+                onClickBackButton = { uiEvent(SettingUiEvent.OnPopBack) }
             )
         }
     ) { innerPadding ->
@@ -60,11 +80,15 @@ internal fun SettingScreen(
         ) {
             MyInformationComponent(
                 modifier = Modifier.padding(top = 10.dp),
-                nickname = "네즈코",
-                birthDate = "2000/01/16",
+                nickname = uiState.nickname,
+                birthDate = uiState.birthDate,
                 socialType = SocialType.KAKAO,
-                onNicknameChanged = {},
-                onBirthdayChanged = {}
+                onNicknameChanged = { nickname ->
+                    uiEvent(SettingUiEvent.OnChangedNickname(nickname))
+                },
+                onBirthDateChanged = { birthdate ->
+                    uiEvent(SettingUiEvent.OnChangedBirthDate(birthdate))
+                }
             )
             AlertSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
@@ -87,9 +111,8 @@ internal fun SettingScreen(
 private fun SettingScreenPreview() {
     SeeDayTheme {
         SettingScreen(
-            onClickDelete = {},
-            onClickLogout = {},
-            onClickBackButton = {}
+            uiState = SettingUiState.init,
+            uiEvent = {}
         )
     }
 }

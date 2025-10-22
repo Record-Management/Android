@@ -4,8 +4,10 @@ import see.day.model.login.SocialType
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.model.user.User
+import see.day.model.user.UserProfileChangedInput
 import see.day.network.dto.user.FullUserResponse
 import see.day.network.dto.user.OnboardingCompleteRequest
+import see.day.network.dto.user.UserProfileChangedInputRequest
 
 fun OnboardingComplete.toDto(): OnboardingCompleteRequest {
     return OnboardingCompleteRequest(
@@ -30,5 +32,12 @@ fun FullUserResponse.toModel(): User {
         notificationEnabled = notificationEnabled,
         onboardingCompleted = onboardingCompleted,
         createdAt = createdAt
+    )
+}
+
+fun UserProfileChangedInput.toDto() : UserProfileChangedInputRequest {
+    return UserProfileChangedInputRequest(
+        nickname = nickname,
+        birthDate = birthDate
     )
 }

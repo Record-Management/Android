@@ -9,6 +9,7 @@ import see.day.model.exception.NoDataException
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.model.user.User
+import see.day.model.user.UserProfileChangedInput
 import see.day.network.UserService
 import see.day.network.dto.auth.DeleteUserRequest
 import see.day.utils.ErrorUtils.createResult
@@ -42,6 +43,12 @@ class UserRepositoryImpl @Inject constructor(
             dataSource.clearData()
         }.onFailure {
             dataSource.clearData()
+        }
+    }
+
+    override suspend fun updateUser(updateUserProfileChangedInput: UserProfileChangedInput): Result<User> {
+        return createResult {
+            userService.updateUserProfile(updateUserProfileChangedInput.toDto()).data?.toModel() ?: throw NoDataException()
         }
     }
 }
