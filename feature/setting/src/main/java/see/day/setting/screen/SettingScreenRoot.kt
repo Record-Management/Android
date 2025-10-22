@@ -27,8 +27,6 @@ import see.day.setting.viewModel.SettingViewModel
 @Composable
 fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () -> Unit) {
     SettingScreen(
-        onClickLogout = viewModel::logout,
-        onClickDelete = viewModel::deleteUser,
         onClickBackButton = onBack,
     )
 }
@@ -36,8 +34,6 @@ fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () 
 @Composable
 internal fun SettingScreen(
     modifier: Modifier = Modifier,
-    onClickLogout: () -> Unit,
-    onClickDelete: () -> Unit,
     onClickBackButton: () -> Unit
 ) {
     Scaffold(
@@ -87,8 +83,6 @@ internal fun SettingScreen(
 private fun SettingScreenPreview() {
     SeeDayTheme {
         SettingScreen(
-            onClickDelete = {},
-            onClickLogout = {},
             onClickBackButton = {}
         )
     }
