@@ -22,6 +22,7 @@ import see.day.model.exception.BadRequestException
 import see.day.model.login.SocialType
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
+import see.day.model.user.UserProfileChangedInput
 import see.day.network.UserService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.auth.DeleteUserRequest
@@ -186,6 +187,60 @@ class UserRepositoryTest {
 
             // then
             verify(userService).getUser()
+        }
+    }
+
+    @Test
+    fun givenUserProfileNickname_whenUpdate_thenWorksFine() {
+        runTest {
+            // given
+            val nickname = "변경된닉네임"
+            val userProfileChangedInput = UserProfileChangedInput.ofNickname(nickname)
+            val userResponse = FullUserResponse("", "", nickname, "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, true, "")
+
+            whenever(userService.updateUserProfile(userProfileChangedInput.toDto())).thenReturn(
+                CommonResponse(
+                    200,
+                    "SUCCESS",
+                    "요청이 성공적으로 처리되었습니다.",
+                    userResponse
+                )
+            )
+
+            // when
+            val result = sut.updateUser(updateUserProfileChangedInput = userProfileChangedInput).getOrThrow()
+
+            // then
+            assertEquals(result.nickname, nickname)
+
+            verify(userService).updateUserProfile(userProfileChangedInput.toDto())
+        }
+    }
+
+    @Test
+    fun givenUserProfileBirthdate_whenUpdate_thenWorksFine() {
+        runTest {
+            // given
+            val birthDate = "2000-01-16"
+            val userProfileChangedInput = UserProfileChangedInput.ofBirthDate(birthDate)
+            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "2000-01-16", 20, true, true, "")
+
+            whenever(userService.updateUserProfile(userProfileChangedInput.toDto())).thenReturn(
+                CommonResponse(
+                    200,
+                    "SUCCESS",
+                    "요청이 성공적으로 처리되었습니다.",
+                    userResponse
+                )
+            )
+
+            // when
+            val result = sut.updateUser(updateUserProfileChangedInput = userProfileChangedInput).getOrThrow()
+
+            // then
+            assertEquals(result.birthDate, birthDate)
+
+            verify(userService).updateUserProfile(userProfileChangedInput.toDto())
         }
     }
 }
