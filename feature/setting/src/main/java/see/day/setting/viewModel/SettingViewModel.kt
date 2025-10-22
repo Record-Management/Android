@@ -67,6 +67,12 @@ class SettingViewModel @Inject constructor(
             is SettingUiEvent.OnChangedBirthDate -> {
                 onChangedBirthday(uiEvent.birthDate)
             }
+            is SettingUiEvent.OnClickLogout -> {
+                onClickLogout()
+            }
+            is SettingUiEvent.OnClickWithdrawal -> {
+                onClickWithdrawal()
+            }
         }
     }
 
@@ -101,6 +107,18 @@ class SettingViewModel @Inject constructor(
                     }
                     _toastMessage.emit("생일 정보가 수정되었습니다.")
                 }
+        }
+    }
+
+    private fun onClickLogout() {
+        viewModelScope.launch {
+            logoutUseCase()
+        }
+    }
+
+    private fun onClickWithdrawal() {
+        viewModelScope.launch {
+            deleteUserUseCase()
         }
     }
 }
