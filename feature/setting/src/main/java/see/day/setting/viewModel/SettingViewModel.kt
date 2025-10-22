@@ -3,8 +3,11 @@ package see.day.setting.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -13,6 +16,7 @@ import see.day.domain.usecase.user.DeleteUserUseCase
 import see.day.domain.usecase.user.GetUserUseCase
 import see.day.domain.usecase.user.UpdateUserProfileUseCase
 import see.day.model.user.UserProfileChangedInput
+import see.day.setting.state.SettingUiEffect
 import see.day.setting.state.SettingUiEvent
 import see.day.setting.state.SettingUiState
 import javax.inject.Inject
@@ -27,6 +31,9 @@ class SettingViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<SettingUiState> = MutableStateFlow(SettingUiState.init)
     val uiState: StateFlow<SettingUiState> = _uiState.asStateFlow()
+
+    private val _uiEffect: MutableSharedFlow<SettingUiEffect> = MutableSharedFlow()
+    val uiEffect: SharedFlow<SettingUiEffect> = _uiEffect.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -46,6 +53,10 @@ class SettingViewModel @Inject constructor(
 
     fun onEvent(uiEvent: SettingUiEvent) {
         when (uiEvent) {
+            is SettingUiEvent.OnPopBack -> {
+                onPopBack()
+            }
+
             is SettingUiEvent.OnChangedNickname -> {
                 onChangedNickname(uiEvent.nickname)
             }
@@ -53,6 +64,12 @@ class SettingViewModel @Inject constructor(
             is SettingUiEvent.OnChangedBirthDate -> {
                 onChangedBirthday(uiEvent.birthDate)
             }
+        }
+    }
+
+    private fun onPopBack() {
+        viewModelScope.launch {
+            _uiEffect.emit(SettingUiEffect.OnPopBack)
         }
     }
 

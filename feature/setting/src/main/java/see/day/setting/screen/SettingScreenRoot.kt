@@ -10,11 +10,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.model.login.SocialType
@@ -22,19 +24,36 @@ import see.day.setting.component.AlertSettingComponent
 import see.day.setting.component.ExtSettingComponent
 import see.day.setting.component.MyInformationComponent
 import see.day.setting.component.SettingTopBar
+import see.day.setting.state.SettingUiEffect
+import see.day.setting.state.SettingUiEvent
+import see.day.setting.state.SettingUiState
 import see.day.setting.viewModel.SettingViewModel
 
 @Composable
 fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () -> Unit) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { uiEffect ->
+            when (uiEffect) {
+                SettingUiEffect.OnPopBack -> {
+                    onBack()
+                }
+            }
+        }
+    }
+
     SettingScreen(
-        onClickBackButton = onBack,
+        uiState = uiState,
+        uiEvent = viewModel::onEvent,
     )
 }
 
 @Composable
 internal fun SettingScreen(
     modifier: Modifier = Modifier,
-    onClickBackButton: () -> Unit
+    uiState: SettingUiState,
+    uiEvent: (SettingUiEvent) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -43,7 +62,7 @@ internal fun SettingScreen(
         topBar = {
             SettingTopBar(
                 modifier = Modifier,
-                onClickBackButton = onClickBackButton
+                onClickBackButton = { uiEvent(SettingUiEvent.OnPopBack) }
             )
         }
     ) { innerPadding ->
@@ -56,8 +75,8 @@ internal fun SettingScreen(
         ) {
             MyInformationComponent(
                 modifier = Modifier.padding(top = 10.dp),
-                nickname = "네즈코",
-                birthDate = "2000/01/16",
+                nickname = uiState.nickname,
+                birthDate = uiState.birthDate,
                 socialType = SocialType.KAKAO,
                 onNicknameChanged = {},
                 onBirthdayChanged = {}
@@ -83,7 +102,8 @@ internal fun SettingScreen(
 private fun SettingScreenPreview() {
     SeeDayTheme {
         SettingScreen(
-            onClickBackButton = {}
+            uiState = SettingUiState.init,
+            uiEvent = {}
         )
     }
 }
