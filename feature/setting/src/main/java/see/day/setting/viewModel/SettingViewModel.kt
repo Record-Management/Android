@@ -99,6 +99,7 @@ class SettingViewModel @Inject constructor(
                             birthDate = user.birthDate
                         )
                     }
+                    _toastMessage.emit("생일 정보가 수정되었습니다.")
                 }
         }
     }

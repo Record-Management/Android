@@ -59,7 +59,7 @@ internal fun MyInformationComponent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             NicknameComponent(Modifier, nickname, onNicknameChanged)
-            BirthdayComponent(Modifier, birthDate, {})
+            BirthDateComponent(Modifier, birthDate, onBirthDateChanged)
             SocialTypeComponent(Modifier, socialType)
         }
     }
@@ -109,11 +109,23 @@ private fun NicknameComponent(modifier: Modifier, nickname: String, onNicknameCh
 }
 
 @Composable
-private fun BirthdayComponent(modifier: Modifier, birthDate: String, onClick: () -> Unit) {
+private fun BirthDateComponent(modifier: Modifier, birthDate: String, onBirthDateChanged: (String) -> Unit) {
+    var openBirthDateDialog by remember { mutableStateOf(false) }
+
+    if(openBirthDateDialog) {
+        BirthDateChangedDialog(
+            birthDate = birthDate,
+            onDismiss = { openBirthDateDialog = false},
+            onBirthDateChanged = { newBirthDate ->
+                openBirthDateDialog = false
+                onBirthDateChanged(newBirthDate)
+            }
+        )
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable { openBirthDateDialog = true },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
