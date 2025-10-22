@@ -34,4 +34,9 @@
 
     <string name="nickname_hint">닉네임 혹은 이름을 입력해 주세요.</string>
     <string name="nickname_description">한글, 영문 최대 6글자 / 공백, 특수기호 입력 불가</string>
+
+    <string name="logout_title">로그아웃 하시겠습니까?</string>
+    <string name="logout_body">변경한 내용은 저장되지 않아요.</string>
+    <string name="logout_cancel">닫기</string>
+    <string name="logout_confirm">로그아웃</string>
 </resources>
