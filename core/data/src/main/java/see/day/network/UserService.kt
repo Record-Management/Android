@@ -4,10 +4,12 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.auth.DeleteUserRequest
 import see.day.network.dto.user.FullUserResponse
 import see.day.network.dto.user.OnboardingCompleteRequest
+import see.day.network.dto.user.UserProfileChangedInputRequest
 
 interface UserService {
 
@@ -19,4 +21,7 @@ interface UserService {
 
     @HTTP(method = "DELETE", path = "api/users/withdrawal", hasBody = true)
     suspend fun deleteUser(@Body requestBody: DeleteUserRequest) : Unit
+
+    @PUT("api/users/profile")
+    suspend fun updateUserProfile(@Body userProfileChangedInputRequest: UserProfileChangedInputRequest) : CommonResponse<FullUserResponse>
 }
