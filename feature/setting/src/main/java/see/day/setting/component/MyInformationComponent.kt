@@ -134,7 +134,7 @@ private fun BirthDateComponent(modifier: Modifier, birthDate: String, onBirthDat
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
-            text = birthDate,
+            text = birthDate.replace('-','/'),
             style = MaterialTheme.typography.labelSmall.copy(color = gray60),
             modifier = Modifier.padding(end = 1.dp)
         )
