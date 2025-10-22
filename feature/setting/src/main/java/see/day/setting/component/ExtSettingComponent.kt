@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray90
+import see.day.designsystem.theme.onError
 import see.day.setting.R
 import see.day.ui.dialog.ConfirmDialog
 
@@ -120,13 +121,13 @@ private fun LogoutComponent(
 ) {
     var openLogoutDialog by remember { mutableStateOf(false) }
 
-    if(openLogoutDialog) {
+    if (openLogoutDialog) {
         ConfirmDialog(
             title = see.day.ui.R.string.logout_title,
             body = see.day.ui.R.string.logout_body,
             cancel = see.day.ui.R.string.logout_cancel,
             confirm = see.day.ui.R.string.logout_confirm,
-            onDismiss = { openLogoutDialog = false},
+            onDismiss = { openLogoutDialog = false },
             onClickConfirmButton = {
                 onClickLogout()
                 openLogoutDialog = false
@@ -151,10 +152,26 @@ private fun WithdrawalComponent(
     modifier: Modifier = Modifier,
     onClickWithdrawal: () -> Unit
 ) {
+    var openWithdrawalDialog by remember { mutableStateOf(false) }
+
+    if (openWithdrawalDialog) {
+        ConfirmDialog(
+            title = see.day.ui.R.string.withdrawal_title,
+            body = see.day.ui.R.string.withdrawal_body,
+            cancel = see.day.ui.R.string.withdrawal_cancel,
+            confirm = see.day.ui.R.string.withdrawal_confirm,
+            onDismiss = { openWithdrawalDialog = false },
+            onClickConfirmButton = {
+                onClickWithdrawal()
+                openWithdrawalDialog = false
+            },
+            confirmButtonColor = onError
+        )
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClickWithdrawal() },
+            .clickable { openWithdrawalDialog = true },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

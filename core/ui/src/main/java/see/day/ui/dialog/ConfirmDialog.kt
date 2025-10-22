@@ -29,6 +29,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray70
+import see.day.designsystem.theme.primaryColor
 import see.day.ui.R
 
 @Composable
@@ -39,7 +40,8 @@ fun ConfirmDialog(
     @StringRes cancel: Int = R.string.record_dismiss_button_text,
     @StringRes confirm: Int = R.string.record_delete_button_text,
     onDismiss: () -> Unit,
-    onClickConfirmButton: () -> Unit
+    onClickConfirmButton: () -> Unit,
+    confirmButtonColor: Color = primaryColor
 ) {
     Dialog(
         onDismissRequest = onDismiss,
@@ -68,12 +70,12 @@ fun ConfirmDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(body),
+                        text = stringResource(title),
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
                         modifier = modifier.padding(top = 8.dp),
-                        text = stringResource(title),
+                        text = stringResource(body),
                         style = MaterialTheme.typography.labelSmall.copy(color = gray70)
                     )
                     Row(
@@ -109,7 +111,10 @@ fun ConfirmDialog(
                                 .weight(1f)
                                 .heightIn(min = 52.dp)
                                 .padding(start = 5.dp),
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors().copy(
+                                containerColor = confirmButtonColor
+                            )
                         ) {
                             Text(
                                 stringResource(confirm),
