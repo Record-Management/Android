@@ -48,7 +48,7 @@ import see.day.habit.viewModel.HabitDetailViewModel
 import see.day.model.record.RecordType
 import see.day.ui.button.CompleteButton
 import see.day.ui.component.TypeTitle
-import see.day.ui.dialog.DeleteRecordDialog
+import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
@@ -136,9 +136,9 @@ internal fun HabitDetailScreenRoot(
 
     var openDeleteDialog by remember { mutableStateOf(false) }
     if (openDeleteDialog) {
-        DeleteRecordDialog(
+        ConfirmDialog(
             onDismiss = { openDeleteDialog = false },
-            onClickDeleteButton = {
+            onClickConfirmButton = {
                 val editMode = uiState.editMode
                 if (editMode is HabitDetailUiState.EditMode.Edit) {
                     viewModel.onEvent(HabitDetailUiEvent.DeleteRecord(editMode.recordId))

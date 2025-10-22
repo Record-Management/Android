@@ -39,7 +39,7 @@ import see.day.designsystem.theme.gray60
 import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.ui.button.CompleteButton
-import see.day.ui.dialog.DeleteRecordDialog
+import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.photo.RecordDetailPhotoRow
 import see.day.ui.textField.RecordWriteTextField
@@ -108,9 +108,9 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
 
     var openDeleteDialog by remember { mutableStateOf(false) }
     if (openDeleteDialog) {
-        DeleteRecordDialog(
+        ConfirmDialog(
             onDismiss = { openDeleteDialog = false },
-            onClickDeleteButton = {
+            onClickConfirmButton = {
                 val editMode = uiState.editMode
                 if (editMode is DailyDetailUiState.EditMode.Edit) {
                     viewModel.onEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
