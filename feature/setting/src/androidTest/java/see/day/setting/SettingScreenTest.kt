@@ -95,4 +95,56 @@ class SettingScreenTest {
             .onNodeWithText(context.getString(R.string.change_birthdate))
             .assertIsNotDisplayed()
     }
+
+    @Test
+    fun given_whenClickLogout_shownLogoutDialog() {
+        composeTestRule.setContent {
+            SettingScreen(
+                uiState = SettingUiState.init,
+                uiEvent = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.logout))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.logout_title))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.logout_cancel))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.logout_title))
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun given_whenClickWithdrawal_shownWithdrawalDialog() {
+        composeTestRule.setContent {
+            SettingScreen(
+                uiState = SettingUiState.init,
+                uiEvent = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.withdrawal))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.withdrawal_title))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.withdrawal_cancel))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.withdrawal_title))
+            .assertIsNotDisplayed()
+    }
 }
