@@ -31,4 +31,7 @@
 
     <string name="today_records_over_title">오늘의 기록 2개가 모두 채워졌어요.</string>
     <string name="today_records_over_body">내일 다시 시도해 주세요.</string>
+
+    <string name="nickname_hint">닉네임 혹은 이름을 입력해 주세요.</string>
+    <string name="nickname_description">한글, 영문 최대 6글자 / 공백, 특수기호 입력 불가</string>
 </resources>
