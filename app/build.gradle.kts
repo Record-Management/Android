@@ -27,4 +27,6 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    // Firebase Cloud Messaging
+    implementation(libs.firebase.messaging)
 }
