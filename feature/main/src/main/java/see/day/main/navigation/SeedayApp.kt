@@ -22,6 +22,8 @@ import see.day.setting.navigation.navigateSetting
 import see.day.setting.navigation.settingNavigation
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
+import see.day.notification.navigation.navigateNotificationHistory
+import see.day.notification.navigation.notificationNavigation
 import see.day.onboarding.navigation.onboardingNavigation
 
 @Composable
@@ -41,7 +43,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
             homeNavigation(
                 onClickAddRecord = navigationState::navigateAddRecord,
                 onClickDetailRecord = navigationState::navigateDetailRecord,
-                onClickSetting = navigationState.navController::navigateSetting
+                onClickSetting = navigationState.navController::navigateSetting,
+                onClickNotification = navigationState.navController::navigateNotificationHistory
             )
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,
@@ -65,6 +68,9 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
 //                onClickChangeRecordType = navigationState::navigateAddRecord
 //            )
             settingNavigation(
+                onBack = navigationState.navController::popBackStack
+            )
+            notificationNavigation(
                 onBack = navigationState.navController::popBackStack
             )
         }

@@ -8,4 +8,5 @@ sealed interface HomeUiEffect {
     data object OnGoSetting : HomeUiEffect
     data class OnClickLongRecord(val recordType: RecordType, val recordId: String) : HomeUiEffect
     data object TodayRecordOver : HomeUiEffect
+    data object OnGoNotification : HomeUiEffect
 }
