@@ -1,12 +1,12 @@
 package see.day.domain.usecase.login
 
-import see.day.domain.repository.LoginRepository
+import see.day.domain.repository.UserRepository
 import javax.inject.Inject
 
 class LogoutUseCase @Inject constructor(
-    private val loginRepository: LoginRepository
+    private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(allDevices: Boolean = true) : Result<Unit>{
-        return loginRepository.logout(allDevices)
+        return userRepository.logout(allDevices)
     }
 }

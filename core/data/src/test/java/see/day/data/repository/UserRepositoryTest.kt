@@ -1,5 +1,6 @@
 package see.day.data.repository
 
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import okio.IOException
@@ -26,6 +27,7 @@ import see.day.model.user.UserProfileChangedInput
 import see.day.network.UserService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.auth.DeleteUserRequest
+import see.day.network.dto.auth.LogoutRequest
 import see.day.network.dto.toResponseBody
 import see.day.network.dto.user.FullUserResponse
 import see.day.repository.UserRepositoryImpl
@@ -241,6 +243,28 @@ class UserRepositoryTest {
             assertEquals(result.birthDate, birthDate)
 
             verify(userService).updateUserProfile(userProfileChangedInput.toDto())
+        }
+    }
+
+    @Test
+    fun givenRefreshToken_whenLogout_thenTokensClear() {
+        runTest {
+            // given
+            val refreshToken = "asdasdasd"
+            val allDevices = false
+            val logoutRequest = LogoutRequest(refreshToken, allDevices)
+
+            whenever(dataSource.getRefreshToken()).thenReturn(flowOf(refreshToken))
+            whenever(userService.logout(logoutRequest)).thenReturn(CommonResponse(200, "S200", "로그아웃되었습니다.", null))
+            whenever(dataSource.clearData()).thenReturn(Unit)
+
+            // when
+            val result = sut.logout(allDevices).getOrThrow()
+
+            // then
+            verify(dataSource).getRefreshToken()
+            verify(userService).logout(logoutRequest)
+            verify(dataSource).clearData()
         }
     }
 }
