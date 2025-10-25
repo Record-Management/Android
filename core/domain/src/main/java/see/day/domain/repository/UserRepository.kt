@@ -11,4 +11,5 @@ interface UserRepository {
     suspend fun getUser(): Result<User>
     suspend fun deleteUser(): Result<Unit>
     suspend fun updateUser(updateUserProfileChangedInput: UserProfileChangedInput) : Result<User>
+    suspend fun logout(allDevices: Boolean): Result<Unit>
 }

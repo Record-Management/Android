@@ -138,26 +138,4 @@ class AuthRepositoryTest {
             verify(authService).signIn(oldSocialLogin.toDto())
         }
     }
-
-    @Test
-    fun givenRefreshToken_whenLogout_thenTokensClear() {
-        runTest {
-            // given
-            val refreshToken = "asdasdasd"
-            val allDevices = false
-            val logoutRequest = LogoutRequest(refreshToken, allDevices)
-
-            whenever(dataSource.getRefreshToken()).thenReturn(flowOf(refreshToken))
-            whenever(authService.logout(logoutRequest)).thenReturn(CommonResponse(200, "S200", "로그아웃되었습니다.", null))
-            whenever(dataSource.clearData()).thenReturn(Unit)
-
-            // when
-            val result = sut.logout(allDevices).getOrThrow()
-
-            // then
-            verify(dataSource).getRefreshToken()
-            verify(authService).logout(logoutRequest)
-            verify(dataSource).clearData()
-        }
-    }
 }

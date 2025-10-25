@@ -1,5 +1,6 @@
 package see.day.repository
 
+import kotlinx.coroutines.flow.first
 import see.day.datastore.DataStoreDataSource
 import javax.inject.Inject
 import see.day.domain.repository.UserRepository
@@ -12,6 +13,7 @@ import see.day.model.user.User
 import see.day.model.user.UserProfileChangedInput
 import see.day.network.UserService
 import see.day.network.dto.auth.DeleteUserRequest
+import see.day.network.dto.auth.LogoutRequest
 import see.day.utils.ErrorUtils.createResult
 
 class UserRepositoryImpl @Inject constructor(
@@ -49,6 +51,22 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateUser(updateUserProfileChangedInput: UserProfileChangedInput): Result<User> {
         return createResult {
             userService.updateUserProfile(updateUserProfileChangedInput.toDto()).data?.toModel() ?: throw NoDataException()
+        }
+    }
+
+    override suspend fun logout(allDevices: Boolean): Result<Unit> {
+        return createResult {
+            val refreshToken = dataSource.getRefreshToken().first()
+            if(refreshToken.isNullOrEmpty()) {
+                dataSource.clearData()
+                throw NoDataException()
+            }
+            val logoutRequest = LogoutRequest(refreshToken, allDevices)
+
+            userService.logout(logoutRequest = logoutRequest)
+            dataSource.clearData()
+        }.onFailure {
+            dataSource.clearData()
         }
     }
 }

@@ -13,7 +13,8 @@ val refreshJson = """
         "name": "이름",
         "email": null,
         "onboardingCompleted": false
-      }
+      },
+      "refreshToken": "new_refresh_token"
     }
 }
 """.trimIndent()

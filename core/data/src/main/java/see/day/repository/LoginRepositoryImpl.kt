@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -21,13 +22,12 @@ import see.day.model.navigation.AppStartState.HOME
 import see.day.model.navigation.AppStartState.LOGIN
 import see.day.model.navigation.AppStartState.ONBOARDING
 import see.day.network.AuthService
-import see.day.network.dto.auth.LogoutRequest
 import see.day.network.dto.auth.RefreshTokenRequest
 import see.day.utils.ErrorUtils.createResult
 
 class LoginRepositoryImpl @Inject constructor(
     private val dataSource: DataStoreDataSource,
-    @Auth private val authService: AuthService
+    @Auth private val authService: AuthService,
 ) : LoginRepository {
 
     override suspend fun login(socialLogin: SocialLogin): Result<AppStartState> {
@@ -47,24 +47,8 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logout(allDevices: Boolean): Result<Unit> {
-        return createResult {
-            val refreshToken = dataSource.getRefreshToken().first()
-            if(refreshToken.isNullOrEmpty()) {
-                dataSource.clearData()
-                throw NoDataException()
-            }
-            val logoutRequest = LogoutRequest(refreshToken, allDevices)
-
-            authService.logout(logoutRequest = logoutRequest)
-            dataSource.clearData()
-        }.onFailure {
-            dataSource.clearData()
-        }
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getLoginState(): Flow<AppStartState> = dataSource.hasToken().flatMapLatest { hasToken ->
+    override fun getLoginState(): Flow<AppStartState> = dataSource.hasToken().distinctUntilChanged().flatMapLatest { hasToken ->
         flow {
             if (!hasToken) {
                 emit(LOGIN)
@@ -88,6 +72,7 @@ class LoginRepositoryImpl @Inject constructor(
 
                     CoroutineScope(Dispatchers.IO).launch {
                         dataSource.saveAccessToken(response.accessToken)
+                        dataSource.saveRefreshToken(response.refreshToken)
                     }
 
                     return@flow if (response.user.onboardingCompleted) {
