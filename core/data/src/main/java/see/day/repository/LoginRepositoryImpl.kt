@@ -1,10 +1,12 @@
 package see.day.repository
 
+import android.util.Log
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -64,7 +66,7 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getLoginState(): Flow<AppStartState> = dataSource.hasToken().flatMapLatest { hasToken ->
+    override fun getLoginState(): Flow<AppStartState> = dataSource.hasToken().distinctUntilChanged().flatMapLatest { hasToken ->
         flow {
             if (!hasToken) {
                 emit(LOGIN)
@@ -88,6 +90,7 @@ class LoginRepositoryImpl @Inject constructor(
 
                     CoroutineScope(Dispatchers.IO).launch {
                         dataSource.saveAccessToken(response.accessToken)
+                        dataSource.saveRefreshToken(response.refreshToken)
                     }
 
                     return@flow if (response.user.onboardingCompleted) {
