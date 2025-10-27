@@ -71,7 +71,14 @@ import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.OneButtonDialog
 
 @Composable
-fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel(), isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit, onClickDetailRecord: (RecordType, String) -> Unit, onClickSetting: () -> Unit) {
+fun HomeScreenRoot(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
+    isRefresh: Boolean, onClickAddRecord: (RecordType) -> Unit,
+    onClickDetailRecord: (RecordType, String) -> Unit,
+    onClickSetting: () -> Unit,
+    onClickNotification: () -> Unit
+) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -105,6 +112,9 @@ fun HomeScreenRoot(modifier: Modifier = Modifier, viewModel: HomeViewModel = hil
                 }
                 is HomeUiEffect.TodayRecordOver -> {
                     openTodayRecordOverDialog = true
+                }
+                is HomeUiEffect.OnGoNotification -> {
+                    onClickNotification()
                 }
             }
         }
@@ -213,6 +223,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     },
                     onClickSetting = {
                         uiEvent(HomeUiEvent.OnClickSetting)
+                    },
+                    onClickNotification = {
+                        uiEvent(HomeUiEvent.OnClickNotification)
                     }
                 )
             },

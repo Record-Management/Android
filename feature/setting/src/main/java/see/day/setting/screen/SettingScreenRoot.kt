@@ -18,14 +18,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.model.login.SocialType
+import see.day.setting.R
 import see.day.setting.component.AlertSettingComponent
 import see.day.setting.component.ExtSettingComponent
 import see.day.setting.component.MyInformationComponent
-import see.day.setting.component.SettingTopBar
 import see.day.setting.state.SettingUiEffect
 import see.day.setting.state.SettingUiEvent
 import see.day.setting.state.SettingUiState
 import see.day.setting.viewModel.SettingViewModel
+import see.day.ui.topbar.CommonAppBar
 
 @Composable
 fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () -> Unit) {
@@ -65,8 +66,10 @@ internal fun SettingScreen(
             .systemBarsPadding()
             .background(gray20),
         topBar = {
-            SettingTopBar(
+            CommonAppBar(
                 modifier = Modifier,
+                title = R.string.setting,
+                backgroundColor = gray20,
                 onClickBackButton = { uiEvent(SettingUiEvent.OnPopBack) }
             )
         }

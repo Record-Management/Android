@@ -20,17 +20,23 @@ fun NavController.navigateBackToHome(isUpdated: Boolean = false) {
     popBackStack(Home, inclusive = false)
 }
 
-fun NavGraphBuilder.homeNavigation(onClickAddRecord: (RecordType) -> Unit,onClickDetailRecord: (RecordType, String) -> Unit,onClickSetting: () -> Unit) {
+fun NavGraphBuilder.homeNavigation(
+    onClickAddRecord: (RecordType) -> Unit,
+    onClickDetailRecord: (RecordType, String) -> Unit,
+    onClickSetting: () -> Unit,
+    onClickNotification: () -> Unit
+) {
     composable<Home> { navBackStack ->
         val isUpdated = navBackStack.savedStateHandle.get<Boolean>("record_updated") ?: false
-        if(isUpdated) {
+        if (isUpdated) {
             navBackStack.savedStateHandle.remove<Boolean>("record_updated")
         }
         HomeScreenRoot(
             isRefresh = isUpdated,
             onClickAddRecord = onClickAddRecord,
             onClickDetailRecord = onClickDetailRecord,
-            onClickSetting = onClickSetting
+            onClickSetting = onClickSetting,
+            onClickNotification = onClickNotification
         )
     }
 }

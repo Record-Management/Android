@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":feature:habit"))
     implementation(project(":feature:exercise"))
     implementation(project(":feature:setting"))
+    implementation(project(":feature:notification"))
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)

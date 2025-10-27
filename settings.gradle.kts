@@ -43,5 +43,6 @@ include(
     "feature:daily",
     "feature:exercise",
     "feature:habit",
-    "feature:setting"
+    "feature:setting",
+    "feature:notification"
 )

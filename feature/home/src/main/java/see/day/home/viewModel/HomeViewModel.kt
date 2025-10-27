@@ -123,6 +123,9 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickUpdateHabitIsComplete -> {
                 onClickHabitRecordIsCompleted(recordId = uiEvent.recordId, isCompleted = uiEvent.isCompleted)
             }
+            is HomeUiEvent.OnClickNotification -> {
+                onClickNotification()
+            }
         }
     }
 
@@ -322,6 +325,12 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }
+        }
+    }
+
+    private fun onClickNotification() {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.OnGoNotification)
         }
     }
 }

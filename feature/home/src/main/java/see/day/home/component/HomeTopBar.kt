@@ -25,7 +25,7 @@ import see.day.home.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpand: Boolean, onClickBackButton: () -> Unit, onClickSetting: () -> Unit) {
+internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpand: Boolean, onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
     TopAppBar(
         title = {
             Row(
@@ -38,7 +38,7 @@ internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, isFullExpan
                     contentDescription = "알람 창",
                     modifier = modifier
                         .padding(end = 9.dp)
-                        .clickable { },
+                        .clickable { onClickNotification() },
                     tint = gray100
                 )
                 Icon(
@@ -82,7 +82,8 @@ private fun HomeTopBarPreview() {
             alpha = 0f,
             isFullExpand = false,
             onClickBackButton = {},
-            onClickSetting = {}
+            onClickSetting = {},
+            onClickNotification = {}
         )
     }
 }
