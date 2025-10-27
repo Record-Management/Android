@@ -23,4 +23,25 @@ object TimeFormatUtil {
             }
         }
     }
+
+    fun hourBefore(hour: Long) : String {
+        val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+
+        val hoursBefore = now.minusHours(hour)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss")
+
+        return hoursBefore.format(formatter)
+    }
+
+    fun daysBefore(days: Long) : String {
+        val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+
+        val daysBefore = now.minusDays(days)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss")
+
+        return daysBefore.format(formatter)
+    }
+
 }
