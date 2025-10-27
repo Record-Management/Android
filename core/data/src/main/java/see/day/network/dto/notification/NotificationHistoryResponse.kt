@@ -20,7 +20,7 @@ data class NotificationHistoryDataResponse(
 
 @Serializable
 data class NotificationHistoryItemResponse(
-    val mainRecordType: RecordType,
+    val mainRecordType: String,
     val description: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val sentAt: String
