@@ -1,4 +1,4 @@
-package see.day.network
+package see.day.network.dto
 
 import kotlinx.serialization.Serializable
 
