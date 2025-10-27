@@ -9,7 +9,7 @@ import see.day.network.decoder.FlexibleDateTimeArraySerializer
 data class NotificationHistoryResponse(
     val notifications: NotificationHistoryDataResponse,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val recentCheckedAt: String
+    val recentCheckedAt: String?
 )
 
 @Serializable

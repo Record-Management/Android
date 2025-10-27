@@ -44,22 +44,34 @@ class NotificationViewModel @Inject constructor(
         viewModelScope.launch {
             getNotificationHistoryUseCase()
                 .onSuccess { history ->
+                    val now = LocalDate.now(ZoneId.of("Asia/Seoul"))
+                    val todayDateString = now.toFormattedString()
+
+                    // 첫 방문이거나 recentCheckedAt이 없으면 전체 읽음 처리
+                    val recentCheckedAt = history.recentCheckedAt ?: run {
+                        updateNotificationHistoryAllReadUseCase()
+                        todayDateString
+                    }
+
+                    // UI 모델 변환
                     val uiModel = history.notifications.map { notification ->
                         NotificationHistoryUiModel(
                             recordType = notification.recordType,
                             relativeTime = TimeFormatUtil.getRelativeTimeString(notification.sentAt),
-                            isChecked = notification.sentAt < history.recentCheckedAt
+                            isChecked = notification.sentAt < recentCheckedAt
                         )
                     }
+
+                    // 읽지 않은 알림이 있으면 읽음 처리
                     if (uiModel.any { !it.isChecked }) {
                         updateNotificationHistoryAllReadUseCase()
                     }
-                    val localDate = LocalDate.now(ZoneId.of("Asia/Seoul"))
-                    val todayRecordCount = getDailyRecordsCountUseCase(String.format("%04d-%02d-%02d", localDate.year, localDate.monthValue, localDate.dayOfMonth))
+
+                    val todayRecordCount = getDailyRecordsCountUseCase(todayDateString)
 
                     _uiState.update {
                         it.copy(
-                            recentCheckedAt = history.recentCheckedAt,
+                            recentCheckedAt = recentCheckedAt,
                             notificationHistories = uiModel,
                             todayRecordCount = todayRecordCount
                         )
@@ -109,5 +121,9 @@ class NotificationViewModel @Inject constructor(
             }
         }
 
+    }
+
+    private fun LocalDate.toFormattedString(): String {
+        return String.format("%04d-%02d-%02d", year, monthValue, dayOfMonth)
     }
 }
