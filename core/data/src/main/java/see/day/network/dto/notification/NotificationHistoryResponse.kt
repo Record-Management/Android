@@ -7,14 +7,19 @@ import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @Serializable
 data class NotificationHistoryResponse(
-    val notifications: List<NotificationHistoryDataResponse>,
-    val pageInfo: PageInfoResponse,
+    val notifications: NotificationHistoryDataResponse,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val recentCheckedAt: String
 )
 
 @Serializable
 data class NotificationHistoryDataResponse(
+    val items: List<NotificationHistoryItemResponse>,
+    val pageInfo: PageInfoResponse
+)
+
+@Serializable
+data class NotificationHistoryItemResponse(
     val mainRecordType: RecordType,
     val description: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
