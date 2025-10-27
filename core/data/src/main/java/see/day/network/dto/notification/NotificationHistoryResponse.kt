@@ -1,14 +1,11 @@
 package see.day.network.dto.notification
 
 import kotlinx.serialization.Serializable
-import see.day.model.record.RecordType
 import see.day.network.dto.PageInfoResponse
-import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @Serializable
 data class NotificationHistoryResponse(
     val notifications: NotificationHistoryDataResponse,
-    @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val recentCheckedAt: String?
 )
 
@@ -22,6 +19,5 @@ data class NotificationHistoryDataResponse(
 data class NotificationHistoryItemResponse(
     val mainRecordType: String,
     val description: String,
-    @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val sentAt: String
 )
