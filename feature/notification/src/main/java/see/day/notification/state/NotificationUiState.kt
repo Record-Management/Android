@@ -2,9 +2,10 @@ package see.day.notification.state
 
 data class NotificationUiState(
     val recentCheckedAt: String,
-    val notificationHistories: List<NotificationHistoryUiModel>
+    val notificationHistories: List<NotificationHistoryUiModel>,
+    val todayRecordCount: Int
 ) {
     companion object {
-        val init = NotificationUiState("", listOf())
+        val init = NotificationUiState("", listOf(), 0)
     }
 }
