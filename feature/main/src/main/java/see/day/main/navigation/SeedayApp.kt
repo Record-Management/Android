@@ -71,7 +71,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onBack = navigationState.navController::popBackStack
             )
             notificationNavigation(
-                onBack = navigationState.navController::popBackStack
+                onBack = navigationState.navController::popBackStack,
+                onClickAddRecord = navigationState::navigateAddRecord
             )
         }
     }

@@ -20,6 +20,7 @@ import see.day.network.CalendarService
 import see.day.network.DailyRecordService
 import see.day.network.ExerciseRecordService
 import see.day.network.HabitRecordService
+import see.day.network.NotificationService
 import see.day.network.PhotoService
 import see.day.network.RecordService
 import see.day.network.UserService
@@ -156,5 +157,11 @@ class ApiModule {
     @Singleton
     fun provideHabitRecordService(@Main retrofit: Retrofit) : HabitRecordService {
         return retrofit.create(HabitRecordService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationService(@Main retrofit: Retrofit) : NotificationService {
+        return retrofit.create(NotificationService::class.java)
     }
 }
