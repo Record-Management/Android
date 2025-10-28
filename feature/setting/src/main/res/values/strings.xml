@@ -18,4 +18,5 @@
     <string name="revise">수정하기</string>
     <string name="system_notification_description">현재 시스템 알림이 꺼져있어요. \n지금 바로 알림을 켜주세요!</string>
     <string name="setting_notification">알림 설정</string>
+    <string name="black_string" />
 </resources>
