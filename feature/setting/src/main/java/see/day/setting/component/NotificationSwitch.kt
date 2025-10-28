@@ -54,7 +54,7 @@ internal fun NotificationSwitch(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChanged,
-            modifier = Modifier.size(24.dp).padding(end = 16.dp),
+            modifier = Modifier.size(24.dp).padding(end = 24.dp),
             colors = SwitchDefaults.colors().copy(
                 checkedThumbColor = Color.White,
                 checkedTrackColor = Color(0xFF2DC86F),
