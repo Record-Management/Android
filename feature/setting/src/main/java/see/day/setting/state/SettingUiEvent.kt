@@ -6,4 +6,5 @@ sealed interface SettingUiEvent {
     data class OnChangedBirthDate(val birthDate: String) : SettingUiEvent
     data object OnClickLogout: SettingUiEvent
     data object OnClickWithdrawal: SettingUiEvent
+    data object OnClickGoalNotification: SettingUiEvent
 }

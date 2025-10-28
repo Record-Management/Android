@@ -29,7 +29,11 @@ import see.day.setting.viewModel.SettingViewModel
 import see.day.ui.topbar.CommonAppBar
 
 @Composable
-fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () -> Unit) {
+fun SettingScreenRoot(
+    viewModel: SettingViewModel = hiltViewModel(),
+    onBack: () -> Unit,
+    onGoSettingGoalNotification: () -> Unit
+) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -38,6 +42,9 @@ fun SettingScreenRoot(viewModel: SettingViewModel = hiltViewModel(), onBack: () 
             when (uiEffect) {
                 SettingUiEffect.OnPopBack -> {
                     onBack()
+                }
+                SettingUiEffect.OnGoGoalNotification -> {
+                    onGoSettingGoalNotification()
                 }
             }
         }
@@ -95,7 +102,9 @@ internal fun SettingScreen(
             )
             AlertSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
-                onClickAppAlert = {},
+                onClickAppAlert = {
+                    uiEvent(SettingUiEvent.OnClickGoalNotification)
+                },
                 onClickRecordsAlert = {}
             )
             ExtSettingComponent(
