@@ -15,28 +15,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.setting.R
 import see.day.setting.component.NotificationSwitch
 import see.day.setting.component.SystemNotificationCard
+import see.day.setting.state.goal.GoalNotificationUiEffect
+import see.day.setting.state.goal.GoalNotificationUiEvent
+import see.day.setting.state.goal.GoalNotificationUiState
 import see.day.setting.util.isNotificationPermissionGranted
+import see.day.setting.viewModel.GoalNotificationViewModel
 import see.day.ui.topbar.CommonAppBar
 
 @Composable
 internal fun SettingGoalNotificationScreenRoot(
+    viewModel: GoalNotificationViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when(effect) {
+                GoalNotificationUiEffect.OnGoBack -> {
+                    onBack()
+                }
+            }
+        }
+    }
     SettingGoalNotificationScreen(
-        onBack = onBack
+        uiState = uiState,
+        uiEvent = viewModel::onEvent
     )
 }
 
 @Composable
 internal fun SettingGoalNotificationScreen(
     modifier: Modifier = Modifier,
-    onBack: () -> Unit
+    uiState: GoalNotificationUiState,
+    uiEvent: (GoalNotificationUiEvent) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -53,15 +73,15 @@ internal fun SettingGoalNotificationScreen(
         }
     }
 
-    val (checked, onCheckedChanged) = remember { mutableStateOf(false) }
-
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
             CommonAppBar(
                 modifier = modifier,
                 title = R.string.black_string,
-                onClickBackButton = onBack
+                onClickBackButton = {
+                    uiEvent(GoalNotificationUiEvent.OnGoBack)
+                }
             )
         }
     ) { innerPadding ->
@@ -77,9 +97,11 @@ internal fun SettingGoalNotificationScreen(
                 modifier = Modifier.padding(top = 10.dp),
                 title = R.string.goal_notification_title,
                 body = R.string.goal_notification_body,
-                checked = checked,
-                isAllChecked = checked,
-                onCheckedChanged = onCheckedChanged
+                checked = uiState.goalNotificationEnabled,
+                isAllChecked = uiState.goalNotificationEnabled,
+                onCheckedChanged = { currentChecked ->
+                    uiEvent(GoalNotificationUiEvent.OnChangedGoalNotification(currentChecked))
+                }
             )
         }
     }
@@ -90,7 +112,8 @@ internal fun SettingGoalNotificationScreen(
 private fun SettingGoalNotificationScreenPreview() {
     SeeDayTheme {
         SettingGoalNotificationScreen(
-            onBack = {}
+            uiState = GoalNotificationUiState.init,
+            uiEvent = {}
         )
     }
 }
