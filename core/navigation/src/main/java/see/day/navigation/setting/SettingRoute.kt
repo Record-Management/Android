@@ -6,5 +6,8 @@ sealed interface SettingRoute {
 
     @Serializable
     data object Setting
+
+    @Serializable
+    data object SettingGoalNotification
 }
 

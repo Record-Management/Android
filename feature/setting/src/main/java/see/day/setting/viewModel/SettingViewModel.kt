@@ -73,6 +73,9 @@ class SettingViewModel @Inject constructor(
             is SettingUiEvent.OnClickWithdrawal -> {
                 onClickWithdrawal()
             }
+            is SettingUiEvent.OnClickGoalNotification -> {
+                onClickGoalNotification()
+            }
         }
     }
 
@@ -119,6 +122,12 @@ class SettingViewModel @Inject constructor(
     private fun onClickWithdrawal() {
         viewModelScope.launch {
             deleteUserUseCase()
+        }
+    }
+
+    private fun onClickGoalNotification() {
+        viewModelScope.launch {
+            _uiEffect.emit(SettingUiEffect.OnGoGoalNotification)
         }
     }
 }

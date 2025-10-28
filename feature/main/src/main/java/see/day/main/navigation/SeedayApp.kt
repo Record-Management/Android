@@ -25,6 +25,7 @@ import see.day.model.navigation.AppStartState
 import see.day.notification.navigation.navigateNotificationHistory
 import see.day.notification.navigation.notificationNavigation
 import see.day.onboarding.navigation.onboardingNavigation
+import see.day.setting.navigation.navigateSettingGoalNotification
 
 @Composable
 fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), viewModel: MainViewModel, appStartDestination: Any) {
@@ -68,7 +69,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
 //                onClickChangeRecordType = navigationState::navigateAddRecord
 //            )
             settingNavigation(
-                onBack = navigationState.navController::popBackStack
+                onBack = navigationState.navController::popBackStack,
+                onGoSettingGoalNotification = navigationState.navController::navigateSettingGoalNotification
             )
             notificationNavigation(
                 onBack = navigationState.navController::popBackStack,
