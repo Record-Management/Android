@@ -1,7 +1,5 @@
 package see.day.setting.screen
 
-import android.content.Context
-import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -15,14 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.setting.R
+import see.day.setting.component.NotificationSwitch
 import see.day.setting.component.SystemNotificationCard
 import see.day.setting.util.isNotificationPermissionGranted
 import see.day.ui.topbar.CommonAppBar
@@ -56,6 +53,8 @@ internal fun SettingGoalNotificationScreen(
         }
     }
 
+    val (checked, onCheckedChanged) = remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
@@ -74,7 +73,14 @@ internal fun SettingGoalNotificationScreen(
                     modifier = Modifier.padding(top = 10.dp)
                 )
             }
-
+            NotificationSwitch(
+                modifier = Modifier.padding(top = 10.dp),
+                title = R.string.goal_notification_title,
+                body = R.string.goal_notification_body,
+                checked = checked,
+                isAllChecked = checked,
+                onCheckedChanged = onCheckedChanged
+            )
         }
     }
 }
