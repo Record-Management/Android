@@ -14,7 +14,6 @@ val getUserResponse = """
         "mainRecordType": "EXERCISE",
         "birthDate": [1998, 6, 2],
         "goalDays": 20,
-        "notificationEnabled": true,
         "onboardingCompleted": true,
         "createdAt": [2025, 9, 2, 2, 46, 41, 12321]
       }
@@ -35,7 +34,6 @@ val updateUserNicknameSuccessResponse = """
         "mainRecordType": "EXERCISE",
         "birthDate": [1998, 6, 2],
         "goalDays": 20,
-        "notificationEnabled": true,
         "onboardingCompleted": true,
         "createdAt": [2025, 9, 2, 2, 46, 41, 12321]
       }
@@ -56,7 +54,6 @@ val updateUserBirthDateSuccessResponse = """
         "mainRecordType": "EXERCISE",
         "birthDate": [2000, 1, 16],
         "goalDays": 20,
-        "notificationEnabled": true,
         "onboardingCompleted": true,
         "createdAt": [2025, 9, 2, 2, 46, 41, 12321]
       }

@@ -56,8 +56,7 @@ class UserRepositoryTest {
                 "",
                 RecordType.HABIT,
                 "",
-                10,
-                true
+                10
             )
             val response = CommonResponse(
                 200,
@@ -72,7 +71,6 @@ class UserRepositoryTest {
                     mainRecordType = "",
                     birthDate = "",
                     goalDays = 10,
-                    notificationEnabled = true,
                     onboardingCompleted = true,
                     createdAt = ""
                 )
@@ -108,7 +106,6 @@ class UserRepositoryTest {
                     mainRecordType = recordType.name,
                     birthDate = "",
                     goalDays = 10,
-                    notificationEnabled = true,
                     onboardingCompleted = true,
                     createdAt = ""
                 )
@@ -174,7 +171,7 @@ class UserRepositoryTest {
     fun given_whenGetUser_thenWorksFine() {
         runTest {
             // given
-            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, true, "")
+            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, "")
             whenever(userService.getUser()).thenReturn(
                 CommonResponse(
                     200,
@@ -198,7 +195,7 @@ class UserRepositoryTest {
             // given
             val nickname = "변경된닉네임"
             val userProfileChangedInput = UserProfileChangedInput.ofNickname(nickname)
-            val userResponse = FullUserResponse("", "", nickname, "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, true, "")
+            val userResponse = FullUserResponse("", "", nickname, "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, "")
 
             whenever(userService.updateUserProfile(userProfileChangedInput.toDto())).thenReturn(
                 CommonResponse(
@@ -225,7 +222,7 @@ class UserRepositoryTest {
             // given
             val birthDate = "2000-01-16"
             val userProfileChangedInput = UserProfileChangedInput.ofBirthDate(birthDate)
-            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "2000-01-16", 20, true, true, "")
+            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "2000-01-16", 20, true, "")
 
             whenever(userService.updateUserProfile(userProfileChangedInput.toDto())).thenReturn(
                 CommonResponse(

@@ -14,8 +14,7 @@ fun OnboardingComplete.toDto(): OnboardingCompleteRequest {
         nickname = nickname,
         mainRecordType = mainRecordType.name,
         birthDate = birthDate,
-        goalDays = goalDays,
-        notificationEnabled = notificationEnabled
+        goalDays = goalDays
     )
 }
 
@@ -29,7 +28,6 @@ fun FullUserResponse.toModel(): User {
         mainRecordType = RecordType.valueOf(mainRecordType),
         birthDate = birthDate,
         goalDays = goalDays,
-        notificationEnabled = notificationEnabled,
         onboardingCompleted = onboardingCompleted,
         createdAt = createdAt
     )

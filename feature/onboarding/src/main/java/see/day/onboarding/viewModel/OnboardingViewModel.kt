@@ -54,10 +54,6 @@ class OnboardingViewModel @Inject constructor(
             is OnboardingUiEvent.EnterGoal -> {
                 setGoalDay(event.goalDay)
             }
-
-            is OnboardingUiEvent.CheckNotification -> {
-                setNotificationEnabled(event.notificationEnabled)
-            }
             is OnboardingUiEvent.FinishOnboarding -> {
                 finishOnboarding()
             }
@@ -103,22 +99,13 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private fun setNotificationEnabled(enabled: Boolean) {
-        _uiState.update {
-            it.copy(
-                notificationEnabled = enabled
-            )
-        }
-    }
-
     private fun finishOnboarding() {
         val onboardState = uiState.value
         val onboardingComplete = OnboardingComplete(
             nickname = onboardState.nickname,
             mainRecordType = onboardState.mainRecordType ?: RecordType.DAILY,
             birthDate = onboardState.birthDate,
-            goalDays = onboardState.goalDays,
-            notificationEnabled = onboardState.notificationEnabled
+            goalDays = onboardState.goalDays
         )
         viewModelScope.launch {
             postOnboardCompleteUseCase(onboardingComplete)

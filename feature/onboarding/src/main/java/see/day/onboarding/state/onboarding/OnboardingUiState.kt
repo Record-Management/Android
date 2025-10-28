@@ -9,8 +9,7 @@ data class OnboardingUiState(
     val mainRecordType: RecordType?,
     val nickname: String,
     val birthDate: String,
-    val goalDays: Int,
-    val notificationEnabled: Boolean
+    val goalDays: Int
 ) {
     companion object {
         val init = OnboardingUiState(
@@ -18,8 +17,7 @@ data class OnboardingUiState(
             mainRecordType = null,
             nickname = "",
             birthDate = todayDate(),
-            goalDays = 0,
-            notificationEnabled = false
+            goalDays = 0
         )
         private fun todayDate(): String {
             val now = LocalDate.now()
