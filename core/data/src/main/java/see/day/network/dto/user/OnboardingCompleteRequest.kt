@@ -7,6 +7,5 @@ data class OnboardingCompleteRequest(
     val nickname: String,
     val mainRecordType: String,
     val birthDate: String,
-    val goalDays: Int,
-    val notificationEnabled: Boolean
+    val goalDays: Int
 )

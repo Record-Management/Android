@@ -6,8 +6,7 @@ data class OnboardingComplete(
     val nickname: String,
     val mainRecordType: RecordType,
     val birthDate: String,
-    val goalDays: Int,
-    val notificationEnabled: Boolean
+    val goalDays: Int
 ) {
 
 }

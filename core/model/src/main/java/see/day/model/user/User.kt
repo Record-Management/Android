@@ -12,7 +12,6 @@ data class User(
     val mainRecordType: RecordType,
     val birthDate: String,
     val goalDays: Int,
-    val notificationEnabled: Boolean,
     val onboardingCompleted: Boolean,
     val createdAt: String
 )
