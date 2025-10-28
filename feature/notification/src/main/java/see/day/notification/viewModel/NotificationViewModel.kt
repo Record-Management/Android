@@ -138,7 +138,7 @@ class NotificationViewModel @Inject constructor(
     }
 }
 
-
+// TODO 더미 테스트용으로 작성, 정상적으로 데이터가 인입된다면 추후 삭제 필요
 private fun getDummyHistories() : List<NotificationHistoryUiModel> {
     return listOf(
         NotificationHistoryUiModel(
