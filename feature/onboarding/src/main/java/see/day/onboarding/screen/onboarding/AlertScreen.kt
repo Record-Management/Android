@@ -27,8 +27,8 @@ import see.day.ui.button.CompleteButton
 internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (OnboardingUiEvent) -> Unit) {
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        onClickComplete(OnboardingUiEvent.CheckNotification(isGranted))
+    ) {
+
     }
 
     LaunchedEffect(Unit) {
