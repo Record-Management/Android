@@ -1,9 +1,12 @@
 package see.day.repository
 
 import see.day.domain.repository.NotificationRepository
+import see.day.mapper.notification.toDto
 import see.day.mapper.notification.toModel
 import see.day.model.exception.NoDataException
 import see.day.model.notification.NotificationHistoryList
+import see.day.model.notification.NotificationSettings
+import see.day.model.notification.NotificationSettingsEdit
 import see.day.network.NotificationService
 import see.day.utils.ErrorUtils.createResult
 import javax.inject.Inject
@@ -21,6 +24,18 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun updateNotificationHistoryAllRead(): Result<Unit> {
         return createResult {
             notificationService.updateNotificationHistoryAllRead()
+        }
+    }
+
+    override suspend fun getNotificationSetting(): Result<NotificationSettings> {
+        return createResult {
+            notificationService.getNotificationSetting().data?.toModel() ?: throw NoDataException()
+        }
+    }
+
+    override suspend fun updateNotificationSetting(notificationSettingsEdit: NotificationSettingsEdit): Result<NotificationSettings> {
+        return createResult {
+            notificationService.updateNotificationSetting(notificationSettingsEdit.toDto()).data?.toModel() ?: throw NoDataException()
         }
     }
 }
