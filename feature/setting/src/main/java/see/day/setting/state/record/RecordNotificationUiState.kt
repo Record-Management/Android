@@ -6,4 +6,8 @@ data class RecordNotificationUiState(
     val habitRecordNotificationEnabled: Boolean
 ) {
     fun isAllNotificationEnabled() = dailyRecordNotificationEnabled && exerciseRecordNotificationEnabled && habitRecordNotificationEnabled
+
+    companion object {
+        val init = RecordNotificationUiState(false, false, false)
+    }
 }
