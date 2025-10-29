@@ -11,19 +11,40 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.notifiaction.GetNotificationSettingUseCase
+import see.day.domain.usecase.notifiaction.UpdateNotificationSettingUseCase
+import see.day.model.notification.NotificationSettingsEdit
 import see.day.setting.state.record.RecordNotificationUiEffect
 import see.day.setting.state.record.RecordNotificationUiEvent
 import see.day.setting.state.record.RecordNotificationUiState
 import javax.inject.Inject
 
 @HiltViewModel
-class RecordNotificationViewModel @Inject constructor() : ViewModel() {
+class RecordNotificationViewModel @Inject constructor(
+    private val getNotificationSettingUseCase: GetNotificationSettingUseCase,
+    private val updateNotificationSettingUseCase: UpdateNotificationSettingUseCase
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<RecordNotificationUiState> = MutableStateFlow(RecordNotificationUiState.init)
     val uiState: StateFlow<RecordNotificationUiState> = _uiState.asStateFlow()
 
     private val _uiEffect: MutableSharedFlow<RecordNotificationUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<RecordNotificationUiEffect> = _uiEffect.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            getNotificationSettingUseCase()
+                .onSuccess { notificationSetting ->
+                    _uiState.update {
+                        it.copy(
+                            dailyRecordNotificationEnabled = notificationSetting.dailyRecordEnabled,
+                            exerciseRecordNotificationEnabled = notificationSetting.exerciseRecordEnabled,
+                            habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled
+                        )
+                    }
+                }
+        }
+    }
 
     fun onEvent(uiEvent: RecordNotificationUiEvent) {
         when (uiEvent) {
@@ -51,12 +72,22 @@ class RecordNotificationViewModel @Inject constructor() : ViewModel() {
         exerciseRecordEnabled: Boolean?,
         habitRecordEnabled: Boolean?
     ) {
-        _uiState.update {
-            it.copy(
-                dailyRecordNotificationEnabled = dailyRecordEnabled ?: it.dailyRecordNotificationEnabled,
-                exerciseRecordNotificationEnabled = exerciseRecordEnabled ?: it.exerciseRecordNotificationEnabled,
-                habitRecordNotificationEnabled = habitRecordEnabled ?: it.habitRecordNotificationEnabled
-            )
+        viewModelScope.launch {
+            updateNotificationSettingUseCase(
+                NotificationSettingsEdit(
+                    dailyRecordNotificationEnabled = dailyRecordEnabled,
+                    exerciseNotificationEnabled = exerciseRecordEnabled,
+                    habitNotificationEnabled = habitRecordEnabled
+                )
+            ).onSuccess { notificationSetting ->
+                _uiState.update {
+                    it.copy(
+                        dailyRecordNotificationEnabled = notificationSetting.dailyRecordEnabled,
+                        exerciseRecordNotificationEnabled = notificationSetting.exerciseRecordEnabled,
+                        habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled
+                    )
+                }
+            }
         }
     }
 }
