@@ -9,5 +9,8 @@ sealed interface SettingRoute {
 
     @Serializable
     data object SettingGoalNotification
+
+    @Serializable
+    data object SettingRecordNotification
 }
 

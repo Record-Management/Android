@@ -76,6 +76,9 @@ class SettingViewModel @Inject constructor(
             is SettingUiEvent.OnClickGoalNotification -> {
                 onClickGoalNotification()
             }
+            is SettingUiEvent.OnClickRecordNotification -> {
+                onClickRecordNotification()
+            }
         }
     }
 
@@ -128,6 +131,12 @@ class SettingViewModel @Inject constructor(
     private fun onClickGoalNotification() {
         viewModelScope.launch {
             _uiEffect.emit(SettingUiEffect.OnGoGoalNotification)
+        }
+    }
+
+    private fun onClickRecordNotification() {
+        viewModelScope.launch {
+            _uiEffect.emit(SettingUiEffect.OnGoRecordNotification)
         }
     }
 }
