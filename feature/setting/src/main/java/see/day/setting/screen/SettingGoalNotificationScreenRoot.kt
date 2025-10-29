@@ -94,7 +94,7 @@ internal fun SettingGoalNotificationScreen(
                 )
             }
             NotificationSwitch(
-                modifier = Modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(top = if(hasPermission) 10.dp else 24.dp),
                 title = R.string.goal_notification_title,
                 body = R.string.goal_notification_body,
                 checked = uiState.goalNotificationEnabled,
