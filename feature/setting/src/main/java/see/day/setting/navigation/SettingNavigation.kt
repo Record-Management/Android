@@ -8,6 +8,7 @@ import see.day.navigation.setting.SettingRoute
 import see.day.navigation.setting.SettingRoute.Setting
 import see.day.navigation.setting.SettingRoute.SettingGoalNotification
 import see.day.setting.screen.SettingGoalNotificationScreenRoot
+import see.day.setting.screen.SettingRecordNotificationScreenRoot
 import see.day.setting.screen.SettingScreenRoot
 
 fun NavController.navigateSetting(navOptions: NavOptions? = null) {
@@ -18,19 +19,31 @@ fun NavController.navigateSettingGoalNotification(navOptions: NavOptions? = null
     navigate(SettingGoalNotification, navOptions)
 }
 
+fun NavController.navigateSettingRecordNotification(navOptions: NavOptions? = null) {
+    navigate(SettingRoute.SettingRecordNotification, navOptions)
+}
+
 fun NavGraphBuilder.settingNavigation(
     onBack: () -> Unit,
-    onGoSettingGoalNotification: () -> Unit
+    onGoSettingGoalNotification: () -> Unit,
+    onGoSettingRecordNotification: () -> Unit
 ) {
     composable<Setting> {
         SettingScreenRoot(
             onBack = onBack,
-            onGoSettingGoalNotification = onGoSettingGoalNotification
+            onGoSettingGoalNotification = onGoSettingGoalNotification,
+            onGoSettingRecordNotification = onGoSettingRecordNotification
         )
     }
 
     composable<SettingGoalNotification> {
         SettingGoalNotificationScreenRoot(
+            onBack = onBack
+        )
+    }
+
+    composable<SettingRoute.SettingRecordNotification> {
+        SettingRecordNotificationScreenRoot(
             onBack = onBack
         )
     }

@@ -18,7 +18,13 @@
     <string name="revise">수정하기</string>
     <string name="system_notification_description">현재 시스템 알림이 꺼져있어요. \n지금 바로 알림을 켜주세요!</string>
     <string name="setting_notification">알림 설정</string>
-    <string name="black_string" />
+    <string name="blank_string" />
     <string name="goal_notification_title">목표 미설정 알림</string>
     <string name="goal_notification_body">목표 기록 미설정 시 알림</string>
+    <string name="record_all_notification">기록 전체 알림</string>
+    <string name="daily_record_notification">하루 기록</string>
+    <string name="record_notification">미 기록 알림</string>
+    <string name="exercise_record_notification">운동 기록</string>
+    <string name="habit_record_notification">습관 기록</string>
+    <string name="habit_time_notification">등록 시간 알림</string>
 </resources>

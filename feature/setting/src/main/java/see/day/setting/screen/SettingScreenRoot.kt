@@ -32,7 +32,8 @@ import see.day.ui.topbar.CommonAppBar
 fun SettingScreenRoot(
     viewModel: SettingViewModel = hiltViewModel(),
     onBack: () -> Unit,
-    onGoSettingGoalNotification: () -> Unit
+    onGoSettingGoalNotification: () -> Unit,
+    onGoSettingRecordNotification: () -> Unit
 ) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -45,6 +46,9 @@ fun SettingScreenRoot(
                 }
                 SettingUiEffect.OnGoGoalNotification -> {
                     onGoSettingGoalNotification()
+                }
+                SettingUiEffect.OnGoRecordNotification -> {
+                    onGoSettingRecordNotification()
                 }
             }
         }
@@ -105,7 +109,9 @@ internal fun SettingScreen(
                 onClickAppAlert = {
                     uiEvent(SettingUiEvent.OnClickGoalNotification)
                 },
-                onClickRecordsAlert = {}
+                onClickRecordsAlert = {
+                    uiEvent(SettingUiEvent.OnClickRecordNotification)
+                }
             )
             ExtSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
