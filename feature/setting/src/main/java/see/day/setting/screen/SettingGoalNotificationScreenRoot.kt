@@ -78,7 +78,7 @@ internal fun SettingGoalNotificationScreen(
         topBar = {
             CommonAppBar(
                 modifier = modifier,
-                title = R.string.black_string,
+                title = R.string.blank_string,
                 onClickBackButton = {
                     uiEvent(GoalNotificationUiEvent.OnGoBack)
                 }
