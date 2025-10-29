@@ -10,6 +10,8 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import see.day.domain.repository.NotificationRepository
+import see.day.mapper.notification.toDto
+import see.day.model.notification.NotificationSettingsEdit
 import see.day.network.NotificationService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.PageInfoResponse
@@ -39,7 +41,7 @@ class NotificationRepositoryTest {
             // given
             val notificationResponse = NotificationHistoryResponse(
                 notifications = NotificationHistoryDataResponse(
-                    items = listOf(NotificationHistoryItemResponse("DAILY","설명","2025-10-27:08:10:00")),
+                    items = listOf(NotificationHistoryItemResponse("DAILY", "설명", "2025-10-27:08:10:00")),
                     pageInfo = PageInfoResponse(
                         page = 0,
                         size = 0,
@@ -97,7 +99,7 @@ class NotificationRepositoryTest {
                     200,
                     "SUCCESS",
                     "요청이 성공적으로 처리되었습니다.",
-                    data = NotificationSettingResponse("",true,true,true,true)
+                    data = NotificationSettingResponse("", true, true, true, true)
                 )
             )
 
@@ -106,6 +108,30 @@ class NotificationRepositoryTest {
 
             // then
             verify(notificationService).getNotificationSetting()
+        }
+    }
+
+    @Test
+    fun givenUpdateNotificationSettingForm_whenUpdateNotificationSetting_thenWorksFine() {
+        runTest {
+            // given
+            val notificationSettingsEdit = NotificationSettingsEdit(true, true, true, true)
+            val notificationSettingResponse = NotificationSettingResponse("", true, true, true, true)
+
+            whenever(notificationService.updateNotificationSetting(notificationSettingsEdit.toDto())).thenReturn(
+                CommonResponse(
+                    200,
+                    "SUCCESS",
+                    "요청이 성공적으로 처리되었습니다.",
+                    data = notificationSettingResponse
+                )
+            )
+
+            // when
+            val result = sut.updateNotificationSetting(notificationSettingsEdit).getOrThrow()
+
+            // then
+            verify(notificationService).updateNotificationSetting(notificationSettingsEdit.toDto())
         }
     }
 }
