@@ -16,6 +16,7 @@ import see.day.network.dto.PageInfoResponse
 import see.day.network.dto.notification.NotificationHistoryDataResponse
 import see.day.network.dto.notification.NotificationHistoryItemResponse
 import see.day.network.dto.notification.NotificationHistoryResponse
+import see.day.network.dto.notification.NotificationSettingResponse
 import see.day.network.dto.notification.UpdatedCountResponse
 import see.day.repository.NotificationRepositoryImpl
 
@@ -84,6 +85,27 @@ class NotificationRepositoryTest {
 
             // then
             verify(notificationService).updateNotificationHistoryAllRead()
+        }
+    }
+
+    @Test
+    fun given_whenGetNotificationSetting_thenWorksFine() {
+        runTest {
+            // given
+            whenever(notificationService.getNotificationSetting()).thenReturn(
+                CommonResponse(
+                    200,
+                    "SUCCESS",
+                    "요청이 성공적으로 처리되었습니다.",
+                    data = NotificationSettingResponse("",true,true,true,true)
+                )
+            )
+
+            // when
+            val result = sut.getNotificationSetting().getOrThrow()
+
+            // then
+            verify(notificationService).getNotificationSetting()
         }
     }
 }
