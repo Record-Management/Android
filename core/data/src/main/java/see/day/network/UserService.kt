@@ -23,14 +23,17 @@ interface UserService {
     suspend fun getUser(): CommonResponse<FullUserResponse>
 
     @HTTP(method = "DELETE", path = "api/users/withdrawal", hasBody = true)
-    suspend fun deleteUser(@Body requestBody: DeleteUserRequest) : Unit
+    suspend fun deleteUser(@Body requestBody: DeleteUserRequest): Unit
 
     @PUT("api/users/profile")
-    suspend fun updateUserProfile(@Body userProfileChangedInputRequest: UserProfileChangedInputRequest) : CommonResponse<FullUserResponse>
+    suspend fun updateUserProfile(@Body userProfileChangedInputRequest: UserProfileChangedInputRequest): CommonResponse<FullUserResponse>
 
     @POST("api/auth/logout")
-    suspend fun logout(@Body logoutRequest: LogoutRequest) : CommonResponse<Unit>
+    suspend fun logout(@Body logoutRequest: LogoutRequest): CommonResponse<Unit>
 
     @PUT("api/users/fcm-token")
-    suspend fun updateFcmToken(@Body fcmToken : FcmTokenRequest) : CommonResponse<Unit>
+    suspend fun updateFcmToken(@Body fcmToken: FcmTokenRequest): CommonResponse<Unit>
+
+    @DELETE("api/users/fcm-token")
+    suspend fun deleteFcmToken(): Unit
 }
