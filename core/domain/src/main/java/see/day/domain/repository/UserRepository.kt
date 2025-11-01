@@ -12,4 +12,5 @@ interface UserRepository {
     suspend fun deleteUser(): Result<Unit>
     suspend fun updateUser(updateUserProfileChangedInput: UserProfileChangedInput) : Result<User>
     suspend fun logout(allDevices: Boolean): Result<Unit>
+    suspend fun updateFcmToken(fcmToken: String) : Result<Unit>
 }

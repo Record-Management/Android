@@ -14,6 +14,7 @@ import see.day.model.user.UserProfileChangedInput
 import see.day.network.UserService
 import see.day.network.dto.auth.DeleteUserRequest
 import see.day.network.dto.auth.LogoutRequest
+import see.day.network.dto.user.FcmTokenRequest
 import see.day.utils.ErrorUtils.createResult
 
 class UserRepositoryImpl @Inject constructor(
@@ -67,6 +68,14 @@ class UserRepositoryImpl @Inject constructor(
             dataSource.clearData()
         }.onFailure {
             dataSource.clearData()
+        }
+    }
+
+    override suspend fun updateFcmToken(fcmToken: String): Result<Unit> {
+        return createResult {
+            if(dataSource.hasToken().first()) {
+                userService.updateFcmToken(FcmTokenRequest(fcmToken))
+            }
         }
     }
 }
