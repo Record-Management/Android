@@ -46,3 +46,4 @@ include(
     "feature:setting",
     "feature:notification"
 )
+include(":core:messaging")
