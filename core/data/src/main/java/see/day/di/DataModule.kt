@@ -9,15 +9,19 @@ import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.CalendarRepository
 import see.day.domain.repository.DailyRecordRepository
 import see.day.domain.repository.ExerciseRecordRepository
+import see.day.domain.repository.FcmRepository
 import see.day.domain.repository.HabitRecordRepository
 import see.day.domain.repository.LoginRepository
 import see.day.domain.repository.NotificationRepository
 import see.day.domain.repository.PhotoRepository
 import see.day.domain.repository.RecordRepository
 import see.day.domain.repository.UserRepository
+import see.day.network.fcm.FcmTokenProvider
+import see.day.network.fcm.FcmTokenProviderImpl
 import see.day.repository.CalendarRepositoryImpl
 import see.day.repository.DailyRecordRepositoryImpl
 import see.day.repository.ExerciseRecordRepositoryImpl
+import see.day.repository.FcmRepositoryImpl
 import see.day.repository.HabitRecordRepositoryImpl
 import see.day.repository.LoginRepositoryImpl
 import see.day.repository.NotificationRepositoryImpl
@@ -31,6 +35,9 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsDataSource(dataStoreDataSource: DataStoreDataSource): DataSource
+
+    @Binds
+    abstract fun bindFcmTokenProvider(fcmTokenProviderImpl: FcmTokenProviderImpl): FcmTokenProvider
 
     @Binds
     abstract fun bindsLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository
@@ -54,8 +61,11 @@ abstract class DataModule {
     abstract fun bindsExerciseRecordRepository(exerciseRecordRepositoryImpl: ExerciseRecordRepositoryImpl): ExerciseRecordRepository
 
     @Binds
-    abstract fun bindsHabitRecordRepository(habitRecordRepositoryImpl: HabitRecordRepositoryImpl) : HabitRecordRepository
+    abstract fun bindsHabitRecordRepository(habitRecordRepositoryImpl: HabitRecordRepositoryImpl): HabitRecordRepository
 
     @Binds
-    abstract fun bindsNotificationRepository(notificationRepositoryImpl: NotificationRepositoryImpl) : NotificationRepository
+    abstract fun bindsNotificationRepository(notificationRepositoryImpl: NotificationRepositoryImpl): NotificationRepository
+
+    @Binds
+    abstract fun bindsFcmRepository(fcmRepositoryImpl: FcmRepositoryImpl): FcmRepository
 }

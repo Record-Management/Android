@@ -24,4 +24,7 @@ dependencies {
 
     testImplementation(libs.okhttp3.mockwebserver)
     testImplementation(libs.mockito.kotlin)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 }
