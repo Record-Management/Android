@@ -1,6 +1,7 @@
 package see.day.network
 
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.POST
@@ -8,6 +9,7 @@ import retrofit2.http.PUT
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.auth.DeleteUserRequest
 import see.day.network.dto.auth.LogoutRequest
+import see.day.network.dto.user.FcmTokenRequest
 import see.day.network.dto.user.FullUserResponse
 import see.day.network.dto.user.OnboardingCompleteRequest
 import see.day.network.dto.user.UserProfileChangedInputRequest
@@ -26,7 +28,9 @@ interface UserService {
     @PUT("api/users/profile")
     suspend fun updateUserProfile(@Body userProfileChangedInputRequest: UserProfileChangedInputRequest) : CommonResponse<FullUserResponse>
 
-    // accessToken이 필요하므로 UserService로 옮김
     @POST("api/auth/logout")
     suspend fun logout(@Body logoutRequest: LogoutRequest) : CommonResponse<Unit>
+
+    @PUT("api/users/fcm-token")
+    suspend fun updateFcmToken(@Body fcmToken : FcmTokenRequest) : CommonResponse<Unit>
 }
