@@ -15,6 +15,8 @@ import see.day.domain.repository.NotificationRepository
 import see.day.domain.repository.PhotoRepository
 import see.day.domain.repository.RecordRepository
 import see.day.domain.repository.UserRepository
+import see.day.network.fcm.FcmTokenProvider
+import see.day.network.fcm.FcmTokenProviderImpl
 import see.day.repository.CalendarRepositoryImpl
 import see.day.repository.DailyRecordRepositoryImpl
 import see.day.repository.ExerciseRecordRepositoryImpl
@@ -31,6 +33,9 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsDataSource(dataStoreDataSource: DataStoreDataSource): DataSource
+
+    @Binds
+    abstract fun bindFcmTokenProvider(fcmTokenProviderImpl: FcmTokenProviderImpl) : FcmTokenProvider
 
     @Binds
     abstract fun bindsLoginRepository(loginRepositoryImpl: LoginRepositoryImpl): LoginRepository
