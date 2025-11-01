@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.fcm.GetFcmTokenUseCase
 import see.day.domain.usecase.user.PostOnboardCompleteUseCase
+import see.day.domain.usecase.user.UpdateFcmTokenUseCase
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.onboarding.state.OnboardingScreenState
@@ -28,7 +30,9 @@ import timber.log.Timber
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val postOnboardCompleteUseCase: PostOnboardCompleteUseCase
+    private val postOnboardCompleteUseCase: PostOnboardCompleteUseCase,
+    private val getFcmTokenUseCase: GetFcmTokenUseCase,
+    private val updateFcmTokenUseCase: UpdateFcmTokenUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<OnboardingUiState> = MutableStateFlow(OnboardingUiState.init)
@@ -110,7 +114,12 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             postOnboardCompleteUseCase(onboardingComplete)
                 .onSuccess {
-                    _uiEffect.emit(OnboardingUiEffect.GoOnboardingComplete)
+                    getFcmTokenUseCase()
+                        .onSuccess { token ->
+                            updateFcmTokenUseCase(token).onSuccess {
+                                _uiEffect.emit(OnboardingUiEffect.GoOnboardingComplete)
+                            }
+                        }
                 }.onFailure {
                     Timber.e(it)
                 }
