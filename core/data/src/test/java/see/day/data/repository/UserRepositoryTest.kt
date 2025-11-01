@@ -29,6 +29,7 @@ import see.day.network.dto.CommonResponse
 import see.day.network.dto.auth.DeleteUserRequest
 import see.day.network.dto.auth.LogoutRequest
 import see.day.network.dto.toResponseBody
+import see.day.network.dto.user.FcmTokenRequest
 import see.day.network.dto.user.FullUserResponse
 import see.day.repository.UserRepositoryImpl
 
@@ -262,6 +263,38 @@ class UserRepositoryTest {
             verify(dataSource).getRefreshToken()
             verify(userService).logout(logoutRequest)
             verify(dataSource).clearData()
+        }
+    }
+
+    @Test
+    fun givenFcmToken_whenUpdating_thenWorksFine() {
+        runTest {
+            // given
+            val fcmToken = "asdasdasd"
+            whenever(dataSource.hasToken()).thenReturn(flowOf(true))
+            whenever(userService.updateFcmToken(FcmTokenRequest(fcmToken))).thenReturn(CommonResponse(200, "U200", "FCM 토큰이 성공적으로 업데이트되었습니다", null))
+
+            // when
+            val result = sut.updateFcmToken(fcmToken).getOrThrow()
+
+            // then
+            verify(dataSource).hasToken()
+            verify(userService).updateFcmToken(FcmTokenRequest(fcmToken))
+        }
+    }
+
+    @Test
+    fun givenFcmTokenAndHasNotToken_whenUpdating_thenNotUpdating() {
+        runTest {
+            // given
+            val fcmToken = "asdasd"
+            whenever(dataSource.hasToken()).thenReturn(flowOf(false))
+
+            // when
+            val result = sut.updateFcmToken(fcmToken).getOrThrow()
+
+            // then
+            verify(dataSource).hasToken()
         }
     }
 }
