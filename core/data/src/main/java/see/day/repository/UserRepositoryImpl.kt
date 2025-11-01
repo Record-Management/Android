@@ -78,4 +78,10 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun deleteFcmToken(): Result<Unit> {
+        return createResult {
+            userService.deleteFcmToken()
+        }
+    }
 }
