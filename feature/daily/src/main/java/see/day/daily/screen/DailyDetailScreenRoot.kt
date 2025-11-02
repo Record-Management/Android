@@ -48,9 +48,12 @@ import see.day.ui.topbar.EditMode
 @Composable
 internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: (Boolean) -> Unit) {
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     LaunchedEffect(dailyRecordPostType) {
         viewModel.fetchData(dailyRecordPostType)
     }
+
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect {
             when (val effect = it) {
@@ -66,9 +69,9 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
+
     var openBackDialog by remember { mutableStateOf(false) }
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     BackHandler {
         if (uiState.isEditing()) {
             openBackDialog = true
@@ -76,6 +79,7 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             onClickPopHome(false)
         }
     }
+
     if (openBackDialog) {
         RecordDetailBackDialog(
             modifier = modifier,
