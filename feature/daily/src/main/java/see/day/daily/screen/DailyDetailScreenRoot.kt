@@ -102,19 +102,6 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         )
     }
 
-    var openDeleteDialog by remember { mutableStateOf(false) }
-    if (openDeleteDialog) {
-        ConfirmDialog(
-            onDismiss = { openDeleteDialog = false },
-            onClickConfirmButton = {
-                val editMode = uiState.editMode
-                if (editMode is DailyDetailUiState.EditMode.Edit) {
-                    viewModel.onEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
-                }
-            }
-        )
-    }
-
     DailyDetailScreen(
         modifier = modifier,
         uiState = uiState,
@@ -125,14 +112,13 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
                 onClickPopHome(false)
             }
         },
-        onClickDeleteButton = { openDeleteDialog = true },
         uiEvent = viewModel::onEvent
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickDeleteButton: () -> Unit,uiEvent: (DailyDetailUiEvent) -> Unit) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit ,uiEvent: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
 
@@ -144,6 +130,19 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
             onDismiss = { openSelectEmotionDialog = false },
             onClickChangeEmotion = { emotion ->
                 uiEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
+            }
+        )
+    }
+
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        ConfirmDialog(
+            onDismiss = { openDeleteDialog = false },
+            onClickConfirmButton = {
+                val editMode = uiState.editMode
+                if (editMode is DailyDetailUiState.EditMode.Edit) {
+                    uiEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
+                }
             }
         )
     }
@@ -161,7 +160,9 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                     is DailyDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = onClickDeleteButton
+                onClickDeleteButton = {
+                    openDeleteDialog = true
+                }
             )
         }
     ) { innerPadding ->
@@ -230,7 +231,6 @@ private fun DailyDetailWriteScreen() {
     SeeDayTheme {
         DailyDetailScreen(
             onClickBackButton = { },
-            onClickDeleteButton = {},
             uiState = DailyDetailUiState.init,
             uiEvent = {}
         )
