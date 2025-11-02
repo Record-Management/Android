@@ -37,7 +37,6 @@ import see.day.daily.viewModel.DailyDetailViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray60
 import see.day.model.record.RecordType
-import see.day.model.record.daily.DailyEmotion
 import see.day.ui.button.CompleteButton
 import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.RecordDetailBackDialog
@@ -46,7 +45,6 @@ import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
 import see.day.ui.topbar.EditMode
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: (Boolean) -> Unit) {
     val context = LocalContext.current
@@ -68,8 +66,6 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
-
-    var openSelectEmotionDialog by remember { mutableStateOf(false) }
     var openBackDialog by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -118,18 +114,6 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             }
         )
     }
-    val onClickChangeEmotion: (DailyEmotion) -> Unit = { emotion ->
-        viewModel.onEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
-    }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    if (openSelectEmotionDialog) {
-        EmotionSelectBottomSheet(
-            modifier = modifier,
-            sheetState = sheetState,
-            onDismiss = { openSelectEmotionDialog = false },
-            onClickChangeEmotion = onClickChangeEmotion
-        )
-    }
 
     DailyDetailScreen(
         modifier = modifier,
@@ -142,14 +126,28 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             }
         },
         onClickDeleteButton = { openDeleteDialog = true },
-        onClickEmotion = { openSelectEmotionDialog = true },
         uiEvent = viewModel::onEvent
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickDeleteButton: () -> Unit, onClickEmotion: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickDeleteButton: () -> Unit,uiEvent: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
+    var openSelectEmotionDialog by remember { mutableStateOf(false) }
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    if (openSelectEmotionDialog) {
+        EmotionSelectBottomSheet(
+            modifier = modifier,
+            sheetState = sheetState,
+            onDismiss = { openSelectEmotionDialog = false },
+            onClickChangeEmotion = { emotion ->
+                uiEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
+            }
+        )
+    }
+
     Scaffold(
         modifier = modifier
             .systemBarsPadding()
@@ -177,7 +175,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 emotion = uiState.emotion,
                 currentDate = uiState.dateTime.formatFullDate(),
                 currentTime = uiState.dateTime.formatFullTime(),
-                onClickEmotion = onClickEmotion
+                onClickEmotion = { openSelectEmotionDialog = true }
             )
             RecordWriteTextField(
                 modifier = modifier.padding(top = 24.dp),
@@ -233,7 +231,6 @@ private fun DailyDetailWriteScreen() {
         DailyDetailScreen(
             onClickBackButton = { },
             onClickDeleteButton = {},
-            onClickEmotion = { },
             uiState = DailyDetailUiState.init,
             uiEvent = {}
         )
