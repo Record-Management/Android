@@ -22,6 +22,10 @@ import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.record.RecordType
+import see.day.model.record.daily.DailyEmotion
+import see.day.model.record.daily.DailyRecordInput
+import see.day.model.time.DateTime
+import see.day.model.time.formatter.KoreanDateTimeFormatter
 
 class DailyDetailScreenTest {
 
@@ -37,7 +41,7 @@ class DailyDetailScreenTest {
 
     @Test
     fun given_whenScreening_shownTitleAndEmotion() {
-        val uiState = DailyDetailUiState.init
+        val uiState = DailyDetailUiState.init.copy(editMode = DailyDetailUiState.EditMode.Create)
 
         composeTestRule.setContent {
             SeeDayTheme {
@@ -64,6 +68,43 @@ class DailyDetailScreenTest {
         composeTestRule
             .onNodeWithText(uiState.dateTime.formatFullTime())
             .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("뒤로가기 버튼")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.write_record_text))
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+    }
+
+    @Test
+    fun givenEditMode_whenScreening_shownBackButtonAndDeleteButton() {
+        val uiState = DailyDetailUiState.init.copy(editMode = DailyDetailUiState.EditMode.Edit(originalRecord = DailyRecordInput("",DailyEmotion.Love,KoreanDateTimeFormatter(DateTime.now(DateTime.korea)), listOf()),""))
+
+        composeTestRule.setContent {
+            SeeDayTheme {
+                DailyDetailScreen(
+                    uiState = uiState,
+                    uiEvent = {},
+                    onClickBackButton = {}
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("뒤로가기 버튼")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("삭제 버튼")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(see.day.ui.R.string.modifiy_record_text))
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
     }
 
     @Test
@@ -144,6 +185,11 @@ class DailyDetailScreenTest {
         composeTestRule
             .onNodeWithText(context.getString(see.day.ui.R.string.write_record_text))
             .assertIsEnabled()
+
+    }
+
+    @Test
+    fun givenDailyText_whenClickBackButton_shownBackDialog() {
 
     }
 }
