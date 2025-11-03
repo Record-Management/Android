@@ -15,7 +15,8 @@ data class HomeUiState(
     val mainRecordType: RecordType,
     val monthlyRecords: List<CalendarDayInfo>,
     val dailyRecordDetails: DailyRecordDetails,
-    val createdAt: String
+    val createdAt: String,
+    val todayRecords: DailyRecordDetails
 ) {
     companion object {
         val init = HomeUiState(
@@ -27,7 +28,8 @@ data class HomeUiState(
             mainRecordType = RecordType.DAILY,
             monthlyRecords = listOf(),
             dailyRecordDetails = DailyRecordDetails(getTodayDate(), listOf()),
-            createdAt = getTodayDate()
+            createdAt = getTodayDate(),
+            todayRecords = DailyRecordDetails(getTodayDate(), listOf())
         )
 
         fun getTodayDate(): String {

@@ -91,7 +91,7 @@ fun HomeScreenRoot(
             }
     }
     var openDeleteDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
-    var openTodayRecordOverDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
@@ -110,9 +110,6 @@ fun HomeScreenRoot(
                 is HomeUiEffect.OnClickLongRecord -> {
                     openDeleteDialog = Triple(true, effect.recordType, effect.recordId)
                 }
-                is HomeUiEffect.TodayRecordOver -> {
-                    openTodayRecordOverDialog = true
-                }
                 is HomeUiEffect.OnGoNotification -> {
                     onClickNotification()
                 }
@@ -124,15 +121,6 @@ fun HomeScreenRoot(
         viewModel.toastMessage.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    if (openTodayRecordOverDialog) {
-        OneButtonDialog(
-            titleRes = see.day.ui.R.string.today_records_over_title,
-            bodyRes = see.day.ui.R.string.today_records_over_body,
-            onDismiss = { openTodayRecordOverDialog = false },
-            onClickAcceptButton = { openTodayRecordOverDialog = false }
-        )
     }
 
     if (openDeleteDialog.first) {
@@ -207,6 +195,18 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         }
     }
 
+    var openTodayRecordOverDialog by remember { mutableStateOf(false) }
+
+    if (openTodayRecordOverDialog) {
+        OneButtonDialog(
+            titleRes = see.day.ui.R.string.today_records_over_title,
+            bodyRes = see.day.ui.R.string.today_records_over_body,
+            onDismiss = { openTodayRecordOverDialog = false },
+            onClickAcceptButton = { openTodayRecordOverDialog = false }
+        )
+    }
+
+
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -249,7 +249,13 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         ) { innerPadding ->
         }
         FloatingActionButton(
-            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType)) },
+            onClick = {
+                if(uiState.todayRecords.records.size >= 2) {
+                    openTodayRecordOverDialog = true
+                } else {
+                    uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                }
+            },
             modifier = modifier
                 .padding(
                     end = 16.dp, bottom = 20.dp
