@@ -76,7 +76,7 @@ fun DetailRecordTopBar(
                         .size(24.dp)
                         .clickable { onClickDeleteButton() },
                     painter = painterResource(R.drawable.ic_trash),
-                    contentDescription = "뒤로가기 버튼",
+                    contentDescription = "삭제 버튼",
                 )
             }
         }

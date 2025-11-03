@@ -37,7 +37,6 @@ import see.day.daily.viewModel.DailyDetailViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray60
 import see.day.model.record.RecordType
-import see.day.model.record.daily.DailyEmotion
 import see.day.ui.button.CompleteButton
 import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.RecordDetailBackDialog
@@ -46,13 +45,15 @@ import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
 import see.day.ui.topbar.EditMode
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: DailyDetailViewModel = hiltViewModel(), dailyRecordPostType: DailyRecordPostType, onClickPopHome: (Boolean) -> Unit) {
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     LaunchedEffect(dailyRecordPostType) {
         viewModel.fetchData(dailyRecordPostType)
     }
+
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect {
             when (val effect = it) {
@@ -69,10 +70,8 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         }
     }
 
-    var openSelectEmotionDialog by remember { mutableStateOf(false) }
     var openBackDialog by remember { mutableStateOf(false) }
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     BackHandler {
         if (uiState.isEditing()) {
             openBackDialog = true
@@ -80,6 +79,7 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
             onClickPopHome(false)
         }
     }
+
     if (openBackDialog) {
         RecordDetailBackDialog(
             modifier = modifier,
@@ -106,31 +106,6 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         )
     }
 
-    var openDeleteDialog by remember { mutableStateOf(false) }
-    if (openDeleteDialog) {
-        ConfirmDialog(
-            onDismiss = { openDeleteDialog = false },
-            onClickConfirmButton = {
-                val editMode = uiState.editMode
-                if (editMode is DailyDetailUiState.EditMode.Edit) {
-                    viewModel.onEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
-                }
-            }
-        )
-    }
-    val onClickChangeEmotion: (DailyEmotion) -> Unit = { emotion ->
-        viewModel.onEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
-    }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    if (openSelectEmotionDialog) {
-        EmotionSelectBottomSheet(
-            modifier = modifier,
-            sheetState = sheetState,
-            onDismiss = { openSelectEmotionDialog = false },
-            onClickChangeEmotion = onClickChangeEmotion
-        )
-    }
-
     DailyDetailScreen(
         modifier = modifier,
         uiState = uiState,
@@ -141,15 +116,41 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
                 onClickPopHome(false)
             }
         },
-        onClickDeleteButton = { openDeleteDialog = true },
-        onClickEmotion = { openSelectEmotionDialog = true },
         uiEvent = viewModel::onEvent
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onClickDeleteButton: () -> Unit, onClickEmotion: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit ,uiEvent: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
+    var openSelectEmotionDialog by remember { mutableStateOf(false) }
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    if (openSelectEmotionDialog) {
+        EmotionSelectBottomSheet(
+            modifier = modifier,
+            sheetState = sheetState,
+            onDismiss = { openSelectEmotionDialog = false },
+            onClickChangeEmotion = { emotion ->
+                uiEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
+            }
+        )
+    }
+
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        ConfirmDialog(
+            onDismiss = { openDeleteDialog = false },
+            onClickConfirmButton = {
+                val editMode = uiState.editMode
+                if (editMode is DailyDetailUiState.EditMode.Edit) {
+                    uiEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
+                }
+            }
+        )
+    }
+
     Scaffold(
         modifier = modifier
             .systemBarsPadding()
@@ -163,7 +164,9 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                     is DailyDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = onClickDeleteButton
+                onClickDeleteButton = {
+                    openDeleteDialog = true
+                }
             )
         }
     ) { innerPadding ->
@@ -177,7 +180,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 emotion = uiState.emotion,
                 currentDate = uiState.dateTime.formatFullDate(),
                 currentTime = uiState.dateTime.formatFullTime(),
-                onClickEmotion = onClickEmotion
+                onClickEmotion = { openSelectEmotionDialog = true }
             )
             RecordWriteTextField(
                 modifier = modifier.padding(top = 24.dp),
@@ -232,8 +235,6 @@ private fun DailyDetailWriteScreen() {
     SeeDayTheme {
         DailyDetailScreen(
             onClickBackButton = { },
-            onClickDeleteButton = {},
-            onClickEmotion = { },
             uiState = DailyDetailUiState.init,
             uiEvent = {}
         )
