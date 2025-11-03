@@ -40,7 +40,7 @@ internal fun ExerciseSelectBottomSheet(modifier: Modifier = Modifier, sheetState
                     .fillMaxWidth()
             ) {
                 Text(
-                    "운동 선택",
+                    "운동 재선택",
                     style = MaterialTheme.typography.titleSmall,
                     modifier = modifier.align(Alignment.Center)
                 )

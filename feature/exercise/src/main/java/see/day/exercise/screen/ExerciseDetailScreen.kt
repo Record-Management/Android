@@ -56,7 +56,6 @@ import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
 import see.day.ui.topbar.EditMode
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseDetailScreenRoot(
     viewModel: ExerciseDetailViewModel = hiltViewModel(),
@@ -122,6 +121,43 @@ fun ExerciseDetailScreenRoot(
         )
     }
 
+    ExerciseDetailScreen(
+        uiState = uiState,
+        uiEvent = viewModel::onEvent,
+        onClickBackButton = {
+            if (uiState.isEditing()) {
+                openBackDialog = true
+            } else {
+                onClickPopHome(false)
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun ExerciseDetailScreen(
+    modifier: Modifier = Modifier,
+    uiState: ExerciseDetailUiState,
+    uiEvent: (ExerciseDetailUiEvent) -> Unit,
+    onClickBackButton: () -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
+    var openSelectExerciseDialog by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    if (openSelectExerciseDialog) {
+        ExerciseSelectBottomSheet(
+            modifier = Modifier,
+            sheetState = sheetState,
+            onDismiss = { openSelectExerciseDialog = false },
+            onClickChangeExerciseType = { newExerciseType ->
+                uiEvent(ExerciseDetailUiEvent.OnExerciseTypeChanged(newExerciseType))
+            }
+        )
+    }
+
     var openDeleteDialog by remember { mutableStateOf(false) }
     if (openDeleteDialog) {
         ConfirmDialog(
@@ -129,52 +165,11 @@ fun ExerciseDetailScreenRoot(
             onClickConfirmButton = {
                 val editMode = uiState.editMode
                 if (editMode is ExerciseDetailUiState.EditMode.Edit) {
-                    viewModel.onEvent(ExerciseDetailUiEvent.DeleteRecord(editMode.recordId))
+                    uiEvent(ExerciseDetailUiEvent.DeleteRecord(editMode.recordId))
                 }
             }
         )
     }
-
-    var openSelectEmotionDialog by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
-    if (openSelectEmotionDialog) {
-        ExerciseSelectBottomSheet(
-            modifier = Modifier,
-            sheetState = sheetState,
-            onDismiss = { openSelectEmotionDialog = false },
-            onClickChangeExerciseType = { newExerciseType ->
-                viewModel.onEvent(ExerciseDetailUiEvent.OnExerciseTypeChanged(newExerciseType))
-            }
-        )
-    }
-    ExerciseDetailScreen(
-        uiState = uiState,
-        uiEvent = viewModel::onEvent,
-        onClickExerciseImage = { openSelectEmotionDialog = true },
-        onClickBackButton = {
-            if (uiState.isEditing()) {
-                openBackDialog = true
-            } else {
-                onClickPopHome(false)
-            }
-        },
-        onClickDeleteButton = {
-            openDeleteDialog = true
-        }
-    )
-}
-
-@Composable
-internal fun ExerciseDetailScreen(
-    modifier: Modifier = Modifier,
-    uiState: ExerciseDetailUiState,
-    uiEvent: (ExerciseDetailUiEvent) -> Unit,
-    onClickExerciseImage: () -> Unit,
-    onClickBackButton: () -> Unit,
-    onClickDeleteButton: () -> Unit
-) {
-    val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
 
     Scaffold(
         modifier = modifier.systemBarsPadding(),
@@ -186,7 +181,9 @@ internal fun ExerciseDetailScreen(
                     is ExerciseDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = onClickDeleteButton
+                onClickDeleteButton = {
+                    openDeleteDialog = true
+                }
             )
         }
     ) { innerPadding ->
@@ -200,7 +197,9 @@ internal fun ExerciseDetailScreen(
                 modifier = modifier.padding(top = 10.dp),
                 typeIcon = uiState.exerciseType.getIconRes,
                 typeName = uiState.exerciseType.displayName,
-                onClickType = onClickExerciseImage
+                onClickType = {
+                    openSelectExerciseDialog = true
+                }
             )
             Row(
                 modifier = modifier.padding(top = 24.dp),
@@ -320,6 +319,6 @@ internal fun ExerciseDetailScreen(
 @Composable
 private fun ExerciseDetailScreenPreview() {
     SeeDayTheme {
-        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickExerciseImage = {}, onClickBackButton = {}, onClickDeleteButton = {})
+        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickBackButton = {})
     }
 }
