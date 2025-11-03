@@ -121,19 +121,6 @@ fun ExerciseDetailScreenRoot(
         )
     }
 
-    var openDeleteDialog by remember { mutableStateOf(false) }
-    if (openDeleteDialog) {
-        ConfirmDialog(
-            onDismiss = { openDeleteDialog = false },
-            onClickConfirmButton = {
-                val editMode = uiState.editMode
-                if (editMode is ExerciseDetailUiState.EditMode.Edit) {
-                    viewModel.onEvent(ExerciseDetailUiEvent.DeleteRecord(editMode.recordId))
-                }
-            }
-        )
-    }
-
     ExerciseDetailScreen(
         uiState = uiState,
         uiEvent = viewModel::onEvent,
@@ -143,9 +130,6 @@ fun ExerciseDetailScreenRoot(
             } else {
                 onClickPopHome(false)
             }
-        },
-        onClickDeleteButton = {
-            openDeleteDialog = true
         }
     )
 }
@@ -157,7 +141,6 @@ internal fun ExerciseDetailScreen(
     uiState: ExerciseDetailUiState,
     uiEvent: (ExerciseDetailUiEvent) -> Unit,
     onClickBackButton: () -> Unit,
-    onClickDeleteButton: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -175,6 +158,19 @@ internal fun ExerciseDetailScreen(
         )
     }
 
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        ConfirmDialog(
+            onDismiss = { openDeleteDialog = false },
+            onClickConfirmButton = {
+                val editMode = uiState.editMode
+                if (editMode is ExerciseDetailUiState.EditMode.Edit) {
+                    uiEvent(ExerciseDetailUiEvent.DeleteRecord(editMode.recordId))
+                }
+            }
+        )
+    }
+
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
@@ -185,7 +181,9 @@ internal fun ExerciseDetailScreen(
                     is ExerciseDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = onClickDeleteButton
+                onClickDeleteButton = {
+                    openDeleteDialog = true
+                }
             )
         }
     ) { innerPadding ->
@@ -321,6 +319,6 @@ internal fun ExerciseDetailScreen(
 @Composable
 private fun ExerciseDetailScreenPreview() {
     SeeDayTheme {
-        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickBackButton = {}, onClickDeleteButton = {})
+        ExerciseDetailScreen(uiState = ExerciseDetailUiState.init, uiEvent = {}, onClickBackButton = {})
     }
 }
