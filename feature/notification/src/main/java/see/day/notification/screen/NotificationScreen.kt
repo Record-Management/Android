@@ -18,6 +18,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.record.RecordType
 import see.day.notification.R
 import see.day.notification.component.HistoryCard
+import see.day.notification.component.HistoryEmptyComponent
 import see.day.notification.state.NotificationHistoryUiModel
 import see.day.notification.state.NotificationUiEffect
 import see.day.notification.state.NotificationUiEvent
@@ -37,10 +38,11 @@ internal fun NotificationScreenRoute(
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
-            when(effect) {
+            when (effect) {
                 NotificationUiEffect.OnPopBack -> {
                     onBack()
                 }
+
                 is NotificationUiEffect.GoWriteRecord -> {
                     onClickAddRecord(effect.recordType, true)
                 }
@@ -72,10 +74,16 @@ internal fun NotificationScreen(
         topBar = {
             CommonAppBar(
                 title = R.string.notification_title,
-                onClickBackButton = { uiEvent(NotificationUiEvent.OnClickBack)}
+                onClickBackButton = { uiEvent(NotificationUiEvent.OnClickBack) }
             )
         }
     ) { innerPadding ->
+        if (uiState.notificationHistories.isEmpty()) {
+            HistoryEmptyComponent(
+                modifier = Modifier.padding()
+            )
+            return@Scaffold
+        }
         LazyColumn(
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -92,7 +100,6 @@ internal fun NotificationScreen(
             }
         }
     }
-
 }
 
 
@@ -107,12 +114,23 @@ private fun NotificationScreenPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun NotificationScreenHistoriesPreview() {
+    SeeDayTheme {
+        NotificationScreen(
+            uiState = NotificationUiState.init.copy(notificationHistories = getSampleNotificationHistory(3)),
+            uiEvent = {}
+        )
+    }
+}
+
 private fun getSampleNotificationHistory(count: Int): List<NotificationHistoryUiModel> {
     return (0 until count).map { num ->
         NotificationHistoryUiModel(
-            recordType = RecordType.entries[num%3],
+            recordType = RecordType.entries[num % 3],
             relativeTime = TimeFormatUtil.getRelativeTimeString(TimeFormatUtil.daysBefore(num.toLong())),
-            isChecked = num%2 == 0
+            isChecked = num % 2 == 0
         )
     }
 }
