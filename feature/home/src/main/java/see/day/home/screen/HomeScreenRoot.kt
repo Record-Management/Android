@@ -90,7 +90,6 @@ fun HomeScreenRoot(
                 }
             }
     }
-    var openDeleteDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
@@ -106,10 +105,6 @@ fun HomeScreenRoot(
                 is HomeUiEffect.OnGoSetting -> {
                     onClickSetting()
                 }
-
-                is HomeUiEffect.OnClickLongRecord -> {
-                    openDeleteDialog = Triple(true, effect.recordType, effect.recordId)
-                }
                 is HomeUiEffect.OnGoNotification -> {
                     onClickNotification()
                 }
@@ -121,15 +116,6 @@ fun HomeScreenRoot(
         viewModel.toastMessage.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    if (openDeleteDialog.first) {
-        ConfirmDialog(
-            onDismiss = { openDeleteDialog = openDeleteDialog.copy(first = false) },
-            onClickConfirmButton = {
-                viewModel.onEvent(HomeUiEvent.OnClickDeleteItem(openDeleteDialog.second, openDeleteDialog.third))
-            }
-        )
     }
 
     HomeScreen(
@@ -206,6 +192,17 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         )
     }
 
+    var openLongPressureDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
+
+    if (openLongPressureDialog.first) {
+        ConfirmDialog(
+            onDismiss = { openLongPressureDialog = openLongPressureDialog.copy(first = false) },
+            onClickConfirmButton = {
+                uiEvent(HomeUiEvent.OnClickDeleteItem(openLongPressureDialog.second, openLongPressureDialog.third))
+            }
+        )
+    }
+
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -236,7 +233,10 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     bottomSheetContentScroll,
                     bottomSheetState,
                     uiState,
-                    uiEvent
+                    uiEvent,
+                    onClickLongPressure = { type, id ->
+                        openLongPressureDialog = Triple(true, type, id)
+                    }
                 )
             },
             sheetPeekHeight = bottomSheetMinHeight,
@@ -284,6 +284,7 @@ private fun HomeBottomSheetContent(
     bottomSheetState: SheetState,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
+    onClickLongPressure: (RecordType, String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -343,7 +344,7 @@ private fun HomeBottomSheetContent(
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 },
                 onClickLongItem = { recordType, recordId ->
-                    uiEvent(HomeUiEvent.OnClickLongItem(recordType, recordId))
+                    onClickLongPressure(recordType, recordId)
                 },
                 onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted ->
                     uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted))

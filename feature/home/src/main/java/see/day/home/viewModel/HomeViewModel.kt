@@ -109,10 +109,6 @@ class HomeViewModel @Inject constructor(
                 onClickSetting()
             }
 
-            is HomeUiEvent.OnClickLongItem -> {
-                onClickItemLong(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
-            }
-
             is HomeUiEvent.OnClickDeleteItem -> {
                 onClickDeleteItem(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
             }
@@ -239,12 +235,6 @@ class HomeViewModel @Inject constructor(
     private fun onClickSetting() {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.OnGoSetting)
-        }
-    }
-
-    private fun onClickItemLong(recordType: RecordType, recordId: String) {
-        viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnClickLongRecord(recordType, recordId))
         }
     }
 
