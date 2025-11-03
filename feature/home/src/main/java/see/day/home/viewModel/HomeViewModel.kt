@@ -25,7 +25,6 @@ import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
 import see.day.home.state.HomeUiState
 import see.day.home.util.RecordFilterType
-import see.day.model.calendar.DailyRecordDetails
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
@@ -43,8 +42,6 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-
-    private val todayRecords: MutableStateFlow<DailyRecordDetails> = MutableStateFlow(DailyRecordDetails(HomeUiState.getTodayDate(), listOf()))
 
     private val _uiEffect: MutableSharedFlow<HomeUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<HomeUiEffect> = _uiEffect.asSharedFlow()
@@ -72,10 +69,10 @@ class HomeViewModel @Inject constructor(
                         mainRecordType = user.await().mainRecordType,
                         monthlyRecords = calendarDayInfos,
                         dailyRecordDetails = detailDailyRecords,
-                        createdAt = user.await().createdAt
+                        createdAt = user.await().createdAt,
+                        todayRecords = detailDailyRecords
                     )
                 }
-                todayRecords.emit(detailDailyRecords)
             } catch (e: Exception) {
             }
         }
@@ -112,10 +109,6 @@ class HomeViewModel @Inject constructor(
                 onClickSetting()
             }
 
-            is HomeUiEvent.OnClickLongItem -> {
-                onClickItemLong(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
-            }
-
             is HomeUiEvent.OnClickDeleteItem -> {
                 onClickDeleteItem(recordType = uiEvent.recordType, recordId = uiEvent.recordId)
             }
@@ -143,20 +136,19 @@ class HomeViewModel @Inject constructor(
                     calendarDayInfos
                 }
 
+                val todayRecords = if (detailDailyRecords.date == HomeUiState.getTodayDate()) {
+                    detailDailyRecords
+                } else {
+                    getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
+                }
+
                 _uiState.update {
                     it.copy(
                         monthlyRecords = calendarDayInfos,
-                        dailyRecordDetails = detailDailyRecords
+                        dailyRecordDetails = detailDailyRecords,
+                        todayRecords = todayRecords
                     )
                 }
-                if (detailDailyRecords.date == HomeUiState.getTodayDate()) {
-                    todayRecords.emit(detailDailyRecords)
-                } else {
-                    getDailyRecordsUseCase(HomeUiState.getTodayDate()).onSuccess { todayRecord ->
-                        todayRecords.emit(todayRecord)
-                    }
-                }
-
             } catch (e: Exception) {
 
             }
@@ -230,12 +222,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
-            if (todayRecords.value.records.size >= 2) {
-                _uiEffect.emit(HomeUiEffect.TodayRecordOver)
-            } else {
-                _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
-            }
-
+            _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
         }
     }
 
@@ -248,12 +235,6 @@ class HomeViewModel @Inject constructor(
     private fun onClickSetting() {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.OnGoSetting)
-        }
-    }
-
-    private fun onClickItemLong(recordType: RecordType, recordId: String) {
-        viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnClickLongRecord(recordType, recordId))
         }
     }
 

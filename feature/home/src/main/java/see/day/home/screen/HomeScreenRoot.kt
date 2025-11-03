@@ -90,8 +90,7 @@ fun HomeScreenRoot(
                 }
             }
     }
-    var openDeleteDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
-    var openTodayRecordOverDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
@@ -106,13 +105,6 @@ fun HomeScreenRoot(
                 is HomeUiEffect.OnGoSetting -> {
                     onClickSetting()
                 }
-
-                is HomeUiEffect.OnClickLongRecord -> {
-                    openDeleteDialog = Triple(true, effect.recordType, effect.recordId)
-                }
-                is HomeUiEffect.TodayRecordOver -> {
-                    openTodayRecordOverDialog = true
-                }
                 is HomeUiEffect.OnGoNotification -> {
                     onClickNotification()
                 }
@@ -124,24 +116,6 @@ fun HomeScreenRoot(
         viewModel.toastMessage.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    if (openTodayRecordOverDialog) {
-        OneButtonDialog(
-            titleRes = see.day.ui.R.string.today_records_over_title,
-            bodyRes = see.day.ui.R.string.today_records_over_body,
-            onDismiss = { openTodayRecordOverDialog = false },
-            onClickAcceptButton = { openTodayRecordOverDialog = false }
-        )
-    }
-
-    if (openDeleteDialog.first) {
-        ConfirmDialog(
-            onDismiss = { openDeleteDialog = openDeleteDialog.copy(first = false) },
-            onClickConfirmButton = {
-                viewModel.onEvent(HomeUiEvent.OnClickDeleteItem(openDeleteDialog.second, openDeleteDialog.third))
-            }
-        )
     }
 
     HomeScreen(
@@ -207,6 +181,29 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         }
     }
 
+    var openTodayRecordOverDialog by remember { mutableStateOf(false) }
+
+    if (openTodayRecordOverDialog) {
+        OneButtonDialog(
+            titleRes = see.day.ui.R.string.today_records_over_title,
+            bodyRes = see.day.ui.R.string.today_records_over_body,
+            onDismiss = { openTodayRecordOverDialog = false },
+            onClickAcceptButton = { openTodayRecordOverDialog = false }
+        )
+    }
+
+    var openLongPressureDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
+
+    if (openLongPressureDialog.first) {
+        ConfirmDialog(
+            onDismiss = { openLongPressureDialog = openLongPressureDialog.copy(first = false) },
+            onClickConfirmButton = {
+                uiEvent(HomeUiEvent.OnClickDeleteItem(openLongPressureDialog.second, openLongPressureDialog.third))
+            }
+        )
+    }
+
+
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -236,7 +233,10 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     bottomSheetContentScroll,
                     bottomSheetState,
                     uiState,
-                    uiEvent
+                    uiEvent,
+                    onClickLongPressure = { type, id ->
+                        openLongPressureDialog = Triple(true, type, id)
+                    }
                 )
             },
             sheetPeekHeight = bottomSheetMinHeight,
@@ -249,7 +249,13 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         ) { innerPadding ->
         }
         FloatingActionButton(
-            onClick = { uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType)) },
+            onClick = {
+                if(uiState.todayRecords.records.size >= 2) {
+                    openTodayRecordOverDialog = true
+                } else {
+                    uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                }
+            },
             modifier = modifier
                 .padding(
                     end = 16.dp, bottom = 20.dp
@@ -278,6 +284,7 @@ private fun HomeBottomSheetContent(
     bottomSheetState: SheetState,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
+    onClickLongPressure: (RecordType, String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -337,7 +344,7 @@ private fun HomeBottomSheetContent(
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 },
                 onClickLongItem = { recordType, recordId ->
-                    uiEvent(HomeUiEvent.OnClickLongItem(recordType, recordId))
+                    onClickLongPressure(recordType, recordId)
                 },
                 onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted ->
                     uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted))
