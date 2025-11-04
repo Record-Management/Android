@@ -67,7 +67,7 @@ internal fun DefaultWheelDatePicker(
                         width = size.width / 3,
                         height = size.height
                     ),
-                    texts = years.map { it.text },
+                    texts = years.map { it.text + "년" },
                     rowCount = rowCount,
                     style = textStyle,
                     color = textColor,
@@ -110,7 +110,7 @@ internal fun DefaultWheelDatePicker(
                     width = if (yearsRange == null) size.width / 2 else size.width / 3,
                     height = size.height
                 ),
-                texts = months.map { it.text },
+                texts = months.map { it.text + "월" },
                 rowCount = rowCount,
                 style = textStyle,
                 color = textColor,
@@ -152,7 +152,7 @@ internal fun DefaultWheelDatePicker(
                     width = if (yearsRange == null) size.width / 2 else size.width / 3,
                     height = size.height
                 ),
-                texts = dayOfMonths.map { it.text },
+                texts = dayOfMonths.map { it.text + "일" },
                 rowCount = rowCount,
                 style = textStyle,
                 color = textColor,
@@ -244,39 +244,51 @@ internal fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
         1 -> {
             month31day
         }
+
         2 -> {
             if (isLeapYear) month29day else month28day
         }
+
         3 -> {
             month31day
         }
+
         4 -> {
             month30day
         }
+
         5 -> {
             month31day
         }
+
         6 -> {
             month30day
         }
+
         7 -> {
             month31day
         }
+
         8 -> {
             month31day
         }
+
         9 -> {
             month30day
         }
+
         10 -> {
             month31day
         }
+
         11 -> {
             month30day
         }
+
         12 -> {
             month31day
         }
+
         else -> {
             emptyList()
         }
