@@ -15,13 +15,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.home.R
-import see.day.home.state.HomeUiEvent
 
 @Composable
-internal fun SelectedDateComponent(modifier: Modifier = Modifier, currentYear: Int, currentMonth: Int, uiEvent: (HomeUiEvent) -> Unit) {
+internal fun SelectedDateComponent(
+    modifier: Modifier = Modifier,
+    currentYear: Int,
+    currentMonth: Int,
+    isDateSelectMode: Boolean,
+    onClickDate: (Boolean) -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { uiEvent(HomeUiEvent.OnClickSelectedDate(currentYear, currentMonth)) }
+        modifier = modifier.clickable { onClickDate(!isDateSelectMode) }
     ) {
         Text(
             text = "$currentYear.$currentMonth",
@@ -44,7 +49,8 @@ private fun SelectedDateComponentPreview() {
         SelectedDateComponent(
             currentYear = 2025,
             currentMonth = 10,
-            uiEvent = { }
+            isDateSelectMode = false,
+            onClickDate = {}
         )
     }
 }
