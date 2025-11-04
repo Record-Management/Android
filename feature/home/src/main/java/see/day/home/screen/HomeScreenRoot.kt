@@ -2,6 +2,7 @@ package see.day.home.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -42,7 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -53,7 +58,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray30
+import see.day.designsystem.theme.gray40
 import see.day.home.R
 import see.day.home.component.CalendarDetail
 import see.day.home.component.HomeImage
@@ -69,6 +76,9 @@ import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.OneButtonDialog
+import see.day.ui.picker.WheelDatePicker
+import see.day.ui.picker.WheelPickerDefaults
+import java.time.LocalDate
 
 @Composable
 fun HomeScreenRoot(
@@ -105,6 +115,7 @@ fun HomeScreenRoot(
                 is HomeUiEffect.OnGoSetting -> {
                     onClickSetting()
                 }
+
                 is HomeUiEffect.OnGoNotification -> {
                     onClickNotification()
                 }
@@ -203,6 +214,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         )
     }
 
+    val (isDateSelectMode, onDateSelectModeChanged) = remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -210,6 +222,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         HomeImage(modifier)
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
+            sheetSwipeEnabled = !isDateSelectMode,
             topBar = {
                 HomeTopBar(
                     modifier = modifier,
@@ -236,7 +249,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     uiEvent,
                     onClickLongPressure = { type, id ->
                         openLongPressureDialog = Triple(true, type, id)
-                    }
+                    },
+                    isDateSelectMode = isDateSelectMode,
+                    onDateSelectModeChanged = onDateSelectModeChanged
                 )
             },
             sheetPeekHeight = bottomSheetMinHeight,
@@ -250,7 +265,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         }
         FloatingActionButton(
             onClick = {
-                if(uiState.todayRecords.records.size >= 2) {
+                if (uiState.todayRecords.records.size >= 2) {
                     openTodayRecordOverDialog = true
                 } else {
                     uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
@@ -284,23 +299,43 @@ private fun HomeBottomSheetContent(
     bottomSheetState: SheetState,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
+    isDateSelectMode: Boolean,
+    onDateSelectModeChanged: (Boolean) -> Unit,
     onClickLongPressure: (RecordType, String) -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxHeight(fraction = topPaddingFraction)
             .fillMaxWidth()
-            .verticalScroll(bottomSheetContentScroll, bottomSheetState.currentValue == SheetValue.Expanded)
+            .verticalScroll(bottomSheetContentScroll, (bottomSheetState.currentValue == SheetValue.Expanded))
     ) {
         Row(
             modifier = modifier.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SelectedDateComponent(modifier, uiState.currentYear, uiState.currentMonth, uiEvent)
+            SelectedDateComponent(modifier, uiState.currentYear, uiState.currentMonth, isDateSelectMode, onDateSelectModeChanged)
             Spacer(modifier = modifier.weight(1f))
             SelectedFilterRecordType(modifier, uiState.selectedFilterType, uiEvent)
         }
         Spacer(modifier = modifier.padding(top = 10.dp))
+        if (isDateSelectMode) {
+            WheelDatePicker(
+                modifier = Modifier.fillMaxWidth(),
+                rowCount = 5,
+                selectorProperties = WheelPickerDefaults.selectorProperties(
+                    color = gray40,
+                    shape = RoundedCornerShape(0),
+                    border = BorderStroke(0.dp, gray40)
+                ),
+                startDate = LocalDate.of(uiState.currentYear, uiState.selectedMonth, uiState.selectedDay),
+                maxDate = LocalDate.now(),
+                textStyle = MaterialTheme.typography.titleMedium,
+                textColor = gray100
+            ) { snappedDate ->
+                uiEvent(HomeUiEvent.OnClickCell(snappedDate.year, snappedDate.monthValue, snappedDate.dayOfMonth))
+            }
+            return@Column
+        }
         Box {
             CustomCalendar(
                 modifier = modifier,
