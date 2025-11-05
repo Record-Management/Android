@@ -91,5 +91,6 @@ data class HabitRecordDetail(
     val notificationEnabled: Boolean,
     val notificationTime: String,
     val memo: String,
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
+    val isMainRecord: Boolean
 ) : RecordDetail()
