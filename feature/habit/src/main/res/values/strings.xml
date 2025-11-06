@@ -7,4 +7,5 @@
     <string name="main_habit_change_body">연속 달성 기록은 유지된채\n메인 습관의 종류가 변경됩니다.</string>
     <string name="changed_main_cancel">닫기</string>
     <string name="changed_main_change">변경하기</string>
+    <string name="delete_main_record_body">목표 기간의 모든 기록 정보가 삭제되며, 삭제된 기록 정보는 복구가 불가해요.</string>
 </resources>
