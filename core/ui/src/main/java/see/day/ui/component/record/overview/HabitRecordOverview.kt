@@ -35,6 +35,7 @@ import see.day.designsystem.util.getIconRes
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.habit.HabitType
+import see.day.ui.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -60,17 +61,32 @@ fun HabitRecordOverView(
         Box(
             modifier = Modifier
                 .size(66.dp)
-                .clip(CircleShape)
-                .background(Color.White)
         ) {
-            Image(
-                painter = painterResource(habitRecord.habitType.getIconRes),
-                contentDescription = habitRecord.habitType.displayName,
+            Box(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(66.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
                     .align(Alignment.Center)
-            )
+            ) {
+                Image(
+                    painter = painterResource(habitRecord.habitType.getIconRes),
+                    contentDescription = habitRecord.habitType.displayName,
+                    modifier = Modifier
+                        .size(50.dp)
+                        .align(Alignment.Center)
+                )
+            }
+            if(habitRecord.isMainRecord) {
+                Image(
+                    painter = painterResource(R.drawable.ic_card_habit_main_pin),
+                    contentDescription = "메인 기록 핀",
+                    modifier = Modifier.size(16.dp)
+                        .align(Alignment.BottomEnd)
+                )
+            }
         }
+
         Text(
             text = habitRecord.habitType.displayName,
             modifier = modifier.padding(start = 16.dp),
@@ -97,7 +113,7 @@ fun HabitRecordOverView(
 @Composable
 private fun HabitRecordOverViewPreview() {
     val context = LocalContext.current
-    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true, true)) }
+    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true, false)) }
     SeeDayTheme {
         HabitRecordOverView(
             habitRecord = habitRecord,
@@ -109,6 +125,23 @@ private fun HabitRecordOverViewPreview() {
             },
             onClickChecked = { id, isChecked ->
                 habitRecord = habitRecord.copy(isCompleted = isChecked)
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HabitRecordOverViewIsMainPreview() {
+    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true, true)) }
+    SeeDayTheme {
+        HabitRecordOverView(
+            habitRecord = habitRecord,
+            onClickItem = { type, id ->
+            },
+            onClickLongItem = { type, id ->
+            },
+            onClickChecked = { id, isChecked ->
             }
         )
     }
