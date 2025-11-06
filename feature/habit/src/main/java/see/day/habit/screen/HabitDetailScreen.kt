@@ -47,6 +47,8 @@ import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
 import see.day.habit.viewModel.HabitDetailViewModel
 import see.day.model.record.RecordType
+import see.day.model.record.habit.HabitRecordUiModel
+import see.day.model.record.habit.HabitType
 import see.day.ui.button.CompleteButton
 import see.day.ui.component.TypeTitle
 import see.day.ui.dialog.ConfirmDialog
@@ -135,7 +137,7 @@ internal fun HabitDetailScreenRoot(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HabitDetailScreen(
+internal fun  HabitDetailScreen(
     modifier: Modifier = Modifier,
     uiState: HabitDetailUiState,
     uiEvent: (HabitDetailUiEvent) -> Unit,
@@ -156,7 +158,13 @@ internal fun HabitDetailScreen(
 
     var openDeleteDialog by remember { mutableStateOf(false) }
     if (openDeleteDialog) {
+        val isMainRecord = if (uiState.editMode is HabitDetailUiState.EditMode.Edit) {
+            uiState.editMode.originalRecord.isMainRecord
+        } else {
+            false
+        }
         ConfirmDialog(
+            body = if(isMainRecord) R.string.delete_main_record_body else see.day.ui.R.string.record_delete_body,
             onDismiss = { openDeleteDialog = false },
             onClickConfirmButton = {
                 val editMode = uiState.editMode
@@ -296,5 +304,17 @@ private fun HabitDetailScreenCanBeMainHabitPreview() {
             uiEvent = {},
             onClickBackButton = {}
         )
+    }
+}
+
+@Preview
+@Composable
+private fun HabitDetailScreenEditModePreview() {
+    SeeDayTheme {
+        HabitDetailScreen(
+            uiState = HabitDetailUiState.init.copy(editMode = HabitDetailUiState.EditMode.Edit(originalRecord = HabitRecordUiModel("",HabitType.EXERCISE,false,0,0,"",true, false),"")),
+            uiEvent = {},
+            onClickBackButton = {}
+       )
     }
 }
