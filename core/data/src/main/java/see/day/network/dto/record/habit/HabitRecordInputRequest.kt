@@ -8,5 +8,6 @@ data class HabitRecordInputRequest(
     val notificationEnabled: Boolean,
     val notificationTime: String?,
     val memo: String?,
-    val recordDate: String
+    val recordDate: String,
+    val isMainRecord: Boolean?
 )

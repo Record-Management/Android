@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -76,7 +77,8 @@ fun ConfirmDialog(
                     Text(
                         modifier = modifier.padding(top = 8.dp),
                         text = stringResource(body),
-                        style = MaterialTheme.typography.labelSmall.copy(color = gray70)
+                        style = MaterialTheme.typography.labelSmall.copy(color = gray70),
+                        textAlign = TextAlign.Center
                     )
                     Row(
                         modifier = modifier

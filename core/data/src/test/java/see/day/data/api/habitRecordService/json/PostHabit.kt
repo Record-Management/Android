@@ -16,7 +16,8 @@ val postFullFieldSuccessResponse = """
         "notificationEnabled": true,
         "notificationTime": [9,0,0],
         "memo": "오늘도 운동 완료!",
-        "isCompleted": false
+        "isCompleted": false,
+        "isMainRecord": false
       }
     }
 """.trimIndent()
@@ -36,7 +37,8 @@ val postNotificationTimeEmptyFieldSuccessResponse = """
         "habitType": "EXERCISE",
         "notificationEnabled": false,
         "memo": "오늘도 운동 완료!",
-        "isCompleted": false
+        "isCompleted": false,
+        "isMainRecord": false
       }
     }
 """.trimIndent()

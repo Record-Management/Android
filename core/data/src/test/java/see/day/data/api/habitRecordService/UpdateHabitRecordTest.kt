@@ -47,7 +47,7 @@ class UpdateHabitRecordTest {
     fun givenRecordIdAndHabitRecordEditForm_whenUpdating_thenWorksFine() = runTest {
         // given
         val recordId = "123-123"
-        val updateHabitRecordEditRequest = HabitRecordEditRequest("WATER_DRINKING", true, "09:00","오늘도 물 2L 마시기 성공!")
+        val updateHabitRecordEditRequest = HabitRecordEditRequest("WATER_DRINKING", true, "09:00","오늘도 물 2L 마시기 성공!",null)
         val responseJson = updateHabitRecordSuccessResponse
 
         mockWebServer.enqueue(

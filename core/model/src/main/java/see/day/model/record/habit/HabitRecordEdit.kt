@@ -5,5 +5,6 @@ data class HabitRecordEdit(
     val notificationEnabled: Boolean,
     val hour: Int,
     val minute: Int,
-    val memo: String
+    val memo: String,
+    val isMainRecord: Boolean
 )

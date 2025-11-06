@@ -129,7 +129,8 @@ data class HabitRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val notificationTime: String? = null,
     val memo: String? = null,
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
+    val isMainRecord: Boolean
 ) : RecordResponse() {
 
     fun toHabitRecord() : HabitRecordDetail {
@@ -144,7 +145,8 @@ data class HabitRecordResponse(
             notificationEnabled = notificationEnabled,
             notificationTime = notificationTime ?: "10:00",
             memo = memo ?: "",
-            isCompleted = isCompleted
+            isCompleted = isCompleted,
+            isMainRecord = isMainRecord
         )
     }
 

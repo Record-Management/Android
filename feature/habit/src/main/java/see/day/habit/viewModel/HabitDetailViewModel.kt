@@ -11,15 +11,15 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
+import see.day.domain.usecase.record.habit.CanSetAsMainRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
+import see.day.domain.usecase.record.habit.GetHabitRecordUseCase
 import see.day.domain.usecase.record.habit.InsertHabitRecordUseCase
 import see.day.domain.usecase.record.habit.UpdateHabitRecordUseCase
 import see.day.habit.state.HabitDetailUiEffect
 import see.day.habit.state.HabitDetailUiEvent
 import see.day.habit.state.HabitDetailUiState
 import see.day.habit.state.HabitRecordPostType
-import see.day.model.calendar.HabitRecordDetail
 import see.day.model.record.habit.HabitRecordEdit
 import see.day.model.record.habit.HabitRecordInput
 import see.day.model.record.habit.HabitType
@@ -28,9 +28,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HabitDetailViewModel @Inject constructor(
     private val insertHabitRecordUseCase: InsertHabitRecordUseCase,
-    private val getRecordDetailUseCase: GetRecordDetailUseCase,
     private val updateHabitRecordUseCase: UpdateHabitRecordUseCase,
-    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase
+    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
+    private val getHabitRecordUseCase: GetHabitRecordUseCase,
+    private val canSetAsMainRecordUseCase: CanSetAsMainRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HabitDetailUiState> = MutableStateFlow(HabitDetailUiState.init)
@@ -43,47 +44,39 @@ class HabitDetailViewModel @Inject constructor(
     val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
 
     fun fetchData(type: HabitRecordPostType) {
-        when (type) {
-            is HabitRecordPostType.Write -> {
-                _uiState.update {
-                    it.copy(
-                        habitType = type.habitType
-                    )
-                }
-            }
-
-            is HabitRecordPostType.Edit -> {
-                viewModelScope.launch {
-                    getRecordDetailUseCase(type.id).onSuccess { habitRecord ->
-                        if(habitRecord is HabitRecordDetail) {
-                            val hour = habitRecord.notificationTime.split(":")[0].toInt()
-                            val minute = habitRecord.notificationTime.split(":")[1].toInt()
-                            _uiState.update {
-                                it.copy(
-                                    habitType = habitRecord.habitType,
-                                    notificationEnabled = habitRecord.notificationEnabled,
-                                    hour = hour,
-                                    minute = minute,
-                                    memo = habitRecord.memo,
-                                    editMode = HabitDetailUiState.EditMode.Edit(
-                                        recordId = habitRecord.id,
-                                        originalRecord = HabitRecordInput(
-                                            habitType = habitRecord.habitType,
-                                            notificationEnabled = habitRecord.notificationEnabled,
-                                            notificationHour = hour,
-                                            notificationMinute = minute,
-                                            memo = habitRecord.memo,
-                                            recordDate = habitRecord.recordDate,
-                                        )
-                                    )
-                                )
-                            }
+        viewModelScope.launch {
+            when (type) {
+                is HabitRecordPostType.Write -> {
+                    canSetAsMainRecordUseCase(uiState.value.recordDate).onSuccess { canSetAsMainRecord ->
+                        _uiState.update {
+                            it.copy(
+                                habitType = type.habitType,
+                                canBeMain = canSetAsMainRecord
+                            )
                         }
                     }
                 }
 
+                is HabitRecordPostType.Edit -> {
+                    getHabitRecordUseCase(type.id).onSuccess { habitRecord ->
+                        _uiState.update {
+                            it.copy(
+                                habitType = habitRecord.habitType,
+                                notificationEnabled = habitRecord.notificationEnabled,
+                                hour = habitRecord.notificationHour,
+                                minute = habitRecord.notificationMinute,
+                                memo = habitRecord.memo,
+                                editMode = HabitDetailUiState.EditMode.Edit(
+                                    recordId = habitRecord.id,
+                                    originalRecord = habitRecord
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
+
     }
 
     fun onEvent(uiEvent: HabitDetailUiEvent) {
@@ -111,9 +104,15 @@ class HabitDetailViewModel @Inject constructor(
             is HabitDetailUiEvent.DeleteRecord -> {
                 deleteRecord(uiEvent.recordId)
             }
+
             is HabitDetailUiEvent.OnTimeSpinnerDisplay -> {
                 _uiState.update {
                     it.copy(isTimeSpinnerDisplayed = uiEvent.displayed)
+                }
+            }
+            is HabitDetailUiEvent.OnSetAsMainHabit -> {
+                _uiState.update {
+                    it.copy(hasBeenSetAsMain = uiEvent.changed)
                 }
             }
         }
@@ -175,7 +174,8 @@ class HabitDetailViewModel @Inject constructor(
                 notificationHour = uiState.value.hour,
                 notificationMinute = uiState.value.minute,
                 memo = uiState.value.memo,
-                recordDate = uiState.value.recordDate
+                recordDate = uiState.value.recordDate,
+                isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
@@ -193,6 +193,7 @@ class HabitDetailViewModel @Inject constructor(
                 hour = uiState.value.hour,
                 minute = uiState.value.minute,
                 memo = uiState.value.memo,
+                isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))

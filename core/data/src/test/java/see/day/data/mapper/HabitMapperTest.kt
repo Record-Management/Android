@@ -17,7 +17,7 @@ class HabitMapperTest {
         val hour = 10
         val minute = 0
         val memo = "hello"
-        val habitRecordInput = HabitRecordInput(HabitType.SAVING, notificationEnabled, hour, minute, memo,"2024-10-19")
+        val habitRecordInput = HabitRecordInput(HabitType.SAVING, notificationEnabled, hour, minute, memo,"2024-10-19",false)
 
         // when
         val request = habitRecordInput.toDto()
@@ -35,7 +35,7 @@ class HabitMapperTest {
         val notificationEnabled = false
         val hour = 10
         val minute = 0
-        val habitRecordInput = HabitRecordInput(HabitType.SAVING, notificationEnabled, hour, minute, "","2024-10-19")
+        val habitRecordInput = HabitRecordInput(HabitType.SAVING, notificationEnabled, hour, minute, "","2024-10-19",false)
 
         // when
         val request = habitRecordInput.toDto()
@@ -48,7 +48,7 @@ class HabitMapperTest {
     fun givenMemoEmpty_whenMapping_thenMemoNull() {
         // given
         val memo = ""
-        val habitRecordInput = HabitRecordInput(HabitType.SAVING,false, 0, 0, memo,"2024-10-19")
+        val habitRecordInput = HabitRecordInput(HabitType.SAVING,false, 0, 0, memo,"2024-10-19",false)
 
         // when
         val request = habitRecordInput.toDto()

@@ -97,7 +97,7 @@ fun HabitRecordOverView(
 @Composable
 private fun HabitRecordOverViewPreview() {
     val context = LocalContext.current
-    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true)) }
+    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true, true)) }
     SeeDayTheme {
         HabitRecordOverView(
             habitRecord = habitRecord,
