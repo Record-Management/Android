@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.record.habit.CanSetAsMainRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.GetHabitRecordUseCase
 import see.day.domain.usecase.record.habit.InsertHabitRecordUseCase
@@ -29,7 +30,8 @@ class HabitDetailViewModel @Inject constructor(
     private val insertHabitRecordUseCase: InsertHabitRecordUseCase,
     private val updateHabitRecordUseCase: UpdateHabitRecordUseCase,
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
-    private val getHabitRecordUseCase: GetHabitRecordUseCase
+    private val getHabitRecordUseCase: GetHabitRecordUseCase,
+    private val canSetAsMainRecordUseCase: CanSetAsMainRecordUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HabitDetailUiState> = MutableStateFlow(HabitDetailUiState.init)
@@ -42,17 +44,20 @@ class HabitDetailViewModel @Inject constructor(
     val toastMessage: SharedFlow<String> = _toastMessage.asSharedFlow()
 
     fun fetchData(type: HabitRecordPostType) {
-        when (type) {
-            is HabitRecordPostType.Write -> {
-                _uiState.update {
-                    it.copy(
-                        habitType = type.habitType
-                    )
+        viewModelScope.launch {
+            when (type) {
+                is HabitRecordPostType.Write -> {
+                    canSetAsMainRecordUseCase(uiState.value.recordDate).onSuccess { canSetAsMainRecord ->
+                        _uiState.update {
+                            it.copy(
+                                habitType = type.habitType,
+                                canBeMain = canSetAsMainRecord
+                            )
+                        }
+                    }
                 }
-            }
 
-            is HabitRecordPostType.Edit -> {
-                viewModelScope.launch {
+                is HabitRecordPostType.Edit -> {
                     getHabitRecordUseCase(type.id).onSuccess { habitRecord ->
                         _uiState.update {
                             it.copy(
@@ -69,9 +74,9 @@ class HabitDetailViewModel @Inject constructor(
                         }
                     }
                 }
-
             }
         }
+
     }
 
     fun onEvent(uiEvent: HabitDetailUiEvent) {
@@ -99,6 +104,7 @@ class HabitDetailViewModel @Inject constructor(
             is HabitDetailUiEvent.DeleteRecord -> {
                 deleteRecord(uiEvent.recordId)
             }
+
             is HabitDetailUiEvent.OnTimeSpinnerDisplay -> {
                 _uiState.update {
                     it.copy(isTimeSpinnerDisplayed = uiEvent.displayed)
