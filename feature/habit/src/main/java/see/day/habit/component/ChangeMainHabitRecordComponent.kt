@@ -78,6 +78,7 @@ internal fun ChangeMainHabitRecordComponent(
                 uncheckedTrackColor = Color(0xFFD7D7D7),
                 uncheckedBorderColor = Color.White,
             ),
+            modifier = Modifier.size(24.dp).padding(end = 24.dp)
         )
     }
 }

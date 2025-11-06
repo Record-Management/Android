@@ -38,6 +38,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.util.getIconRes
 import see.day.habit.R
+import see.day.habit.component.ChangeMainHabitRecordComponent
 import see.day.habit.component.HabitAlertComponent
 import see.day.habit.component.HabitSelectBottomSheet
 import see.day.habit.state.HabitDetailUiEffect
@@ -198,8 +199,15 @@ internal fun HabitDetailScreen(
                 typeName = uiState.habitType.displayName,
                 onClickType = onClickHabitTitle
             )
+            if(uiState.canBeMain) {
+                ChangeMainHabitRecordComponent(
+                    modifier = Modifier.padding(top = 24.dp),
+                    isMainHabit = uiState.hasBeenSetAsMain,
+                    onChangedMainHabit = {}
+                )
+            }
             HabitAlertComponent(
-                modifier = modifier
+                modifier = Modifier
                     .padding(top = 24.dp),
                 isChecked = uiState.notificationEnabled,
                 timeSpinnerDisplayed = uiState.isTimeSpinnerDisplayed,
@@ -275,6 +283,20 @@ private fun HabitDetailScreenPreview() {
     SeeDayTheme {
         HabitDetailScreen(
             uiState = HabitDetailUiState.init,
+            uiEvent = {},
+            onClickHabitTitle = {},
+            onClickBackButton = {},
+            onClickDeleteButton = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HabitDetailScreenCanBeMainHabitPreview() {
+    SeeDayTheme {
+        HabitDetailScreen(
+            uiState = HabitDetailUiState.init.copy(canBeMain = true, hasBeenSetAsMain = false),
             uiEvent = {},
             onClickHabitTitle = {},
             onClickBackButton = {},
