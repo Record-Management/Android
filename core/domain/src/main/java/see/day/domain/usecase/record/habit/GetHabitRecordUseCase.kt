@@ -28,11 +28,15 @@ class GetHabitRecordUseCase @Inject constructor(
             mainRecordType == RecordType.HABIT
         }
 
+        val (hour, minute) = habitRecord.notificationTime.split(":").map { it.toInt() }
+
         return Result.success(
             HabitRecordUiModel(
+                id = habitRecord.id,
                 habitType = habitRecord.habitType,
                 notificationEnabled = habitRecord.notificationEnabled,
-                notificationTime = habitRecord.notificationTime,
+                notificationHour = hour,
+                notificationMinute = minute,
                 memo = habitRecord.memo,
                 isMainRecord = isMainRecord,
                 canBeMain = canBeMain
