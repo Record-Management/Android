@@ -42,7 +42,7 @@ class HabitRecordRepositoryTest {
         runTest {
             // given
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
-            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "", "2024-10-19")
+            val habitRecordInput = HabitRecordInput(HabitType.SAVING, true, 10, 0, "", "2024-10-19", false)
             val habitRecordResponse = HabitRecordResponse(
                 id = "0",
                 type = RecordType.HABIT.name,
@@ -54,7 +54,8 @@ class HabitRecordRepositoryTest {
                 notificationEnabled = true,
                 notificationTime = "10:00:00",
                 memo = "",
-                isCompleted = false
+                isCompleted = false,
+                isMainRecord = false
             )
 
             whenever(habitRecordService.postHabitRecord(habitRecordInput.toDto())).thenReturn(
@@ -118,7 +119,8 @@ class HabitRecordRepositoryTest {
                 notificationEnabled = true,
                 notificationTime = "10:00:00",
                 memo = "",
-                isCompleted = true
+                isCompleted = true,
+                isMainRecord = false
             )
 
             whenever(habitRecordService.updateHabitRecordComplete(recordId, HabitRecordCompleteRequest(isCompleted))).thenReturn(
@@ -145,7 +147,7 @@ class HabitRecordRepositoryTest {
             // given
             val recordId = "123-123"
             val habitType = HabitType.SAVING
-            val habitRecordEdit = HabitRecordEdit(habitType = habitType, notificationEnabled = false, hour = 9, minute = 0, memo = "")
+            val habitRecordEdit = HabitRecordEdit(habitType = habitType, notificationEnabled = false, hour = 9, minute = 0, memo = "", false)
 
             val timeFormatter = KoreanDateTimeFormatter(DateTime.now(DateTime.korea))
             val habitRecordResponse = HabitRecordResponse(
@@ -159,7 +161,8 @@ class HabitRecordRepositoryTest {
                 notificationEnabled = false,
                 notificationTime = "90:00:00",
                 memo = "",
-                isCompleted = true
+                isCompleted = true,
+                isMainRecord = false
             )
 
             whenever(habitRecordService.updateHabitRecord(recordId, habitRecordEdit.toDto())).thenReturn(

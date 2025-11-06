@@ -49,7 +49,7 @@ class PostHabitRecordTest {
     @Test
     fun givenHabitRecordInput_whenPosting_thenReturnsFullHabitRecord() = runTest {
         // given
-        val habitRecordInputRequest = HabitRecordInputRequest("EXERCISE", true, "09:00", "오늘도 운동 완료!","2024-10-19")
+        val habitRecordInputRequest = HabitRecordInputRequest("EXERCISE", true, "09:00", "오늘도 운동 완료!","2024-10-19",null)
         val responseJson = postFullFieldSuccessResponse
 
         mockWebServer.enqueue(
@@ -77,7 +77,7 @@ class PostHabitRecordTest {
     @Test
     fun givenHabitRecordInputEmptyNotificationTime_whenPosting_thenReturnsNotificationTimeEmpty() = runTest {
         // given
-        val habitRecordInputRequest = HabitRecordInputRequest("EXERCISE", false, null, "오늘도 운동 완료!","2024-10-19")
+        val habitRecordInputRequest = HabitRecordInputRequest("EXERCISE", false, null, "오늘도 운동 완료!","2024-10-19",null)
         val responseJson = postNotificationTimeEmptyFieldSuccessResponse
 
         mockWebServer.enqueue(

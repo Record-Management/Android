@@ -16,7 +16,8 @@ val updateHabitRecordCompletionSuccessResponse = """
             "notificationEnabled": true,
             "notificationTime": [9,0,0],
             "memo": "오늘도 운동 완료!",
-            "isCompleted": true
+            "isCompleted": true,
+            "isMainRecord": false
           }
         }
 """.trimIndent()
@@ -37,7 +38,8 @@ val updateHabitRecordSuccessResponse = """
         "notificationEnabled": true,
         "notificationTime": [9,0,0],
         "memo": "오늘도 물 2L 마시기 성공!",
-        "isCompleted": false
+        "isCompleted": false,
+        "isMainRecord": false
       }
     }
 """.trimIndent()
