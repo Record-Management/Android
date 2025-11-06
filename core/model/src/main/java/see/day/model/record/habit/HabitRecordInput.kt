@@ -6,5 +6,6 @@ data class HabitRecordInput(
     val notificationHour: Int,
     val notificationMinute: Int,
     val memo: String,
-    val recordDate: String
+    val recordDate: String,
+    val isMainRecord: Boolean
 )

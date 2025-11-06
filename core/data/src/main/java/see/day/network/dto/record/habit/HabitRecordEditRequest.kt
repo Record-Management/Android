@@ -7,5 +7,6 @@ data class HabitRecordEditRequest(
     val habitType: String,
     val notificationEnabled: Boolean,
     val notificationTime: String?,
-    val memo: String?
+    val memo: String?,
+    val isMainRecord: Boolean?
 )

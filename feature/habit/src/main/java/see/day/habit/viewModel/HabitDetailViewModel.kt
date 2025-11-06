@@ -174,7 +174,8 @@ class HabitDetailViewModel @Inject constructor(
                 notificationHour = uiState.value.hour,
                 notificationMinute = uiState.value.minute,
                 memo = uiState.value.memo,
-                recordDate = uiState.value.recordDate
+                recordDate = uiState.value.recordDate,
+                isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
@@ -192,6 +193,7 @@ class HabitDetailViewModel @Inject constructor(
                 hour = uiState.value.hour,
                 minute = uiState.value.minute,
                 memo = uiState.value.memo,
+                isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
             _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
