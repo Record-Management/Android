@@ -35,7 +35,6 @@ fun CustomCalendar(
     selectedDay: Int,
     calendarDayInfo: List<CalendarDayInfo>,
     currentFilterType: RecordType?,
-    mainRecordType: RecordType,
     createdAt: String,
     onClickCell: (Int, Int, Int) -> Unit,
     onSwipeCalendar: (Int, Int) -> Unit
@@ -111,7 +110,9 @@ fun CustomCalendar(
                         isSameMonth = date.isCurrentMonth,
                         filterType = currentFilterType,
                         isSelected = currentYear == date.year && selectedDay == date.day && selectedMonth == date.month,
-                        mainRecordType = mainRecordType,
+                        mainRecordType = calendarDayInfo.firstOrNull{
+                            it.day == date.day && it.month == date.month && it.year == date.year
+                        }?.mainRecordType ?: RecordType.EXERCISE,
                         createdAt = createdAt,
                         records = calendarDayInfo.firstOrNull {
                             it.day == date.day && it.month == date.month && it.year == date.year

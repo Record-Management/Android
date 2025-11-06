@@ -23,6 +23,7 @@ fun List<DailyRecordsResponse>.toDailyRecordsList(): List<DailyRecords> {
 fun DailyRecordsResponse.toModel(): DailyRecords {
     return DailyRecords(
         date = date,
+        mainRecordType = mainRecordType,
         records = records.toDailyRecordList()
     )
 }

@@ -1,6 +1,8 @@
 package see.day.network.dto.calendar
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import see.day.model.record.RecordType
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @Serializable
@@ -14,6 +16,7 @@ data class MonthlyRecordResponse(
 data class DailyRecordsResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val date: String,
+    @SerialName("mainRecordTypeForDate") val mainRecordType : RecordType,
     val records: List<DailyRecordResponse>
 )
 
