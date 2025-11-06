@@ -12,4 +12,8 @@ dependencies {
 
     implementation(libs.hilt.core)
     implementation(libs.coroutines.core)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.coroutines.test)
 }
