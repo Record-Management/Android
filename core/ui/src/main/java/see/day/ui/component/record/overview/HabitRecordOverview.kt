@@ -6,7 +6,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,11 +33,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray10
+import see.day.designsystem.theme.gray50
 import see.day.designsystem.util.getIconRes
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.record.RecordType
 import see.day.model.record.habit.HabitType
 import see.day.ui.R
+import see.day.util.convertTo12HourFormat
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -77,21 +81,33 @@ fun HabitRecordOverView(
                         .align(Alignment.Center)
                 )
             }
-            if(habitRecord.isMainRecord) {
+            if (habitRecord.isMainRecord) {
                 Image(
                     painter = painterResource(R.drawable.ic_card_habit_main_pin),
                     contentDescription = "메인 기록 핀",
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier
+                        .size(16.dp)
                         .align(Alignment.BottomEnd)
                 )
             }
         }
+        Column(
+            modifier = Modifier.padding(start = 16.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = habitRecord.habitType.displayName,
+                style = MaterialTheme.typography.titleSmall
+            )
+            if (habitRecord.notificationEnabled) {
+                Text(
+                    modifier = Modifier.padding(top = 4.dp),
+                    text = convertTo12HourFormat(habitRecord.notificationTime),
+                    style = MaterialTheme.typography.labelSmall.copy(color = gray50)
+                )
+            }
+        }
 
-        Text(
-            text = habitRecord.habitType.displayName,
-            modifier = modifier.padding(start = 16.dp),
-            style = MaterialTheme.typography.titleSmall
-        )
         Spacer(modifier = Modifier.weight(1f))
         Box(
             modifier = Modifier
@@ -113,7 +129,7 @@ fun HabitRecordOverView(
 @Composable
 private fun HabitRecordOverViewPreview() {
     val context = LocalContext.current
-    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true, false)) }
+    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "13:30", "", true, false)) }
     SeeDayTheme {
         HabitRecordOverView(
             habitRecord = habitRecord,
@@ -133,7 +149,7 @@ private fun HabitRecordOverViewPreview() {
 @Preview
 @Composable
 private fun HabitRecordOverViewIsMainPreview() {
-    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, true, "", "", true, true)) }
+    var habitRecord by remember { mutableStateOf(HabitRecordDetail("", RecordType.HABIT, "", "", "", "", HabitType.SAVING, false, "", "", true, true)) }
     SeeDayTheme {
         HabitRecordOverView(
             habitRecord = habitRecord,
