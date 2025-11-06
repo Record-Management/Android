@@ -55,7 +55,6 @@ import see.day.ui.textField.RecordWriteTextField
 import see.day.ui.topbar.DetailRecordTopBar
 import see.day.ui.topbar.EditMode
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HabitDetailScreenRoot(
     viewModel: HabitDetailViewModel = hiltViewModel(),
@@ -83,20 +82,6 @@ internal fun HabitDetailScreenRoot(
         viewModel.toastMessage.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
-    }
-
-
-    var openSelectEmotionDialog by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
-
-    if (openSelectEmotionDialog) {
-        HabitSelectBottomSheet(
-            sheetState = sheetState,
-            onDismiss = { openSelectEmotionDialog = false },
-            onClickHabit = { newHabitType ->
-                viewModel.onEvent(HabitDetailUiEvent.OnHabitTypeChanged(newHabitType))
-            }
-        )
     }
 
     var openBackDialog by remember { mutableStateOf(false) }
@@ -135,6 +120,40 @@ internal fun HabitDetailScreenRoot(
         )
     }
 
+    HabitDetailScreen(
+        uiState = uiState,
+        uiEvent = viewModel::onEvent,
+        onClickBackButton = {
+            if (uiState.isEditing()) {
+                openBackDialog = true
+            } else {
+                onClickPopHome(false)
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun HabitDetailScreen(
+    modifier: Modifier = Modifier,
+    uiState: HabitDetailUiState,
+    uiEvent: (HabitDetailUiEvent) -> Unit,
+    onClickBackButton: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+    var openSelectEmotionDialog by remember { mutableStateOf(false) }
+
+    if (openSelectEmotionDialog) {
+        HabitSelectBottomSheet(
+            sheetState = sheetState,
+            onDismiss = { openSelectEmotionDialog = false },
+            onClickHabit = { newHabitType ->
+                uiEvent(HabitDetailUiEvent.OnHabitTypeChanged(newHabitType))
+            }
+        )
+    }
+
     var openDeleteDialog by remember { mutableStateOf(false) }
     if (openDeleteDialog) {
         ConfirmDialog(
@@ -142,37 +161,12 @@ internal fun HabitDetailScreenRoot(
             onClickConfirmButton = {
                 val editMode = uiState.editMode
                 if (editMode is HabitDetailUiState.EditMode.Edit) {
-                    viewModel.onEvent(HabitDetailUiEvent.DeleteRecord(editMode.recordId))
+                    uiEvent(HabitDetailUiEvent.DeleteRecord(editMode.recordId))
                 }
             }
         )
     }
 
-
-    HabitDetailScreen(
-        uiState = uiState,
-        uiEvent = viewModel::onEvent,
-        onClickHabitTitle = { openSelectEmotionDialog = true },
-        onClickBackButton = {
-            if (uiState.isEditing()) {
-                openBackDialog = true
-            } else {
-                onClickPopHome(false)
-            }
-        },
-        onClickDeleteButton = { openDeleteDialog = true }
-    )
-}
-
-@Composable
-internal fun HabitDetailScreen(
-    modifier: Modifier = Modifier,
-    uiState: HabitDetailUiState,
-    uiEvent: (HabitDetailUiEvent) -> Unit,
-    onClickHabitTitle: () -> Unit,
-    onClickBackButton: () -> Unit,
-    onClickDeleteButton: () -> Unit
-) {
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
@@ -183,7 +177,7 @@ internal fun HabitDetailScreen(
                     is HabitDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = onClickDeleteButton
+                onClickDeleteButton = { openDeleteDialog = true}
             )
         }
     ) { innerPadding ->
@@ -197,7 +191,9 @@ internal fun HabitDetailScreen(
                 modifier = modifier.padding(top = 10.dp),
                 typeIcon = uiState.habitType.getIconRes,
                 typeName = uiState.habitType.displayName,
-                onClickType = onClickHabitTitle
+                onClickType = {
+                    openSelectEmotionDialog = true
+                }
             )
             if(uiState.canBeMain) {
                 ChangeMainHabitRecordComponent(
@@ -286,9 +282,7 @@ private fun HabitDetailScreenPreview() {
         HabitDetailScreen(
             uiState = HabitDetailUiState.init,
             uiEvent = {},
-            onClickHabitTitle = {},
-            onClickBackButton = {},
-            onClickDeleteButton = {}
+            onClickBackButton = {}
         )
     }
 }
@@ -300,9 +294,7 @@ private fun HabitDetailScreenCanBeMainHabitPreview() {
         HabitDetailScreen(
             uiState = HabitDetailUiState.init.copy(canBeMain = true, hasBeenSetAsMain = false),
             uiEvent = {},
-            onClickHabitTitle = {},
-            onClickBackButton = {},
-            onClickDeleteButton = {}
+            onClickBackButton = {}
         )
     }
 }
