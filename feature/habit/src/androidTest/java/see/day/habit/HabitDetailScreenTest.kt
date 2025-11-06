@@ -128,6 +128,6 @@ class HabitDetailScreenTest {
         composeTestRule
             .onNodeWithText(context.getString(R.string.change_main))
             .assertIsDisplayed()
-        
+
     }
 }

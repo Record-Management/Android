@@ -7,6 +7,7 @@ data class CalendarDayInfo(
     val year: Int,
     val month: Int,
     val day: Int,
+    val mainRecordType: RecordType,
     val records: List<RecordType>,
     val schedules: List<String>,
 ) {
@@ -21,6 +22,7 @@ data class CalendarDayInfo(
                     year = year,
                     month = month,
                     day = day,
+                    mainRecordType = dailyRecord.mainRecordType,
                     records = otherRecords.map { it.type },
                     schedules = listOf()
                 )

@@ -279,6 +279,7 @@ class HomeViewModel @Inject constructor(
                 it.year,
                 it.month,
                 it.day,
+                it.mainRecordType,
                 it.records.filter { record ->
                     record == recordType
                 },
