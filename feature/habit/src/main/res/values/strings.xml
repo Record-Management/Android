@@ -2,4 +2,9 @@
 <resources>
     <string name="change_record_type">기록 방식을 바꿀래요</string>
     <string name="memo">메모</string>
+    <string name="change_main">메인 기록으로 변경</string>
+    <string name="main_habit_change_title">메인 습관 기록을 변경할까요?</string>
+    <string name="main_habit_change_body">연속 달성 기록은 유지된채\n메인 습관의 종류가 변경됩니다.</string>
+    <string name="changed_main_cancel">닫기</string>
+    <string name="changed_main_change">변경하기</string>
 </resources>
