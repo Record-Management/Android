@@ -203,7 +203,9 @@ internal fun HabitDetailScreen(
                 ChangeMainHabitRecordComponent(
                     modifier = Modifier.padding(top = 24.dp),
                     isMainHabit = uiState.hasBeenSetAsMain,
-                    onChangedMainHabit = {}
+                    onChangedMainHabit = { changed ->
+                        uiEvent(HabitDetailUiEvent.OnSetAsMainHabit(changed))
+                    }
                 )
             }
             HabitAlertComponent(

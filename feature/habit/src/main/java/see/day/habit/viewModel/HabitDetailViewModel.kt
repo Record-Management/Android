@@ -110,6 +110,11 @@ class HabitDetailViewModel @Inject constructor(
                     it.copy(isTimeSpinnerDisplayed = uiEvent.displayed)
                 }
             }
+            is HabitDetailUiEvent.OnSetAsMainHabit -> {
+                _uiState.update {
+                    it.copy(hasBeenSetAsMain = uiEvent.changed)
+                }
+            }
         }
     }
 
