@@ -345,7 +345,6 @@ private fun HomeBottomSheetContent(
                 selectedDay = uiState.selectedDay,
                 calendarDayInfo = uiState.monthlyRecords,
                 currentFilterType = uiState.selectedFilterType.toRecordType(),
-                mainRecordType = uiState.mainRecordType,
                 createdAt = uiState.createdAt,
                 onClickCell = { year, month, day ->
                     uiEvent(HomeUiEvent.OnClickCell(year, month, day))
