@@ -152,7 +152,6 @@ private fun CustomCalendarPreview() {
             },
             calendarDayInfo = listOf(),
             currentFilterType = null,
-            mainRecordType = RecordType.EXERCISE,
             createdAt = "2025-10-01"
         )
     }

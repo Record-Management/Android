@@ -38,6 +38,7 @@ import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.gray50
 import see.day.model.record.RecordType
 import see.day.model.record.RecordType.DAILY
+import see.day.model.record.RecordType.EXERCISE
 import see.day.model.record.RecordType.HABIT
 import see.day.util.getGrayIcon
 import see.day.util.getIcon
@@ -223,13 +224,13 @@ private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
             modifier = Modifier.width(49.dp)
         ) {
             DayCell(
-                year = 2025,
-                month = 9,
-                day = 13,
+                year = now.year,
+                month = now.monthValue,
+                day = now.dayOfMonth,
                 filterType = null,
                 isSelected = true,
-                mainRecordType = DAILY,
-                records = listOf(DAILY, RecordType.HABIT),
+                mainRecordType = EXERCISE,
+                records = listOf(EXERCISE, RecordType.HABIT),
                 schedules = listOf(),
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
@@ -251,9 +252,9 @@ private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
             modifier = Modifier.width(49.dp)
         ) {
             DayCell(
-                year = 2025,
-                month = 9,
-                day = 13,
+                year = now.year,
+                month = now.monthValue,
+                day = now.dayOfMonth,
                 filterType = null,
                 isSelected = true,
                 mainRecordType = DAILY,
@@ -279,9 +280,9 @@ private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
             modifier = Modifier.width(49.dp)
         ) {
             DayCell(
-                year = 2025,
-                month = 9,
-                day = 13,
+                year = now.year,
+                month = now.monthValue,
+                day = now.dayOfMonth,
                 filterType = DAILY,
                 isSelected = true,
                 mainRecordType = DAILY,
@@ -307,9 +308,9 @@ private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
             modifier = Modifier.width(49.dp)
         ) {
             DayCell(
-                year = 2025,
-                month = 9,
-                day = 13,
+                year = now.year,
+                month = now.monthValue,
+                day = now.dayOfMonth,
                 filterType = DAILY,
                 isSelected = true,
                 mainRecordType = DAILY,
