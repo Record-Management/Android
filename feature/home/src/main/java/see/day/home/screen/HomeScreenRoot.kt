@@ -227,6 +227,8 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                 HomeTopBar(
                     modifier = modifier,
                     alpha = topAppBarAlpha,
+                    mainRecordType = uiState.mainRecordType,
+                    goalDays = uiState.goalDays,
                     isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
                     onClickBackButton = {
                         onDownBottomSheet()
