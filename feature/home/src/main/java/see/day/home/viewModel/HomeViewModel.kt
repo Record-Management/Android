@@ -67,6 +67,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         mainRecordType = user.await().mainRecordType,
+                        goalDays = user.await().goalDays,
                         monthlyRecords = calendarDayInfos,
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
