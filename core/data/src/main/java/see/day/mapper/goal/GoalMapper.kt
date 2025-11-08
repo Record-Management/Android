@@ -1,7 +1,9 @@
 package see.day.mapper.goal
 
 import see.day.model.goal.CurrentGoal
+import see.day.model.goal.NewGoal
 import see.day.network.dto.goal.CurrentGoalResponse
+import see.day.network.dto.goal.NewGoalRequest
 
 internal fun CurrentGoalResponse.toModel() : CurrentGoal {
     return CurrentGoal(
@@ -14,5 +16,13 @@ internal fun CurrentGoalResponse.toModel() : CurrentGoal {
         achievementRate = achievementRate,
         treeStage = treeStage,
         canCreateNew = canCreateNew
+    )
+}
+
+internal fun NewGoal.toDto() : NewGoalRequest {
+    return NewGoalRequest(
+        recordType = recordType.name,
+        goalDays = goalDays,
+        startDate = startDate
     )
 }
