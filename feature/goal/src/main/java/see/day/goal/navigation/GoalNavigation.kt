@@ -10,7 +10,7 @@ import see.day.goal.screen.CurrentGoalScreenRoot
 import see.day.navigation.goal.GoalRoute
 
 fun NavController.navigateCurrentGoal(userId: String, navOptions: NavOptions? = null) {
-    navigate(userId, navOptions)
+    navigate(GoalRoute.CurrentGoal(userId), navOptions)
 }
 
 fun NavGraphBuilder.goalNavigation(
