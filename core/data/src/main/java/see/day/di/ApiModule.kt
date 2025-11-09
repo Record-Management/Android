@@ -19,6 +19,7 @@ import see.day.network.AuthService
 import see.day.network.CalendarService
 import see.day.network.DailyRecordService
 import see.day.network.ExerciseRecordService
+import see.day.network.GoalService
 import see.day.network.HabitRecordService
 import see.day.network.NotificationService
 import see.day.network.PhotoService
@@ -163,5 +164,11 @@ class ApiModule {
     @Singleton
     fun provideNotificationService(@Main retrofit: Retrofit) : NotificationService {
         return retrofit.create(NotificationService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGoalService(@Main retrofit: Retrofit) : GoalService {
+        return retrofit.create(GoalService::class.java)
     }
 }
