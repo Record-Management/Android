@@ -6,6 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import see.day.goal.screen.CurrentGoalScreen
+import see.day.goal.screen.CurrentGoalScreenRoot
 import see.day.navigation.goal.GoalRoute
 
 fun NavController.navigateCurrentGoal(userId: String, navOptions: NavOptions? = null) {
@@ -17,7 +18,7 @@ fun NavGraphBuilder.goalNavigation(
 ) {
     composable<GoalRoute.CurrentGoal> { navBackStackEntry ->
         val userId = navBackStackEntry.toRoute<GoalRoute.CurrentGoal>().userId
-        CurrentGoalScreen(
+        CurrentGoalScreenRoot(
             onBack = onBack,
             userId = userId
         )

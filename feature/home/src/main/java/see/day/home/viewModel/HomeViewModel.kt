@@ -258,6 +258,10 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
+            if(uiState.value.shouldCreateNewGoal) {
+                _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(uiState.value.userId))
+                return@launch
+            }
             _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
         }
     }

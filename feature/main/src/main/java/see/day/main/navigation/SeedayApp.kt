@@ -14,6 +14,8 @@ import see.day.daily.navigation.dailyNavigation
 import see.day.daily.navigation.navigateDailyWrite
 import see.day.exercise.navigation.exerciseNavigation
 import see.day.exercise.navigation.navigateExerciseWrite
+import see.day.goal.navigation.goalNavigation
+import see.day.goal.navigation.navigateCurrentGoal
 import see.day.habit.navigation.habitNavigation
 import see.day.habit.navigation.navigateHabitWrite
 import see.day.home.navigation.homeNavigation
@@ -46,7 +48,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onClickAddRecord = navigationState::navigateAddRecord,
                 onClickDetailRecord = navigationState::navigateDetailRecord,
                 onClickSetting = navigationState.navController::navigateSetting,
-                onClickNotification = navigationState.navController::navigateNotificationHistory
+                onClickNotification = navigationState.navController::navigateNotificationHistory,
+                onGoCurrentGoal = navigationState.navController::navigateCurrentGoal
             )
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,
@@ -77,6 +80,9 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
             notificationNavigation(
                 onBack = navigationState.navController::popBackStack,
                 onClickAddRecord = navigationState::navigateAddRecord
+            )
+            goalNavigation(
+                onBack = navigationState.navController::popBackStack
             )
         }
     }
