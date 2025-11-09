@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
                 val storedDateString = getStoredDateUseCase().getOrThrow()
                 if(storedDateString == null) {
                     if(currentGoal.canCreateNew) {
-                        _toastMessage.emit(currentGoal.toString())
+                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
                     }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
@@ -102,7 +102,7 @@ class HomeViewModel @Inject constructor(
 
                 if(currentGoal.canCreateNew) {
                     if(storedDate < endDate.plusDays(1)) {
-                        _toastMessage.emit(currentGoal.toString())
+                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
                     }
                 }
                 if(storedDate < todayDate) {
@@ -258,6 +258,10 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
+            if(uiState.value.shouldCreateNewGoal) {
+                _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(uiState.value.userId))
+                return@launch
+            }
             _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
         }
     }

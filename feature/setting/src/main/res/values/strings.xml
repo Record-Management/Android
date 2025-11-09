@@ -27,4 +27,7 @@
     <string name="exercise_record_notification">운동 기록</string>
     <string name="habit_record_notification">습관 기록</string>
     <string name="habit_time_notification">등록 시간 알림</string>
+
+    <string name="system_notification_banner_title">현재 시스템 알림이 꺼져있어요.\n지금 바로 알림을 켜주세요!</string>
+    <string name="system_notification_banner_body">알림 설정</string>
 </resources>

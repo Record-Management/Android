@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,12 +27,13 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
 import see.day.setting.R
 import see.day.setting.component.NotificationSwitch
-import see.day.setting.component.SystemNotificationCard
 import see.day.setting.state.record.RecordNotificationUiEffect
 import see.day.setting.state.record.RecordNotificationUiEvent
 import see.day.setting.state.record.RecordNotificationUiState
 import see.day.setting.util.isNotificationPermissionGranted
+import see.day.setting.util.openAppSettings
 import see.day.setting.viewModel.RecordNotificationViewModel
+import see.day.ui.card.ActionBanner
 import see.day.ui.topbar.CommonAppBar
 
 @Composable
@@ -99,8 +99,11 @@ internal fun SettingRecordNotificationScreen(
                 .padding(horizontal = 16.dp)
         ) {
             if (!hasPermission) {
-                SystemNotificationCard(
-                    modifier = Modifier.padding(top = 10.dp)
+                ActionBanner(
+                    modifier = Modifier.padding(top = 10.dp),
+                    onClick = { openAppSettings(context) },
+                    title = R.string.system_notification_banner_title,
+                    body = R.string.system_notification_banner_body
                 )
             }
             NotificationSwitch(

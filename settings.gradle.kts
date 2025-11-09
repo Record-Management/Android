@@ -32,7 +32,8 @@ include(
     "core:model",
     "core:designsystem",
     "core:ui",
-    "core:navigation"
+    "core:navigation",
+    "core:messaging"
 )
 
 include(
@@ -44,6 +45,6 @@ include(
     "feature:exercise",
     "feature:habit",
     "feature:setting",
-    "feature:notification"
+    "feature:notification",
+    "feature:goal"
 )
-include(":core:messaging")
