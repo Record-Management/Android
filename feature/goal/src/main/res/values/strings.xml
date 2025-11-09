@@ -3,4 +3,7 @@
     <string name="goal_acheive_title">목표 달성 리포트</string>
     <string name="my_goal_title">나의 목표</string>
     <string name="goal_during">목표 기간</string>
+    <string name="achievement_rate_text">목표\n달성률</string>
+    <string name="complete_days_text">기록 완료\n일 수</string>
+    <string name="day_streak_text">누적 달성\n횟 수</string>
 </resources>
