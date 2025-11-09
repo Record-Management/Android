@@ -6,4 +6,6 @@
     <string name="achievement_rate_text">목표\n달성률</string>
     <string name="complete_days_text">기록 완료\n일 수</string>
     <string name="day_streak_text">누적 달성\n횟 수</string>
+    <string name="current_goal_banner_title">새로운 목표를 세우고\n다른 하루를 시작해보세요</string>
+    <string name="current_goal_banner_body">새 목표 설정하기</string>
 </resources>
