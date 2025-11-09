@@ -84,4 +84,16 @@ class UserRepositoryImpl @Inject constructor(
             userService.deleteFcmToken()
         }
     }
+
+    override suspend fun getStoredDate(): Result<String?> {
+        return runCatching {
+            dataSource.getTodayDate().first()
+        }
+    }
+
+    override suspend fun updateStoredDate(date: String): Result<Unit> {
+        return runCatching {
+            dataSource.saveTodayDate(date)
+        }
+    }
 }
