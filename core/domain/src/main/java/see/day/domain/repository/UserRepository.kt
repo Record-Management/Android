@@ -14,4 +14,6 @@ interface UserRepository {
     suspend fun logout(allDevices: Boolean): Result<Unit>
     suspend fun updateFcmToken(fcmToken: String): Result<Unit>
     suspend fun deleteFcmToken(): Result<Unit>
+    suspend fun getStoredDate() : Result<String?>
+    suspend fun updateStoredDate(date: String) : Result<Unit>
 }

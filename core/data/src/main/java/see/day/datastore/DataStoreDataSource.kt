@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import see.day.datastore.DataStoreDataSource.PreferencesKey.ACCESS_TOKEN
 import see.day.datastore.DataStoreDataSource.PreferencesKey.REFRESH_TOKEN
+import see.day.datastore.DataStoreDataSource.PreferencesKey.TODAY_DATE
 
 class DataStoreDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>
@@ -16,6 +17,7 @@ class DataStoreDataSource @Inject constructor(
     object PreferencesKey {
         val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
         val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
+        val TODAY_DATE = stringPreferencesKey("TODAY_TOKEN")
     }
 
     override fun hasToken(): Flow<Boolean> = dataStore.data.map { preferences ->
@@ -34,6 +36,12 @@ class DataStoreDataSource @Inject constructor(
         }
     }
 
+    fun getTodayDate() : Flow<String?> {
+        return dataStore.data.map { prefs ->
+            prefs[TODAY_DATE]
+        }
+    }
+
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { prefs ->
             prefs[ACCESS_TOKEN] = token
@@ -43,6 +51,12 @@ class DataStoreDataSource @Inject constructor(
     suspend fun saveRefreshToken(token: String) {
         dataStore.edit { prefs ->
             prefs[REFRESH_TOKEN] = token
+        }
+    }
+
+    suspend fun saveTodayDate(date: String) {
+        dataStore.edit { prefs ->
+            prefs[TODAY_DATE] = date
         }
     }
 

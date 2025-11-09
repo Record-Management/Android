@@ -15,11 +15,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
+import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.UpdateHabitRecordIsCompletedUseCase
+import see.day.domain.usecase.user.GetStoredDateUseCase
 import see.day.domain.usecase.user.GetUserUseCase
+import see.day.domain.usecase.user.UpdateStoredDateUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
@@ -28,6 +31,7 @@ import see.day.home.util.RecordFilterType
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
+import java.time.LocalDate
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -37,7 +41,10 @@ class HomeViewModel @Inject constructor(
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
     private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
-    private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase
+    private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
+    private val getCurrentGoalUseCase: GetCurrentGoalUseCase,
+    private val getStoredDateUseCase: GetStoredDateUseCase,
+    private val updateStoredDateUseCase: UpdateStoredDateUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
@@ -58,6 +65,8 @@ class HomeViewModel @Inject constructor(
                 val user = async { getUserUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
+                val currentGoal = getCurrentGoalUseCase(user.await().id).getOrThrow()
+
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
                 monthlyRecord.update {
@@ -66,14 +75,40 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
+                        userId = user.await().id,
                         mainRecordType = user.await().mainRecordType,
                         goalDays = user.await().goalDays,
                         monthlyRecords = calendarDayInfos,
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
-                        todayRecords = detailDailyRecords
+                        todayRecords = detailDailyRecords,
+                        treeStage = currentGoal.treeStage,
+                        shouldCreateNewGoal = currentGoal.canCreateNew
                     )
                 }
+
+                val storedDateString = getStoredDateUseCase().getOrThrow()
+                if(storedDateString == null) {
+                    if(currentGoal.canCreateNew) {
+                        _toastMessage.emit(currentGoal.toString())
+                    }
+                    updateStoredDateUseCase(HomeUiState.getTodayDate())
+                    return@launch
+                }
+
+                val endDate = LocalDate.parse(currentGoal.endDate)
+                val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
+                val storedDate = LocalDate.parse(storedDateString)
+
+                if(currentGoal.canCreateNew) {
+                    if(storedDate < endDate.plusDays(1)) {
+                        _toastMessage.emit(currentGoal.toString())
+                    }
+                }
+                if(storedDate < todayDate) {
+                    updateStoredDateUseCase(HomeUiState.getTodayDate())
+                }
+
             } catch (e: Exception) {
             }
         }

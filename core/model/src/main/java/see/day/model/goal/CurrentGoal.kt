@@ -9,7 +9,7 @@ data class CurrentGoal(
     val startDate: String,
     val endDate: String,
     val completedDays: Int,
-    val achievementRate: Int,
+    val achievementRate: Double,
     val treeStage: TreeStage,
     val canCreateNew: Boolean
 )
