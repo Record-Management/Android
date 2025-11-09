@@ -1,8 +1,6 @@
-package see.day.setting.component
+package see.day.ui.card
 
-import android.content.Context
-import android.content.Intent
-import android.provider.Settings
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,31 +18,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.setting.R
+import see.day.ui.R
 
 @Composable
-internal fun SystemNotificationCard(
+fun ActionBanner(
     modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    @StringRes title: Int,
+    @StringRes body: Int
 ) {
-    val context = LocalContext.current
-
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .clickable { openAppSettings(context) }
+            .clickable { onClick() }
             .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.system_notification_description),
+            text = stringResource(title),
             style = MaterialTheme.typography.labelMedium.copy(Color.White)
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -56,11 +54,11 @@ internal fun SystemNotificationCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.setting_notification),
+                text = stringResource(body),
                 style = MaterialTheme.typography.displaySmall.copy(color = MaterialTheme.colorScheme.primary)
             )
             Image(
-                painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+                painter = painterResource(R.drawable.ic_arrow_right),
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
                 contentDescription = "선택",
                 modifier = Modifier.size(20.dp)
@@ -69,19 +67,15 @@ internal fun SystemNotificationCard(
     }
 }
 
-fun openAppSettings(context: Context) {
-    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-    }
-    context.startActivity(intent)
-}
-
 @Preview
 @Composable
-private fun SystemNotificationCardPreview() {
+private fun ActionBannerPreview() {
     SeeDayTheme {
-        SystemNotificationCard(
-            modifier = Modifier.padding(top = 10.dp, start = 16.dp, end = 16.dp)
+        ActionBanner(
+            modifier = Modifier.padding(top = 10.dp, start = 16.dp, end = 16.dp),
+            onClick = {},
+            title = R.string.test_title,
+            body = R.string.test_body
         )
     }
 }
