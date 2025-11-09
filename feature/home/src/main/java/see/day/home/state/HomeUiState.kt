@@ -4,9 +4,11 @@ import java.time.LocalDate
 import see.day.home.util.RecordFilterType
 import see.day.model.calendar.DailyRecordDetails
 import see.day.model.date.CalendarDayInfo
+import see.day.model.goal.TreeStage
 import see.day.model.record.RecordType
 
 data class HomeUiState(
+    val userId : String,
     val currentYear: Int,
     val currentMonth: Int,
     val selectedMonth: Int,
@@ -17,10 +19,13 @@ data class HomeUiState(
     val monthlyRecords: List<CalendarDayInfo>,
     val dailyRecordDetails: DailyRecordDetails,
     val createdAt: String,
-    val todayRecords: DailyRecordDetails
+    val todayRecords: DailyRecordDetails,
+    val treeStage: TreeStage,
+    val shouldCreateNewGoal : Boolean
 ) {
     companion object {
         val init = HomeUiState(
+            userId = "",
             currentYear = LocalDate.now().year,
             currentMonth = LocalDate.now().monthValue,
             selectedMonth = LocalDate.now().monthValue,
@@ -31,7 +36,9 @@ data class HomeUiState(
             monthlyRecords = listOf(),
             dailyRecordDetails = DailyRecordDetails(getTodayDate(), listOf()),
             createdAt = getTodayDate(),
-            todayRecords = DailyRecordDetails(getTodayDate(), listOf())
+            todayRecords = DailyRecordDetails(getTodayDate(), listOf()),
+            treeStage = TreeStage.STAGE_1,
+            shouldCreateNewGoal = false
         )
 
         fun getTodayDate(): String {
