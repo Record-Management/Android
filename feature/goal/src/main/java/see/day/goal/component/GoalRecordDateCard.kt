@@ -1,7 +1,6 @@
 package see.day.goal.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,12 +35,11 @@ internal fun GoalRecordDateCard(
 ) {
     Row(
         modifier = modifier
-            .background(gray20)
             .clip(RoundedCornerShape(12.dp))
+            .background(gray20)
             .padding(horizontal = 20.dp, vertical = 12.dp)
             .height(49.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -71,7 +69,7 @@ internal fun GoalRecordDateCard(
             )
             Text(
                 modifier = Modifier.padding(top = 2.dp),
-                text = startDate.replace("-",".").substring(2) + "~" + endDate.replace("-",".").substring(2),
+                text = startDate.replace("-",".").substring(2) + " ~ " + endDate.replace("-",".").substring(2),
                 style = MaterialTheme.typography.titleSmall
             )
         }
