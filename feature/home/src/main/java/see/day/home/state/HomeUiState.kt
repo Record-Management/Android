@@ -20,7 +20,7 @@ data class HomeUiState(
     val dailyRecordDetails: DailyRecordDetails,
     val createdAt: String,
     val todayRecords: DailyRecordDetails,
-    val treeStage: TreeStage,
+    val treeStage: TreeStage?,
     val shouldCreateNewGoal : Boolean
 ) {
     companion object {
