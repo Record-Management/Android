@@ -37,14 +37,14 @@ import see.day.model.record.daily.DailyEmotion
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DailyRecordOverview(modifier: Modifier = Modifier, recordId: String, dailyEmotion: DailyEmotion, recordDate: String, content: String, photoUrls: List<String>, onClickItem: (RecordType, String) -> Unit, onClickLongItem: (RecordType, String) -> Unit) {
+fun DailyRecordOverview(modifier: Modifier = Modifier, recordId: String, dailyEmotion: DailyEmotion, recordDate: String, content: String, photoUrls: List<String>, onClickItem: (RecordType, String) -> Unit, onClickLongItem: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .combinedClickable(
                 onClick = { onClickItem(RecordType.DAILY, recordId) },
-                onLongClick = { onClickLongItem(RecordType.DAILY, recordId) }
+                onLongClick = { onClickLongItem() }
             )
             .background(gray10)
             .padding(16.dp)
@@ -105,7 +105,7 @@ private fun DailyRecordOverviewHasPhotoPreview() {
             content = "오늘 아침에 일어나서 밥먹고 소화시키다 누워서 다시 자고 일어나서 다시 밥먹고 다시 자고나니 하루가 다 갔다.",
             photoUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"),
             onClickItem = { recordType, recordId -> },
-            onClickLongItem = { recordType, recordId -> }
+            onClickLongItem = {}
         )
     }
 }
@@ -121,7 +121,7 @@ private fun DailyRecordOverviewOversizePreview() {
             content = "오늘 아침에 일어나서 밥먹고 소화시키다 누워서 다시 자고 일어나서 다시 밥먹고 다시 자고나니 하루가 다 갔다. 정말 즐거운 하루였고 내일도 즐거운 하루였으면 좋겠다 너무너무 행복하다",
             photoUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png", "https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"),
             onClickItem = { recordType, recordId -> },
-            onClickLongItem = { recordType, recordId -> }
+            onClickLongItem = { }
         )
     }
 }
@@ -137,7 +137,7 @@ private fun DailyRecordOverviewPreview() {
             content = "오늘 아침에 일어나서 밥먹고 소화시키다 누워서 다시 자고 일어나서 다시 밥먹고 다시 자고나니 하루가 다 갔다.",
             photoUrls = listOf(),
             onClickItem = { recordType, recordId -> },
-            onClickLongItem = { recordType, recordId -> }
+            onClickLongItem = {  }
         )
     }
 }
