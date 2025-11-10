@@ -40,8 +40,8 @@ import see.day.ui.dialog.DialogBackground
 fun CalendarDetail(
     modifier: Modifier = Modifier,
     dailyRecordDetails: DailyRecordDetails,
-    onClickOverview: (RecordType, String) -> Unit,
-    onClickLongItem: (RecordType, String) -> Unit,
+    onClickRevise: (RecordType, String) -> Unit,
+    onClickDelete: (RecordType, String) -> Unit,
     onClickUpdateHabitRecordIsCompleted: (String, Boolean) -> Unit
 ) {
     var openLongPressureDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
@@ -50,8 +50,8 @@ fun CalendarDetail(
             onDismiss = { openLongPressureDialog = openLongPressureDialog.copy(first = false) },
             recordType = openLongPressureDialog.second,
             recordId = openLongPressureDialog.third,
-            onClickRevise = onClickOverview,
-            onClickRemove = onClickLongItem
+            onClickRevise = onClickRevise,
+            onClickRemove = onClickDelete
         )
     }
 
@@ -78,7 +78,7 @@ fun CalendarDetail(
                             recordDate = record.fullRecordTime,
                             content = record.content,
                             photoUrls = record.imageUrls,
-                            onClickItem = onClickOverview,
+                            onClickItem = onClickRevise,
                             onClickLongItem = { openLongPressureDialog = openLongPressureDialog.copy(true, record.type, record.id) }
                         )
                     }
@@ -86,7 +86,7 @@ fun CalendarDetail(
                     is ExerciseRecordDetail -> {
                         ExerciseRecordOverview(
                             exerciseRecord = record,
-                            onClickItem = onClickOverview,
+                            onClickItem = onClickRevise,
                             onClickLongItem = { openLongPressureDialog = openLongPressureDialog.copy(true, record.type, record.id) }
                         )
                     }
@@ -94,7 +94,7 @@ fun CalendarDetail(
                     is HabitRecordDetail -> {
                         HabitRecordOverView(
                             habitRecord = record,
-                            onClickItem = onClickOverview,
+                            onClickItem = onClickRevise,
                             onClickLongItem = { openLongPressureDialog = openLongPressureDialog.copy(true, record.type, record.id) },
                             onClickChecked = onClickUpdateHabitRecordIsCompleted
                         )
@@ -178,8 +178,8 @@ private fun CalendarDetailPreview() {
                 "2025-09-12",
                 listOf(DailyRecordDetail(id = "", type = RecordType.DAILY, emotion = DailyEmotion.Love, content = "asdasdasd", imageUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime = "13:30", recordDate = "2025-11-10", createdAt = "", updatedAt = ""))
             ),
-            onClickOverview = { recordType, recordId -> },
-            onClickLongItem = { recordType, recordId -> },
+            onClickRevise = { recordType, recordId -> },
+            onClickDelete = { recordType, recordId -> },
             onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted -> }
         )
     }
