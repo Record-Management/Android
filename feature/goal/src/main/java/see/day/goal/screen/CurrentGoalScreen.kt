@@ -57,7 +57,7 @@ internal fun CurrentGoalScreen(
                     brush = Brush.verticalGradient(
                         colorStops = arrayOf(
                             0.0f to Color(0xFFFFFFFF),
-                            0.6f to Color(0xFFFFFFFF),
+                            0.55f to Color(0xFFFFFFFF),
                             1.0f to Color(0xFFFFE0C1)
                         )
                     )
