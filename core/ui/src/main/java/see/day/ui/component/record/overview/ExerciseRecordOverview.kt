@@ -31,7 +31,7 @@ fun ExerciseRecordOverview(
     modifier: Modifier = Modifier,
     exerciseRecord: ExerciseRecordDetail,
     onClickItem: (RecordType, String) -> Unit,
-    onClickLongItem: (RecordType, String) -> Unit
+    onClickLongItem: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -39,7 +39,7 @@ fun ExerciseRecordOverview(
             .clip(RoundedCornerShape(16.dp))
             .combinedClickable(
                 onClick = { onClickItem(RecordType.EXERCISE, exerciseRecord.id) },
-                onLongClick = { onClickLongItem(RecordType.EXERCISE, exerciseRecord.id) }
+                onLongClick = { onClickLongItem() }
             )
             .background(gray10)
             .padding(16.dp)
@@ -94,7 +94,7 @@ private fun ExerciseRecordOverviewPreview() {
                 dailyNote = "너무너무 행복한 하루였다.",
             ),
             onClickItem = { type, id -> },
-            onClickLongItem = { type, id -> }
+            onClickLongItem = { }
         )
     }
 }

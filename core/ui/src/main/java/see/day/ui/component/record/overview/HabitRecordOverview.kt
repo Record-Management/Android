@@ -47,7 +47,7 @@ fun HabitRecordOverView(
     modifier: Modifier = Modifier,
     habitRecord: HabitRecordDetail,
     onClickItem: (RecordType, String) -> Unit,
-    onClickLongItem: (RecordType, String) -> Unit,
+    onClickLongItem: () -> Unit,
     onClickChecked: (String, Boolean) -> Unit
 ) {
     Row(
@@ -56,7 +56,7 @@ fun HabitRecordOverView(
             .clip(RoundedCornerShape(16.dp))
             .combinedClickable(
                 onClick = { onClickItem(RecordType.HABIT, habitRecord.id) },
-                onLongClick = { onClickLongItem(RecordType.HABIT, habitRecord.id) }
+                onLongClick = { onClickLongItem() }
             )
             .background(gray10)
             .padding(top = 10.dp, bottom = 10.dp, start = 16.dp, end = 4.dp),
@@ -136,9 +136,7 @@ private fun HabitRecordOverViewPreview() {
             onClickItem = { type, id ->
                 Toast.makeText(context, "onItemClick", Toast.LENGTH_SHORT).show()
             },
-            onClickLongItem = { type, id ->
-                Toast.makeText(context, "onClickLongItem", Toast.LENGTH_SHORT).show()
-            },
+            onClickLongItem = {},
             onClickChecked = { id, isChecked ->
                 habitRecord = habitRecord.copy(isCompleted = isChecked)
             }
@@ -155,8 +153,7 @@ private fun HabitRecordOverViewIsMainPreview() {
             habitRecord = habitRecord,
             onClickItem = { type, id ->
             },
-            onClickLongItem = { type, id ->
-            },
+            onClickLongItem = {},
             onClickChecked = { id, isChecked ->
             }
         )

@@ -70,7 +70,6 @@ import see.day.home.util.RecordFilterType
 import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
-import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.OneButtonDialog
 import see.day.ui.picker.WheelDatePicker
 import see.day.ui.picker.WheelPickerDefaults
@@ -203,17 +202,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         )
     }
 
-    var openLongPressureDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
-
-    if (openLongPressureDialog.first) {
-        ConfirmDialog(
-            onDismiss = { openLongPressureDialog = openLongPressureDialog.copy(first = false) },
-            onClickConfirmButton = {
-                uiEvent(HomeUiEvent.OnClickDeleteItem(openLongPressureDialog.second, openLongPressureDialog.third))
-            }
-        )
-    }
-
     val (isDateSelectMode, onDateSelectModeChanged) = remember { mutableStateOf(false) }
 
     Box(
@@ -249,9 +237,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     bottomSheetState,
                     uiState,
                     uiEvent,
-                    onClickLongPressure = { type, id ->
-                        openLongPressureDialog = Triple(true, type, id)
-                    },
                     isDateSelectMode = isDateSelectMode,
                     onDateSelectModeChanged = onDateSelectModeChanged
                 )
@@ -302,8 +287,7 @@ private fun HomeBottomSheetContent(
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
     isDateSelectMode: Boolean,
-    onDateSelectModeChanged: (Boolean) -> Unit,
-    onClickLongPressure: (RecordType, String) -> Unit
+    onDateSelectModeChanged: (Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -376,11 +360,11 @@ private fun HomeBottomSheetContent(
         if (filteredRecords.isNotEmpty()) {
             CalendarDetail(
                 dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords),
-                onClickOverview = { recordType, recordId ->
+                onClickRevise = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 },
-                onClickLongItem = { recordType, recordId ->
-                    onClickLongPressure(recordType, recordId)
+                onClickDelete = { recordType, recordId ->
+                    uiEvent(HomeUiEvent.OnClickDeleteItem(recordType, recordId))
                 },
                 onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted ->
                     uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted))
