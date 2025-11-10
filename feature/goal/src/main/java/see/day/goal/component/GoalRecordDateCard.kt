@@ -60,8 +60,10 @@ internal fun GoalRecordDateCard(
             .fillMaxHeight()
             .background(gray40))
 
+        Spacer(modifier = Modifier.weight(1f))
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = stringResource(R.string.goal_during),
