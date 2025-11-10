@@ -87,7 +87,7 @@ fun CalendarDetail(
                         ExerciseRecordOverview(
                             exerciseRecord = record,
                             onClickItem = onClickOverview,
-                            onClickLongItem = onClickLongItem
+                            onClickLongItem = { openLongPressureDialog = openLongPressureDialog.copy(true, record.type, record.id) }
                         )
                     }
 
@@ -95,7 +95,7 @@ fun CalendarDetail(
                         HabitRecordOverView(
                             habitRecord = record,
                             onClickItem = onClickOverview,
-                            onClickLongItem = onClickLongItem,
+                            onClickLongItem = { openLongPressureDialog = openLongPressureDialog.copy(true, record.type, record.id) },
                             onClickChecked = onClickUpdateHabitRecordIsCompleted
                         )
                     }
