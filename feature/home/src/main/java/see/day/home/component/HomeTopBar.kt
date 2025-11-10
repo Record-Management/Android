@@ -20,6 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
@@ -116,7 +118,7 @@ private fun GoalDays(
         Text(
             modifier = Modifier.padding(start = 6.dp),
             text = "D-$goalDays",
-            style = MaterialTheme.typography.displayMedium.copy()
+            style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold)
         )
     }
 }
