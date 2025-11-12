@@ -105,12 +105,12 @@ class HomeViewModel @Inject constructor(
                     return@launch
                 }
 
-                val storedDate = LocalDate.parse(storedDateString)
-
-                if(storedDate < todayDate) {
-                    updateStoredDateUseCase(HomeUiState.getTodayDate())
+                storedDateString?.let { dateString ->
+                    val storedDate = LocalDate.parse(dateString)
+                    if(storedDate < todayDate) {
+                        updateStoredDateUseCase(HomeUiState.getTodayDate())
+                    }
                 }
-
             } catch (e: Exception) {
                 Timber.e("HomeViewModel is not init ${e.message}")
             }
