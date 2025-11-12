@@ -7,5 +7,5 @@ data class NotificationSettingsEditRequest(
     val dailyRecordNotificationEnabled : Boolean?,
     val exerciseNotificationEnabled: Boolean?,
     val habitNotificationEnabled: Boolean?,
-    val noGoalNotificationEnabled: Boolean?
+    val goalSettingNotificationEnabled: Boolean?
 )
