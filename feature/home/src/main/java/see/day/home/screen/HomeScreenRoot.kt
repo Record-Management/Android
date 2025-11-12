@@ -219,6 +219,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     mainRecordType = uiState.mainRecordType,
                     goalDays = uiState.goalDays,
                     isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
+                    hasGoal = !uiState.shouldCreateNewGoal,
                     onClickBackButton = {
                         onDownBottomSheet()
                     },
