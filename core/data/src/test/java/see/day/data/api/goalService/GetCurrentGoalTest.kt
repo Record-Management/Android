@@ -45,7 +45,6 @@ class GetCurrentGoalTest {
     @Test
     fun givenUserId_whenGetCurrentGoal_thenWorksFine() = runTest {
         // given
-        val userId = "asdasd"
         val responseBody = getCurrentGoalSuccessResponse
 
         mockWebServer.enqueue(
@@ -55,7 +54,7 @@ class GetCurrentGoalTest {
         )
 
         // when
-        val response = sut.getCurrentGoal(userId)
+        val response = sut.getCurrentGoal()
         val recordedRequest = mockWebServer.takeRequest()
 
         // then
