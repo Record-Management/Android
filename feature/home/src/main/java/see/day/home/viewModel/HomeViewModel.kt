@@ -31,6 +31,7 @@ import see.day.home.util.RecordFilterType
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
+import see.day.navigation.home.Home
 import java.time.LocalDate
 
 @HiltViewModel
@@ -90,11 +91,13 @@ class HomeViewModel @Inject constructor(
 
                 val storedDateString = getStoredDateUseCase().getOrThrow()
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
-                val storedDate = LocalDate.parse(storedDateString)
 
                 if(currentGoal == null) {
-                    if(storedDate < todayDate) {
-                        updateStoredDateUseCase(HomeUiState.getTodayDate())
+                    if(storedDateString != null) {
+                        val storedDate = LocalDate.parse(storedDateString)
+                        if(storedDate < todayDate) {
+                            updateStoredDateUseCase(HomeUiState.getTodayDate())
+                        }
                     }
                     return@launch
                 }
@@ -107,6 +110,7 @@ class HomeViewModel @Inject constructor(
                     return@launch
                 }
 
+                val storedDate = LocalDate.parse(storedDateString)
                 val endDate = LocalDate.parse(currentGoal.endDate)
 
                 if(currentGoal.canCreateNew) {
