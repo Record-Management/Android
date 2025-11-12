@@ -73,6 +73,7 @@ class HomeViewModel @Inject constructor(
                     calendarDayInfos
                 }
 
+
                 _uiState.update {
                     it.copy(
                         userId = user.await().id,
@@ -82,12 +83,22 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
-                        treeStage = currentGoal.treeStage,
-                        shouldCreateNewGoal = currentGoal.canCreateNew
+                        treeStage = currentGoal?.treeStage,
+                        shouldCreateNewGoal = currentGoal != null
                     )
                 }
 
                 val storedDateString = getStoredDateUseCase().getOrThrow()
+                val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
+                val storedDate = LocalDate.parse(storedDateString)
+
+                if(currentGoal == null) {
+                    if(storedDate < todayDate) {
+                        updateStoredDateUseCase(HomeUiState.getTodayDate())
+                    }
+                    return@launch
+                }
+
                 if(storedDateString == null) {
                     if(currentGoal.canCreateNew) {
                         _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
@@ -97,8 +108,6 @@ class HomeViewModel @Inject constructor(
                 }
 
                 val endDate = LocalDate.parse(currentGoal.endDate)
-                val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
-                val storedDate = LocalDate.parse(storedDateString)
 
                 if(currentGoal.canCreateNew) {
                     if(storedDate < endDate.plusDays(1)) {

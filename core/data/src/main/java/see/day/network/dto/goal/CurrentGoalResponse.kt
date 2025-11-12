@@ -7,15 +7,15 @@ import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @Serializable
 data class CurrentGoalResponse(
-    val goalId: String?,
-    val recordType: RecordType?,
+    val goalId: String,
+    val recordType: RecordType,
     val goalDays: Int,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val startDate: String? = null,
+    val startDate: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val endDate: String? = null,
+    val endDate: String,
     val completedDays: Int,
     val achievementRate: Double,
-    val treeStage: TreeStage?,
+    val treeStage: TreeStage,
     val canCreateNew: Boolean
 )

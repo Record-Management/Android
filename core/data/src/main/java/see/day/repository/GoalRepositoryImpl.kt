@@ -20,9 +20,9 @@ class GoalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCurrentGoal(userId: String): Result<CurrentGoal> {
+    override suspend fun getCurrentGoal(userId: String): Result<CurrentGoal?> {
         return createResult {
-            goalService.getCurrentGoal(userId).data?.toModel() ?: throw NoDataException()
+            goalService.getCurrentGoal(userId).data?.toModel()
         }
     }
 }
