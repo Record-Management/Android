@@ -44,4 +44,7 @@
     <string name="withdrawal_body">탈퇴 시 모든 정보가 삭제되며, 복구가 불가능합니다.</string>
     <string name="withdrawal_cancel">닫기</string>
     <string name="withdrawal_confirm">탈퇴하기</string>
+
+    <string name="current_goal_banner_title">새 목표를 통해 다른\n하루를 시작해보세요</string>
+    <string name="current_goal_banner_body">새 목표 설정하기</string>
 </resources>
