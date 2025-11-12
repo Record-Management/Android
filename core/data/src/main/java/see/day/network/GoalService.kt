@@ -14,5 +14,5 @@ interface GoalService {
     suspend fun postNewGoal(@Header("userId") userId: String, @Body newGoalRequest: NewGoalRequest) : Unit
 
     @GET("api/goals/current")
-    suspend fun getCurrentGoal(@Header("userId") userId: String) : CommonResponse<CurrentGoalResponse>
+    suspend fun getCurrentGoal(@Header("userId") userId: String) : CommonResponse<CurrentGoalResponse?>
 }

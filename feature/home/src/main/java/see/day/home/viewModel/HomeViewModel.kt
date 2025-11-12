@@ -31,6 +31,7 @@ import see.day.home.util.RecordFilterType
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
+import timber.log.Timber
 import java.time.LocalDate
 
 @HiltViewModel
@@ -82,34 +83,36 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
-                        treeStage = currentGoal.treeStage,
-                        shouldCreateNewGoal = currentGoal.canCreateNew
+                        treeStage = currentGoal?.treeStage,
+                        shouldCreateNewGoal = currentGoal?.canCreateNew ?: true
                     )
                 }
 
                 val storedDateString = getStoredDateUseCase().getOrThrow()
-                if(storedDateString == null) {
-                    if(currentGoal.canCreateNew) {
+                val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
+
+                if(currentGoal == null) {
+                    val shouldShowGoalPrompt = if(storedDateString != null) {
+                        val storedDate = LocalDate.parse(storedDateString)
+                        storedDate < todayDate
+                    } else {
+                        true
+                    }
+                    if(shouldShowGoalPrompt) {
                         _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
                     }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
                 }
 
-                val endDate = LocalDate.parse(currentGoal.endDate)
-                val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
-                val storedDate = LocalDate.parse(storedDateString)
-
-                if(currentGoal.canCreateNew) {
-                    if(storedDate < endDate.plusDays(1)) {
-                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
+                storedDateString?.let { dateString ->
+                    val storedDate = LocalDate.parse(dateString)
+                    if(storedDate < todayDate) {
+                        updateStoredDateUseCase(HomeUiState.getTodayDate())
                     }
                 }
-                if(storedDate < todayDate) {
-                    updateStoredDateUseCase(HomeUiState.getTodayDate())
-                }
-
             } catch (e: Exception) {
+                Timber.e("HomeViewModel is not init ${e.message}")
             }
         }
     }

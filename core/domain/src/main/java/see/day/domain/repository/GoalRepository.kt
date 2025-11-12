@@ -7,5 +7,5 @@ interface GoalRepository {
 
     suspend fun postNewGoal(userId: String, newGoal: NewGoal): Result<Unit>
 
-    suspend fun getCurrentGoal(userId: String): Result<CurrentGoal>
+    suspend fun getCurrentGoal(userId: String): Result<CurrentGoal?>
 }
