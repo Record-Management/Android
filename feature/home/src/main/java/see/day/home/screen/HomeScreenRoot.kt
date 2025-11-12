@@ -70,6 +70,7 @@ import see.day.home.util.RecordFilterType
 import see.day.home.viewModel.HomeViewModel
 import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
+import see.day.ui.card.ActionBanner
 import see.day.ui.dialog.OneButtonDialog
 import see.day.ui.picker.WheelDatePicker
 import see.day.ui.picker.WheelPickerDefaults
@@ -218,6 +219,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     mainRecordType = uiState.mainRecordType,
                     goalDays = uiState.goalDays,
                     isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
+                    hasGoal = !uiState.shouldCreateNewGoal,
                     onClickBackButton = {
                         onDownBottomSheet()
                     },
@@ -250,29 +252,38 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             sheetContainerColor = Color.White
         ) { innerPadding ->
         }
-        FloatingActionButton(
-            onClick = {
-                if (uiState.todayRecords.records.size >= 2) {
-                    openTodayRecordOverDialog = true
-                } else {
-                    uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
-                }
-            },
-            modifier = modifier
-                .padding(
-                    end = 16.dp, bottom = 20.dp
-                )
-                .systemBarsPadding()
-                .align(Alignment.BottomEnd),
-            containerColor = MaterialTheme.colorScheme.primary,
-            shape = CircleShape,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.image_edit),
-                contentDescription = "추가하기 버튼",
-                modifier = modifier.size(24.dp)
+        if(uiState.shouldCreateNewGoal) {
+            ActionBanner(
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp, start = 26.dp, end = 26.dp).systemBarsPadding(),
+                onClick = { /* TODO 추후 목표 재설정 화면이 나오면 작성*/},
+                title = see.day.ui.R.string.current_goal_banner_title,
+                body = see.day.ui.R.string.current_goal_banner_body
             )
+        } else {
+            FloatingActionButton(
+                onClick = {
+                    if (uiState.todayRecords.records.size >= 2) {
+                        openTodayRecordOverDialog = true
+                    } else {
+                        uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                    }
+                },
+                modifier = modifier
+                    .padding(
+                        end = 16.dp, bottom = 20.dp
+                    )
+                    .systemBarsPadding()
+                    .align(Alignment.BottomEnd),
+                containerColor = MaterialTheme.colorScheme.primary,
+                shape = CircleShape,
+                elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.image_edit),
+                    contentDescription = "추가하기 버튼",
+                    modifier = modifier.size(24.dp)
+                )
+            }
         }
     }
 }

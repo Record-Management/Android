@@ -32,25 +32,28 @@ import see.day.util.getIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType, goalDays: Int, isFullExpand: Boolean, onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
+internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType, goalDays: Int, isFullExpand: Boolean, hasGoal : Boolean,onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
     TopAppBar(
         title = {
             Box(
                 modifier = modifier.fillMaxWidth(),
             ) {
-                val goalDaysAlignment = if (isFullExpand) {
-                    Alignment.Center
-                } else {
-                    Alignment.CenterStart
+                if(hasGoal) {
+                    val goalDaysAlignment = if (isFullExpand) {
+                        Alignment.Center
+                    } else {
+                        Alignment.CenterStart
+                    }
+
+                    GoalDays(
+                        modifier = Modifier
+                            .align(goalDaysAlignment)
+                            .offset(x = if (isFullExpand) (-40).dp else (-16).dp),
+                        recordType = mainRecordType,
+                        goalDays = goalDays
+                    )
                 }
 
-                GoalDays(
-                    modifier = Modifier
-                        .align(goalDaysAlignment)
-                        .offset(x = if (isFullExpand) (-40).dp else (-16).dp),
-                    recordType = mainRecordType,
-                    goalDays = goalDays
-                )
                 Row(
                     modifier = Modifier.align(Alignment.CenterEnd),
                     verticalAlignment = Alignment.CenterVertically
@@ -132,6 +135,7 @@ private fun HomeTopBarPreview() {
             mainRecordType = RecordType.EXERCISE,
             goalDays = 10,
             isFullExpand = false,
+            hasGoal = true,
             onClickBackButton = {},
             onClickSetting = {},
             onClickNotification = {}
