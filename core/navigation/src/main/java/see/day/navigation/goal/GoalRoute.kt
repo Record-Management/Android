@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 sealed interface GoalRoute {
 
     @Serializable
-    data class CurrentGoal(val userId: String) : GoalRoute
+    data object CurrentGoal : GoalRoute
 }

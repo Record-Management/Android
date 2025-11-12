@@ -8,7 +8,6 @@ import see.day.model.goal.TreeStage
 import see.day.model.record.RecordType
 
 data class HomeUiState(
-    val userId : String,
     val currentYear: Int,
     val currentMonth: Int,
     val selectedMonth: Int,
@@ -25,7 +24,6 @@ data class HomeUiState(
 ) {
     companion object {
         val init = HomeUiState(
-            userId = "",
             currentYear = LocalDate.now().year,
             currentMonth = LocalDate.now().monthValue,
             selectedMonth = LocalDate.now().monthValue,

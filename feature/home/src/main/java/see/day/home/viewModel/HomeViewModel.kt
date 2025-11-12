@@ -76,7 +76,6 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
-                        userId = user.await().id,
                         mainRecordType = user.await().mainRecordType,
                         goalDays = user.await().goalDays,
                         monthlyRecords = calendarDayInfos,
@@ -99,7 +98,7 @@ class HomeViewModel @Inject constructor(
                         true
                     }
                     if(shouldShowGoalPrompt) {
-                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
+                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
                     }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
@@ -262,7 +261,7 @@ class HomeViewModel @Inject constructor(
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
             if(uiState.value.shouldCreateNewGoal) {
-                _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(uiState.value.userId))
+                _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
                 return@launch
             }
             _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
