@@ -1,6 +1,8 @@
 package see.day.notification.screen
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +28,7 @@ import see.day.notification.state.NotificationUiEvent
 import see.day.notification.state.NotificationUiState
 import see.day.notification.util.TimeFormatUtil
 import see.day.notification.viewModel.NotificationViewModel
+import see.day.ui.card.ActionBanner
 import see.day.ui.topbar.CommonAppBar
 
 @Composable
@@ -78,24 +82,40 @@ internal fun NotificationScreen(
             )
         }
     ) { innerPadding ->
-        if (uiState.notificationHistories.isEmpty()) {
-            HistoryEmptyComponent(
-                modifier = Modifier.padding()
-            )
-            return@Scaffold
-        }
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            items(uiState.notificationHistories) { history ->
-                HistoryCard(
-                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                    recordType = history.recordType,
-                    relativeTime = history.relativeTime,
-                    isChecked = history.isChecked,
-                    onClickCard = { type, time ->
-                        uiEvent(NotificationUiEvent.OnClickItem(type, time))
-                    },
+            if (uiState.notificationHistories.isEmpty()) {
+                HistoryEmptyComponent(
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    items(uiState.notificationHistories) { history ->
+                        HistoryCard(
+                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+                            recordType = history.recordType,
+                            relativeTime = history.relativeTime,
+                            isChecked = history.isChecked,
+                            onClickCard = { type, time ->
+                                if(!uiState.hasNoGoal) {
+                                    uiEvent(NotificationUiEvent.OnClickItem(type, time))
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+            if(uiState.hasNoGoal) {
+                ActionBanner(
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(20.dp),
+                    onClick = { /* TODO 추후 목표 재설정 화면이 나올 때 작성 */},
+                    title = see.day.ui.R.string.current_goal_banner_title,
+                    body = see.day.ui.R.string.current_goal_banner_body,
                 )
             }
         }

@@ -37,7 +37,7 @@ class GoalNotificationViewModel @Inject constructor(
                 .onSuccess { notificationSetting ->
                     _uiState.update {
                         it.copy(
-                            goalNotificationEnabled = notificationSetting.noGoalsNotificationEnabled
+                            goalNotificationEnabled = notificationSetting.goalSettingNotificationEnabled
                         )
                     }
                 }
@@ -60,12 +60,12 @@ class GoalNotificationViewModel @Inject constructor(
         viewModelScope.launch {
             updateNotificationSettingUseCase(
                 NotificationSettingsEdit(
-                    noGoalNotificationEnabled = enabled
+                    goalSettingNotificationEnabled = enabled
                 )
             ).onSuccess { notificationSetting ->
                 _uiState.update {
                     it.copy(
-                        goalNotificationEnabled = notificationSetting.noGoalsNotificationEnabled
+                        goalNotificationEnabled = notificationSetting.goalSettingNotificationEnabled
                     )
                 }
             }

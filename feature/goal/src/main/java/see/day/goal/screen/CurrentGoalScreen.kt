@@ -78,8 +78,8 @@ internal fun CurrentGoalScreen(
             ActionBanner(
                 modifier = Modifier.fillMaxWidth().padding(top = 34.dp, bottom = 52.dp).systemBarsPadding(),
                 onClick = {},
-                title = R.string.current_goal_banner_title,
-                body = R.string.current_goal_banner_body
+                title = see.day.ui.R.string.current_goal_banner_title,
+                body = see.day.ui.R.string.current_goal_banner_body
             )
         }
     }

@@ -41,7 +41,7 @@ val getNotificationSettingSuccessResponse = """
         "dailyRecordNotificationEnabled": true,
         "exerciseNotificationEnabled": true,
         "habitNotificationEnabled": false,
-        "noGoalNotificationEnabled": true
+        "goalSettingNotificationEnabled": true
       }
     }
 """.trimIndent()

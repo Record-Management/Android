@@ -35,7 +35,7 @@ fun NotificationSettingResponse.toModel(): NotificationSettings {
         dailyRecordEnabled = dailyRecordNotificationEnabled,
         exerciseRecordEnabled = exerciseNotificationEnabled,
         habitRecordEnabled = habitNotificationEnabled,
-        noGoalsNotificationEnabled = noGoalNotificationEnabled
+        goalSettingNotificationEnabled = goalSettingNotificationEnabled
     )
 }
 
@@ -44,6 +44,6 @@ fun NotificationSettingsEdit.toDto() : NotificationSettingsEditRequest {
         dailyRecordNotificationEnabled = dailyRecordNotificationEnabled,
         exerciseNotificationEnabled = exerciseNotificationEnabled,
         habitNotificationEnabled = habitNotificationEnabled,
-        noGoalNotificationEnabled = noGoalNotificationEnabled
+        goalSettingNotificationEnabled = goalSettingNotificationEnabled
     )
 }
