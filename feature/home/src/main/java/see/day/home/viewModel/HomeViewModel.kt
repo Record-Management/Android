@@ -31,7 +31,6 @@ import see.day.home.util.RecordFilterType
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
-import see.day.navigation.home.Home
 import java.time.LocalDate
 
 @HiltViewModel
@@ -74,7 +73,6 @@ class HomeViewModel @Inject constructor(
                     calendarDayInfos
                 }
 
-
                 _uiState.update {
                     it.copy(
                         userId = user.await().id,
@@ -85,7 +83,7 @@ class HomeViewModel @Inject constructor(
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
                         treeStage = currentGoal?.treeStage,
-                        shouldCreateNewGoal = currentGoal != null
+                        shouldCreateNewGoal = currentGoal == null
                     )
                 }
 
@@ -96,6 +94,7 @@ class HomeViewModel @Inject constructor(
                     if(storedDateString != null) {
                         val storedDate = LocalDate.parse(storedDateString)
                         if(storedDate < todayDate) {
+                            _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
                             updateStoredDateUseCase(HomeUiState.getTodayDate())
                         }
                     }
@@ -103,21 +102,12 @@ class HomeViewModel @Inject constructor(
                 }
 
                 if(storedDateString == null) {
-                    if(currentGoal.canCreateNew) {
-                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
-                    }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
                 }
 
                 val storedDate = LocalDate.parse(storedDateString)
-                val endDate = LocalDate.parse(currentGoal.endDate)
 
-                if(currentGoal.canCreateNew) {
-                    if(storedDate < endDate.plusDays(1)) {
-                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
-                    }
-                }
                 if(storedDate < todayDate) {
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                 }

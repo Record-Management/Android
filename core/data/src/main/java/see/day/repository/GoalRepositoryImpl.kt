@@ -3,7 +3,6 @@ package see.day.repository
 import see.day.domain.repository.GoalRepository
 import see.day.mapper.goal.toDto
 import see.day.mapper.goal.toModel
-import see.day.model.exception.NoDataException
 import see.day.model.goal.CurrentGoal
 import see.day.model.goal.NewGoal
 import see.day.network.GoalService
