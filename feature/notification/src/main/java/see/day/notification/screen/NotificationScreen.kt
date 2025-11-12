@@ -89,11 +89,11 @@ internal fun NotificationScreen(
         ) {
             if (uiState.notificationHistories.isEmpty()) {
                 HistoryEmptyComponent(
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.fillMaxSize()
                 )
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     items(uiState.notificationHistories) { history ->
                         HistoryCard(
@@ -110,8 +110,8 @@ internal fun NotificationScreen(
             }
             if(uiState.hasNoGoal) {
                 ActionBanner(
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(20.dp).systemBarsPadding(),
-                    onClick = {},
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(20.dp),
+                    onClick = { /* TODO 추후 목표 재설정 화면이 나올 때 작성 */},
                     title = see.day.ui.R.string.current_goal_banner_title,
                     body = see.day.ui.R.string.current_goal_banner_body,
                 )
