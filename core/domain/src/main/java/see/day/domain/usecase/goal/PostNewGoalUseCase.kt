@@ -8,7 +8,7 @@ class PostNewGoalUseCase @Inject constructor(
     private val goalRepository: GoalRepository
 ) {
 
-    suspend operator fun invoke(userId: String, newGoal: NewGoal): Result<Unit> {
+    suspend operator fun invoke(newGoal: NewGoal): Result<Unit> {
         return goalRepository.postNewGoal(newGoal)
     }
 }

@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(
                 val user = async { getUserUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
-                val currentGoal = getCurrentGoalUseCase(user.await().id).getOrThrow()
+                val currentGoal = getCurrentGoalUseCase().getOrThrow()
 
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
