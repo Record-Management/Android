@@ -31,6 +31,7 @@ import see.day.home.util.RecordFilterType
 import see.day.model.calendar.HabitRecordDetail
 import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
+import timber.log.Timber
 import java.time.LocalDate
 
 @HiltViewModel
@@ -91,17 +92,15 @@ class HomeViewModel @Inject constructor(
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
 
                 if(currentGoal == null) {
-                    if(storedDateString != null) {
+                    val shouldShowGoalPrompt = if(storedDateString != null) {
                         val storedDate = LocalDate.parse(storedDateString)
-                        if(storedDate < todayDate) {
-                            _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
-                            updateStoredDateUseCase(HomeUiState.getTodayDate())
-                        }
+                        storedDate < todayDate
+                    } else {
+                        true
                     }
-                    return@launch
-                }
-
-                if(storedDateString == null) {
+                    if(shouldShowGoalPrompt) {
+                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
+                    }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
                 }
@@ -113,6 +112,7 @@ class HomeViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
+                Timber.e("HomeViewModel is not init ${e.message}")
             }
         }
     }
