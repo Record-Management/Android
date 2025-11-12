@@ -102,7 +102,9 @@ internal fun NotificationScreen(
                             relativeTime = history.relativeTime,
                             isChecked = history.isChecked,
                             onClickCard = { type, time ->
-                                uiEvent(NotificationUiEvent.OnClickItem(type, time))
+                                if(!uiState.hasNoGoal) {
+                                    uiEvent(NotificationUiEvent.OnClickItem(type, time))
+                                }
                             },
                         )
                     }

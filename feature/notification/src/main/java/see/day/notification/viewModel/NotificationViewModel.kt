@@ -110,9 +110,6 @@ class NotificationViewModel @Inject constructor(
     }
 
     private fun onClickItem(recordType: RecordType, relativeTime: String) {
-        if(uiState.value.hasNoGoal) {
-            return
-        }
         viewModelScope.launch {
             val isTodayNotification = relativeTime.contains("시간 전")
             val hasAlreadyRecordedToday = uiState.value.todayRecords.size >= 2 ||
