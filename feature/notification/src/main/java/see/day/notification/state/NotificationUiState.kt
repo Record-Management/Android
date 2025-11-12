@@ -7,9 +7,10 @@ data class NotificationUiState(
     val recentCheckedAt: String,
     val notificationHistories: List<NotificationHistoryUiModel>,
     val todayRecords: List<RecordDetail>,
-    val mainRecordType: RecordType
+    val mainRecordType: RecordType,
+    val hasNoGoal: Boolean
 ) {
     companion object {
-        val init = NotificationUiState("", listOf(), listOf(), RecordType.DAILY)
+        val init = NotificationUiState("", listOf(), listOf(), RecordType.DAILY, false)
     }
 }

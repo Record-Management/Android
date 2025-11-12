@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
+import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.notifiaction.GetNotificationHistoryUseCase
 import see.day.domain.usecase.notifiaction.UpdateNotificationHistoryAllReadUseCase
 import see.day.domain.usecase.user.GetMainRecordTypeUseCase
@@ -32,7 +33,8 @@ class NotificationViewModel @Inject constructor(
     private val getNotificationHistoryUseCase: GetNotificationHistoryUseCase,
     private val updateNotificationHistoryAllReadUseCase: UpdateNotificationHistoryAllReadUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
-    private val getMainRecordTypeUseCase: GetMainRecordTypeUseCase
+    private val getMainRecordTypeUseCase: GetMainRecordTypeUseCase,
+    private val getCurrentGoalUseCase: GetCurrentGoalUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NotificationUiState> = MutableStateFlow(NotificationUiState.init)
@@ -74,12 +76,15 @@ class NotificationViewModel @Inject constructor(
                     val todayRecords = getDailyRecordsUseCase(todayDateString).getOrNull()?.records ?: listOf()
                     val mainRecordType = getMainRecordTypeUseCase()
 
+                    val hasNoGoal = getCurrentGoalUseCase().getOrNull()?.canCreateNew ?: true
+
                     _uiState.update {
                         it.copy(
                             recentCheckedAt = recentCheckedAt,
                             notificationHistories = getDummyHistories(),
                             todayRecords = todayRecords,
-                            mainRecordType = mainRecordType ?: RecordType.DAILY
+                            mainRecordType = mainRecordType ?: RecordType.DAILY,
+                            hasNoGoal = hasNoGoal
                         )
                     }
                 }
