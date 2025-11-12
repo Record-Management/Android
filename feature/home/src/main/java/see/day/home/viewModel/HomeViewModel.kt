@@ -83,7 +83,7 @@ class HomeViewModel @Inject constructor(
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
                         treeStage = currentGoal?.treeStage,
-                        shouldCreateNewGoal = currentGoal == null
+                        shouldCreateNewGoal = currentGoal?.canCreateNew ?: true
                     )
                 }
 
