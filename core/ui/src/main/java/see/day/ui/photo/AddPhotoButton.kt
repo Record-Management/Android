@@ -35,21 +35,11 @@ import see.day.designsystem.theme.gray50
 import see.day.ui.R
 import see.day.util.permission.hasPhotoPermissions
 import see.day.util.permission.isPhotoPickerSupported
+import see.day.util.permission.openPhotoSettings
 
 @Composable
 fun AddPhotoButton(modifier: Modifier = Modifier, context: Context, currentPhotoCount: Int, onClickPhotoAddButton: (List<String>) -> Unit) {
     var hasPermissionsPreApi33 by remember { mutableStateOf(hasPhotoPermissions(context)) }
-
-    val photoPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 권한 허용 → 커스텀 포토피커 화면으로 이동
-            hasPermissionsPreApi33 = true
-        } else {
-            // 토스트 메시지 띄우기
-        }
-    }
 
     val pickMediaLauncher = if (currentPhotoCount == 2) {
         rememberLauncherForActivityResult(
@@ -69,16 +59,25 @@ fun AddPhotoButton(modifier: Modifier = Modifier, context: Context, currentPhoto
         }
     }
 
+    val photoPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            hasPermissionsPreApi33 = true
+        } else {
+            openPhotoSettings(context)
+        }
+    }
+
     Column(
         modifier = modifier
             .size(100.dp)
             .clip(shape = RoundedCornerShape(8.dp))
             .background(gray20)
             .clickable {
-                if (isPhotoPickerSupported()) {
+                if (isPhotoPickerSupported() || hasPermissionsPreApi33) {
                     pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                } else if (hasPermissionsPreApi33) {
-                    // 커스텀 포토 피커 화면으로 이동
                 } else {
                     photoPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
