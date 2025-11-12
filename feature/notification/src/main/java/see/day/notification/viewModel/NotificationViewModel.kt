@@ -109,8 +109,10 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    // 오늘 주 메인 기록 기록이 있으면 그냥 넘어가고 2개 이상 있으면 무조건 넘어가기
     private fun onClickItem(recordType: RecordType, relativeTime: String) {
+        if(uiState.value.hasNoGoal) {
+            return
+        }
         viewModelScope.launch {
             val isTodayNotification = relativeTime.contains("시간 전")
             val hasAlreadyRecordedToday = uiState.value.todayRecords.size >= 2 ||
