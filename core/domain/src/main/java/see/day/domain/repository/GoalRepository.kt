@@ -5,7 +5,7 @@ import see.day.model.goal.NewGoal
 
 interface GoalRepository {
 
-    suspend fun postNewGoal(userId: String, newGoal: NewGoal): Result<Unit>
+    suspend fun postNewGoal(newGoal: NewGoal): Result<Unit>
 
-    suspend fun getCurrentGoal(userId: String): Result<CurrentGoal?>
+    suspend fun getCurrentGoal(): Result<CurrentGoal?>
 }

@@ -8,7 +8,7 @@ class GetCurrentGoalUseCase @Inject constructor(
     private val goalRepository: GoalRepository
 ) {
 
-    suspend operator fun invoke(userId: String): Result<CurrentGoal?> {
-        return goalRepository.getCurrentGoal(userId)
+    suspend operator fun invoke(): Result<CurrentGoal?> {
+        return goalRepository.getCurrentGoal()
     }
 }

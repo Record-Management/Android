@@ -25,8 +25,7 @@ import see.day.ui.topbar.ClosableTopBar
 
 @Composable
 internal fun CurrentGoalScreenRoot(
-    onBack : () -> Unit,
-    userId: String
+    onBack : () -> Unit
 ) {
     val uiState by remember { mutableStateOf(CurrentGoalUiState.init) }
     CurrentGoalScreen(

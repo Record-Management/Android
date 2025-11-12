@@ -83,7 +83,7 @@ fun HomeScreenRoot(
     onClickDetailRecord: (RecordType, String) -> Unit,
     onClickSetting: () -> Unit,
     onClickNotification: () -> Unit,
-    onGoCurrentGoal: (String) -> Unit
+    onGoCurrentGoal: () -> Unit
 ) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -116,7 +116,7 @@ fun HomeScreenRoot(
                     onClickNotification()
                 }
                 is HomeUiEffect.OnGoCurrentGoal -> {
-                    onGoCurrentGoal(effect.userId)
+                    onGoCurrentGoal()
                 }
             }
         }

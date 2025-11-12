@@ -11,8 +11,8 @@ import see.day.network.dto.goal.NewGoalRequest
 interface GoalService {
 
     @POST("api/goals/new")
-    suspend fun postNewGoal(@Header("userId") userId: String, @Body newGoalRequest: NewGoalRequest) : Unit
+    suspend fun postNewGoal(@Body newGoalRequest: NewGoalRequest) : Unit
 
     @GET("api/goals/current")
-    suspend fun getCurrentGoal(@Header("userId") userId: String) : CommonResponse<CurrentGoalResponse?>
+    suspend fun getCurrentGoal() : CommonResponse<CurrentGoalResponse?>
 }

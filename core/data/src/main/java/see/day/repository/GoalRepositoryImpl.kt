@@ -13,15 +13,15 @@ class GoalRepositoryImpl @Inject constructor(
     private val goalService: GoalService
 ) : GoalRepository{
 
-    override suspend fun postNewGoal(userId: String, newGoal: NewGoal): Result<Unit> {
+    override suspend fun postNewGoal(newGoal: NewGoal): Result<Unit> {
         return createResult {
-            goalService.postNewGoal(userId, newGoal.toDto())
+            goalService.postNewGoal(newGoal.toDto())
         }
     }
 
-    override suspend fun getCurrentGoal(userId: String): Result<CurrentGoal?> {
+    override suspend fun getCurrentGoal(): Result<CurrentGoal?> {
         return createResult {
-            goalService.getCurrentGoal(userId).data?.toModel()
+            goalService.getCurrentGoal().data?.toModel()
         }
     }
 }

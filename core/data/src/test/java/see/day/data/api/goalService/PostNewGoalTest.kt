@@ -45,7 +45,6 @@ class PostNewGoalTest {
     @Test
     fun givenNewGoalRequest_whenPostNewGoal_thenWorksFine() = runTest {
         // given
-        val userId = "Asdasd"
         val newGoalRequest = NewGoalRequest("HABIT",30,"2025-11-08")
 
         mockWebServer.enqueue(
@@ -64,7 +63,7 @@ class PostNewGoalTest {
         )
 
         // when
-        val response = sut.postNewGoal(userId, newGoalRequest)
+        val response = sut.postNewGoal(newGoalRequest)
         val recordedRequest = mockWebServer.takeRequest()
 
         // then

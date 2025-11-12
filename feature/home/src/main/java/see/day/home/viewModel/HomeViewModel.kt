@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(
                 val user = async { getUserUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
-                val currentGoal = getCurrentGoalUseCase(user.await().id).getOrThrow()
+                val currentGoal = getCurrentGoalUseCase().getOrThrow()
 
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
@@ -76,7 +76,6 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
-                        userId = user.await().id,
                         mainRecordType = user.await().mainRecordType,
                         goalDays = user.await().goalDays,
                         monthlyRecords = calendarDayInfos,
@@ -99,7 +98,7 @@ class HomeViewModel @Inject constructor(
                         true
                     }
                     if(shouldShowGoalPrompt) {
-                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(user.await().id))
+                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
                     }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
@@ -262,7 +261,7 @@ class HomeViewModel @Inject constructor(
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
             if(uiState.value.shouldCreateNewGoal) {
-                _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal(uiState.value.userId))
+                _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
                 return@launch
             }
             _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
