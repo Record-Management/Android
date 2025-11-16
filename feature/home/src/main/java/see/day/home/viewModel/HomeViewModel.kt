@@ -66,7 +66,6 @@ class HomeViewModel @Inject constructor(
                 val user = async { getUserUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
-                val currentGoal = getCurrentGoalUseCase().getOrThrow()
 
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
@@ -82,15 +81,14 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
-                        treeStage = currentGoal?.treeStage,
-                        shouldCreateNewGoal = currentGoal?.canCreateNew ?: true
+                        treeStage = user.await().treeStage
                     )
                 }
 
                 val storedDateString = getStoredDateUseCase().getOrThrow()
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
 
-                if(currentGoal == null) {
+                if(user.await().mainRecordType == null) {
                     val shouldShowGoalPrompt = if(storedDateString != null) {
                         val storedDate = LocalDate.parse(storedDateString)
                         storedDate < todayDate

@@ -13,10 +13,10 @@ data class FullUserResponse(
     val nickname: String,
     val email: String? = null,
     val socialType: String,
-    val mainRecordType: RecordType?,
+    val mainRecordType: RecordType? = null,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val birthDate: String,
-    val goalDays: Int?,
+    val goalDays: Int? ,
     val onboardingCompleted: Boolean,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val createdAt: String,

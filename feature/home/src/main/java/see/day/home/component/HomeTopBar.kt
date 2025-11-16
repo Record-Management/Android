@@ -32,19 +32,18 @@ import see.day.util.getIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType, goalDays: Int, isFullExpand: Boolean, hasGoal : Boolean,onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
+internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType?, goalDays: Int?, isFullExpand: Boolean,onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
     TopAppBar(
         title = {
             Box(
                 modifier = modifier.fillMaxWidth(),
             ) {
-                if(hasGoal) {
+                if(mainRecordType != null && goalDays != null) {
                     val goalDaysAlignment = if (isFullExpand) {
                         Alignment.Center
                     } else {
                         Alignment.CenterStart
                     }
-
                     GoalDays(
                         modifier = Modifier
                             .align(goalDaysAlignment)
@@ -135,7 +134,22 @@ private fun HomeTopBarPreview() {
             mainRecordType = RecordType.EXERCISE,
             goalDays = 10,
             isFullExpand = false,
-            hasGoal = true,
+            onClickBackButton = {},
+            onClickSetting = {},
+            onClickNotification = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeTopBarNoGoalPreview() {
+    SeeDayTheme {
+        HomeTopBar(
+            alpha = 0f,
+            mainRecordType = null,
+            goalDays = null,
+            isFullExpand = false,
             onClickBackButton = {},
             onClickSetting = {},
             onClickNotification = {}
