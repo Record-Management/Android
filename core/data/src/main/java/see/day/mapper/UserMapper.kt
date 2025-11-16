@@ -25,11 +25,12 @@ fun FullUserResponse.toModel(): User {
         nickname = nickname,
         email = email ?: "",
         socialType = SocialType.valueOf(socialType),
-        mainRecordType = RecordType.valueOf(mainRecordType),
+        mainRecordType =  mainRecordType,
         birthDate = birthDate,
         goalDays = goalDays,
         onboardingCompleted = onboardingCompleted,
-        createdAt = createdAt
+        createdAt = createdAt,
+        treeStage = treeStage
     )
 }
 

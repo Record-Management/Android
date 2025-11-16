@@ -30,7 +30,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getMainRecordType(): Result<RecordType> {
         return createResult {
-            RecordType.valueOf(userService.getUser().data?.mainRecordType ?: throw NoDataException())
+            userService.getUser().data?.mainRecordType ?: throw NoDataException()
         }
     }
 
