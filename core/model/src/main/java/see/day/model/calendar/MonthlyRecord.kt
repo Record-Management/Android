@@ -10,7 +10,7 @@ data class MonthlyRecord(
 
 data class DailyRecords(
     val date: String,
-    val mainRecordType : RecordType,
+    val mainRecordType : RecordType?,
     val records: List<DailyRecord>
 )
 

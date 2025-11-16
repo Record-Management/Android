@@ -7,7 +7,7 @@ data class CalendarDayInfo(
     val year: Int,
     val month: Int,
     val day: Int,
-    val mainRecordType: RecordType,
+    val mainRecordType: RecordType?,
     val records: List<RecordType>,
     val schedules: List<String>,
 ) {

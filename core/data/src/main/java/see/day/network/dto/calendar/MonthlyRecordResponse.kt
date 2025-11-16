@@ -16,7 +16,7 @@ data class MonthlyRecordResponse(
 data class DailyRecordsResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val date: String,
-    @SerialName("mainRecordTypeForDate") val mainRecordType : RecordType,
+    @SerialName("mainRecordTypeForDate") val mainRecordType : RecordType? = null,
     val records: List<DailyRecordResponse>
 )
 

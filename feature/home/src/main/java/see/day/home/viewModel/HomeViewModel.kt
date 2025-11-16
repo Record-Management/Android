@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
-import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
@@ -43,7 +42,6 @@ class HomeViewModel @Inject constructor(
     private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
     private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
-    private val getCurrentGoalUseCase: GetCurrentGoalUseCase,
     private val getStoredDateUseCase: GetStoredDateUseCase,
     private val updateStoredDateUseCase: UpdateStoredDateUseCase
 ) : ViewModel() {
@@ -66,7 +64,6 @@ class HomeViewModel @Inject constructor(
                 val user = async { getUserUseCase().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
-                val currentGoal = getCurrentGoalUseCase().getOrThrow()
 
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
@@ -82,15 +79,14 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
-                        treeStage = currentGoal?.treeStage,
-                        shouldCreateNewGoal = currentGoal?.canCreateNew ?: true
+                        treeStage = user.await().treeStage
                     )
                 }
 
                 val storedDateString = getStoredDateUseCase().getOrThrow()
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
 
-                if(currentGoal == null) {
+                if(user.await().mainRecordType == null) {
                     val shouldShowGoalPrompt = if(storedDateString != null) {
                         val storedDate = LocalDate.parse(storedDateString)
                         storedDate < todayDate

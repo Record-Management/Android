@@ -13,14 +13,13 @@ data class HomeUiState(
     val selectedMonth: Int,
     val selectedDay: Int,
     val selectedFilterType: RecordFilterType,
-    val mainRecordType: RecordType,
-    val goalDays: Int,
+    val mainRecordType: RecordType?,
+    val goalDays: Int?,
     val monthlyRecords: List<CalendarDayInfo>,
     val dailyRecordDetails: DailyRecordDetails,
     val createdAt: String,
     val todayRecords: DailyRecordDetails,
     val treeStage: TreeStage?,
-    val shouldCreateNewGoal : Boolean
 ) {
     companion object {
         val init = HomeUiState(
@@ -36,7 +35,6 @@ data class HomeUiState(
             createdAt = getTodayDate(),
             todayRecords = DailyRecordDetails(getTodayDate(), listOf()),
             treeStage = TreeStage.STAGE_1,
-            shouldCreateNewGoal = false
         )
 
         fun getTodayDate(): String {

@@ -219,7 +219,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     mainRecordType = uiState.mainRecordType,
                     goalDays = uiState.goalDays,
                     isFullExpand = bottomSheetState.currentValue == SheetValue.Expanded,
-                    hasGoal = !uiState.shouldCreateNewGoal,
                     onClickBackButton = {
                         onDownBottomSheet()
                     },
@@ -252,7 +251,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             sheetContainerColor = Color.White
         ) { innerPadding ->
         }
-        if(uiState.shouldCreateNewGoal) {
+        if(uiState.mainRecordType == null) {
             ActionBanner(
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp, start = 26.dp, end = 26.dp).systemBarsPadding(),
                 onClick = { /* TODO 추후 목표 재설정 화면이 나오면 작성*/},
@@ -265,7 +264,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     if (uiState.todayRecords.records.size >= 2) {
                         openTodayRecordOverDialog = true
                     } else {
-                        uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                        uiState.mainRecordType?.let {
+                            uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                        }
                     }
                 },
                 modifier = modifier

@@ -20,6 +20,7 @@ import see.day.datastore.DataStoreDataSource
 import see.day.domain.repository.UserRepository
 import see.day.mapper.toDto
 import see.day.model.exception.BadRequestException
+import see.day.model.goal.TreeStage
 import see.day.model.login.SocialType
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
@@ -69,11 +70,12 @@ class UserRepositoryTest {
                     nickname = "",
                     email = "",
                     socialType = "",
-                    mainRecordType = "",
+                    mainRecordType = RecordType.HABIT,
                     birthDate = "",
                     goalDays = 10,
                     onboardingCompleted = true,
-                    createdAt = ""
+                    createdAt = "",
+                    treeStage = TreeStage.STAGE_1
                 )
             )
 
@@ -104,11 +106,12 @@ class UserRepositoryTest {
                     nickname = "",
                     email = "",
                     socialType = "",
-                    mainRecordType = recordType.name,
+                    mainRecordType = recordType,
                     birthDate = "",
                     goalDays = 10,
                     onboardingCompleted = true,
-                    createdAt = ""
+                    createdAt = "",
+                    treeStage = TreeStage.STAGE_1
                 )
             )
 
@@ -172,7 +175,7 @@ class UserRepositoryTest {
     fun given_whenGetUser_thenWorksFine() {
         runTest {
             // given
-            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, "")
+            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT, "", 20, true, "", TreeStage.STAGE_1)
             whenever(userService.getUser()).thenReturn(
                 CommonResponse(
                     200,
@@ -196,7 +199,7 @@ class UserRepositoryTest {
             // given
             val nickname = "변경된닉네임"
             val userProfileChangedInput = UserProfileChangedInput.ofNickname(nickname)
-            val userResponse = FullUserResponse("", "", nickname, "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "", 20, true, "")
+            val userResponse = FullUserResponse("", "", nickname, "", SocialType.KAKAO.toString(), RecordType.HABIT, "", 20, true, "",TreeStage.STAGE_1)
 
             whenever(userService.updateUserProfile(userProfileChangedInput.toDto())).thenReturn(
                 CommonResponse(
@@ -223,7 +226,7 @@ class UserRepositoryTest {
             // given
             val birthDate = "2000-01-16"
             val userProfileChangedInput = UserProfileChangedInput.ofBirthDate(birthDate)
-            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT.name, "2000-01-16", 20, true, "")
+            val userResponse = FullUserResponse("", "", "", "", SocialType.KAKAO.toString(), RecordType.HABIT, "2000-01-16", 20, true, "",TreeStage.STAGE_1)
 
             whenever(userService.updateUserProfile(userProfileChangedInput.toDto())).thenReturn(
                 CommonResponse(
