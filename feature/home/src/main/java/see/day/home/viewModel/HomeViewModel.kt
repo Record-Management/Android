@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
-import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
@@ -43,7 +42,6 @@ class HomeViewModel @Inject constructor(
     private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
     private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
-    private val getCurrentGoalUseCase: GetCurrentGoalUseCase,
     private val getStoredDateUseCase: GetStoredDateUseCase,
     private val updateStoredDateUseCase: UpdateStoredDateUseCase
 ) : ViewModel() {
