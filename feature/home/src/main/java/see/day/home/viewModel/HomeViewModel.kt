@@ -153,6 +153,9 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickNotification -> {
                 onClickNotification()
             }
+            is HomeUiEvent.OnClickGoalSetting -> {
+                onClickGoalSetting()
+            }
         }
     }
 
@@ -347,6 +350,12 @@ class HomeViewModel @Inject constructor(
     private fun onClickNotification() {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.OnGoNotification)
+        }
+    }
+
+    private fun onClickGoalSetting() {
+        viewModelScope.launch {
+            _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
         }
     }
 }
