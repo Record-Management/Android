@@ -6,4 +6,9 @@
     <string name="achievement_rate_text">목표\n달성률</string>
     <string name="complete_days_text">기록 완료\n일 수</string>
     <string name="day_streak_text">누적 달성\n횟 수</string>
+
+    <string name="tree_stage_1_complete_text">성장 1단계 성공!</string>
+    <string name="tree_stage_2_complete_text">성장 2단계 성공!</string>
+    <string name="tree_stage_3_complete_text">성장 3단계 성공!</string>
+    <string name="tree_stage_4_complete_text">하루 나무 성장 완료!</string>
 </resources>
