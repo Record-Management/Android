@@ -12,6 +12,7 @@ data class CurrentGoalUiState(
     val achievementRate: Int,
     val completedDays: Int,
     val dayStreak: Int,
+    val isCompleted: Boolean
 ) {
     companion object {
         val init = CurrentGoalUiState(
@@ -22,7 +23,8 @@ data class CurrentGoalUiState(
             endDate = "2025-11-10",
             achievementRate = 10,
             completedDays = 1,
-            dayStreak = 1
+            dayStreak = 1,
+            isCompleted = true
         )
     }
 }
