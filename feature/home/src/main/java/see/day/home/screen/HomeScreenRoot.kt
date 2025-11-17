@@ -254,7 +254,10 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
         if(uiState.mainRecordType == null) {
             ActionBanner(
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp, start = 26.dp, end = 26.dp).systemBarsPadding(),
-                onClick = { /* TODO 추후 목표 재설정 화면이 나오면 작성*/},
+                onClick = {
+                  // TODO 현재는 목포레포트로 이동 추후 목표 재설정 하면이 나오면 이벤트 변경
+                    uiEvent(HomeUiEvent.OnClickGoalSetting)
+                },
                 title = see.day.ui.R.string.current_goal_banner_title,
                 body = see.day.ui.R.string.current_goal_banner_body
             )
@@ -264,9 +267,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     if (uiState.todayRecords.records.size >= 2) {
                         openTodayRecordOverDialog = true
                     } else {
-                        uiState.mainRecordType?.let {
-                            uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
-                        }
+                        uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
                     }
                 },
                 modifier = modifier
