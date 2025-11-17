@@ -35,7 +35,7 @@ internal fun BoxScope.HomeImage(modifier: Modifier = Modifier, treeStage: TreeSt
     ) {
         Image(
             painter = painterResource(treeStage.completeImage()),
-            contentDescription = treeStage?.name ?: "",
+            contentDescription = treeStage?.name ?: "목표 미설정",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
