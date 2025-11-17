@@ -208,7 +208,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        HomeImage(modifier)
+        HomeImage(Modifier, uiState.treeStage)
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
             sheetSwipeEnabled = !isDateSelectMode,
