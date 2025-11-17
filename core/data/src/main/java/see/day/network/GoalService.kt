@@ -6,6 +6,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.goal.CurrentGoalResponse
+import see.day.network.dto.goal.GoalReportResponse
 import see.day.network.dto.goal.NewGoalRequest
 
 interface GoalService {
@@ -15,4 +16,7 @@ interface GoalService {
 
     @GET("api/goals/current")
     suspend fun getCurrentGoal() : CommonResponse<CurrentGoalResponse?>
+
+    @GET("api/goals/achievement/report")
+    suspend fun getGoalReport() : CommonResponse<GoalReportResponse>
 }
