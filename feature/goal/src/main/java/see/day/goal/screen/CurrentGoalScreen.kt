@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,33 +29,54 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.collect
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.goal.R
 import see.day.goal.component.GoalAchievementComponent
 import see.day.goal.component.GoalRecordDateCard
+import see.day.goal.state.CurrentGoalUiEffect
+import see.day.goal.state.CurrentGoalUiEvent
 import see.day.goal.state.CurrentGoalUiState
 import see.day.goal.util.completeText
 import see.day.goal.util.treeImage
+import see.day.goal.viewModel.CurrentGoalViewModel
 import see.day.model.goal.TreeStage
 import see.day.ui.card.ActionBanner
 import see.day.ui.topbar.ClosableTopBar
 
 @Composable
 internal fun CurrentGoalScreenRoot(
+    viewModel: CurrentGoalViewModel = hiltViewModel(),
     onBack : () -> Unit
 ) {
-    val uiState by remember { mutableStateOf(CurrentGoalUiState.init) }
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit){
+        viewModel.uiEffect.collect { effect ->
+            when(effect) {
+                CurrentGoalUiEffect.OnGoBack -> {
+                    onBack()
+                }
+                CurrentGoalUiEffect.OnGoGoalSetting -> {
+                    // TODO 목표 재설정
+                }
+            }
+        }
+    }
+
     CurrentGoalScreen(
-        onBack = onBack,
-        uiState = uiState
+        uiState = uiState.value,
+        onAction = viewModel::onAction
     )
 }
 
 @Composable
 internal fun CurrentGoalScreen(
     modifier: Modifier = Modifier,
-    onBack: () -> Unit,
-    uiState: CurrentGoalUiState
+    uiState: CurrentGoalUiState,
+    onAction: (CurrentGoalUiEvent) -> Unit
 ) {
     Scaffold(
         modifier =  modifier.background(Color(0xFFF2FCF3))
@@ -70,7 +92,9 @@ internal fun CurrentGoalScreen(
                 ) {
                     ClosableTopBar(
                         modifier = Modifier.background(Color(0xFFF2FCF3)).padding(16.dp),
-                        onClose = onBack,
+                        onClose = {
+                            onAction(CurrentGoalUiEvent.OnClickBack)
+                                  },
                         title = R.string.goal_acheive_title
                     )
                     Text(
@@ -116,7 +140,7 @@ internal fun CurrentGoalScreen(
                 if(uiState.isCompleted) {
                     ActionBanner(
                         modifier = Modifier.fillMaxWidth().padding(top = 41.dp),
-                        onClick = {},
+                        onClick = { onAction(CurrentGoalUiEvent.OnClickGoalBanner)},
                         title = see.day.ui.R.string.current_goal_banner_title,
                         body = see.day.ui.R.string.current_goal_banner_body
                     )
@@ -132,8 +156,8 @@ internal fun CurrentGoalScreen(
 private fun CurrentGoalScreenPreview() {
     SeeDayTheme {
         CurrentGoalScreen(
-            onBack = {},
-            uiState = CurrentGoalUiState.init
+            uiState = CurrentGoalUiState.init,
+            onAction = {}
         )
     }
 }
@@ -143,8 +167,8 @@ private fun CurrentGoalScreenPreview() {
 private fun CurrentGoalScreenTreeStage4Preview() {
     SeeDayTheme {
         CurrentGoalScreen(
-            onBack = {},
-            uiState = CurrentGoalUiState.init.copy(treeStage = TreeStage.STAGE_4)
+            uiState = CurrentGoalUiState.init.copy(treeStage = TreeStage.STAGE_4),
+            onAction = {}
         )
     }
 }
