@@ -22,7 +22,7 @@ fun NavGraphBuilder.goalNavigation(
     onBack: () -> Unit,
     onClickResetGoal: () -> Unit
 ) {
-    composable<CurrentGoal> { navBackStackEntry ->
+    composable<CurrentGoal> {
         CurrentGoalScreenRoot(
             onBack = onBack,
             onClickResetGoal = onClickResetGoal

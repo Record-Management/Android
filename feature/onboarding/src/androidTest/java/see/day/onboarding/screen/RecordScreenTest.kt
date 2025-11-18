@@ -37,7 +37,7 @@ class RecordScreenTest {
         composeTestRule.setContent {
             SeeDayTheme {
                 OnboardingScreen(
-                    uiState = OnboardingUiState.init,
+                    uiState = uiState,
                     uiEvent = {}
                 )
             }

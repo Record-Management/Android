@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,8 +18,8 @@ import see.day.ui.button.CompleteButton
 import see.day.ui.component.GoalsComponent
 
 @Composable
-fun GoalsScreen(modifier: Modifier = Modifier, goalDays: Int,completeButtonText: String = "다음", onComplete: (Int) -> Unit) {
-    var currentGoalDays by rememberSaveable(goalD) { mutableStateOf(goalDays) }
+fun GoalsScreen(modifier: Modifier = Modifier, goalDays: Int, completeButtonText: String = "다음", onComplete: (Int) -> Unit) {
+    var currentGoalDays by rememberSaveable(goalDays) { mutableStateOf(goalDays) }
 
     Column(
         modifier = modifier
