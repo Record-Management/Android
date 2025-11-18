@@ -35,10 +35,12 @@ class RecordScreenTest {
     fun givenInitOnboarding_whenScreening_shownRecordTitleAndBody() {
         val uiState = OnboardingUiState.init
         composeTestRule.setContent {
-            OnboardingScreen(
-                uiState = OnboardingUiState.init,
-                uiEvent = {}
-            )
+            SeeDayTheme {
+                OnboardingScreen(
+                    uiState = OnboardingUiState.init,
+                    uiEvent = {}
+                )
+            }
         }
 
         composeTestRule
@@ -53,26 +55,25 @@ class RecordScreenTest {
     @Test
     fun given_whenClickAllTypes_shownEnabledNextButton() {
         composeTestRule.setContent {
-            OnboardingScreen(
-                uiState = OnboardingUiState.init,
-                uiEvent = {}
-            )
+            SeeDayTheme {
+                OnboardingScreen(
+                    uiState = OnboardingUiState.init,
+                    uiEvent = {}
+                )
+            }
         }
 
         RecordType.entries.forEach { type ->
             composeTestRule
                 .onNodeWithContentDescription("$type Image")
-                .performScrollTo()
                 .performClick()
 
             composeTestRule
                 .onNodeWithContentDescription("checked")
-                .performScrollTo()
                 .assertIsDisplayed()
 
             composeTestRule
                 .onNodeWithText("다음")
-                .performScrollTo()
                 .assertIsEnabled()
         }
     }
@@ -86,7 +87,6 @@ class RecordScreenTest {
                     uiEvent = {}
                 )
             }
-
         }
 
         RecordType.entries.forEach { type ->

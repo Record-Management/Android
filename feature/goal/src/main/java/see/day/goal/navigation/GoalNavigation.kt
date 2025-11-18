@@ -29,6 +29,8 @@ fun NavGraphBuilder.goalNavigation(
         )
     }
     composable<ResetGoal> {
-        ResetGoalScreenRoot()
+        ResetGoalScreenRoot(
+            onBack = onBack
+        )
     }
 }

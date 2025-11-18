@@ -20,7 +20,6 @@ import see.day.onboarding.component.OnboardingTopBar
 import see.day.onboarding.component.TitleDescription
 import see.day.onboarding.screen.onboarding.AlertScreen
 import see.day.onboarding.screen.onboarding.BirthdayScreen
-import see.day.onboarding.screen.onboarding.GoalsScreen
 import see.day.onboarding.screen.onboarding.NicknameScreen
 import see.day.onboarding.state.OnboardingScreenState.ALERT
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
@@ -31,6 +30,7 @@ import see.day.onboarding.state.onboarding.OnboardingUiEffect
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.onboarding.state.onboarding.OnboardingUiState
 import see.day.onboarding.viewModel.OnboardingViewModel
+import see.day.ui.screen.GoalsScreen
 import see.day.ui.screen.RecordTypeScreen
 
 @Composable
@@ -102,8 +102,10 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                 }
                 GOAL -> {
                     GoalsScreen(
-                        goals = uiState.goalDays,
-                        onComplete = uiEvent
+                        goalDays = uiState.goalDays,
+                        onComplete = { goalDays ->
+                            uiEvent(OnboardingUiEvent.EnterGoal(goalDays))
+                        }
                     )
                 }
                 ALERT -> {

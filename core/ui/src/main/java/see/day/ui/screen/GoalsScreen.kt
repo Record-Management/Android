@@ -13,13 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.ui.button.CompleteButton
 import see.day.ui.component.GoalsComponent
 
 @Composable
-fun GoalsScreen(modifier: Modifier = Modifier, goalDays: Int, onComplete: (Int) -> Unit) {
+fun GoalsScreen(modifier: Modifier = Modifier, goalDays: Int,completeButtonText: String = "다음", onComplete: (Int) -> Unit) {
     var currentGoalDays by remember { mutableStateOf(goalDays) }
 
     Column(
@@ -48,7 +47,7 @@ fun GoalsScreen(modifier: Modifier = Modifier, goalDays: Int, onComplete: (Int) 
 
         CompleteButton(
             modifier = modifier,
-            text = "다음",
+            text = completeButtonText,
             isEnabled = currentGoalDays != 0,
             onClick = { onComplete(currentGoalDays) }
         )
