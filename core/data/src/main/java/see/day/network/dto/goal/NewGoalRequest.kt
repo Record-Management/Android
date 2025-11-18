@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NewGoalRequest(
     val recordType: String,
-    val goalDays: Int,
-    val startDate: String
+    val goalDays: Int
 )

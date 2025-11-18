@@ -4,6 +4,5 @@ import see.day.model.record.RecordType
 
 data class NewGoal(
     val recordType: RecordType,
-    val goalDays: Int,
-    val startDate: String
+    val goalDays: Int
 )
