@@ -16,3 +16,8 @@ enum class GoalResetStep(val titleRes: Int, val iconRes: Int) {
     RECORD(see.day.ui.R.string.record_message, see.day.ui.R.drawable.onboard_record),
     DAY(see.day.ui.R.string.goals_message, see.day.ui.R.drawable.onboard_goal)
 }
+
+fun GoalResetStep.getProgress() : Float {
+    val totalSteps = GoalResetStep.entries.size
+    return (this.ordinal + 1).toFloat() / totalSteps
+}
