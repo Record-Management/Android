@@ -3,7 +3,6 @@ package see.day.goal
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -44,7 +43,7 @@ class ResetGoalScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription("뒤로가기 버튼")
-            .assertIsNotDisplayed()
+            .assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("목표 재설정 ${GoalResetStep.RECORD.ordinal} 번째 아이콘")
