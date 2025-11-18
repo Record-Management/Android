@@ -37,17 +37,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.navigation.onboarding.CompleteType
 import see.day.onboarding.R
 import see.day.onboarding.component.OnboardingCompleteLabel
 import see.day.onboarding.util.isNotificationPermissionGranted
 import see.day.ui.button.CompleteButton
 
 @Composable
-internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
+internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, completeType: CompleteType, onGoHome: () -> Unit) {
     val context = LocalContext.current
 
-    if (!isNotificationPermissionGranted(context)) {
-        Toast.makeText(context, stringResource(R.string.notification_setting_denied), Toast.LENGTH_SHORT).show()
+    when(completeType) {
+        CompleteType.ONBOARDING -> {
+            if (!isNotificationPermissionGranted(context)) {
+                Toast.makeText(context, stringResource(R.string.notification_setting_denied), Toast.LENGTH_SHORT).show()
+            }
+        }
+        CompleteType.RESET_GOAL -> {
+
+        }
     }
 
     OnboardingCompleteScreen(

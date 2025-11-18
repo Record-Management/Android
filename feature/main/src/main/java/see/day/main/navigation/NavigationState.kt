@@ -17,6 +17,7 @@ import see.day.habit.navigation.navigateHabitDetail
 import see.day.home.navigation.navigateHome
 import see.day.main.navigation.graph.navigateSchedule
 import see.day.model.record.RecordType
+import see.day.navigation.onboarding.CompleteType
 import see.day.onboarding.navigation.navigateOnboarding
 import see.day.onboarding.navigation.navigateOnboardingComplete
 
@@ -45,8 +46,8 @@ class NavigationState(
         navController.navigateHome(cleanBackstackNavOptions())
     }
 
-    fun navigateOnboardingComplete() {
-        navController.navigateOnboardingComplete(cleanBackstackNavOptions())
+    fun navigateOnboardingComplete(completeType: CompleteType) {
+        navController.navigateOnboardingComplete(completeType, cleanBackstackNavOptions())
     }
 
     fun navigateAddRecord(recordType: RecordType, deleteBackStack: Boolean = false) {
