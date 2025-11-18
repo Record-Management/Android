@@ -55,6 +55,7 @@ fun RecordType.goalTitle(): Int {
     }
 }
 
+@StringRes
 fun RecordType.goalBody(): Int {
     return when (this) {
         RecordType.DAILY -> R.string.daily_body
