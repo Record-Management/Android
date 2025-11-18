@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.navigation.onboarding.CompleteType
 import see.day.onboarding.component.OnboardingTopBar
 import see.day.onboarding.component.TitleDescription
 import see.day.onboarding.screen.onboarding.AlertScreen
@@ -34,7 +35,7 @@ import see.day.ui.screen.GoalsScreen
 import see.day.ui.screen.RecordTypeScreen
 
 @Composable
-internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoOnboardingComplete: () -> Unit) {
+internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoOnboardingComplete: (CompleteType) -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     BackHandler(true) {
         viewModel.onEvent(OnboardingUiEvent.OnBack)
@@ -48,7 +49,7 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
                 }
 
                 OnboardingUiEffect.GoOnboardingComplete -> {
-                    onGoOnboardingComplete()
+                    onGoOnboardingComplete(CompleteType.ONBOARDING)
                 }
             }
         }

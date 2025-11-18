@@ -23,13 +23,15 @@ import see.day.goal.state.reset.ResetGoalUiEffect
 import see.day.goal.state.reset.ResetGoalUiEvent
 import see.day.goal.state.reset.ResetGoalUiState
 import see.day.goal.viewModel.ResetGoalViewModel
+import see.day.navigation.onboarding.CompleteType
 import see.day.ui.screen.GoalsScreen
 import see.day.ui.screen.RecordTypeScreen
 
 @Composable
 internal fun ResetGoalScreenRoot(
     viewModel: ResetGoalViewModel = hiltViewModel(),
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onGoResetGoalComplete: (CompleteType) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -44,7 +46,7 @@ internal fun ResetGoalScreenRoot(
                     onBack()
                 }
                 ResetGoalUiEffect.OnFinishResetGoal -> {
-
+                    onGoResetGoalComplete(CompleteType.RESET_GOAL)
                 }
             }
         }

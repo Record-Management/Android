@@ -11,16 +11,19 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.goal.PostNewGoalUseCase
 import see.day.goal.state.reset.GoalResetStep.DAY
 import see.day.goal.state.reset.GoalResetStep.RECORD
 import see.day.goal.state.reset.ResetGoalUiEffect
 import see.day.goal.state.reset.ResetGoalUiEvent
 import see.day.goal.state.reset.ResetGoalUiState
+import see.day.model.goal.NewGoal
 import see.day.model.record.RecordType
 import javax.inject.Inject
 
 @HiltViewModel
 class ResetGoalViewModel @Inject constructor(
+    private val postNewGoalUseCase: PostNewGoalUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ResetGoalUiState> = MutableStateFlow(ResetGoalUiState.init)
@@ -54,7 +57,12 @@ class ResetGoalViewModel @Inject constructor(
 
     private fun setGoalDays(goalDays: Int) {
         viewModelScope.launch {
-            _uiEffect.emit(ResetGoalUiEffect.OnFinishResetGoal)
+            uiState.value.recordType?.let {  recordType ->
+                postNewGoalUseCase(NewGoal(recordType,goalDays))
+                    .onSuccess {
+                        _uiEffect.emit(ResetGoalUiEffect.OnFinishResetGoal)
+                    }
+            }
         }
     }
 

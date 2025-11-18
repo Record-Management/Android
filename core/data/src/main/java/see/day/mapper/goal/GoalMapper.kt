@@ -24,8 +24,7 @@ internal fun CurrentGoalResponse.toModel() : CurrentGoal {
 internal fun NewGoal.toDto() : NewGoalRequest {
     return NewGoalRequest(
         recordType = recordType.name,
-        goalDays = goalDays,
-        startDate = startDate
+        goalDays = goalDays
     )
 }
 

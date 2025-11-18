@@ -8,5 +8,11 @@ sealed interface OnboardingRoute {
     data object Onboarding : OnboardingRoute
 
     @Serializable
-    data object OnboardingComplete : OnboardingRoute
+    data class OnboardingComplete(val completeType: CompleteType) : OnboardingRoute
+}
+
+@Serializable
+enum class CompleteType {
+    ONBOARDING,
+    RESET_GOAL;
 }
