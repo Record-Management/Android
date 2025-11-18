@@ -31,7 +31,7 @@ fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordTy
     ) {
         RecordType.entries.forEach { recordType ->
             GoalRecordTypeCard (
-                modifier = modifier,
+                modifier = Modifier,
                 recordType = recordType,
                 isClicked = currentSelectedRecordType?.let { it == recordType } ?: false,
                 onClickItem = { type ->
@@ -43,9 +43,9 @@ fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordTy
                 }
             )
         }
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
         CompleteButton (
-            modifier = modifier,
+            modifier = Modifier,
             text = "다음",
             isEnabled = currentSelectedRecordType != null,
             onClick = {

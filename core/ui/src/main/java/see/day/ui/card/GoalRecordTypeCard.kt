@@ -37,7 +37,7 @@ import see.day.util.goalTitle
 @Composable
 internal fun GoalRecordTypeCard(modifier: Modifier = Modifier, recordType: RecordType, isClicked: Boolean, onClickItem: (RecordType) -> Unit) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClickItem(recordType) },
         border = if (isClicked) {
@@ -48,20 +48,19 @@ internal fun GoalRecordTypeCard(modifier: Modifier = Modifier, recordType: Recor
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
-            modifier = modifier
-                .fillMaxSize()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(recordType.goalRecordIcon()),
                 contentDescription = "$recordType Image",
-                modifier = modifier.size(50.dp)
+                modifier = Modifier.size(50.dp)
             )
             Column(
-                modifier = modifier
-                    .padding(start = 16.dp)
-                    .fillMaxHeight(),
+                modifier = Modifier
+                    .padding(start = 16.dp),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -69,12 +68,12 @@ internal fun GoalRecordTypeCard(modifier: Modifier = Modifier, recordType: Recor
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
-                    modifier = modifier.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = 4.dp),
                     text = stringResource(recordType.goalBody()),
                     style = MaterialTheme.typography.headlineMedium
                 )
             }
-            Spacer(modifier = modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
             Image(
                 painter = painterResource(
                     if (isClicked) see.day.designsystem.R.drawable.ic_checked else see.day.designsystem.R.drawable.ic_unchecked
