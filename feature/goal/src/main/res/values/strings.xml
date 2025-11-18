@@ -11,4 +11,7 @@
     <string name="tree_stage_2_complete_text">성장 2단계 성공!</string>
     <string name="tree_stage_3_complete_text">성장 3단계 성공!</string>
     <string name="tree_stage_4_complete_text">하루 나무 성장 완료!</string>
+
+    <string name="reset_goal_record_message">이번엔 어떤 기록 방식을 통해\n꾸준함을 만들어 볼까요?</string>
+    <string name="reset_goal_days_message">다시 한 번 목표를 설정해 주세요!\n작은 목표가 큰 변화를 만들어요!</string>
 </resources>

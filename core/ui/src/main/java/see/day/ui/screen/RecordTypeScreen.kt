@@ -1,12 +1,9 @@
-package see.day.onboarding.screen.onboarding
+package see.day.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -18,26 +15,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.record.RecordType
-import see.day.onboarding.component.RecordComponent
-import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.ui.button.CompleteButton
+import see.day.ui.card.GoalRecordTypeCard
 
 @Composable
-internal fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordType?, onClickCompleteButton: (OnboardingUiEvent) -> Unit) {
-    val scrollState = rememberScrollState()
-    val coroutineScope = rememberCoroutineScope()
+fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordType?, onClickCompleteButton: (RecordType) -> Unit) {
     var currentSelectedRecordType by rememberSaveable {
         mutableStateOf(selectedRecordType)
     }
     Column(
-        modifier = modifier.fillMaxSize().verticalScroll(scrollState),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         RecordType.entries.forEach { recordType ->
-            RecordComponent(
+            GoalRecordTypeCard (
                 modifier = modifier,
                 recordType = recordType,
                 isClicked = currentSelectedRecordType?.let { it == recordType } ?: false,
@@ -46,21 +39,18 @@ internal fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType:
                         currentSelectedRecordType = null
                     } else {
                         currentSelectedRecordType = type
-                        coroutineScope.launch {
-                            scrollState.animateScrollTo(scrollState.maxValue)
-                        }
                     }
                 }
             )
         }
         Spacer(modifier = modifier.weight(1f))
-        CompleteButton(
+        CompleteButton (
             modifier = modifier,
             text = "다음",
             isEnabled = currentSelectedRecordType != null,
             onClick = {
                 currentSelectedRecordType?.let { recordType ->
-                    onClickCompleteButton(OnboardingUiEvent.SetRecordType(recordType))
+                    onClickCompleteButton(recordType)
                 }
             }
         )

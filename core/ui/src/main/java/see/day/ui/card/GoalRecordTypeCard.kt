@@ -1,4 +1,4 @@
-package see.day.onboarding.component
+package see.day.ui.card
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,13 +30,12 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.model.record.RecordType
-import see.day.onboarding.R
-import see.day.onboarding.util.body
-import see.day.onboarding.util.getIcon
-import see.day.onboarding.util.title
+import see.day.util.goalBody
+import see.day.util.goalRecordIcon
+import see.day.util.goalTitle
 
 @Composable
-internal fun RecordComponent(modifier: Modifier = Modifier, recordType: RecordType, isClicked: Boolean, onClickItem: (RecordType) -> Unit) {
+internal fun GoalRecordTypeCard(modifier: Modifier = Modifier, recordType: RecordType, isClicked: Boolean, onClickItem: (RecordType) -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +54,7 @@ internal fun RecordComponent(modifier: Modifier = Modifier, recordType: RecordTy
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(recordType.getIcon()),
+                painter = painterResource(recordType.goalRecordIcon()),
                 contentDescription = "$recordType Image",
                 modifier = modifier.size(50.dp)
             )
@@ -67,12 +65,12 @@ internal fun RecordComponent(modifier: Modifier = Modifier, recordType: RecordTy
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(recordType.title()),
+                    text = stringResource(recordType.goalTitle()),
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
                     modifier = modifier.padding(top = 4.dp),
-                    text = stringResource(recordType.body()),
+                    text = stringResource(recordType.goalBody()),
                     style = MaterialTheme.typography.headlineMedium
                 )
             }
@@ -98,7 +96,7 @@ private fun RecordComponentPreview() {
         }
     }
     SeeDayTheme {
-        RecordComponent(
+        GoalRecordTypeCard(
             recordType = RecordType.DAILY,
             isClicked = isChecked,
             onClickItem = onClickItem
