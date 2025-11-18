@@ -12,6 +12,7 @@ import org.mockito.kotlin.whenever
 import see.day.domain.repository.NotificationRepository
 import see.day.mapper.notification.toDto
 import see.day.model.notification.NotificationSettingsEdit
+import see.day.model.notification.NotificationType
 import see.day.network.NotificationService
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.PageInfoResponse
@@ -41,7 +42,7 @@ class NotificationRepositoryTest {
             // given
             val notificationResponse = NotificationHistoryResponse(
                 notifications = NotificationHistoryDataResponse(
-                    items = listOf(NotificationHistoryItemResponse("DAILY", "설명", "2025-10-27:08:10:00")),
+                    items = listOf(NotificationHistoryItemResponse(id = "",type = NotificationType.TEST, title = "", message = "", sentAt = "" , isRead = true)),
                     pageInfo = PageInfoResponse(
                         page = 0,
                         size = 0,

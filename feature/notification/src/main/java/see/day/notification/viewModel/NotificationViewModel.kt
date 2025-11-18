@@ -16,6 +16,7 @@ import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.notifiaction.GetNotificationHistoryUseCase
 import see.day.domain.usecase.notifiaction.UpdateNotificationHistoryAllReadUseCase
 import see.day.domain.usecase.user.GetMainRecordTypeUseCase
+import see.day.model.notification.NotificationType
 import see.day.model.record.RecordType
 import see.day.notification.state.NotificationHistoryUiModel
 import see.day.notification.state.NotificationUiEffect
@@ -62,9 +63,11 @@ class NotificationViewModel @Inject constructor(
                     // UI 모델 변환
                     val uiModel = history.notifications.map { notification ->
                         NotificationHistoryUiModel(
-                            recordType = notification.recordType,
+                            notificationType = notification.type,
+                            title = notification.title,
+                            message = notification.message,
                             relativeTime = TimeFormatUtil.getRelativeTimeString(notification.sentAt),
-                            isChecked = notification.sentAt < recentCheckedAt
+                            isChecked = notification.isRead
                         )
                     }
 
@@ -81,7 +84,7 @@ class NotificationViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             recentCheckedAt = recentCheckedAt,
-                            notificationHistories = getDummyHistories(),
+                            notificationHistories = uiModel,
                             todayRecords = todayRecords,
                             mainRecordType = mainRecordType ?: RecordType.DAILY,
                             hasNoGoal = hasNoGoal
@@ -148,34 +151,4 @@ class NotificationViewModel @Inject constructor(
     private fun LocalDate.toFormattedString(): String {
         return String.format("%04d-%02d-%02d", year, monthValue, dayOfMonth)
     }
-}
-
-// TODO 더미 테스트용으로 작성, 정상적으로 데이터가 인입된다면 추후 삭제 필요
-private fun getDummyHistories() : List<NotificationHistoryUiModel> {
-    return listOf(
-        NotificationHistoryUiModel(
-            recordType = RecordType.DAILY,
-            relativeTime = TimeFormatUtil.getRelativeTimeString(TimeFormatUtil.hourBefore(1L)),
-            isChecked = TimeFormatUtil.hourBefore(1L) < TimeFormatUtil.hourBefore(2L)
-        ),
-        NotificationHistoryUiModel(
-            recordType = RecordType.EXERCISE,
-            relativeTime = TimeFormatUtil.getRelativeTimeString(TimeFormatUtil.hourBefore(3L)),
-            isChecked = TimeFormatUtil.hourBefore(3L) < TimeFormatUtil.hourBefore(2L)
-        ),
-        NotificationHistoryUiModel(
-            recordType = RecordType.HABIT,
-            relativeTime = TimeFormatUtil.getRelativeTimeString(TimeFormatUtil.daysBefore(1L)),
-            isChecked = TimeFormatUtil.daysBefore(1L) < TimeFormatUtil.hourBefore(2L)
-        ),
-        NotificationHistoryUiModel(
-            recordType = RecordType.DAILY,
-            relativeTime = TimeFormatUtil.getRelativeTimeString(TimeFormatUtil.daysBefore(3L)),
-            isChecked = TimeFormatUtil.daysBefore(3L) < TimeFormatUtil.hourBefore(2L)
-        )
-    )
-}
-
-private fun LocalDateTime.toFormattedString(): String {
-    return String.format("%04d-%02d-%02d", year, monthValue, dayOfMonth)
 }

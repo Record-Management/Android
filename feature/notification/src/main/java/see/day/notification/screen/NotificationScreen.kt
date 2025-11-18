@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.model.notification.NotificationType
 import see.day.model.record.RecordType
 import see.day.notification.R
 import see.day.notification.component.HistoryCard
@@ -100,17 +101,21 @@ internal fun NotificationScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     items(uiState.notificationHistories) { history ->
-                        HistoryCard(
-                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                            recordType = history.recordType,
-                            relativeTime = history.relativeTime,
-                            isChecked = history.isChecked,
-                            onClickCard = { type, time ->
-                                if(!uiState.hasNoGoal) {
-                                    uiEvent(NotificationUiEvent.OnClickItem(type, time))
-                                }
-                            },
-                        )
+                        if(history.isVisible()) {
+                            HistoryCard(
+                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+                                notificationType = history.notificationType,
+                                title = history.title,
+                                message = history.message,
+                                relativeTime = history.relativeTime,
+                                isChecked = history.isChecked,
+                                onClickCard = { type, time ->
+                                    if(!uiState.hasNoGoal) {
+                                        uiEvent(NotificationUiEvent.OnClickItem(type, time))
+                                    }
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -154,7 +159,9 @@ private fun NotificationScreenHistoriesPreview() {
 private fun getSampleNotificationHistory(count: Int): List<NotificationHistoryUiModel> {
     return (0 until count).map { num ->
         NotificationHistoryUiModel(
-            recordType = RecordType.entries[num % 3],
+            notificationType = NotificationType.entries[num % 3],
+            title = "asdasd",
+            message = "asdasd",
             relativeTime = TimeFormatUtil.getRelativeTimeString(TimeFormatUtil.daysBefore(num.toLong())),
             isChecked = num % 2 == 0
         )
