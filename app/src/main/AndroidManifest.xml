@@ -11,13 +11,6 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
-
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
     <application
         android:name="record.daily.android.RecordApplication"
         android:allowBackup="true"
