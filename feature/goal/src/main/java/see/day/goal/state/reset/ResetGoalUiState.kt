@@ -9,7 +9,7 @@ data class ResetGoalUiState(
     val goalDays: Int
 ) {
     companion object {
-        val init = ResetGoalUiState(GoalResetStep.RECORD, recordType = null, goalDays = 10)
+        val init = ResetGoalUiState(GoalResetStep.RECORD, recordType = null, goalDays = 0)
     }
 }
 
