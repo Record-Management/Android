@@ -1,6 +1,7 @@
 package see.day.network.dto.notification
 
 import kotlinx.serialization.Serializable
+import see.day.model.notification.NotificationType
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
 import see.day.network.dto.PageInfoResponse
 
@@ -19,8 +20,11 @@ data class NotificationHistoryDataResponse(
 
 @Serializable
 data class NotificationHistoryItemResponse(
-    val mainRecordType: String,
-    val description: String,
+    val id: String,
+    val type: NotificationType,
+    val title: String,
+    val message: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val sentAt: String
+    val sentAt: String,
+    val isRead: Boolean
 )

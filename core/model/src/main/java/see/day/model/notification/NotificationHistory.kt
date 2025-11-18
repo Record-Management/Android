@@ -1,9 +1,10 @@
 package see.day.model.notification
 
-import see.day.model.record.RecordType
-
 data class NotificationHistory(
-    val recordType: RecordType,
-    val description: String,
-    val sentAt: String
+    val id: String,
+    val type: NotificationType,
+    val title: String,
+    val message: String,
+    val sentAt: String,
+    val isRead: Boolean
 )

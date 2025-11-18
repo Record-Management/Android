@@ -23,9 +23,12 @@ fun List<NotificationHistoryItemResponse>.toModel(): List<NotificationHistory> {
 
 fun NotificationHistoryItemResponse.toModel(): NotificationHistory {
     return NotificationHistory(
-        recordType = RecordType.valueOf(mainRecordType),
-        description = description,
-        sentAt = sentAt
+        id = id,
+        type = type,
+        title = title,
+        message = message,
+        sentAt = sentAt,
+        isRead = isRead
     )
 }
 
