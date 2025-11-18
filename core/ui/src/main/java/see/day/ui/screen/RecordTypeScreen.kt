@@ -19,7 +19,7 @@ import see.day.ui.card.GoalRecordTypeCard
 
 @Composable
 fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordType?, onClickCompleteButton: (RecordType) -> Unit) {
-    var currentSelectedRecordType by rememberSaveable {
+    var currentSelectedRecordType by rememberSaveable(selectedRecordType) {
         mutableStateOf(selectedRecordType)
     }
     Column(

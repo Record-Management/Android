@@ -25,7 +25,7 @@ internal fun ResetGoalTopBar(modifier: Modifier = Modifier, step: GoalResetStep,
     ) {
         if (step != GoalResetStep.RECORD) {
             Image(
-                modifier = modifier
+                modifier = Modifier
                     .padding(vertical = 16.dp)
                     .padding(start = 16.dp)
                     .clickable { onClickBackButton() },
@@ -33,10 +33,10 @@ internal fun ResetGoalTopBar(modifier: Modifier = Modifier, step: GoalResetStep,
                 contentDescription = "뒤로가기 버튼"
             )
         }
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
         LinearProgressIndicator(
             progress = { step.getProgress() },
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(4.dp),
             color = MaterialTheme.colorScheme.primary,

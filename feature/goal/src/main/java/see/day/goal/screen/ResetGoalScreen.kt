@@ -80,7 +80,7 @@ internal fun ResetGoalScreen(
                 .fillMaxSize()
         ) {
             ResetGoalTitleDescription(step = uiState.step)
-            Spacer(modifier = modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             when(uiState.step) {
                 GoalResetStep.RECORD -> {
                     RecordTypeScreen(
