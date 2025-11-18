@@ -22,7 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -47,6 +49,15 @@ import see.day.ui.button.CompleteButton
 internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, completeType: CompleteType, onGoHome: () -> Unit) {
     val context = LocalContext.current
 
+    var titleText by rememberSaveable {
+        mutableStateOf("하루를 담을 준비를 하고 있어요!")
+    }
+    LaunchedEffect(Unit) {
+
+        delay(2100)
+        titleText = "하루를 채울 준비를 마쳤어요!"
+    }
+
     when(completeType) {
         CompleteType.ONBOARDING -> {
             if (!isNotificationPermissionGranted(context)) {
@@ -60,13 +71,15 @@ internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, complet
 
     OnboardingCompleteScreen(
         modifier = modifier,
+        titleText = titleText,
         onGoHome = onGoHome
     )
 }
 
 @Composable
-internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: () -> Unit) {
+internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, titleText: String, onGoHome: () -> Unit) {
     val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier.padding(horizontal = 16.dp).fillMaxHeight().verticalScroll(scrollState)
     ) {
@@ -85,7 +98,7 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, onGoHome: (
             modifier = modifier
                 .padding(top = 28.dp)
                 .fillMaxWidth(),
-            text = stringResource(R.string.onboard_complete_title_message),
+            text = titleText,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
@@ -163,8 +176,18 @@ fun FadeEffect(delayMills: Int,scrollState: ScrollState, content: @Composable (m
 @Preview
 @Composable
 private fun OnboardingCompleteScreenPreview() {
+    var titleText by rememberSaveable {
+        mutableStateOf("하루를 담을 준비를 하고 있어요!")
+    }
+    LaunchedEffect(Unit) {
+
+        delay(2100)
+        titleText = "하루를 채울 준비를 마쳤어요!"
+    }
+
     SeeDayTheme {
         OnboardingCompleteScreen(
+            titleText = titleText,
             onGoHome = {}
         )
     }

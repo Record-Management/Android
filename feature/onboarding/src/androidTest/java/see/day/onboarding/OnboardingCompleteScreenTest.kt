@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.screen.OnboardingCompleteScreen
 
 class OnboardingCompleteScreenTest {
@@ -25,11 +26,13 @@ class OnboardingCompleteScreenTest {
     @Test
     fun given_whenScreening_shownTexts() {
         composeTestRule.setContent {
-            OnboardingCompleteScreen { }
+            SeeDayTheme {
+                OnboardingCompleteScreen(titleText = "하루를 담을 준비를 하고 있어요!", onGoHome = {})
+            }
         }
 
         composeTestRule
-            .onNodeWithText(context.getString(R.string.onboard_complete_title_message))
+            .onNodeWithText("하루를 담을 준비를 하고 있어요!")
             .assertIsDisplayed()
 
         composeTestRule.mainClock.advanceTimeBy(700)
