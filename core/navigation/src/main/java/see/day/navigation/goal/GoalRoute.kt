@@ -6,4 +6,7 @@ sealed interface GoalRoute {
 
     @Serializable
     data object CurrentGoal : GoalRoute
+
+    @Serializable
+    data object ResetGoal : GoalRoute
 }

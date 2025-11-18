@@ -49,7 +49,8 @@ import see.day.ui.topbar.ClosableTopBar
 @Composable
 internal fun CurrentGoalScreenRoot(
     viewModel: CurrentGoalViewModel = hiltViewModel(),
-    onBack : () -> Unit
+    onBack : () -> Unit,
+    onClickResetGoal: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -60,7 +61,7 @@ internal fun CurrentGoalScreenRoot(
                     onBack()
                 }
                 CurrentGoalUiEffect.OnGoGoalSetting -> {
-                    // TODO 목표 재설정
+                    onClickResetGoal()
                 }
             }
         }
