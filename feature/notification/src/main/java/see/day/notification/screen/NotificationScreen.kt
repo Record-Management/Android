@@ -35,7 +35,8 @@ import see.day.ui.topbar.CommonAppBar
 internal fun NotificationScreenRoute(
     viewModel: NotificationViewModel = hiltViewModel(),
     onBack: () -> Unit,
-    onClickAddRecord: (RecordType, Boolean) -> Unit
+    onClickAddRecord: (RecordType, Boolean) -> Unit,
+    onClickResetGoal: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -49,6 +50,9 @@ internal fun NotificationScreenRoute(
 
                 is NotificationUiEffect.GoWriteRecord -> {
                     onClickAddRecord(effect.recordType, true)
+                }
+                NotificationUiEffect.OnResetGoal -> {
+                    onClickResetGoal()
                 }
             }
         }
@@ -113,7 +117,9 @@ internal fun NotificationScreen(
             if(uiState.hasNoGoal) {
                 ActionBanner(
                     modifier = Modifier.align(Alignment.BottomCenter).padding(20.dp),
-                    onClick = { /* TODO 추후 목표 재설정 화면이 나올 때 작성 */},
+                    onClick = {
+                        uiEvent(NotificationUiEvent.OnClickResetGoalBanner)
+                    },
                     title = see.day.ui.R.string.current_goal_banner_title,
                     body = see.day.ui.R.string.current_goal_banner_body,
                 )
