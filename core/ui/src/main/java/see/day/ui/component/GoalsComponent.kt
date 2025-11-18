@@ -1,4 +1,4 @@
-package see.day.onboarding.component
+package see.day.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,19 +21,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.content.pm.ShortcutInfoCompat.Surface
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
-import see.day.onboarding.R
+import see.day.ui.R
 
 @Composable
-internal fun GoalsComponent(modifier: Modifier = Modifier, goals: Int, currentGoals: Int, onClick: (Int) -> Unit) {
+fun GoalsComponent(modifier: Modifier = Modifier, goals: Int, currentGoals: Int, onClick: (Int) -> Unit) {
     Surface(
         modifier = modifier
-            .height(157.dp)
-            .width(104.dp)
             .clickable { onClick(goals) },
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(1.dp, if (goals == currentGoals) MaterialTheme.colorScheme.primary else gray20)
@@ -55,7 +50,7 @@ internal fun GoalsComponent(modifier: Modifier = Modifier, goals: Int, currentGo
                         .background(Color(0xFFFFF9E0), shape = RoundedCornerShape(6.dp))
                         .padding(horizontal = 6.dp, vertical = 2.dp),
                     text = stringResource(R.string.goals_10_message),
-                    style = MaterialTheme.typography.headlineLarge.copy(fontSize = 8.sp),
+                    style = MaterialTheme.typography.headlineLarge,
                     color = Color(0xFFFFA30F)
                 )
                 Text(
@@ -77,7 +72,7 @@ internal fun GoalsComponent(modifier: Modifier = Modifier, goals: Int, currentGo
                         .background(Color(0xFFFFF4E5), shape = RoundedCornerShape(6.dp))
                         .padding(horizontal = 6.dp, vertical = 2.dp),
                     text = stringResource(R.string.goals_20_message),
-                    style = MaterialTheme.typography.headlineLarge.copy(fontSize = 8.sp),
+                    style = MaterialTheme.typography.headlineLarge,
                     color = Color(0xFFE65100)
                 )
                 Text(
@@ -99,7 +94,7 @@ internal fun GoalsComponent(modifier: Modifier = Modifier, goals: Int, currentGo
                         .background(Color(0xFFE8F5E9), shape = RoundedCornerShape(6.dp))
                         .padding(horizontal = 6.dp, vertical = 2.dp),
                     text = stringResource(R.string.goals_30_message),
-                    style = MaterialTheme.typography.headlineLarge.copy(fontSize = 8.sp),
+                    style = MaterialTheme.typography.headlineLarge,
                     color = Color(0xFF1B5E20)
                 )
                 Text(
