@@ -27,6 +27,7 @@ import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
 import see.day.notification.navigation.navigateNotificationHistory
 import see.day.notification.navigation.notificationNavigation
+import see.day.onboarding.navigation.navigateOnboardingComplete
 import see.day.onboarding.navigation.onboardingNavigation
 import see.day.setting.navigation.navigateSettingGoalNotification
 import see.day.setting.navigation.navigateSettingRecordNotification
@@ -84,7 +85,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
             )
             goalNavigation(
                 onBack = navigationState.navController::popBackStack,
-                onClickResetGoal = navigationState.navController::navigateResetGoal
+                onClickResetGoal = navigationState.navController::navigateResetGoal,
+                onClickResetGoalComplete = navigationState.navController::navigateOnboardingComplete
             )
         }
     }

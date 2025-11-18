@@ -9,6 +9,7 @@ import see.day.goal.screen.ResetGoalScreenRoot
 import see.day.navigation.goal.GoalRoute
 import see.day.navigation.goal.GoalRoute.CurrentGoal
 import see.day.navigation.goal.GoalRoute.ResetGoal
+import see.day.navigation.onboarding.CompleteType
 
 fun NavController.navigateCurrentGoal(navOptions: NavOptions? = null) {
     navigate(CurrentGoal, navOptions)
@@ -20,7 +21,8 @@ fun NavController.navigateResetGoal(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.goalNavigation(
     onBack: () -> Unit,
-    onClickResetGoal: () -> Unit
+    onClickResetGoal: () -> Unit,
+    onClickResetGoalComplete: (CompleteType) -> Unit
 ) {
     composable<CurrentGoal> {
         CurrentGoalScreenRoot(
@@ -30,7 +32,8 @@ fun NavGraphBuilder.goalNavigation(
     }
     composable<ResetGoal> {
         ResetGoalScreenRoot(
-            onBack = onBack
+            onBack = onBack,
+            onGoResetGoalComplete = onClickResetGoalComplete
         )
     }
 }
