@@ -47,7 +47,7 @@
 
     <string name="current_goal_banner_title">새 목표를 통해 다른\n하루를 시작해보세요</string>
     <string name="current_goal_banner_body">새 목표 설정하기</string>
-    
+
     <string name="daily_title">하루 기록</string>
     <string name="daily_body">나의 찰나와 감정까지, 오늘을 기록해요.</string>
     <string name="exercise_title">운동 기록</string>
@@ -56,4 +56,8 @@
     <string name="schedule_body">해야 할 일과 중요한 순간을 놓치지 말아요.</string>
     <string name="habit_title">습관 기록</string>
     <string name="habit_body">작은 습관부터, 나의 변화를 기록해요.</string>
+
+    <string name="goals_10_message">첫 걸음</string>
+    <string name="goals_20_message">습관의 시작</string>
+    <string name="goals_30_message">꾸준한 성장</string>
 </resources>

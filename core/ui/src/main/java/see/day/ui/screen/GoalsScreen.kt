@@ -1,4 +1,4 @@
-package see.day.onboarding.screen.onboarding
+package see.day.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.ui.button.CompleteButton
+import see.day.ui.component.GoalsComponent
 
 @Composable
-internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: (OnboardingUiEvent) -> Unit) {
-    var currentGoals by remember { mutableStateOf(goals) }
+fun GoalsScreen(modifier: Modifier = Modifier, goalDays: Int, onComplete: (Int) -> Unit) {
+    var currentGoalDays by remember { mutableStateOf(goalDays) }
 
     Column(
         modifier = modifier
@@ -28,17 +28,17 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
     ) {
         LazyRow(
             modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             items(listOf(10, 20, 30)) { goal ->
-                see.day.ui.component.GoalsComponent (
+                GoalsComponent(
                     goals = goal,
-                    currentGoals = currentGoals,
+                    currentGoals = currentGoalDays,
                     onClick = { selectedGoal ->
-                        if (selectedGoal == currentGoals) {
-                            currentGoals = 0
+                        if (selectedGoal == currentGoalDays) {
+                            currentGoalDays = 0
                         } else {
-                            currentGoals = selectedGoal
+                            currentGoalDays = selectedGoal
                         }
                     }
                 )
@@ -49,8 +49,8 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
         CompleteButton(
             modifier = modifier,
             text = "다음",
-            isEnabled = currentGoals != 0,
-            onClick = { onComplete(OnboardingUiEvent.EnterGoal(currentGoals)) }
+            isEnabled = currentGoalDays != 0,
+            onClick = { onComplete(currentGoalDays) }
         )
     }
 }
@@ -60,7 +60,7 @@ internal fun GoalsScreen(modifier: Modifier = Modifier, goals: Int, onComplete: 
 private fun GoalsScreenPreview() {
     SeeDayTheme {
         GoalsScreen(
-            goals = 0,
+            goalDays = 0,
             onComplete = {}
         )
     }
