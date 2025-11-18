@@ -15,12 +15,14 @@ fun NavController.navigateNotificationHistory(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.notificationNavigation(
     onBack: () -> Unit,
-    onClickAddRecord: (RecordType, Boolean) -> Unit
+    onClickAddRecord: (RecordType, Boolean) -> Unit,
+    onClickResetGoal: () -> Unit
 ) {
     composable<History> {
         NotificationScreenRoute(
             onBack = onBack,
-            onClickAddRecord = onClickAddRecord
+            onClickAddRecord = onClickAddRecord,
+            onClickResetGoal = onClickResetGoal
         )
     }
 }

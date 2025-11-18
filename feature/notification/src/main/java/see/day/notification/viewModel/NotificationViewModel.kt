@@ -100,6 +100,9 @@ class NotificationViewModel @Inject constructor(
             is NotificationUiEvent.OnClickItem -> {
                 onClickItem(uiEvent.recordType, uiEvent.relativeTime)
             }
+            NotificationUiEvent.OnClickResetGoalBanner -> {
+                onClickResetGoalBanner()
+            }
         }
     }
 
@@ -134,7 +137,12 @@ class NotificationViewModel @Inject constructor(
                 }
             }
         }
+    }
 
+    private fun onClickResetGoalBanner() {
+        viewModelScope.launch {
+            _uiEffect.emit(NotificationUiEffect.OnResetGoal)
+        }
     }
 
     private fun LocalDate.toFormattedString(): String {

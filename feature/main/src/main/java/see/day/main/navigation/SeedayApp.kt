@@ -51,7 +51,7 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onClickDetailRecord = navigationState::navigateDetailRecord,
                 onClickSetting = navigationState.navController::navigateSetting,
                 onClickNotification = navigationState.navController::navigateNotificationHistory,
-                onGoCurrentGoal = navigationState.navController::navigateCurrentGoal
+                onGoCurrentGoal = navigationState.navController::navigateResetGoal
             )
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,
@@ -81,7 +81,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
             )
             notificationNavigation(
                 onBack = navigationState.navController::popBackStack,
-                onClickAddRecord = navigationState::navigateAddRecord
+                onClickAddRecord = navigationState::navigateAddRecord,
+                onClickResetGoal = navigationState.navController::navigateResetGoal
             )
             goalNavigation(
                 onBack = navigationState.navController::popBackStack,
