@@ -1,5 +1,6 @@
 package see.day.network.dto.notification
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import see.day.model.notification.NotificationType
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
@@ -26,5 +27,6 @@ data class NotificationHistoryItemResponse(
     val message: String,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val sentAt: String,
+    @SerialName("read")
     val isRead: Boolean
 )
