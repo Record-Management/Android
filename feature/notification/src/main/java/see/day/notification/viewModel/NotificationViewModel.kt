@@ -16,7 +16,6 @@ import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.notifiaction.GetNotificationHistoryUseCase
 import see.day.domain.usecase.notifiaction.UpdateNotificationHistoryAllReadUseCase
 import see.day.domain.usecase.user.GetMainRecordTypeUseCase
-import see.day.model.notification.NotificationType
 import see.day.model.record.RecordType
 import see.day.notification.state.NotificationHistoryUiModel
 import see.day.notification.state.NotificationUiEffect
