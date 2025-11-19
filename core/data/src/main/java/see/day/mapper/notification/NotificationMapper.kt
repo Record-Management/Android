@@ -4,7 +4,6 @@ import see.day.model.notification.NotificationHistory
 import see.day.model.notification.NotificationHistoryList
 import see.day.model.notification.NotificationSettings
 import see.day.model.notification.NotificationSettingsEdit
-import see.day.model.record.RecordType
 import see.day.network.dto.notification.NotificationHistoryItemResponse
 import see.day.network.dto.notification.NotificationHistoryResponse
 import see.day.network.dto.notification.NotificationSettingResponse
