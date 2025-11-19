@@ -9,14 +9,20 @@ val getNotificationHistorySuccessResponse = """
         "notifications": {
           "items": [
             {
-              "mainRecordType": "EXERCISE",
-              "description": "꾸준한 운동 기록으로 건강한 습관을 만들어보세요!",
-              "sentAt": [2025,10,23,20,0,0]
+              "id": "123",
+              "type": "DAILY_RECORD_REMINDER",
+              "title": "꾸준한 운동 기록으로 건강한 습관을 만들어보세요!",
+              "message": "asdasd",
+              "sentAt": [2025,10,23,20,0,0],
+              "isRead": true
             },
             {
-              "mainRecordType": "DAILY",
-              "description": "오늘의 소중한 순간을 기록으로 남겨보세요!",
-              "sentAt": [2025,10,23,19,0,0]
+              "id": "123",
+              "type": "GOAL_SETTING_REMINDER",
+              "title": "오늘의 소중한 순간을 기록으로 남겨보세요!",
+              "message": "asdasd",
+              "sentAt": [2025,10,23,19,0,0],
+              "isRead": true
             }
           ],
           "pageInfo": {

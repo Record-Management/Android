@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,36 +27,48 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray60
 import see.day.designsystem.theme.gray70
+import see.day.model.notification.NotificationType
 import see.day.model.record.RecordType
 import see.day.notification.util.TimeFormatUtil
 import see.day.notification.util.TimeFormatUtil.daysBefore
 import see.day.notification.util.TimeFormatUtil.hourBefore
-import see.day.notification.util.historyMessage
-import see.day.util.getIcon
+import see.day.notification.util.getIcon
+import see.day.notification.util.toRecordType
 
 @Composable
 internal fun HistoryCard(
     modifier: Modifier,
-    recordType: RecordType,
+    notificationType: NotificationType,
+    title: String,
+    message: String,
     isChecked: Boolean,
     relativeTime: String,
     onClickCard: (RecordType, String) -> Unit
 ) {
+    val recordType = remember(notificationType) { notificationType.toRecordType() }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 95.dp)
-            .clickable { onClickCard(recordType, relativeTime) }
+            .clickable(
+                enabled = recordType != null
+            ) {
+                recordType?.let { onClickCard(it, relativeTime) }
+            }
             .background(if (isChecked) Color.White else Color(0xFFFFF5EC))
             .then(modifier)
     ) {
         Box(
-            modifier = Modifier.size(24.dp).border((0.72).dp, gray30, CircleShape)
+            modifier = Modifier
+                .size(24.dp)
+                .border((0.72).dp, gray30, CircleShape)
         ) {
             Image(
-                painter = painterResource(recordType.getIcon()),
-                contentDescription = recordType.title,
-                modifier = Modifier.size(16.dp).align(Alignment.Center)
+                painter = painterResource(notificationType.getIcon()),
+                contentDescription = title,
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.Center)
             )
         }
 
@@ -66,7 +79,7 @@ internal fun HistoryCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = recordType.title,
+                    text = title,
                     style = MaterialTheme.typography.labelMedium.copy(color = gray70)
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -77,7 +90,7 @@ internal fun HistoryCard(
             }
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = recordType.historyMessage(),
+                text = message,
                 style = MaterialTheme.typography.labelMedium
             )
         }
@@ -91,10 +104,12 @@ private fun HistoryCardPreviewFiveHourBefore() {
     SeeDayTheme {
         HistoryCard(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            recordType = RecordType.DAILY,
+            notificationType = NotificationType.DAILY_RECORD_REMINDER,
+            title = "하루 기록",
+            message = "아직 '하루 기록을 등록하지않았삼",
             isChecked = false,
             relativeTime = time,
-            onClickCard = { type, relativeTime ->}
+            onClickCard = { type, relativeTime -> }
         )
     }
 }
@@ -106,10 +121,12 @@ private fun HistoryCardPreviewBeforeThreeDays() {
     SeeDayTheme {
         HistoryCard(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            recordType = RecordType.DAILY,
+            notificationType = NotificationType.EXERCISE_REMINDER,
+            title = "하루 기록",
+            message = "아직 '하루 기록을 등록하지않았삼",
             isChecked = false,
             relativeTime = time,
-            onClickCard = { type, relativeTime ->}
+            onClickCard = { type, relativeTime -> }
         )
     }
 }
@@ -123,10 +140,12 @@ private fun HistoryCardsPreview() {
             RecordType.entries.forEach { recordType ->
                 HistoryCard(
                     modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                    recordType = recordType,
+                    notificationType = NotificationType.HABIT_REMINDER,
+                    title = "하루 기록",
+                    message = "아직 '하루 기록을 등록하지않았삼",
                     isChecked = false,
                     relativeTime = time,
-                    onClickCard = { type, relativeTime ->}
+                    onClickCard = { type, relativeTime -> }
                 )
             }
         }
