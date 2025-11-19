@@ -148,7 +148,7 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeUiEvent.OnClickUpdateHabitIsComplete -> {
-                onClickHabitRecordIsCompleted(recordId = uiEvent.recordId, isCompleted = uiEvent.isCompleted)
+                onClickHabitRecordIsCompleted(recordId = uiEvent.recordId, isCompleted = uiEvent.isCompleted, recordDate = uiEvent.recordDate)
             }
             is HomeUiEvent.OnClickNotification -> {
                 onClickNotification()
@@ -325,7 +325,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onClickHabitRecordIsCompleted(recordId: String, isCompleted: Boolean) {
+    private fun onClickHabitRecordIsCompleted(recordId: String, isCompleted: Boolean, recordDate: String) {
+        if(recordDate != HomeUiState.getTodayDate()) {
+            return
+        }
         viewModelScope.launch {
             updateHabitRecordIsCompletedUseCase(recordId, isCompleted)
                 .onSuccess {

@@ -48,7 +48,7 @@ fun HabitRecordOverView(
     habitRecord: HabitRecordDetail,
     onClickItem: (RecordType, String) -> Unit,
     onClickLongItem: () -> Unit,
-    onClickChecked: (String, Boolean) -> Unit
+    onClickChecked: (String, Boolean, String) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -112,7 +112,7 @@ fun HabitRecordOverView(
         Box(
             modifier = Modifier
                 .size(44.dp)
-                .clickable { onClickChecked(habitRecord.id, !habitRecord.isCompleted) }
+                .clickable { onClickChecked(habitRecord.id, !habitRecord.isCompleted, habitRecord.recordDate) }
         ) {
             Image(
                 painter = painterResource(if (habitRecord.isCompleted) see.day.designsystem.R.drawable.ic_checked else see.day.designsystem.R.drawable.ic_unchecked),
@@ -137,7 +137,7 @@ private fun HabitRecordOverViewPreview() {
                 Toast.makeText(context, "onItemClick", Toast.LENGTH_SHORT).show()
             },
             onClickLongItem = {},
-            onClickChecked = { id, isChecked ->
+            onClickChecked = { id, isChecked, recordDate ->
                 habitRecord = habitRecord.copy(isCompleted = isChecked)
             }
         )
@@ -154,7 +154,7 @@ private fun HabitRecordOverViewIsMainPreview() {
             onClickItem = { type, id ->
             },
             onClickLongItem = {},
-            onClickChecked = { id, isChecked ->
+            onClickChecked = { id, isChecked, recordDate ->
             }
         )
     }

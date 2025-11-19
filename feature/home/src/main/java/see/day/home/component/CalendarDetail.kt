@@ -42,7 +42,7 @@ fun CalendarDetail(
     dailyRecordDetails: DailyRecordDetails,
     onClickRevise: (RecordType, String) -> Unit,
     onClickDelete: (RecordType, String) -> Unit,
-    onClickUpdateHabitRecordIsCompleted: (String, Boolean) -> Unit
+    onClickUpdateHabitRecordIsCompleted: (String, Boolean, String) -> Unit
 ) {
     var openLongPressureDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
     if (openLongPressureDialog.first) {
@@ -180,7 +180,7 @@ private fun CalendarDetailPreview() {
             ),
             onClickRevise = { recordType, recordId -> },
             onClickDelete = { recordType, recordId -> },
-            onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted -> }
+            onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted, recordDate -> }
         )
     }
 }
