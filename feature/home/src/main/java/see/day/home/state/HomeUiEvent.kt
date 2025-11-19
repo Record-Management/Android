@@ -12,7 +12,7 @@ sealed interface HomeUiEvent {
     data class OnClickDetailButton(val recordType: RecordType, val recordId: String) : HomeUiEvent
     data object OnClickSetting : HomeUiEvent
     data class OnClickDeleteItem(val recordType: RecordType, val recordId: String) : HomeUiEvent
-    data class OnClickUpdateHabitIsComplete(val recordId: String, val isCompleted: Boolean) : HomeUiEvent
+    data class OnClickUpdateHabitIsComplete(val recordId: String, val isCompleted: Boolean, val recordDate: String) : HomeUiEvent
     data object OnClickNotification : HomeUiEvent
     data object OnClickGoalSetting: HomeUiEvent
 }

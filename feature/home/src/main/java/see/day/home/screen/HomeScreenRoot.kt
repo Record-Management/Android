@@ -379,8 +379,8 @@ private fun HomeBottomSheetContent(
                 onClickDelete = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDeleteItem(recordType, recordId))
                 },
-                onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted ->
-                    uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted))
+                onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted, recordDate ->
+                    uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted, recordDate))
                 }
             )
             Spacer(modifier = Modifier.height(100.dp))
