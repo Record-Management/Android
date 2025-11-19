@@ -16,6 +16,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,15 +47,15 @@ internal fun HistoryCard(
     relativeTime: String,
     onClickCard: (RecordType, String) -> Unit
 ) {
-
+    val recordType by remember{ mutableStateOf(notificationType.toRecordType())}
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 95.dp)
-            .clickable {
-                notificationType.toRecordType()?.let { recordType ->
-                    onClickCard(recordType, relativeTime)
-                }
+            .clickable (
+                enabled = recordType != null
+            ) {
+                recordType?.let { onClickCard(it, relativeTime) }
             }
             .background(if (isChecked) Color.White else Color(0xFFFFF5EC))
             .then(modifier)
