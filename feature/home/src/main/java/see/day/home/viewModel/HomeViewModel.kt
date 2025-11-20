@@ -318,7 +318,7 @@ class HomeViewModel @Inject constructor(
                 it.day,
                 it.mainRecordType,
                 it.records.filter { record ->
-                    record == recordType
+                    record.type == recordType
                 },
                 it.schedules
             )
@@ -347,6 +347,7 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }
+            onRefresh()
         }
     }
 

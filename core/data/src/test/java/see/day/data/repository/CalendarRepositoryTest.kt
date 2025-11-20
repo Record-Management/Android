@@ -44,7 +44,7 @@ class CalendarRepositoryTest {
                 response = MonthlyRecordResponse(
                     year,
                     month,
-                    monthlyRecords = listOf(DailyRecordsResponse(date = "", mainRecordType = RecordType.EXERCISE,records = listOf(see.day.network.dto.calendar.DailyRecordResponse("", "DAILY"))))
+                    monthlyRecords = listOf(DailyRecordsResponse(date = "", mainRecordType = RecordType.EXERCISE,records = listOf(see.day.network.dto.calendar.DailyRecordResponse("", "DAILY",true))))
                 )
             )
             whenever(calendarService.getMonthlyRecords(year, month, types)).thenReturn(response)
