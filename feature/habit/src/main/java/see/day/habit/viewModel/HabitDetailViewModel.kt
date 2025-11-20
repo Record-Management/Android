@@ -66,6 +66,7 @@ class HabitDetailViewModel @Inject constructor(
                                 hour = habitRecord.notificationHour,
                                 minute = habitRecord.notificationMinute,
                                 memo = habitRecord.memo,
+                                canBeMain = habitRecord.canBeMain,
                                 editMode = HabitDetailUiState.EditMode.Edit(
                                     recordId = habitRecord.id,
                                     originalRecord = habitRecord
