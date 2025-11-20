@@ -97,7 +97,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
                     if (records.size >= 2) {
                         Image(
                             painter = painterResource(R.drawable.ic_red_dot),
-                            modifier = modifier
+                            modifier = Modifier
                                 .size(6.dp)
                                 .align(Alignment.TopCenter)
                                 .offset(x = (14.5).dp),
@@ -218,6 +218,34 @@ private val now = LocalDate.now(ZoneId.of("Asia/Seoul"))
 @Preview
 @Composable
 private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = now.year,
+                month = now.monthValue,
+                day = now.dayOfMonth,
+                filterType = null,
+                isSelected = true,
+                mainRecordType = EXERCISE,
+                records = listOf(EXERCISE, RecordType.HABIT),
+                schedules = listOf(),
+                createdAt = "2025-10-10",
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true
+            )
+        }
+    }
+}
+
+// 두 개 이상인 경우
+@Preview
+@Composable
+private fun DayCellFilterTypeNullMainTypeExerciseDoubleRecordsNoSchedulePreview() {
     val context = LocalContext.current
     SeeDayTheme {
         Column(
