@@ -4,11 +4,9 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -27,15 +25,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.R
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
-import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray40
-import see.day.designsystem.theme.gray50
+import see.day.model.calendar.DailyRecord
 import see.day.model.record.RecordType
 import see.day.model.record.RecordType.DAILY
 import see.day.model.record.RecordType.EXERCISE
@@ -46,7 +42,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 @Composable
-fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType, records: List<RecordType>, schedules: List<String>, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
+fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>, schedules: List<String>, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
     Column(
         modifier = modifier
             .heightIn(min = 80.dp)
@@ -72,133 +68,190 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
         if (!isSameMonth || isAfterToday(year, month, day) || isBeforeCreatedAt(createdAt, year, month, day)) {
             return
         }
-        // 아이콘이 정상적인 색상으로 나오는 것
-//        if (mainRecordType != SCHEDULE) {
-            if (filterType == null && records.contains(mainRecordType)) {
-                Box(
+        if (isBeforeToday(year, month, day)) {
+            PastDayImages(filterType, mainRecordType, records)
+        } else if (LocalDate.of(year, month, day).isEqual(now)) {
+            TodayImages(filterType, mainRecordType, records)
+        }
+    }
+}
+
+@Composable
+private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>) {
+    if (filterType == null) {
+        if (mainRecordType == null) {
+            return
+        }
+        Box(
+            modifier = Modifier
+                .height(25.dp)
+                .padding(horizontal = (5.5).dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 1.dp)
+                    .align(Alignment.Center)
+            ) {
+                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                Image(
+                    painter = painterResource(
+                        if (mainRecordType == HABIT) {
+                            if (records.filter { it.type == HABIT }.any { it.isCompleted }) {
+                                mainRecordType.getIcon()
+                            } else {
+                                mainRecordType.getGrayIcon()
+                            }
+                        } else {
+                            mainRecordType.getIcon()
+                        }
+                    ),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = "이미지"
+                )
+            }
+            // 점이 찍히는 조건
+            if (records.isNotEmpty()) {
+                Image(
+                    painter = painterResource(R.drawable.ic_red_dot),
                     modifier = Modifier
-                        .height(25.dp)
-                        .padding(horizontal = (5.5).dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 1.dp)
-                            .align(Alignment.Center)
-                    ) {
-                        // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                        Image(
-                            painter = painterResource(mainRecordType.getIcon()),
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = "이미지"
-                        )
-                    }
-                    // 점이 찍히는 조건
-                    if (records.size >= 2) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_red_dot),
-                            modifier = Modifier
-                                .size(6.dp)
-                                .align(Alignment.TopCenter)
-                                .offset(x = (14.5).dp),
-                            contentDescription = "선택된 버튼"
-                        )
-                    }
-                }
-            } else if (filterType == null && !records.contains(mainRecordType)) {
-                Box(
-                    modifier = Modifier
-                        .height(25.dp)
-                        .padding(horizontal = (5.5).dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 1.dp)
-                            .align(Alignment.Center)
-                    ) {
-                        // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                        Image(
-                            painter = painterResource(mainRecordType.getGrayIcon()),
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = "이미지"
-                        )
-                    }
-                    // 점이 찍히는 조건
-                    if (records.isNotEmpty()) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_red_dot),
-                            modifier = Modifier
-                                .size(6.dp)
-                                .align(Alignment.TopCenter)
-                                .offset(x = (14.5).dp),
-                            contentDescription = "선택된 버튼"
-                        )
-                    }
-                }
-            } else if (filterType != null && records.contains(filterType)) {
-                Box(
-                    modifier = Modifier
-                        .height(25.dp)
-                        .padding(horizontal = (5.5).dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 1.dp)
-                            .align(Alignment.Center)
-                    ) {
-                        // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                        Image(
-                            painter = painterResource(filterType.getIcon()),
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = "이미지"
-                        )
-                    }
+                        .size(6.dp)
+                        .align(Alignment.TopCenter)
+                        .offset(x = (14.5).dp),
+                    contentDescription = "선택된 버튼"
+                )
+            }
+        }
+        return
+    }
+    if (records.isNotEmpty()) {
+        val mainTypeRecords = records.filter { it.type == filterType }
+        Box(
+            modifier = Modifier
+                .height(25.dp)
+                .padding(horizontal = (5.5).dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 1.dp)
+                    .align(Alignment.Center)
+            ) {
+                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                if (mainTypeRecords.isNotEmpty()) {
+                    Image(
+                        painter = painterResource(
+                            if (filterType == HABIT) {
+                                if (mainTypeRecords.any { it.isCompleted }) {
+                                    filterType.getIcon()
+                                } else {
+                                    filterType.getGrayIcon()
+                                }
+                            } else {
+                                filterType.getIcon()
+                            }
+                        ),
+                        modifier = Modifier.size(24.dp),
+                        contentDescription = "이미지"
+                    )
                 }
             }
-//        }
-
-//        if (schedules.isNotEmpty() && (filterType == null || filterType == SCHEDULE)) {
-//            Spacer(modifier = Modifier.size(6.dp))
-//            Row(
-//                modifier = Modifier
-//                    .clip(RoundedCornerShape(2.dp))
-//                    .background(gray20)
-//                    .fillMaxWidth()
-//                    .padding(end = 4.dp)
-//                    .align(Alignment.Start),
-//                horizontalArrangement = Arrangement.Start,
-//                verticalAlignment = Alignment.Bottom
-//            ) {
-//                // 색상
-//                Spacer(
-//                    modifier = Modifier
-//                        .padding(2.dp)
-//                        .size(width = 2.dp, height = 10.dp)
-//                        .background(gray50)
-//                )
-//                Text(
-//                    text = schedules[0],
-//                    style = MaterialTheme.typography.headlineSmall,
-//                    maxLines = 1,
-//                    overflow = TextOverflow.Ellipsis,
-//                    modifier = modifier.padding(bottom = 1.dp)
-//                )
-//            }
-//            if (schedules.size >= 2) {
-//                Text(
-//                    text = "+${schedules.size - 1}",
-//                    modifier = Modifier
-//                        .padding(2.dp)
-//                        .clip(RoundedCornerShape(4.dp))
-//                        .background(gray20)
-//                        .align(Alignment.Start),
-//                    style = MaterialTheme.typography.headlineSmall
-//                )
-//            }
-//        }
+        }
     }
+}
+
+@Composable
+private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>) {
+    if (filterType == null) {
+        if (mainRecordType == null) {
+            return
+        }
+        if (records.isEmpty()) {
+            return
+        }
+        Box(
+            modifier = Modifier
+                .height(25.dp)
+                .padding(horizontal = (5.5).dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 1.dp)
+                    .align(Alignment.Center)
+            ) {
+                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                if (records.any { it.type == mainRecordType }) {
+                    Image(
+                        painter = painterResource(
+                            if (mainRecordType == HABIT) {
+                                if (records.filter { it.type == HABIT }.any { it.isCompleted }) {
+                                    mainRecordType.getIcon()
+                                } else {
+                                    mainRecordType.getGrayIcon()
+                                }
+                            } else {
+                                mainRecordType.getIcon()
+                            }
+                        ),
+                        modifier = Modifier.size(24.dp),
+                        contentDescription = "이미지"
+                    )
+                }
+            }
+            // 점이 찍히는 조건
+            if (records.isNotEmpty()) {
+                Image(
+                    painter = painterResource(R.drawable.ic_red_dot),
+                    modifier = Modifier
+                        .size(6.dp)
+                        .align(Alignment.TopCenter)
+                        .offset(x = (14.5).dp),
+                    contentDescription = "선택된 버튼"
+                )
+            }
+        }
+        return
+    }
+    if (records.isNotEmpty()) {
+        val mainTypeRecords = records.filter { it.type == filterType }
+        Box(
+            modifier = Modifier
+                .height(25.dp)
+                .padding(horizontal = (5.5).dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 1.dp)
+                    .align(Alignment.Center)
+            ) {
+                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+                if (mainTypeRecords.isNotEmpty()) {
+                    Image(
+                        painter = painterResource(
+                            if (filterType == HABIT) {
+                                if (mainTypeRecords.any { it.isCompleted }) {
+                                    filterType.getIcon()
+                                } else {
+                                    filterType.getGrayIcon()
+                                }
+                            } else {
+                                filterType.getIcon()
+                            }
+                        ),
+                        modifier = Modifier.size(24.dp),
+                        contentDescription = "이미지"
+                    )
+                }
+            }
+        }
+    }
+}
+
+private fun isBeforeToday(year: Int, month: Int, day: Int): Boolean {
+    val inputDate = LocalDate.of(year, month, day)
+    return inputDate.isBefore(now)
 }
 
 private fun isAfterToday(year: Int, month: Int, day: Int): Boolean {
@@ -206,7 +259,7 @@ private fun isAfterToday(year: Int, month: Int, day: Int): Boolean {
     return inputDate.isAfter(now)
 }
 
-private fun isBeforeCreatedAt(createdAt: String, year: Int, month: Int, day: Int) : Boolean {
+private fun isBeforeCreatedAt(createdAt: String, year: Int, month: Int, day: Int): Boolean {
     val inputDate = LocalDate.of(year, month, day)
     val createdArray = createdAt.substringBefore(":").split("-").map { it.toInt() }
     return inputDate.isBefore(LocalDate.of(createdArray[0], createdArray[1], createdArray[2]))
@@ -217,20 +270,21 @@ private val now = LocalDate.now(ZoneId.of("Asia/Seoul"))
 // 두 개 이상인 경우
 @Preview
 @Composable
-private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
+private fun PastDayCellFilterAllAndTwoDailyRecord() {
+    val date = now.minusDays(3)
     val context = LocalContext.current
     SeeDayTheme {
         Column(
             modifier = Modifier.width(49.dp)
         ) {
             DayCell(
-                year = now.year,
-                month = now.monthValue,
-                day = now.dayOfMonth,
+                year = date.year,
+                month = date.monthValue,
+                day = date.dayOfMonth,
                 filterType = null,
                 isSelected = true,
-                mainRecordType = EXERCISE,
-                records = listOf(EXERCISE, RecordType.HABIT),
+                mainRecordType = DAILY,
+                records = listOf(DailyRecord(id = "", DAILY, true), DailyRecord(id = "", HABIT, isCompleted = true)),
                 schedules = listOf(),
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
@@ -242,23 +296,23 @@ private fun DayCellFilterTypeNullDoubleRecordsNoSchedulePreview() {
     }
 }
 
-// 두 개 이상인 경우
 @Preview
 @Composable
-private fun DayCellFilterTypeNullMainTypeExerciseDoubleRecordsNoSchedulePreview() {
+private fun PastDayCellFilterAllAndHabitComplete() {
+    val date = now.minusDays(3)
     val context = LocalContext.current
     SeeDayTheme {
         Column(
             modifier = Modifier.width(49.dp)
         ) {
             DayCell(
-                year = now.year,
-                month = now.monthValue,
-                day = now.dayOfMonth,
+                year = date.year,
+                month = date.monthValue,
+                day = date.dayOfMonth,
                 filterType = null,
                 isSelected = true,
-                mainRecordType = EXERCISE,
-                records = listOf(EXERCISE, RecordType.HABIT),
+                mainRecordType = HABIT,
+                records = listOf(DailyRecord(id = "", DAILY, true), DailyRecord(id = "", HABIT, isCompleted = true)),
                 schedules = listOf(),
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
@@ -270,10 +324,93 @@ private fun DayCellFilterTypeNullMainTypeExerciseDoubleRecordsNoSchedulePreview(
     }
 }
 
-// 타입이 ALL이고 본인에 해당하는 타입이 없으며 records가 한 개 존재하는경우
 @Preview
 @Composable
-private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
+private fun PastDayCellFilterAllAndHabitNotComplete() {
+    val date = now.minusDays(3)
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = date.year,
+                month = date.monthValue,
+                day = date.dayOfMonth,
+                filterType = null,
+                isSelected = true,
+                mainRecordType = HABIT,
+                records = listOf(DailyRecord(id = "", HABIT, isCompleted = false)),
+                schedules = listOf(),
+                createdAt = "2025-10-10",
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PastDayCellFilterDailyAndHasDailyRecord() {
+    val date = now.minusDays(3)
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = date.year,
+                month = date.monthValue,
+                day = date.dayOfMonth,
+                filterType = DAILY,
+                isSelected = true,
+                mainRecordType = HABIT,
+                records = listOf(DailyRecord(id = "", DAILY, isCompleted = false)),
+                schedules = listOf(),
+                createdAt = "2025-10-10",
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PastDayCellFilterDailyAndHasNoDailyRecord() {
+    val date = now.minusDays(3)
+    val context = LocalContext.current
+    SeeDayTheme {
+        Column(
+            modifier = Modifier.width(49.dp)
+        ) {
+            DayCell(
+                year = date.year,
+                month = date.monthValue,
+                day = date.dayOfMonth,
+                filterType = DAILY,
+                isSelected = true,
+                mainRecordType = HABIT,
+                records = listOf(DailyRecord(id = "", EXERCISE, isCompleted = false)),
+                schedules = listOf(),
+                createdAt = "2025-10-10",
+                onClickItem = { year, month, day ->
+                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
+                },
+                isSameMonth = true
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TodayCellFilterAllAndHabitComplete() {
     val context = LocalContext.current
     SeeDayTheme {
         Column(
@@ -285,9 +422,9 @@ private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
                 day = now.dayOfMonth,
                 filterType = null,
                 isSelected = true,
-                mainRecordType = DAILY,
-                records = listOf(RecordType.HABIT),
-                schedules = listOf("hello"),
+                mainRecordType = HABIT,
+                records = listOf(DailyRecord(id = "", DAILY, true), DailyRecord(id = "", HABIT, isCompleted = true)),
+                schedules = listOf(),
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -298,10 +435,9 @@ private fun DayCellFilterTypeNullNoRecordNoSchedulePreview() {
     }
 }
 
-// 타입이 Daily이고 본인에 해당하는 타입이 없으며 records가 여러 개 존재하는경우
 @Preview
 @Composable
-private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
+private fun TodayCellFilterAllAndHabitNotComplete() {
     val context = LocalContext.current
     SeeDayTheme {
         Column(
@@ -311,11 +447,11 @@ private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
                 year = now.year,
                 month = now.monthValue,
                 day = now.dayOfMonth,
-                filterType = DAILY,
+                filterType = null,
                 isSelected = true,
-                mainRecordType = DAILY,
-                records = listOf(DAILY, DAILY, HABIT),
-                schedules = listOf("hello"),
+                mainRecordType = HABIT,
+                records = listOf(DailyRecord(id = "", HABIT, isCompleted = false)),
+                schedules = listOf(),
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -326,10 +462,9 @@ private fun DayCellFilterTypeDailyThreeRecordNoSchedulePreview() {
     }
 }
 
-// 타입이 Daily이고 본인에 해당하는 타입이 없으며 record가 다른게 하나 존재하는 경우
 @Preview
 @Composable
-private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
+private fun TodayCellFilterAllAndNoHabit() {
     val context = LocalContext.current
     SeeDayTheme {
         Column(
@@ -339,11 +474,11 @@ private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
                 year = now.year,
                 month = now.monthValue,
                 day = now.dayOfMonth,
-                filterType = DAILY,
+                filterType = null,
                 isSelected = true,
-                mainRecordType = DAILY,
-                records = listOf(HABIT),
-                schedules = listOf("hello"),
+                mainRecordType = HABIT,
+                records = listOf(),
+                schedules = listOf(),
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -353,32 +488,3 @@ private fun DayCellFilterTypeDailyOneRecordNoSchedulePreview() {
         }
     }
 }
-
-// 타입이 스케줄이고 본인에 해당하는 타입이 없으며 record가 다른게 하나 존재하는 경우
-//@Preview
-//@Composable
-//private fun DayCellFilterTypeScheduleOneRecordNoSchedulePreview() {
-//    val context = LocalContext.current
-//    SeeDayTheme {
-//        Column(
-//            modifier = Modifier.width(49.dp)
-//        ) {
-//            DayCell(
-//                year = 2025,
-//                month = 9,
-//                day = 13,
-//                filterType = SCHEDULE,
-//                isSelected = true,
-//                mainRecordType = DAILY,
-//                records = listOf(HABIT),
-//                schedules = listOf("hello"),
-//                createdAt = "2025-10-10",
-//                onClickItem = { year, month, day ->
-//                    Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
-//                },
-//                isSameMonth = true
-//            )
-//        }
-//    }
-//}
-// 상황별 분리

@@ -112,7 +112,7 @@ fun CustomCalendar(
                         isSelected = currentYear == date.year && selectedDay == date.day && selectedMonth == date.month,
                         mainRecordType = calendarDayInfo.firstOrNull{
                             it.day == date.day && it.month == date.month && it.year == date.year
-                        }?.mainRecordType ?: RecordType.EXERCISE,
+                        }?.mainRecordType,
                         createdAt = createdAt,
                         records = calendarDayInfo.firstOrNull {
                             it.day == date.day && it.month == date.month && it.year == date.year
