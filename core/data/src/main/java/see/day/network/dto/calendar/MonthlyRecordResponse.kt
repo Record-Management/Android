@@ -23,5 +23,6 @@ data class DailyRecordsResponse(
 @Serializable
 data class DailyRecordResponse(
     val id: String,
-    val type: String
+    val type: String,
+    val isCompleted: Boolean= true
 )

@@ -14,7 +14,7 @@ val getNotificationHistorySuccessResponse = """
               "title": "꾸준한 운동 기록으로 건강한 습관을 만들어보세요!",
               "message": "asdasd",
               "sentAt": [2025,10,23,20,0,0],
-              "isRead": true
+              "read": true
             },
             {
               "id": "123",
@@ -22,7 +22,7 @@ val getNotificationHistorySuccessResponse = """
               "title": "오늘의 소중한 순간을 기록으로 남겨보세요!",
               "message": "asdasd",
               "sentAt": [2025,10,23,19,0,0],
-              "isRead": true
+              "read": true
             }
           ],
           "pageInfo": {

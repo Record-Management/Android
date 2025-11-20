@@ -16,5 +16,6 @@ data class DailyRecords(
 
 data class DailyRecord(
     val id: String,
-    val type: RecordType
+    val type: RecordType,
+    val isCompleted: Boolean
 )
