@@ -1,6 +1,7 @@
 plugins {
     id("youth.android.application")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -26,6 +27,7 @@ dependencies {
     implementation(libs.kakao.v2.user)
 
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     // Firebase Cloud Messaging
     implementation(libs.firebase.messaging)
