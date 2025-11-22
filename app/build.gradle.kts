@@ -40,10 +40,8 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    android {
-        lint {
-            disable += "NullSafeMutableLiveData"
-        }
+    lint {
+        disable += "NullSafeMutableLiveData"
     }
     firebaseCrashlytics {
         mappingFileUploadEnabled = true
