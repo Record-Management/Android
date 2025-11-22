@@ -21,15 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 ############################
-# 기본 설정 (로그/디버그용)
-############################
-
-# Retrofit/OkHttp 로그 인터셉터의 로그 메소드 유지 (원하면 제거 가능)
--keepclassmembers class okhttp3.logging.HttpLoggingInterceptor {
-    public *;
-}
-
-############################
 # Retrofit + Kotlinx Serialization
 ############################
 
@@ -39,9 +30,6 @@
 
 # 예: 네트워크 API 인터페이스
  -keep interface see.day.network.** { *; }
-
-# 예: 네트워크 DTO (필요시)
-# -keep class see.day.data.remote.dto.** { *; }
 
 ############################
 # Hilt / Dagger
@@ -73,11 +61,6 @@
 # Firebase는 대부분 룰이 내장되어 있지만, 경고를 줄이기 위한 방어적 설정
 
 -dontwarn com.google.firebase.**
--keep class com.google.firebase.** { *; }
-
-# Firebase Messaging 서비스 구현체가 있다면 (예: SeeDayFirebaseMessagingService)
-# 실제 클래스 이름에 맞게 수정
-# -keep class see.day.**.**FirebaseMessagingService { *; }
 
 ############################
 # Kakao SDK
@@ -85,7 +68,6 @@
 
 # Kakao SDK 관련 클래스 보호 (필요시 범위를 더 좁혀도 됨)
 -keep class com.kakao.** { *; }
--dontwarn com.kakao.**
 
 ############################
 # 기타 (DataStore 등)
