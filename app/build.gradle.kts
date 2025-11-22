@@ -33,13 +33,20 @@ android {
     }
     buildTypes {
         getByName("release") {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     android {
         lint {
             disable += "NullSafeMutableLiveData"
         }
+    }
+    firebaseCrashlytics {
+        mappingFileUploadEnabled = true
     }
 }
 
@@ -49,6 +56,8 @@ dependencies {
 
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:model"))
 
     implementation(libs.kakao.v2.user)
 
