@@ -111,7 +111,7 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
                 )
             }
             // 점이 찍히는 조건
-            if (records.isNotEmpty()) {
+            if (records.size >= 2 || records.any { it.type != mainRecordType }) {
                 Image(
                     painter = painterResource(R.drawable.ic_red_dot),
                     modifier = Modifier
@@ -200,7 +200,7 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
                 }
             }
             // 점이 찍히는 조건
-            if (records.isNotEmpty()) {
+            if (records.size >= 2 || records.any { it.type != mainRecordType }) {
                 Image(
                     painter = painterResource(R.drawable.ic_red_dot),
                     modifier = Modifier
