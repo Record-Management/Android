@@ -36,7 +36,7 @@
     <string name="nickname_description">한글, 영문 최대 6글자 / 공백, 특수기호 입력 불가</string>
 
     <string name="logout_title">로그아웃 하시겠습니까?</string>
-    <string name="logout_body">뭐라 말할까</string>
+    <string name="logout_body">로그아웃 후에는 다시 로그인해야만\n서비스 이용이 가능해요.</string>
     <string name="logout_cancel">닫기</string>
     <string name="logout_confirm">로그아웃</string>
 
