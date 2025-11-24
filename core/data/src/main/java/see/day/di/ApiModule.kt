@@ -57,7 +57,13 @@ class ApiModule {
     @Auth
     fun provideLoginOkHttp(): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        httpLoggingInterceptor.apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
 
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
@@ -97,7 +103,11 @@ class ApiModule {
     @Main
     fun provideMainOkHttpClient(@Main authInterceptor: AuthInterceptor, @Main tokenAuthInterceptor: TokenAuthenticator): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         }
 
         return OkHttpClient.Builder()

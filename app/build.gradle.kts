@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("youth.android.application")
     id("com.google.gms.google-services")
@@ -15,6 +17,35 @@ android {
         versionCode = 1
         versionName = "1.0.0"
     }
+
+    fun getApiKey(propertyKey: String): String {
+        return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(getApiKey("keystore.file"))
+            storePassword = getApiKey("keystore.password")
+            keyAlias = getApiKey("key.alias")
+            keyPassword = getApiKey("key.password")
+        }
+
+    }
+    buildTypes {
+        getByName("release") {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
+    firebaseCrashlytics {
+        mappingFileUploadEnabled = true
+    }
 }
 
 dependencies {
@@ -23,6 +54,8 @@ dependencies {
 
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:model"))
 
     implementation(libs.kakao.v2.user)
 
