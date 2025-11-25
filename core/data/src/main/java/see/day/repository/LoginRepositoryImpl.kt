@@ -85,4 +85,12 @@ class LoginRepositoryImpl @Inject constructor(
                 }
         }
     }
+
+    override suspend fun isAppFirstLaunch(): Boolean {
+        return dataSource.getFirstLaunchState().first() ?: true
+    }
+
+    override suspend fun setAppIsLaunched() {
+        dataSource.setAppLaunch()
+    }
 }
