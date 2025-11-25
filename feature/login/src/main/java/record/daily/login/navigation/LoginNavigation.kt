@@ -5,18 +5,30 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import record.daily.login.screen.LoginScreenRoot
-import see.day.navigation.login.Login
+import record.daily.login.screen.PermissionScreenRoot
+import see.day.navigation.login.LoginRoute.Login
+import see.day.navigation.login.LoginRoute.Permission
 
 
 fun NavController.navigateLogin(navOptions: NavOptions? = null) {
     navigate(Login, navOptions)
 }
 
-fun NavGraphBuilder.loginNavigation(onGoHome: () -> Unit, onGoOnboarding: () -> Unit) {
+fun NavController.navigatePermission(navOptions: NavOptions? = null) {
+    navigate(Permission, navOptions)
+}
+
+fun NavGraphBuilder.loginNavigation(onGoHome: () -> Unit, onGoOnboarding: () -> Unit, onGoPermission: () -> Unit, onBack: () -> Unit) {
     composable<Login> {
         LoginScreenRoot(
             onGoOnboarding = onGoOnboarding,
-            onGoHome = onGoHome
+            onGoHome = onGoHome,
+            onGoPermission = onGoPermission
+        )
+    }
+    composable<Permission> {
+        PermissionScreenRoot(
+            onBack = onBack
         )
     }
 }

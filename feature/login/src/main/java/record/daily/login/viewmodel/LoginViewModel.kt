@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import record.daily.login.state.login.LoginUiEffect
+import see.day.domain.usecase.login.GetAppFirstLaunchUseCase
 import see.day.domain.usecase.login.PostLoginUseCase
 import see.day.model.login.SocialLogin
 import see.day.model.login.SocialType
@@ -17,11 +18,21 @@ import see.day.model.navigation.AppStartState.ONBOARDING
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val postLoginUseCase: PostLoginUseCase
+    private val postLoginUseCase: PostLoginUseCase,
+    private val getAppFirstLaunchUseCase: GetAppFirstLaunchUseCase
 ) : ViewModel() {
 
     private val _uiEffect: MutableSharedFlow<LoginUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<LoginUiEffect> = _uiEffect.asSharedFlow()
+
+    fun isAppFirstLaunch() {
+        viewModelScope.launch {
+            val isAppFirstLaunched = getAppFirstLaunchUseCase()
+            if(isAppFirstLaunched) {
+                _uiEffect.emit(LoginUiEffect.GoPermission)
+            }
+        }
+    }
 
     fun login(socialType: SocialType, accessToken: String) {
         viewModelScope.launch {
