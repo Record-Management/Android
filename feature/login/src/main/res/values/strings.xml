@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="storage_title">저장공간</string>
+    <string name="photo_title">사진</string>
+    <string name="notification_title">알림</string>
+    <string name="optional">(선택)</string>
+    <string name="undefined_body">\?\?\?\?\?</string>
+</resources>
