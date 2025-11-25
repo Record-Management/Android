@@ -3,7 +3,7 @@ package see.day.network
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.goal.CurrentGoalResponse
@@ -23,6 +23,6 @@ interface GoalService {
     suspend fun getGoalReport() : CommonResponse<GoalReportResponse>
 
     // TODO 테스트용 API 추후에 삭제 예정
-    @DELETE("api/goals/current")
+    @PATCH("api/goals/current/force-complete")
     suspend fun deleteCurrentGoal() : Unit
 }
