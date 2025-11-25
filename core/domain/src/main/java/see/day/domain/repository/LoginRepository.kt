@@ -7,4 +7,6 @@ import see.day.model.navigation.AppStartState
 interface LoginRepository {
     suspend fun login(socialLogin: SocialLogin) : Result<AppStartState>
     fun getLoginState() : Flow<AppStartState>
+    suspend fun isAppFirstLaunch() : Boolean
+    suspend fun setAppIsLaunched()
 }

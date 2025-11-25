@@ -19,7 +19,7 @@ import see.day.main.navigation.rememberNavigationState
 import see.day.main.viewmodel.MainViewModel
 import see.day.model.navigation.AppStartState
 import see.day.navigation.home.Home
-import see.day.navigation.login.Login
+import see.day.navigation.login.LoginRoute
 import see.day.navigation.onboarding.OnboardingRoute
 
 @AndroidEntryPoint
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
             SeeDayTheme {
                 startDestination?.let { appStartState ->
                     val appStartRoute = when (appStartState) {
-                        AppStartState.LOGIN -> Login
+                        AppStartState.LOGIN -> LoginRoute.Login
                         AppStartState.HOME -> Home
                         AppStartState.ONBOARDING -> OnboardingRoute.Onboarding
                     }

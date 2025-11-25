@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import record.daily.login.navigation.loginNavigation
+import record.daily.login.navigation.navigatePermission
 import see.day.daily.navigation.dailyNavigation
 import see.day.daily.navigation.navigateDailyWrite
 import see.day.exercise.navigation.exerciseNavigation
@@ -39,7 +40,9 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
         NavHost(navigationState.navController, startDestination = appStartDestination) {
             loginNavigation(
                 onGoOnboarding = navigationState::navigateOnboarding,
-                onGoHome = navigationState::navigateHome
+                onGoHome = navigationState::navigateHome,
+                onGoPermission = navigationState.navController::navigatePermission,
+                onBack = navigationState.navController::popBackStack
             )
             onboardingNavigation(
                 onBack = navigationState.navController::popBackStack,
