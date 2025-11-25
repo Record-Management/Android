@@ -102,6 +102,9 @@ internal fun SettingScreen(
                 },
                 onBirthDateChanged = { birthdate ->
                     uiEvent(SettingUiEvent.OnChangedBirthDate(birthdate))
+                },
+                onClickDeleteCurrentGoal = {
+                    uiEvent(SettingUiEvent.OnClickDeleteCurrentGoal)
                 }
             )
             AlertSettingComponent(

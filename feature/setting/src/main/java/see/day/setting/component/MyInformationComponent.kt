@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray60
@@ -42,6 +43,7 @@ internal fun MyInformationComponent(
     socialType: SocialType,
     onNicknameChanged: (String) -> Unit,
     onBirthDateChanged: (String) -> Unit,
+    onClickDeleteCurrentGoal: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -60,7 +62,7 @@ internal fun MyInformationComponent(
         ) {
             NicknameComponent(Modifier, nickname, onNicknameChanged)
             BirthDateComponent(Modifier, birthDate, onBirthDateChanged)
-            SocialTypeComponent(Modifier, socialType)
+            SocialTypeComponent(Modifier, socialType, onClickDeleteCurrentGoal)
         }
     }
 }
@@ -150,11 +152,27 @@ private fun BirthDateComponent(modifier: Modifier, birthDate: String, onBirthDat
 @Composable
 private fun SocialTypeComponent(
     modifier: Modifier,
-    socialType: SocialType
+    socialType: SocialType,
+    onClickDeleteCurrentGoal: () -> Unit
 ) {
+    var showDeleteCurrentGoalDialog by remember { mutableStateOf(false) }
+    if(showDeleteCurrentGoalDialog) {
+        Dialog({
+            showDeleteCurrentGoalDialog = false
+        }) {
+            Column(
+                modifier = Modifier.background(Color.White).clickable {
+                    onClickDeleteCurrentGoal()
+                    showDeleteCurrentGoalDialog = false
+                }
+            ) {
+                Text("이거 누르면 목표 삭제됨")
+            }
+        }
+    }
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().clickable { showDeleteCurrentGoalDialog = true },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -182,7 +200,8 @@ private fun MyInformationComponentPreview() {
             birthDate = "1995/09/23",
             socialType = SocialType.KAKAO,
             onNicknameChanged = {},
-            onBirthDateChanged = {}
+            onBirthDateChanged = {},
+            onClickDeleteCurrentGoal = {}
         )
     }
 }
