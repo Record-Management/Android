@@ -11,4 +11,7 @@ interface GoalRepository {
     suspend fun getCurrentGoal(): Result<CurrentGoal?>
 
     suspend fun getRecentGoalReport() : Result<RecentGoalReport>
+
+    // TODO 테스트용 API 추후 삭제 예정
+    suspend fun deleteCurrentGoal() : Result<Unit>
 }
