@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
 import see.day.domain.usecase.login.LogoutUseCase
 import see.day.domain.usecase.user.DeleteUserUseCase
 import see.day.domain.usecase.user.GetUserUseCase
@@ -26,7 +27,8 @@ class SettingViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val updateUserProfileUseCase: UpdateUserProfileUseCase,
     private val logoutUseCase: LogoutUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SettingUiState> = MutableStateFlow(SettingUiState.init)
@@ -78,6 +80,11 @@ class SettingViewModel @Inject constructor(
             }
             is SettingUiEvent.OnClickRecordNotification -> {
                 onClickRecordNotification()
+            }
+            is SettingUiEvent.OnClickDeleteCurrentGoal -> {
+                viewModelScope.launch {
+                    deleteCurrentGoalUseCase()
+                }
             }
         }
     }
