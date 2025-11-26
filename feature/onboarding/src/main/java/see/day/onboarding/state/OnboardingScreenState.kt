@@ -3,6 +3,7 @@ package see.day.onboarding.state
 import see.day.onboarding.R
 
 enum class OnboardingScreenState(val titleRes: Int, val iconRes: Int) {
+    TERMS(R.string.terms_title, R.drawable.arrow_left),
     RECORD(R.string.record_message, R.drawable.onboard_record),
     NICKNAME(R.string.nickname_message, R.drawable.onboard_nickname),
     BIRTHDAY(R.string.birthday_message, R.drawable.onboard_birthday),
@@ -12,5 +13,5 @@ enum class OnboardingScreenState(val titleRes: Int, val iconRes: Int) {
 
 fun OnboardingScreenState.getProgress(): Float {
     val totalSteps = OnboardingScreenState.entries.size
-    return (this.ordinal + 1).toFloat() / totalSteps
+    return this.ordinal.toFloat() / totalSteps
 }

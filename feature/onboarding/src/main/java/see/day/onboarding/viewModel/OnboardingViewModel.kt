@@ -43,6 +43,9 @@ class OnboardingViewModel @Inject constructor(
 
     fun onEvent(event: OnboardingUiEvent) {
         when (event) {
+            is OnboardingUiEvent.ConformTerms -> {
+                confirmTerms()
+            }
             is OnboardingUiEvent.SetRecordType -> {
                 setRecordType(event.recordType)
             }
@@ -67,6 +70,13 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
+    private fun confirmTerms() {
+        _uiState.update {
+            it.copy(
+                onboardingScreenState = RECORD
+            )
+        }
+    }
     private fun setRecordType(recordType: RecordType) {
         _uiState.update {
             it.copy(
@@ -128,7 +138,7 @@ class OnboardingViewModel @Inject constructor(
 
     private fun onBack() {
         val currentScreenState = uiState.value.onboardingScreenState
-        if (currentScreenState == RECORD) {
+        if (currentScreenState == OnboardingScreenState.entries[0]) {
             viewModelScope.launch {
                 _uiEffect.emit(OnboardingUiEffect.FinishApp)
             }

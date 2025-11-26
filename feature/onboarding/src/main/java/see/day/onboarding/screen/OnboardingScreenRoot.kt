@@ -22,11 +22,14 @@ import see.day.onboarding.component.TitleDescription
 import see.day.onboarding.screen.onboarding.AlertScreen
 import see.day.onboarding.screen.onboarding.BirthdayScreen
 import see.day.onboarding.screen.onboarding.NicknameScreen
+import see.day.onboarding.screen.onboarding.TermsScreen
+import see.day.onboarding.state.OnboardingScreenState
 import see.day.onboarding.state.OnboardingScreenState.ALERT
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.OnboardingScreenState.GOAL
 import see.day.onboarding.state.OnboardingScreenState.NICKNAME
 import see.day.onboarding.state.OnboardingScreenState.RECORD
+import see.day.onboarding.state.OnboardingScreenState.TERMS
 import see.day.onboarding.state.onboarding.OnboardingUiEffect
 import see.day.onboarding.state.onboarding.OnboardingUiEvent
 import see.day.onboarding.state.onboarding.OnboardingUiState
@@ -63,6 +66,12 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
 
 @Composable
 internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUiEvent) -> Unit, modifier: Modifier = Modifier) {
+    if(uiState.onboardingScreenState == TERMS) {
+        TermsScreen(
+            onClick = {uiEvent(OnboardingUiEvent.ConformTerms)}
+        )
+        return
+    }
     Scaffold(
         modifier = modifier.systemBarsPadding(),
         topBar = {
@@ -114,6 +123,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                         onClickComplete = uiEvent
                     )
                 }
+                TERMS -> {}
             }
         }
     }
@@ -125,6 +135,17 @@ private fun OnboardingScreenPreview() {
     SeeDayTheme {
         OnboardingScreen(
             uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY),
+            uiEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OnboardingScreenInitPreview() {
+    SeeDayTheme {
+        OnboardingScreen(
+            uiState = OnboardingUiState.init,
             uiEvent = {}
         )
     }

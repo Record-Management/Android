@@ -13,7 +13,7 @@ data class OnboardingUiState(
 ) {
     companion object {
         val init = OnboardingUiState(
-            onboardingScreenState = OnboardingScreenState.RECORD,
+            onboardingScreenState = OnboardingScreenState.TERMS,
             mainRecordType = null,
             nickname = "",
             birthDate = todayDate(),
