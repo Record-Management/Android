@@ -12,6 +12,6 @@ enum class OnboardingScreenState(val titleRes: Int, val iconRes: Int) {
 }
 
 fun OnboardingScreenState.getProgress(): Float {
-    val totalSteps = OnboardingScreenState.entries.size
+    val totalSteps = OnboardingScreenState.entries.size - 1
     return this.ordinal.toFloat() / totalSteps
 }
