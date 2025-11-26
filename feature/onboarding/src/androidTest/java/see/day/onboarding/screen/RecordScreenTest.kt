@@ -17,6 +17,7 @@ import org.junit.Test
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.record.RecordType
 import see.day.onboarding.R
+import see.day.onboarding.state.OnboardingScreenState
 import see.day.onboarding.state.onboarding.OnboardingUiState
 
 class RecordScreenTest {
@@ -33,7 +34,7 @@ class RecordScreenTest {
 
     @Test
     fun givenInitOnboarding_whenScreening_shownRecordTitleAndBody() {
-        val uiState = OnboardingUiState.init
+        val uiState = OnboardingUiState.init.copy(OnboardingScreenState.RECORD)
         composeTestRule.setContent {
             SeeDayTheme {
                 OnboardingScreen(
@@ -57,7 +58,7 @@ class RecordScreenTest {
         composeTestRule.setContent {
             SeeDayTheme {
                 OnboardingScreen(
-                    uiState = OnboardingUiState.init,
+                    uiState = OnboardingUiState.init.copy(OnboardingScreenState.RECORD),
                     uiEvent = {}
                 )
             }
@@ -83,7 +84,7 @@ class RecordScreenTest {
         composeTestRule.setContent {
             SeeDayTheme {
                 OnboardingScreen(
-                    uiState = OnboardingUiState.init,
+                    uiState = OnboardingUiState.init.copy(OnboardingScreenState.RECORD),
                     uiEvent = {}
                 )
             }
