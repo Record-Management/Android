@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.R
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.onboarding.OnboardingUiState
@@ -49,18 +50,21 @@ class BirthdayScreenTest {
     fun givenEmptyNickname_whenScreening_shownEnableNextButton() {
         val uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY)
         composeTestRule.setContent {
-            OnboardingScreen(
-                uiState = uiState,
-                uiEvent = {}
-            )
+            SeeDayTheme {
+                OnboardingScreen(
+                    uiState = uiState,
+                    uiEvent = {}
+                )
+            }
+
         }
 
         composeTestRule
-            .onNodeWithText(LocalDate.now().year.toString())
+            .onNodeWithText(uiState.birthDate.split("-")[0] +"년")
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(LocalDate.now().dayOfMonth.toString())
+            .onNodeWithText(uiState.birthDate.split("-")[2] + "일")
             .assertIsDisplayed()
     }
 }
