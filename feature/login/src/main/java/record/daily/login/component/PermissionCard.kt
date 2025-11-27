@@ -52,9 +52,9 @@ internal fun PermissionCard(
 }
 
 enum class Permissions(val isRequired: Boolean, @StringRes val title: Int, @StringRes val body: Int, @DrawableRes val icon: Int) {
-    Storage(isRequired = false, title = R.string.storage_title, body = R.string.undefined_body, R.drawable.ic_storage),
-    Photo(isRequired = false, title = R.string.photo_title, body = R.string.undefined_body, R.drawable.ic_photo),
-    Notification(isRequired = false, title = R.string.notification_title, body = R.string.undefined_body, R.drawable.ic_notification)
+    Storage(isRequired = false, title = R.string.storage_title, body = R.string.storage_body, R.drawable.ic_storage),
+    Photo(isRequired = false, title = R.string.photo_title, body = R.string.photo_body, R.drawable.ic_photo),
+    Notification(isRequired = false, title = R.string.notification_title, body = R.string.notification_body, R.drawable.ic_notification)
 }
 
 @Preview
