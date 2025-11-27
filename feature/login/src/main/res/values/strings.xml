@@ -4,8 +4,9 @@
     <string name="photo_title">사진</string>
     <string name="notification_title">알림</string>
     <string name="optional">(선택)</string>
-<!--    TODO 추후 삭제할 예정-->
-    <string name="undefined_body">\?\?\?\?\?</string>
+    <string name="storage_body">기록 작성 시 사진첩 접근에 사용</string>
+    <string name="photo_body">기록 작성 시 사진 추가에 사용</string>
+    <string name="notification_body">서비스 이용의 푸시알림</string>
     <string name="permission_description_title">씨드데이 사용에 필요한\n접근 권한 허용 항목이에요.</string>
     <string name="confirm_permission">확인</string>
 </resources>
