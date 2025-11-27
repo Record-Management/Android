@@ -1,5 +1,10 @@
 package see.day.onboarding.screen.onboarding
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -106,9 +111,20 @@ internal fun TermsScreen(
                     tint = Color.Unspecified
                 )
             }
-            if(termsExpended) {
+            AnimatedVisibility (
+                visible = termsExpended,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
                 Text(
-                    modifier = Modifier.padding(top = 6.dp).clip(RoundedCornerShape(16.dp)).background(gray20).padding(top = 16.dp,start = 16.dp,end = 16.dp).fillMaxWidth().height(380.dp).verticalScroll(rememberScrollState()),
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(gray20)
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        .fillMaxWidth()
+                        .height(380.dp)
+                        .verticalScroll(rememberScrollState()),
                     text = stringResource(R.string.terms),
                     style = MaterialTheme.typography.headlineMedium.copy(color = gray80)
                 )
