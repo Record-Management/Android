@@ -4,8 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -27,9 +25,20 @@ import see.day.ui.picker.WheelPickerDefaults
 
 @Composable
 internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onClickComplete: (OnboardingUiEvent) -> Unit) {
-    var year by remember { mutableStateOf(birthDay.split("-")[0].toInt()) }
-    var month by remember { mutableStateOf(birthDay.split("-")[1].toInt()) }
-    var day by remember { mutableStateOf(birthDay.split("-")[2].toInt()) }
+    val initialDate = remember {
+        val threeYearsAgo = LocalDate.now().minusYears(3)
+        val parsedBirthDay = LocalDate.parse(birthDay)
+
+        if (parsedBirthDay.isAfter(threeYearsAgo)) {
+            threeYearsAgo
+        } else {
+            parsedBirthDay
+        }
+    }
+
+    var year by remember { mutableStateOf(initialDate.year) }
+    var month by remember { mutableStateOf(initialDate.monthValue) }
+    var day by remember { mutableStateOf(initialDate.dayOfMonth) }
 
     Column(
         modifier = modifier
@@ -45,7 +54,7 @@ internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onC
                 border = BorderStroke(0.dp, gray40)
             ),
             startDate = LocalDate.of(year, month, day),
-            maxDate = LocalDate.now(),
+            maxDate = LocalDate.now().minusYears(3),
             textStyle = MaterialTheme.typography.titleMedium,
             textColor = gray100
         ) { snappedDate ->
@@ -69,6 +78,17 @@ private fun BirthdayScreenPreview() {
     SeeDayTheme {
         BirthdayScreen(
             birthDay = "2025-09-09",
+            onClickComplete = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BirthdayScreenBefore3YearsPreview() {
+    SeeDayTheme {
+        BirthdayScreen(
+            birthDay = "2000-01-01",
             onClickComplete = {}
         )
     }
