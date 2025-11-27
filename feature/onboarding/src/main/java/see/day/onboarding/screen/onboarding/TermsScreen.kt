@@ -1,8 +1,13 @@
 package see.day.onboarding.screen.onboarding
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,7 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
+import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray80
+import see.day.designsystem.theme.primaryColor
 import see.day.onboarding.R
 import see.day.ui.button.CompleteButton
 
@@ -73,33 +80,56 @@ internal fun TermsScreen(
                     .heightIn(44.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(if (termCheck) see.day.designsystem.R.drawable.ic_checked else see.day.designsystem.R.drawable.ic_unchecked),
-                    contentDescription = termCheck.toString(),
-                    modifier = Modifier
-                        .size(20.dp)
-                )
+                Box(
+                    modifier = Modifier.size(20.dp).clip(CircleShape).background(if(termCheck) primaryColor else gray30),
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_check),
+                        contentDescription = termCheck.toString(),
+                        modifier = Modifier
+                            .size(16.dp).align(Alignment.Center),
+                        tint = Color.Unspecified
+                    )
+                }
+
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
                     text = stringResource(R.string.terms_desc),
-                    style = MaterialTheme.typography.labelMedium.copy(color = Color(0xFF999999))
+                    style = MaterialTheme.typography.labelMedium
                 )
                 Text(
                     text = " " + stringResource(R.string.required_text),
-                    style = MaterialTheme.typography.labelMedium.copy(color = Color(0xFF2DCB6F))
+                    style = MaterialTheme.typography.labelMedium.copy(color = MaterialTheme.colorScheme.primary)
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Image(
-                    imageVector = Icons.Default.KeyboardArrowUp,
-                    contentDescription = "버튼쓰",
-                    modifier = Modifier.size(24.dp).clickable {  }
+                Icon(
+                    painter = painterResource(if(termsExpended) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up),
+                    contentDescription = "확장 버튼",
+                    modifier = Modifier.size(20.dp).clickable {
+                        termsExpended = !termsExpended
+                    },
+                    tint = Color.Unspecified
                 )
             }
-            Text(
-                modifier = Modifier.padding(top = 6.dp).clip(RoundedCornerShape(16.dp)).background(gray20).padding(top = 16.dp,start = 16.dp,end = 16.dp).fillMaxWidth().height(380.dp).verticalScroll(rememberScrollState()),
-                text = stringResource(R.string.terms),
-                style = MaterialTheme.typography.headlineMedium.copy(color = gray80)
-            )
+            AnimatedVisibility (
+                visible = termsExpended,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(gray20)
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        .fillMaxWidth()
+                        .height(380.dp)
+                        .verticalScroll(rememberScrollState()),
+                    text = stringResource(R.string.terms),
+                    style = MaterialTheme.typography.headlineMedium.copy(color = gray80)
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
             CompleteButton(
                 isEnabled = termCheck,
