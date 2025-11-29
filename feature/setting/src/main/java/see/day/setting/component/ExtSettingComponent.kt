@@ -1,5 +1,7 @@
 package see.day.setting.component
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,10 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray90
@@ -36,11 +40,12 @@ import see.day.ui.dialog.ConfirmDialog
 @Composable
 internal fun ExtSettingComponent(
     modifier: Modifier = Modifier,
-    onClickPolicy: () -> Unit,
     onClickInquiry: () -> Unit,
     onClickLogout: () -> Unit,
     onClickWithdrawal: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
     ) {
@@ -56,7 +61,7 @@ internal fun ExtSettingComponent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PolicyComponent(Modifier, onClickPolicy)
+            PolicyComponent(Modifier, context)
             InquiryComponent(Modifier, onClickInquiry)
             LogoutComponent(Modifier, onClickLogout)
             WithdrawalComponent(Modifier, onClickWithdrawal)
@@ -67,12 +72,15 @@ internal fun ExtSettingComponent(
 @Composable
 private fun PolicyComponent(
     modifier: Modifier = Modifier,
-    onClickPolicy: () -> Unit
+    context: Context,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClickPolicy() },
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, "https://placid-aurora-3ad.notion.site/2b54e8ebd8b080c1a8bdd9267b94dc3e?source=copy_link".toUri())
+                context.startActivity(intent)
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -189,7 +197,6 @@ private fun ExtSettingComponentPreview() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp, start = 16.dp, end = 16.dp),
-            onClickPolicy = {},
             onClickInquiry = {},
             onClickLogout = {},
             onClickWithdrawal = {}
