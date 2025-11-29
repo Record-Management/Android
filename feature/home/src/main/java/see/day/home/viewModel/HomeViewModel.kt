@@ -359,7 +359,8 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickGoalSetting() {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
+            _uiEffect.emit(HomeUiEffect.OnGoSetNewGoal
+            )
         }
     }
 }

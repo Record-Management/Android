@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import see.day.home.screen.HomeScreenRoot
 import see.day.model.record.RecordType
 import see.day.navigation.home.Home
-import timber.log.Timber
 
 
 fun NavController.navigateHome(navOptions: NavOptions? = null) {
@@ -25,7 +24,8 @@ fun NavGraphBuilder.homeNavigation(
     onClickDetailRecord: (RecordType, String) -> Unit,
     onClickSetting: () -> Unit,
     onClickNotification: () -> Unit,
-    onGoCurrentGoal: () -> Unit
+    onGoCurrentGoal: () -> Unit,
+    onGoSetNewGoal: () -> Unit,
 ) {
     composable<Home> { navBackStack ->
         val isUpdated = navBackStack.savedStateHandle.get<Boolean>("record_updated") ?: false
@@ -38,7 +38,8 @@ fun NavGraphBuilder.homeNavigation(
             onClickDetailRecord = onClickDetailRecord,
             onClickSetting = onClickSetting,
             onClickNotification = onClickNotification,
-            onGoCurrentGoal = onGoCurrentGoal
+            onGoCurrentGoal = onGoCurrentGoal,
+            onGoSetNewGoal = onGoSetNewGoal
         )
     }
 }
