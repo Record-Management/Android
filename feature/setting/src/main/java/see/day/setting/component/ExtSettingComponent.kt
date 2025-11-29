@@ -2,6 +2,7 @@ package see.day.setting.component
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -77,8 +78,12 @@ private fun PolicyComponent(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-                val intent = Intent(Intent.ACTION_VIEW, "https://placid-aurora-3ad.notion.site/2b54e8ebd8b080c1a8bdd9267b94dc3e?source=copy_link".toUri())
-                context.startActivity(intent)
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://placid-aurora-3ad.notion.site/2b54e8ebd8b080c1a8bdd9267b94dc3e?source=copy_link".toUri())
+                    context.startActivity(intent)
+                } catch (activityNotFoundException: android.content.ActivityNotFoundException) {
+                    Toast.makeText(context, "브라우저 앱이 없습니다.", Toast.LENGTH_SHORT).show()
+                }
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -105,8 +110,13 @@ private fun InquiryComponent(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-                val intent = Intent(Intent.ACTION_VIEW, "https://docs.google.com/forms/d/e/1FAIpQLSeJfrO0L_qm1SHhkYCTl-DmveZvr1MJQ2_Ec5j5oW_Ota_MfA/viewform".toUri())
-                context.startActivity(intent)
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://docs.google.com/forms/d/e/1FAIpQLSeJfrO0L_qm1SHhkYCTl-DmveZvr1MJQ2_Ec5j5oW_Ota_MfA/viewform".toUri())
+                    context.startActivity(intent)
+                } catch (activityNotFoundException: android.content.ActivityNotFoundException) {
+                    Toast.makeText(context, "브라우저 앱이 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
