@@ -118,7 +118,6 @@ internal fun SettingScreen(
             )
             ExtSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
-                onClickInquiry = {},
                 onClickLogout = {
                     uiEvent(SettingUiEvent.OnClickLogout)
                 },

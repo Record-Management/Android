@@ -40,7 +40,6 @@ import see.day.ui.dialog.ConfirmDialog
 @Composable
 internal fun ExtSettingComponent(
     modifier: Modifier = Modifier,
-    onClickInquiry: () -> Unit,
     onClickLogout: () -> Unit,
     onClickWithdrawal: () -> Unit
 ) {
@@ -62,7 +61,7 @@ internal fun ExtSettingComponent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             PolicyComponent(Modifier, context)
-            InquiryComponent(Modifier, onClickInquiry)
+            InquiryComponent(Modifier, context)
             LogoutComponent(Modifier, onClickLogout)
             WithdrawalComponent(Modifier, onClickWithdrawal)
         }
@@ -100,12 +99,15 @@ private fun PolicyComponent(
 @Composable
 private fun InquiryComponent(
     modifier: Modifier = Modifier,
-    onClickInquiry: () -> Unit
+    context: Context,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClickInquiry() },
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, "https://docs.google.com/forms/d/e/1FAIpQLSeJfrO0L_qm1SHhkYCTl-DmveZvr1MJQ2_Ec5j5oW_Ota_MfA/viewform".toUri())
+                context.startActivity(intent)
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -197,7 +199,6 @@ private fun ExtSettingComponentPreview() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp, start = 16.dp, end = 16.dp),
-            onClickInquiry = {},
             onClickLogout = {},
             onClickWithdrawal = {}
         )
