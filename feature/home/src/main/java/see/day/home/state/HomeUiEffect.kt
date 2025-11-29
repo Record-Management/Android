@@ -8,4 +8,5 @@ sealed interface HomeUiEffect {
     data object OnGoSetting : HomeUiEffect
     data object OnGoNotification : HomeUiEffect
     data object OnGoCurrentGoal : HomeUiEffect
+    data object OnGoSetNewGoal : HomeUiEffect
 }
