@@ -4,6 +4,9 @@ plugins {
 
 android {
     namespace = "see.day.daily"
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
 }
 
 dependencies {
