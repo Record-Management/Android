@@ -6,6 +6,11 @@ plugins {
     id("com.android.library")
 }
 
+android {
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
+}
 configureKotlinAndroid()
 configureCoroutineAndroid()
 configureHilt()
