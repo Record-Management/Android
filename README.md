@@ -1,5 +1,5 @@
 # 씨드데이
-![seeday_logo](/screenshots/logo.jpg)
+![seeday_logo](screenshots/logo.jpg)
 ## 소개
 3가지 기록을 통해 꾸준함과 습관을 만들어 보세요!
 운동, 습관, 하루 기록 등을 한 곳에서 관리하고, 알림을 통해 꾸준히 실천할 수 있도록 돕는 것을 목표로 합니다.
