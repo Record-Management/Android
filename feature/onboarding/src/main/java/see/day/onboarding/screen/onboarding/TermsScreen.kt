@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,89 +53,81 @@ internal fun TermsScreen(
     var termCheck by remember { mutableStateOf(false) }
     var termsExpended by remember { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = modifier
+    Column(
+        modifier = modifier.background(Color.White)
             .padding(horizontal = 16.dp)
             .padding(bottom = 12.dp)
-            .systemBarsPadding(),
-        topBar = {
-            Column {
-                Spacer(modifier = Modifier.fillMaxWidth())
-            }
-        }
-    ) { innerPaddings ->
-        Column(
-            modifier = Modifier.padding(innerPaddings)
+            .systemBarsPadding()
+    ) {
+        Text(
+            modifier = Modifier.padding(top = 66.dp),
+            text = stringResource(R.string.terms_title),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Row(
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .clickable { termCheck = !termCheck }
+                .fillMaxWidth()
+                .heightIn(44.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(R.string.terms_title),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Row(
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .clickable { termCheck = !termCheck }
-                    .fillMaxWidth()
-                    .heightIn(44.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier.size(20.dp).clip(CircleShape).background(if(termCheck) primaryColor else gray30),
             ) {
-                Box(
-                    modifier = Modifier.size(20.dp).clip(CircleShape).background(if(termCheck) primaryColor else gray30),
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_check),
-                        contentDescription = termCheck.toString(),
-                        modifier = Modifier
-                            .size(16.dp).align(Alignment.Center),
-                        tint = Color.Unspecified
-                    )
-                }
-
-                Text(
-                    modifier = Modifier.padding(start = 8.dp),
-                    text = stringResource(R.string.terms_desc),
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Text(
-                    text = " " + stringResource(R.string.required_text),
-                    style = MaterialTheme.typography.labelMedium.copy(color = MaterialTheme.colorScheme.primary)
-                )
-                Spacer(modifier = Modifier.weight(1f))
                 Icon(
-                    painter = painterResource(if(termsExpended) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up),
-                    contentDescription = "확장 버튼",
-                    modifier = Modifier.size(20.dp).clickable {
-                        termsExpended = !termsExpended
-                    },
+                    painter = painterResource(R.drawable.ic_check),
+                    contentDescription = termCheck.toString(),
+                    modifier = Modifier
+                        .size(16.dp).align(Alignment.Center),
                     tint = Color.Unspecified
                 )
             }
-            AnimatedVisibility (
-                visible = termsExpended,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 6.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(gray20)
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                        .fillMaxWidth()
-                        .height(380.dp)
-                        .verticalScroll(rememberScrollState()),
-                    text = stringResource(R.string.terms),
-                    style = MaterialTheme.typography.headlineMedium.copy(color = gray80)
-                )
-            }
 
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = stringResource(R.string.terms_desc),
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                text = " " + stringResource(R.string.required_text),
+                style = MaterialTheme.typography.labelMedium.copy(color = MaterialTheme.colorScheme.primary)
+            )
             Spacer(modifier = Modifier.weight(1f))
-            CompleteButton(
-                isEnabled = termCheck,
-                text = "확인",
-                onClick = onClick
+            Icon(
+                painter = painterResource(if(termsExpended) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up),
+                contentDescription = "확장 버튼",
+                modifier = Modifier.size(20.dp).clickable {
+                    termsExpended = !termsExpended
+                },
+                tint = Color.Unspecified
             )
         }
+        AnimatedVisibility (
+            visible = termsExpended,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically()
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(top = 6.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(gray20)
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth()
+                    .height(380.dp)
+                    .verticalScroll(rememberScrollState()),
+                text = stringResource(R.string.terms),
+                style = MaterialTheme.typography.headlineMedium.copy(color = gray80)
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+        CompleteButton(
+            isEnabled = termCheck,
+            text = "확인",
+            onClick = onClick
+        )
     }
 }
 
