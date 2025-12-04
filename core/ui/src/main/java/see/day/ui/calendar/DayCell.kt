@@ -78,6 +78,9 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
 
 @Composable
 private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>) {
+    if (records.isEmpty()) {
+        return
+    }
     if (filterType == null) {
         if (mainRecordType == null) {
             return
@@ -124,37 +127,35 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
         }
         return
     }
-    if (records.isNotEmpty()) {
-        val mainTypeRecords = records.filter { it.type == filterType }
-        Box(
+    val mainTypeRecords = records.filter { it.type == filterType }
+    Box(
+        modifier = Modifier
+            .height(25.dp)
+            .padding(horizontal = (5.5).dp)
+            .fillMaxWidth()
+    ) {
+        Row(
             modifier = Modifier
-                .height(25.dp)
-                .padding(horizontal = (5.5).dp)
-                .fillMaxWidth()
+                .padding(top = 1.dp)
+                .align(Alignment.Center)
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(top = 1.dp)
-                    .align(Alignment.Center)
-            ) {
-                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                if (mainTypeRecords.isNotEmpty()) {
-                    Image(
-                        painter = painterResource(
-                            if (filterType == HABIT) {
-                                if (mainTypeRecords.any { it.isCompleted }) {
-                                    filterType.getIcon()
-                                } else {
-                                    filterType.getGrayIcon()
-                                }
-                            } else {
+            // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+            if (mainTypeRecords.isNotEmpty()) {
+                Image(
+                    painter = painterResource(
+                        if (filterType == HABIT) {
+                            if (mainTypeRecords.any { it.isCompleted }) {
                                 filterType.getIcon()
+                            } else {
+                                filterType.getGrayIcon()
                             }
-                        ),
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = "이미지"
-                    )
-                }
+                        } else {
+                            filterType.getIcon()
+                        }
+                    ),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = "이미지"
+                )
             }
         }
     }
@@ -162,11 +163,11 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
 
 @Composable
 private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>) {
+    if (records.isEmpty()) {
+        return
+    }
     if (filterType == null) {
         if (mainRecordType == null) {
-            return
-        }
-        if (records.isEmpty()) {
             return
         }
         Box(
@@ -213,37 +214,35 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
         }
         return
     }
-    if (records.isNotEmpty()) {
-        val mainTypeRecords = records.filter { it.type == filterType }
-        Box(
+    val mainTypeRecords = records.filter { it.type == filterType }
+    Box(
+        modifier = Modifier
+            .height(25.dp)
+            .padding(horizontal = (5.5).dp)
+            .fillMaxWidth()
+    ) {
+        Row(
             modifier = Modifier
-                .height(25.dp)
-                .padding(horizontal = (5.5).dp)
-                .fillMaxWidth()
+                .padding(top = 1.dp)
+                .align(Alignment.Center)
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(top = 1.dp)
-                    .align(Alignment.Center)
-            ) {
-                // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                if (mainTypeRecords.isNotEmpty()) {
-                    Image(
-                        painter = painterResource(
-                            if (filterType == HABIT) {
-                                if (mainTypeRecords.any { it.isCompleted }) {
-                                    filterType.getIcon()
-                                } else {
-                                    filterType.getGrayIcon()
-                                }
-                            } else {
+            // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
+            if (mainTypeRecords.isNotEmpty()) {
+                Image(
+                    painter = painterResource(
+                        if (filterType == HABIT) {
+                            if (mainTypeRecords.any { it.isCompleted }) {
                                 filterType.getIcon()
+                            } else {
+                                filterType.getGrayIcon()
                             }
-                        ),
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = "이미지"
-                    )
-                }
+                        } else {
+                            filterType.getIcon()
+                        }
+                    ),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = "이미지"
+                )
             }
         }
     }
