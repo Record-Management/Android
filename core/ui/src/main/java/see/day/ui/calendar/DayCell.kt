@@ -198,6 +198,12 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
                         modifier = Modifier.size(24.dp),
                         contentDescription = "이미지"
                     )
+                } else if(records.any { it.type != mainRecordType }) {
+                    Image(
+                        painter = painterResource(mainRecordType.getGrayIcon()),
+                        modifier = Modifier.size(24.dp),
+                        contentDescription = "이미지"
+                    )
                 }
             }
             // 점이 찍히는 조건
