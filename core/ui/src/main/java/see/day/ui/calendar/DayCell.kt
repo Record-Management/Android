@@ -1,7 +1,6 @@
 package see.day.ui.calendar
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -145,17 +144,7 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
             // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
             if (mainTypeRecords.isNotEmpty()) {
                 Icon(
-                    painter = painterResource(
-                        if (filterType == HABIT) {
-                            if (mainTypeRecords.any { it.isCompleted }) {
-                                filterType.getIcon()
-                            } else {
-                                filterType.getGrayIcon()
-                            }
-                        } else {
-                            filterType.getIcon()
-                        }
-                    ),
+                    painter = painterResource(filterType.getIcon()),
                     modifier = Modifier.size(24.dp),
                     contentDescription = "이미지",
                     tint = Color.Unspecified
@@ -242,17 +231,7 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
             // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
             if (mainTypeRecords.isNotEmpty()) {
                 Icon(
-                    painter = painterResource(
-                        if (filterType == HABIT) {
-                            if (mainTypeRecords.any { it.isCompleted }) {
-                                filterType.getIcon()
-                            } else {
-                                filterType.getGrayIcon()
-                            }
-                        } else {
-                            filterType.getIcon()
-                        }
-                    ),
+                    painter = painterResource(filterType.getIcon()),
                     modifier = Modifier.size(24.dp),
                     contentDescription = "이미지",
                     tint = Color.Unspecified
