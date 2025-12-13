@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -97,7 +98,7 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
                     .align(Alignment.Center)
             ) {
                 // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
-                Image(
+                Icon(
                     painter = painterResource(
                         if (mainRecordType == HABIT) {
                             if (records.filter { it.type == HABIT }.any { it.isCompleted }) {
@@ -110,18 +111,20 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
                         }
                     ),
                     modifier = Modifier.size(24.dp),
-                    contentDescription = "이미지"
+                    contentDescription = "이미지",
+                    tint = Color.Unspecified
                 )
             }
             // 점이 찍히는 조건
             if (records.size >= 2 || records.any { it.type != mainRecordType }) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.ic_red_dot),
                     modifier = Modifier
                         .size(6.dp)
                         .align(Alignment.TopCenter)
                         .offset(x = (14.5).dp),
-                    contentDescription = "선택된 버튼"
+                    contentDescription = "선택된 버튼",
+                    tint = Color.Unspecified
                 )
             }
         }
@@ -141,7 +144,7 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
         ) {
             // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
             if (mainTypeRecords.isNotEmpty()) {
-                Image(
+                Icon(
                     painter = painterResource(
                         if (filterType == HABIT) {
                             if (mainTypeRecords.any { it.isCompleted }) {
@@ -154,7 +157,8 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
                         }
                     ),
                     modifier = Modifier.size(24.dp),
-                    contentDescription = "이미지"
+                    contentDescription = "이미지",
+                    tint = Color.Unspecified
                 )
             }
         }
@@ -183,7 +187,7 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
             ) {
                 // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
                 if (records.any { it.type == mainRecordType }) {
-                    Image(
+                    Icon(
                         painter = painterResource(
                             if (mainRecordType == HABIT) {
                                 if (records.filter { it.type == HABIT }.any { it.isCompleted }) {
@@ -196,19 +200,28 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
                             }
                         ),
                         modifier = Modifier.size(24.dp),
-                        contentDescription = "이미지"
+                        contentDescription = "이미지",
+                        tint = Color.Unspecified
+                    )
+                } else if(records.any { it.type != mainRecordType }) {
+                    Icon(
+                        painter = painterResource(mainRecordType.getGrayIcon()),
+                        modifier = Modifier.size(24.dp),
+                        contentDescription = "이미지",
+                        tint = Color.Unspecified
                     )
                 }
             }
             // 점이 찍히는 조건
             if (records.size >= 2 || records.any { it.type != mainRecordType }) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.ic_red_dot),
                     modifier = Modifier
                         .size(6.dp)
                         .align(Alignment.TopCenter)
                         .offset(x = (14.5).dp),
-                    contentDescription = "선택된 버튼"
+                    contentDescription = "선택된 버튼",
+                    tint = Color.Unspecified
                 )
             }
         }
@@ -228,7 +241,7 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
         ) {
             // 동적으로 이미지 변경, 이미지 색상 변경(회색, 그냥 원래 색)
             if (mainTypeRecords.isNotEmpty()) {
-                Image(
+                Icon(
                     painter = painterResource(
                         if (filterType == HABIT) {
                             if (mainTypeRecords.any { it.isCompleted }) {
@@ -241,7 +254,8 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
                         }
                     ),
                     modifier = Modifier.size(24.dp),
-                    contentDescription = "이미지"
+                    contentDescription = "이미지",
+                    tint = Color.Unspecified
                 )
             }
         }
