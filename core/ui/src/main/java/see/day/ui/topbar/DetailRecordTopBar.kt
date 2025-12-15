@@ -61,7 +61,6 @@ fun DetailRecordTopBar(
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(end = 16.dp)
                         .size(24.dp)
                         .clickable { onClickCloseButton() },
                     painter = painterResource(R.drawable.ic_close),
@@ -72,7 +71,6 @@ fun DetailRecordTopBar(
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(end = 16.dp)
                         .size(24.dp)
                         .clickable { onClickDeleteButton() },
                     painter = painterResource(R.drawable.ic_trash),
