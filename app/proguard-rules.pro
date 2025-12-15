@@ -30,6 +30,7 @@
 
 # 예: 네트워크 API 인터페이스
  -keep interface see.day.network.** { *; }
+ -keep class see.day.network.dto.** { *; }
 
 ############################
 # Hilt / Dagger
