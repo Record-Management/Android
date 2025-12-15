@@ -46,7 +46,7 @@ fun CustomCalendar(
     }
 
     Column(
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 16.dp)
             .pointerInput(currentYear, currentMonth) {
                 var totalDragAmount = 0f
                 detectHorizontalDragGestures(
