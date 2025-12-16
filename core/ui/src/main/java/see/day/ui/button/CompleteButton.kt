@@ -2,6 +2,7 @@ package see.day.ui.button
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,8 +27,7 @@ fun CompleteButton(modifier: Modifier = Modifier, text: String, isEnabled: Boole
     Button(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp)
-            .systemBarsPadding()
+            .padding(vertical = 12.dp)
             .heightIn(min = 52.dp),
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
