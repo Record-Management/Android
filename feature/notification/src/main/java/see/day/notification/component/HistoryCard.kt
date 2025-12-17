@@ -137,12 +137,12 @@ private fun HistoryCardsPreview() {
     val time = TimeFormatUtil.getRelativeTimeString(daysBefore(3))
     SeeDayTheme {
         Column {
-            RecordType.entries.forEach { recordType ->
+            NotificationType.entries.forEach { notificationType ->
                 HistoryCard(
                     modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                    notificationType = NotificationType.HABIT_REMINDER,
-                    title = "하루 기록",
-                    message = "아직 '하루 기록을 등록하지않았삼",
+                    notificationType = notificationType,
+                    title = notificationType.name,
+                    message = "아직 ${notificationType.name}을 등록하지않았삼",
                     isChecked = false,
                     relativeTime = time,
                     onClickCard = { type, relativeTime -> }
