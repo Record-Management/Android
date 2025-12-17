@@ -14,6 +14,10 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
 
+/*
+ * https://angrypodo.tistory.com/2
+ * 해당 블로그 글을 참고로 해결했다.
+ */
 fun Modifier.advancedImePadding() = composed {
     var consumePadding by remember { mutableStateOf(0) }
     onGloballyPositioned { coordinates ->
