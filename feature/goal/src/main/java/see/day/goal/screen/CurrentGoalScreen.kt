@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -139,8 +140,9 @@ internal fun CurrentGoalScreen(
                     dayStreak = uiState.dayStreak
                 )
                 if(uiState.isCompleted) {
+                    Spacer(modifier = Modifier.weight(1f))
                     ActionBanner(
-                        modifier = Modifier.fillMaxWidth().padding(top = 41.dp),
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).navigationBarsPadding(),
                         onClick = { onAction(CurrentGoalUiEvent.OnClickGoalBanner)},
                         title = see.day.ui.R.string.current_goal_banner_title,
                         body = see.day.ui.R.string.current_goal_banner_body
