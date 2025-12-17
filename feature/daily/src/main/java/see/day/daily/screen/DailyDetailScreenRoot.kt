@@ -4,9 +4,12 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -122,7 +125,7 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit ,uiEvent: (DailyDetailUiEvent) -> Unit) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
 
@@ -153,11 +156,13 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
 
     Scaffold(
         modifier = modifier
-            .systemBarsPadding()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(horizontal = 16.dp)
+            .statusBarsPadding()
+            .imePadding(),
         topBar = {
             DetailRecordTopBar(
-                modifier = modifier,
+                modifier = Modifier,
                 recordType = RecordType.DAILY,
                 editMode = when (uiState.editMode) {
                     DailyDetailUiState.EditMode.Create -> EditMode.ADD
@@ -168,12 +173,32 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                     openDeleteDialog = true
                 }
             )
+        },
+        bottomBar = {
+            CompleteButton(
+                modifier = Modifier.navigationBarsPadding(),
+                text = stringResource(
+                    when (uiState.editMode) {
+                        is DailyDetailUiState.EditMode.Create -> {
+                            see.day.ui.R.string.write_record_text
+                        }
+
+                        is DailyDetailUiState.EditMode.Edit -> {
+                            see.day.ui.R.string.modifiy_record_text
+                        }
+                    }
+                ),
+                isEnabled = uiState.canSubmit,
+                onClick = {
+                    uiEvent(DailyDetailUiEvent.OnSaveRecord)
+                }
+            )
         }
     ) { innerPadding ->
         Column(
             modifier = modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             EmotionAndDate(
                 modifier = modifier,
@@ -206,24 +231,6 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 text = stringResource(R.string.photo_limit_text),
                 color = gray60,
                 style = MaterialTheme.typography.labelSmall
-            )
-            Spacer(modifier = modifier.weight(1f))
-            CompleteButton(
-                text = stringResource(
-                    when (uiState.editMode) {
-                        is DailyDetailUiState.EditMode.Create -> {
-                            see.day.ui.R.string.write_record_text
-                        }
-
-                        is DailyDetailUiState.EditMode.Edit -> {
-                            see.day.ui.R.string.modifiy_record_text
-                        }
-                    }
-                ),
-                isEnabled = uiState.canSubmit,
-                onClick = {
-                    uiEvent(DailyDetailUiEvent.OnSaveRecord)
-                }
             )
         }
     }

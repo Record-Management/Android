@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -172,7 +175,11 @@ internal fun ExerciseDetailScreen(
     }
 
     Scaffold(
-        modifier = modifier.systemBarsPadding(),
+        modifier = modifier
+            .background(Color.White)
+            .padding(horizontal = 16.dp)
+            .statusBarsPadding()
+            .imePadding(),
         topBar = {
             DetailRecordTopBar(
                 recordType = RecordType.EXERCISE,
@@ -185,113 +192,10 @@ internal fun ExerciseDetailScreen(
                     openDeleteDialog = true
                 }
             )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            TypeTitle (
-                modifier = modifier.padding(top = 10.dp),
-                typeIcon = uiState.exerciseType.getIconRes,
-                typeName = uiState.exerciseType.displayName,
-                onClickType = {
-                    openSelectExerciseDialog = true
-                }
-            )
-            Row(
-                modifier = modifier.padding(top = 24.dp),
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Text(
-                    "운동 기록",
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                Text(
-                    "(1개 이상 필수 입력)",
-                    style = MaterialTheme.typography.labelSmall.copy(color = gray50),
-                    modifier = modifier.padding(start = 6.dp)
-                )
-            }
-            HealthStatInputField(
-                modifier = modifier.padding(top = 16.dp),
-                healthStat = HealthStat.Kcal,
-                text = uiState.caloriesBurned,
-                onTextChanged = { newCaloriesBurned ->
-                    uiEvent(ExerciseDetailUiEvent.OnCaloriesChanged(newCaloriesBurned))
-                },
-                focusManager = focusManager
-            )
-            HealthStatInputField(
-                modifier = modifier.padding(top = 24.dp),
-                healthStat = HealthStat.Time,
-                text = uiState.exerciseTimeMinutes,
-                onTextChanged = { newExerciseTime ->
-                    uiEvent(ExerciseDetailUiEvent.OnExerciseTimeChanged(newExerciseTime))
-                },
-                focusManager = focusManager
-            )
-            HealthStatInputField(
-                modifier = modifier.padding(top = 24.dp),
-                healthStat = HealthStat.StepCount,
-                text = uiState.stepCount,
-                onTextChanged = { newStepCount ->
-                    uiEvent(ExerciseDetailUiEvent.OnStepCountChanged(newStepCount))
-                },
-                focusManager = focusManager
-            )
-            HealthStatInputField(
-                modifier = modifier.padding(top = 24.dp),
-                healthStat = HealthStat.Weight,
-                text = uiState.weight,
-                onTextChanged = { newWeight ->
-                    uiEvent(ExerciseDetailUiEvent.OnWeightChanged(newWeight))
-                },
-                focusManager = focusManager
-            )
-            Spacer(
-                modifier = modifier
-                    .padding(top = 24.dp)
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(gray30)
-            )
-            Text(
-                modifier = modifier.padding(top = 24.dp, bottom = 10.dp),
-                text = "나의 하루",
-                style = MaterialTheme.typography.displaySmall
-            )
-            RecordWriteTextField(
-                modifier = modifier,
-                text = uiState.dailyNote,
-                placeHolder = see.day.ui.R.string.daily_place_holder,
-                onChangedText = { newDailyNote ->
-                    uiEvent(ExerciseDetailUiEvent.OnDailyNoteChanged(newDailyNote))
-                }
-            )
-            RecordDetailPhotoRow(
-                modifier = modifier,
-                context = context,
-                uris = uiState.imageUrls,
-                onRemovePhotos = { photo ->
-                    uiEvent(ExerciseDetailUiEvent.OnRemovePhoto(photo))
-                },
-                onClickAddPhotos = { photos ->
-                    uiEvent(ExerciseDetailUiEvent.OnAddPhotos(photos))
-                }
-            )
-            Text(
-                modifier = modifier.padding(top = 10.dp),
-                text = stringResource(R.string.max_photo_description),
-                color = gray60,
-                style = MaterialTheme.typography.labelSmall
-            )
+        },
+        bottomBar = {
             CompleteButton(
-                modifier = modifier
-                    .padding(top = 80.dp)
-                    .systemBarsPadding(),
+                modifier = Modifier.navigationBarsPadding(),
                 text = stringResource(
                     when (uiState.editMode) {
                         is ExerciseDetailUiState.EditMode.Create -> {
@@ -309,10 +213,111 @@ internal fun ExerciseDetailScreen(
                     uiEvent(ExerciseDetailUiEvent.OnSaveRecord)
                 }
             )
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+        ) {
+            TypeTitle(
+                modifier = Modifier.padding(top = 10.dp),
+                typeIcon = uiState.exerciseType.getIconRes,
+                typeName = uiState.exerciseType.displayName,
+                onClickType = {
+                    openSelectExerciseDialog = true
+                }
+            )
+            Row(
+                modifier = Modifier.padding(top = 24.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    "운동 기록",
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                Text(
+                    "(1개 이상 필수 입력)",
+                    style = MaterialTheme.typography.labelSmall.copy(color = gray50),
+                    modifier = Modifier.padding(start = 6.dp)
+                )
+            }
+            HealthStatInputField(
+                modifier = Modifier.padding(top = 16.dp),
+                healthStat = HealthStat.Kcal,
+                text = uiState.caloriesBurned,
+                onTextChanged = { newCaloriesBurned ->
+                    uiEvent(ExerciseDetailUiEvent.OnCaloriesChanged(newCaloriesBurned))
+                },
+                focusManager = focusManager
+            )
+            HealthStatInputField(
+                modifier = Modifier.padding(top = 24.dp),
+                healthStat = HealthStat.Time,
+                text = uiState.exerciseTimeMinutes,
+                onTextChanged = { newExerciseTime ->
+                    uiEvent(ExerciseDetailUiEvent.OnExerciseTimeChanged(newExerciseTime))
+                },
+                focusManager = focusManager
+            )
+            HealthStatInputField(
+                modifier = Modifier.padding(top = 24.dp),
+                healthStat = HealthStat.StepCount,
+                text = uiState.stepCount,
+                onTextChanged = { newStepCount ->
+                    uiEvent(ExerciseDetailUiEvent.OnStepCountChanged(newStepCount))
+                },
+                focusManager = focusManager
+            )
+            HealthStatInputField(
+                modifier = Modifier.padding(top = 24.dp),
+                healthStat = HealthStat.Weight,
+                text = uiState.weight,
+                onTextChanged = { newWeight ->
+                    uiEvent(ExerciseDetailUiEvent.OnWeightChanged(newWeight))
+                },
+                focusManager = focusManager
+            )
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(gray30)
+            )
+            Text(
+                modifier = Modifier.padding(top = 24.dp, bottom = 10.dp),
+                text = "나의 하루",
+                style = MaterialTheme.typography.displaySmall
+            )
+            RecordWriteTextField(
+                modifier = Modifier,
+                text = uiState.dailyNote,
+                placeHolder = see.day.ui.R.string.daily_place_holder,
+                onChangedText = { newDailyNote ->
+                    uiEvent(ExerciseDetailUiEvent.OnDailyNoteChanged(newDailyNote))
+                }
+            )
+            RecordDetailPhotoRow(
+                modifier = Modifier,
+                context = context,
+                uris = uiState.imageUrls,
+                onRemovePhotos = { photo ->
+                    uiEvent(ExerciseDetailUiEvent.OnRemovePhoto(photo))
+                },
+                onClickAddPhotos = { photos ->
+                    uiEvent(ExerciseDetailUiEvent.OnAddPhotos(photos))
+                }
+            )
+            Text(
+                modifier = Modifier.padding(top = 10.dp, bottom = 25.dp),
+                text = stringResource(R.string.max_photo_description),
+                color = gray60,
+                style = MaterialTheme.typography.labelSmall
+            )
         }
 
     }
-
 }
 
 @Preview
