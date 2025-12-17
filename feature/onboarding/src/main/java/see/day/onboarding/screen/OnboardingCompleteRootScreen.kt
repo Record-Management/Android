@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -120,7 +121,7 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, titleText: 
         Spacer(modifier = modifier.weight(1f))
         FadeEffect(2100,scrollState = scrollState) { modifier ->
             CompleteButton(
-                modifier = modifier,
+                modifier = modifier.navigationBarsPadding(),
                 isEnabled = true,
                 text = "시작하기",
                 onClick = onGoHome
