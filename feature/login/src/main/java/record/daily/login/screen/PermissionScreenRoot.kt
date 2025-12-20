@@ -36,8 +36,8 @@ internal fun PermissionScreenRoot(
         (context as? Activity)?.finish()
     }
     LaunchedEffect(Unit) {
-        viewModel.uiEffect.collect {effect ->
-            when(effect) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
                 PermissionUiEffect.OnGoLogin -> {
                     onBack()
                 }
@@ -53,7 +53,7 @@ internal fun PermissionScreenRoot(
 @Composable
 internal fun PermissionScreen(
     modifier: Modifier = Modifier,
-    onAction : (PermissionUiEvent) -> Unit
+    onAction: (PermissionUiEvent) -> Unit
 ) {
     Column(
         modifier = modifier

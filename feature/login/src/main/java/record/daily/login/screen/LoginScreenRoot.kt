@@ -64,10 +64,10 @@ internal fun LoginScreen(modifier: Modifier = Modifier, onClickKakaoLogin: () ->
     ) {
         SplashScreen(modifier = modifier)
         KakaoLogin(
-            modifier = modifier,
+            modifier = Modifier,
             onClickKakaoLogin = onClickKakaoLogin
         )
-        Spacer(modifier = modifier.padding(bottom = 72.dp))
+        Spacer(modifier = Modifier.padding(bottom = 72.dp))
     }
 }
 
