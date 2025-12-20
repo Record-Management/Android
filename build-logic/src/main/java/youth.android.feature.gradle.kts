@@ -41,4 +41,8 @@ dependencies {
 
     implementation(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
     implementation(libs.findLibrary("androidx.lifecycle.runtime.ktx").get())
+
+    implementation(libs.findLibrary("androidx.core.ktx").get())
+    implementation(libs.findLibrary("androidx.appcompat").get())
+    implementation(libs.findLibrary("material").get())
 }
