@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
     fun isAppFirstLaunch() {
         viewModelScope.launch {
             val isAppFirstLaunched = getAppFirstLaunchUseCase()
-            if(isAppFirstLaunched) {
+            if (isAppFirstLaunched) {
                 _uiEffect.emit(LoginUiEffect.GoPermission)
             }
         }

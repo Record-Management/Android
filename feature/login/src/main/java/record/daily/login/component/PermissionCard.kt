@@ -37,12 +37,17 @@ internal fun PermissionCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.size(60.dp).clip(CircleShape).background(gray20),
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape)
+                .background(gray20),
         ) {
             Icon(
                 painter = painterResource(permission.icon),
                 contentDescription = stringResource(permission.title),
-                modifier = Modifier.size(26.dp).align(Alignment.Center),
+                modifier = Modifier
+                    .size(26.dp)
+                    .align(Alignment.Center),
                 tint = Color.Unspecified
             )
         }
@@ -85,6 +90,7 @@ private fun PermissionCardsPreview() {
         }
     }
 }
+
 @Preview
 @Composable
 private fun PermissionCardPreview() {

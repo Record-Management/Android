@@ -15,13 +15,13 @@ import javax.inject.Inject
 @HiltViewModel
 class PermissionViewModel @Inject constructor(
     private val setAppFirstLaunchUseCase: SetAppFirstLaunchUseCase
-) : ViewModel(){
+) : ViewModel() {
 
-    private val _uiEffect : MutableSharedFlow<PermissionUiEffect> = MutableSharedFlow()
-    val uiEffect : SharedFlow<PermissionUiEffect> = _uiEffect.asSharedFlow()
+    private val _uiEffect: MutableSharedFlow<PermissionUiEffect> = MutableSharedFlow()
+    val uiEffect: SharedFlow<PermissionUiEffect> = _uiEffect.asSharedFlow()
 
     fun onAction(uiEvent: PermissionUiEvent) {
-        when(uiEvent) {
+        when (uiEvent) {
             PermissionUiEvent.OnClickPermissionConfirm -> {
                 setAppFirstLaunch()
             }
