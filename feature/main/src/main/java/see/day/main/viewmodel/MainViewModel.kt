@@ -16,27 +16,29 @@ class MainViewModel @Inject constructor(
     private val getLoginStateUseCase: GetLoginStateUseCase
 ) : ViewModel() {
 
-    private val _startDestination : MutableStateFlow<AppStartState?> = MutableStateFlow(null)
-    val startDestination : StateFlow<AppStartState?> = _startDestination.asStateFlow()
+    private val _startDestination: MutableStateFlow<AppStartState?> = MutableStateFlow(null)
+    val startDestination: StateFlow<AppStartState?> = _startDestination.asStateFlow()
 
-    private val _navigationEvent : MutableStateFlow<AppStartState?> = MutableStateFlow(null)
-    val navigationEvent : StateFlow<AppStartState?> = _navigationEvent.asStateFlow()
+    private val _navigationEvent: MutableStateFlow<AppStartState?> = MutableStateFlow(null)
+    val navigationEvent: StateFlow<AppStartState?> = _navigationEvent.asStateFlow()
 
     init {
         viewModelScope.launch {
             getLoginStateUseCase().collect { newLoginState ->
-                if(startDestination.value == null) {
+                if (startDestination.value == null) {
                     _startDestination.emit(newLoginState)
                 } else {
-                    when(newLoginState) {
+                    when (newLoginState) {
                         AppStartState.LOGIN -> {
                             _navigationEvent.emit(newLoginState)
                         }
+
                         AppStartState.ONBOARDING -> {
                             _navigationEvent.emit(newLoginState)
                         }
+
                         AppStartState.HOME -> {
-                            if(startDestination.value != AppStartState.ONBOARDING || navigationEvent.value != AppStartState.ONBOARDING) {
+                            if (startDestination.value != AppStartState.ONBOARDING || navigationEvent.value != AppStartState.ONBOARDING) {
                                 _navigationEvent.emit(newLoginState)
                             }
                         }

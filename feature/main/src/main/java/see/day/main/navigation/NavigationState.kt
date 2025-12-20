@@ -15,7 +15,6 @@ import see.day.exercise.navigation.navigateExerciseDetail
 import see.day.habit.navigation.navigateHabit
 import see.day.habit.navigation.navigateHabitDetail
 import see.day.home.navigation.navigateHome
-import see.day.main.navigation.graph.navigateSchedule
 import see.day.model.record.RecordType
 import see.day.navigation.onboarding.CompleteType
 import see.day.onboarding.navigation.navigateOnboarding
@@ -62,9 +61,11 @@ class NavigationState(
             RecordType.DAILY -> {
                 navController.navigateDaily(navOptions)
             }
+
             RecordType.EXERCISE -> {
                 navController.navigateExercise(navOptions)
             }
+
             RecordType.HABIT -> {
                 navController.navigateHabit(navOptions)
             }
@@ -75,13 +76,15 @@ class NavigationState(
     }
 
     fun navigateDetailRecord(recordType: RecordType, recordId: String) {
-        when(recordType) {
+        when (recordType) {
             RecordType.DAILY -> {
                 navController.navigateDailyDetail(recordId)
             }
+
             RecordType.EXERCISE -> {
                 navController.navigateExerciseDetail(recordId)
             }
+
             RecordType.HABIT -> {
                 navController.navigateHabitDetail(recordId)
             }
