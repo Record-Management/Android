@@ -8,5 +8,5 @@ android {
 }
 
 dependencies {
-    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+    implementation(libs.wheelpickercompose)
 }
