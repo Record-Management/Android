@@ -26,7 +26,7 @@ import see.day.setting.state.goal.GoalNotificationUiEffect
 import see.day.setting.state.goal.GoalNotificationUiEvent
 import see.day.setting.state.goal.GoalNotificationUiState
 import see.day.setting.util.isNotificationPermissionGranted
-import see.day.setting.util.openAppSettings
+import see.day.setting.util.openAppNotificationSetting
 import see.day.setting.viewModel.GoalNotificationViewModel
 import see.day.ui.card.ActionBanner
 import see.day.ui.topbar.CommonAppBar
@@ -92,7 +92,7 @@ internal fun SettingGoalNotificationScreen(
             if(!hasPermission) {
                 ActionBanner(
                     modifier = Modifier.padding(top = 10.dp),
-                    onClick = { openAppSettings(context) },
+                    onClick = { openAppNotificationSetting(context) },
                     title = R.string.system_notification_banner_title,
                     body = R.string.system_notification_banner_body
                 )
