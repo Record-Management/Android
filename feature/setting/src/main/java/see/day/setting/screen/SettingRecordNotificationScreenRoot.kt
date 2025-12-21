@@ -46,7 +46,7 @@ internal fun SettingRecordNotificationScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                RecordNotificationUiEffect.OnGoBack -> {
+                RecordNotificationUiEffect.NavigateToBackStack -> {
                     onBack()
                 }
             }
@@ -88,7 +88,7 @@ internal fun SettingRecordNotificationScreen(
                 modifier = modifier,
                 title = R.string.blank_string,
                 onClickBackButton = {
-                    uiEvent(RecordNotificationUiEvent.OnGoBack)
+                    uiEvent(RecordNotificationUiEvent.OnClickBack)
                 }
             )
         }

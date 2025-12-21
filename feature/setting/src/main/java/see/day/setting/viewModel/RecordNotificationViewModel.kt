@@ -48,7 +48,7 @@ class RecordNotificationViewModel @Inject constructor(
 
     fun onAction(uiEvent: RecordNotificationUiEvent) {
         when (uiEvent) {
-            RecordNotificationUiEvent.OnGoBack -> {
+            RecordNotificationUiEvent.OnClickBack -> {
                 onGoBack()
             }
 
@@ -64,7 +64,7 @@ class RecordNotificationViewModel @Inject constructor(
 
     private fun onGoBack() {
         viewModelScope.launch {
-            _uiEffect.emit(RecordNotificationUiEffect.OnGoBack)
+            _uiEffect.emit(RecordNotificationUiEffect.NavigateToBackStack)
         }
     }
 

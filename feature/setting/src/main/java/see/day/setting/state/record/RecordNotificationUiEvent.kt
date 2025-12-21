@@ -1,7 +1,7 @@
 package see.day.setting.state.record
 
 sealed interface RecordNotificationUiEvent {
-    data object OnGoBack: RecordNotificationUiEvent
+    data object OnClickBack : RecordNotificationUiEvent
     data class OnChangedRecordNotification(
         val dailyRecordNotificationEnabled: Boolean? = null,
         val exerciseRecordNotificationEnabled: Boolean? = null,

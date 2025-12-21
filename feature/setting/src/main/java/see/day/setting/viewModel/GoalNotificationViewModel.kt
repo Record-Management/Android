@@ -50,7 +50,7 @@ class GoalNotificationViewModel @Inject constructor(
                 onChangedGoalNotification(enabled = uiEvent.enabled)
             }
 
-            GoalNotificationUiEvent.OnGoBack -> {
+            GoalNotificationUiEvent.OnClickBack -> {
                 onGoBack()
             }
         }
@@ -79,7 +79,7 @@ class GoalNotificationViewModel @Inject constructor(
 
     private fun onGoBack() {
         viewModelScope.launch {
-            _uiEffect.emit(GoalNotificationUiEffect.OnGoBack)
+            _uiEffect.emit(GoalNotificationUiEffect.NavigateToBackStack)
         }
     }
 }

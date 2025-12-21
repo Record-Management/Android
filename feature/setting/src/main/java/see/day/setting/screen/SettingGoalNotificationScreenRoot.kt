@@ -41,7 +41,7 @@ internal fun SettingGoalNotificationScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                GoalNotificationUiEffect.OnGoBack -> {
+                GoalNotificationUiEffect.NavigateToBackStack -> {
                     onBack()
                 }
             }
@@ -81,7 +81,7 @@ internal fun SettingGoalNotificationScreen(
                 modifier = modifier,
                 title = R.string.blank_string,
                 onClickBackButton = {
-                    uiEvent(GoalNotificationUiEvent.OnGoBack)
+                    uiEvent(GoalNotificationUiEvent.OnClickBack)
                 }
             )
         }

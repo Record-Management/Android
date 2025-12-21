@@ -41,13 +41,13 @@ fun SettingScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { uiEffect ->
             when (uiEffect) {
-                SettingUiEffect.OnPopBack -> {
+                SettingUiEffect.NavigateToBackStack -> {
                     onBack()
                 }
-                SettingUiEffect.OnGoGoalNotification -> {
+                SettingUiEffect.NavigateToGoalNotificationSetting -> {
                     onGoSettingGoalNotification()
                 }
-                SettingUiEffect.OnGoRecordNotification -> {
+                SettingUiEffect.NavigateToRecordNotificationSetting -> {
                     onGoSettingRecordNotification()
                 }
             }
@@ -81,7 +81,7 @@ internal fun SettingScreen(
                 modifier = Modifier,
                 title = R.string.setting,
                 backgroundColor = gray20,
-                onClickBackButton = { uiEvent(SettingUiEvent.OnPopBack) }
+                onClickBackButton = { uiEvent(SettingUiEvent.OnClickBack) }
             )
         }
     ) { innerPadding ->
