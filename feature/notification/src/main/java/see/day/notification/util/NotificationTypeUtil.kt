@@ -6,8 +6,8 @@ import see.day.model.record.RecordType
 import see.day.notification.R
 
 @DrawableRes
-fun NotificationType.getIcon() : Int {
-    return when(this) {
+fun NotificationType.getIcon(): Int {
+    return when (this) {
         NotificationType.DAILY_RECORD_REMINDER -> R.drawable.ic_daily_notification
         NotificationType.EXERCISE_REMINDER -> R.drawable.ic_exercise_notification
         NotificationType.HABIT_REMINDER -> R.drawable.ic_habit_notification
@@ -16,8 +16,8 @@ fun NotificationType.getIcon() : Int {
     }
 }
 
-fun NotificationType.toRecordType() : RecordType? {
-    return when(this) {
+fun NotificationType.toRecordType(): RecordType? {
+    return when (this) {
         NotificationType.DAILY_RECORD_REMINDER -> RecordType.DAILY
         NotificationType.EXERCISE_REMINDER -> RecordType.EXERCISE
         NotificationType.HABIT_REMINDER -> RecordType.HABIT

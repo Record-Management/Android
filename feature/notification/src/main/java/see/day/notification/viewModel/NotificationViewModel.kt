@@ -92,7 +92,7 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: NotificationUiEvent) {
+    fun onAction(uiEvent: NotificationUiEvent) {
         when (uiEvent) {
             NotificationUiEvent.OnClickBack -> {
                 onClickBack()
@@ -101,6 +101,7 @@ class NotificationViewModel @Inject constructor(
             is NotificationUiEvent.OnClickItem -> {
                 onClickItem(uiEvent.recordType, uiEvent.relativeTime)
             }
+
             NotificationUiEvent.OnClickResetGoalBanner -> {
                 onClickResetGoalBanner()
             }

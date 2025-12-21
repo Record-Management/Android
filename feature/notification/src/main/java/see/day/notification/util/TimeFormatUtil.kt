@@ -24,7 +24,7 @@ object TimeFormatUtil {
         }
     }
 
-    fun hourBefore(hour: Long) : String {
+    fun hourBefore(hour: Long): String {
         val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 
         val hoursBefore = now.minusHours(hour)
@@ -34,7 +34,7 @@ object TimeFormatUtil {
         return hoursBefore.format(formatter)
     }
 
-    fun daysBefore(days: Long) : String {
+    fun daysBefore(days: Long): String {
         val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
 
         val daysBefore = now.minusDays(days)

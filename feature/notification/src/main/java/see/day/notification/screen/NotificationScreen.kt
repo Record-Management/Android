@@ -67,7 +67,7 @@ internal fun NotificationScreenRoute(
 
     NotificationScreen(
         uiState = uiState.value,
-        uiEvent = viewModel::onEvent
+        uiEvent = viewModel::onAction
     )
 }
 
