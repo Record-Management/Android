@@ -45,14 +45,14 @@ internal fun NotificationScreenRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                NotificationUiEffect.OnPopBack -> {
+                NotificationUiEffect.NavigateToBackStack -> {
                     onBack()
                 }
 
-                is NotificationUiEffect.GoWriteRecord -> {
+                is NotificationUiEffect.NavigateToWriteRecord -> {
                     onClickAddRecord(effect.recordType, true)
                 }
-                NotificationUiEffect.OnResetGoal -> {
+                NotificationUiEffect.NavigateToResetGoal -> {
                     onClickResetGoal()
                 }
             }
