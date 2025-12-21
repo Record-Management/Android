@@ -197,7 +197,7 @@ private fun MyInformationComponentPreview() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             nickname = "네즈코",
-            birthDate = "1995/09/23",
+            birthDate = "1995-09-23",
             socialType = SocialType.KAKAO,
             onNicknameChanged = {},
             onBirthDateChanged = {},
