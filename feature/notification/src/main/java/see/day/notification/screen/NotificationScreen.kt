@@ -36,8 +36,8 @@ import see.day.ui.topbar.CommonAppBar
 internal fun NotificationScreenRoute(
     viewModel: NotificationViewModel = hiltViewModel(),
     onBack: () -> Unit,
-    onClickAddRecord: (RecordType, Boolean) -> Unit,
-    onClickResetGoal: () -> Unit
+    onNavigateToWriteRecord: (RecordType, Boolean) -> Unit,
+    onNavigateToResetGoal: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -50,10 +50,11 @@ internal fun NotificationScreenRoute(
                 }
 
                 is NotificationUiEffect.NavigateToWriteRecord -> {
-                    onClickAddRecord(effect.recordType, true)
+                    onNavigateToWriteRecord(effect.recordType, true)
                 }
+
                 NotificationUiEffect.NavigateToResetGoal -> {
-                    onClickResetGoal()
+                    onNavigateToResetGoal()
                 }
             }
         }
@@ -67,7 +68,7 @@ internal fun NotificationScreenRoute(
 
     NotificationScreen(
         uiState = uiState.value,
-        uiEvent = viewModel::onAction
+        onAction = viewModel::onAction
     )
 }
 
@@ -75,7 +76,7 @@ internal fun NotificationScreenRoute(
 internal fun NotificationScreen(
     modifier: Modifier = Modifier,
     uiState: NotificationUiState,
-    uiEvent: (NotificationUiEvent) -> Unit,
+    onAction: (NotificationUiEvent) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -83,7 +84,7 @@ internal fun NotificationScreen(
         topBar = {
             CommonAppBar(
                 title = R.string.notification_title,
-                onClickBackButton = { uiEvent(NotificationUiEvent.OnClickBack) }
+                onClickBackButton = { onAction(NotificationUiEvent.OnClickBack) }
             )
         }
     ) { innerPadding ->
@@ -101,7 +102,7 @@ internal fun NotificationScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     items(uiState.notificationHistories) { history ->
-                        if(history.isVisible()) {
+                        if (history.isVisible()) {
                             HistoryCard(
                                 modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
                                 notificationType = history.notificationType,
@@ -110,8 +111,8 @@ internal fun NotificationScreen(
                                 relativeTime = history.relativeTime,
                                 isChecked = history.isChecked,
                                 onClickCard = { type, time ->
-                                    if(!uiState.hasNoGoal) {
-                                        uiEvent(NotificationUiEvent.OnClickItem(type, time))
+                                    if (!uiState.hasNoGoal) {
+                                        onAction(NotificationUiEvent.OnClickItem(type, time))
                                     }
                                 },
                             )
@@ -119,11 +120,13 @@ internal fun NotificationScreen(
                     }
                 }
             }
-            if(uiState.hasNoGoal) {
+            if (uiState.hasNoGoal) {
                 ActionBanner(
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(20.dp),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(20.dp),
                     onClick = {
-                        uiEvent(NotificationUiEvent.OnClickResetGoalBanner)
+                        onAction(NotificationUiEvent.OnClickResetGoalBanner)
                     },
                     title = see.day.ui.R.string.current_goal_banner_title,
                     body = see.day.ui.R.string.current_goal_banner_body,
@@ -140,7 +143,7 @@ private fun NotificationScreenPreview() {
     SeeDayTheme {
         NotificationScreen(
             uiState = NotificationUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }
@@ -151,7 +154,7 @@ private fun NotificationScreenHistoriesPreview() {
     SeeDayTheme {
         NotificationScreen(
             uiState = NotificationUiState.init.copy(notificationHistories = getSampleNotificationHistory(3)),
-            uiEvent = {}
+            onAction = {}
         )
     }
 }
