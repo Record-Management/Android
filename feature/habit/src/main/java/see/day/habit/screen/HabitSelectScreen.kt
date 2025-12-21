@@ -70,7 +70,7 @@ internal fun HabitSelectScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
                 .padding(16.dp),
@@ -85,7 +85,7 @@ internal fun HabitSelectScreen(
                     style = MaterialTheme.typography.labelMedium.copy(
                         textDecoration = TextDecoration.Underline
                     ),
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 14.dp)
                         .clickable {
@@ -95,7 +95,7 @@ internal fun HabitSelectScreen(
                 )
             }
             item {
-                Spacer(modifier = modifier.systemBarsPadding())
+                Spacer(modifier = Modifier.systemBarsPadding())
             }
         }
     }

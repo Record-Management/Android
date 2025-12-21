@@ -8,7 +8,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import dalvik.annotation.TestTarget
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +39,7 @@ class HabitDetailScreenTest {
                 SeeDayTheme {
                     HabitDetailScreen(
                         uiState = uiState,
-                        uiEvent = {},
+                        onAction = {},
                         onClickBackButton = {}
                     )
                 }
@@ -77,7 +76,7 @@ class HabitDetailScreenTest {
                 SeeDayTheme {
                     HabitDetailScreen(
                         uiState = uiState,
-                        uiEvent = {},
+                        onAction = {},
                         onClickBackButton = {}
                     )
                 }
@@ -119,7 +118,7 @@ class HabitDetailScreenTest {
                 SeeDayTheme {
                     HabitDetailScreen(
                         uiState = uiState,
-                        uiEvent = {},
+                        onAction = {},
                         onClickBackButton = {}
                     )
                 }
