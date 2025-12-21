@@ -43,6 +43,7 @@ class CurrentGoalScreenTest {
 
         composeTestRule
             .onNodeWithText(context.getString(R.string.goal_acheive_title))
+            .assertIsDisplayed()
     }
 
     @Test
