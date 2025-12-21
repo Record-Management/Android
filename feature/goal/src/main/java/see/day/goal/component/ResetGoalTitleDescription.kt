@@ -19,7 +19,7 @@ import see.day.goal.state.reset.GoalResetStep
 @Composable
 internal fun ColumnScope.ResetGoalTitleDescription(modifier: Modifier = Modifier, step: GoalResetStep) {
     Image(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 30.dp)
             .size(30.dp),
         painter = painterResource(step.iconRes),
