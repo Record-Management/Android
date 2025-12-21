@@ -16,8 +16,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -103,7 +101,7 @@ internal fun BirthDateChangedDialog(
                         onClick = {
                             onDismiss()
                         },
-                        modifier = modifier
+                        modifier = Modifier
                             .weight(1f)
                             .heightIn(min = 52.dp)
                             .padding(end = 5.dp),
@@ -122,7 +120,7 @@ internal fun BirthDateChangedDialog(
                         onClick = {
                             onBirthDateChanged(String.format("%04d-%02d-%02d", year, month, day))
                         },
-                        modifier = modifier
+                        modifier = Modifier
                             .weight(1f)
                             .heightIn(min = 52.dp)
                             .padding(start = 5.dp),

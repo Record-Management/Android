@@ -26,7 +26,7 @@ import see.day.setting.state.goal.GoalNotificationUiEffect
 import see.day.setting.state.goal.GoalNotificationUiEvent
 import see.day.setting.state.goal.GoalNotificationUiState
 import see.day.setting.util.isNotificationPermissionGranted
-import see.day.setting.util.openAppSettings
+import see.day.setting.util.openAppNotificationSetting
 import see.day.setting.viewModel.GoalNotificationViewModel
 import see.day.ui.card.ActionBanner
 import see.day.ui.topbar.CommonAppBar
@@ -40,8 +40,8 @@ internal fun SettingGoalNotificationScreenRoot(
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
-            when(effect) {
-                GoalNotificationUiEffect.OnGoBack -> {
+            when (effect) {
+                GoalNotificationUiEffect.NavigateToBackStack -> {
                     onBack()
                 }
             }
@@ -49,7 +49,7 @@ internal fun SettingGoalNotificationScreenRoot(
     }
     SettingGoalNotificationScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -57,7 +57,7 @@ internal fun SettingGoalNotificationScreenRoot(
 internal fun SettingGoalNotificationScreen(
     modifier: Modifier = Modifier,
     uiState: GoalNotificationUiState,
-    uiEvent: (GoalNotificationUiEvent) -> Unit
+    onAction: (GoalNotificationUiEvent) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -81,30 +81,32 @@ internal fun SettingGoalNotificationScreen(
                 modifier = modifier,
                 title = R.string.blank_string,
                 onClickBackButton = {
-                    uiEvent(GoalNotificationUiEvent.OnGoBack)
+                    onAction(GoalNotificationUiEvent.OnClickBack)
                 }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier.padding(innerPadding).padding(horizontal = 16.dp)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
         ) {
-            if(!hasPermission) {
+            if (!hasPermission) {
                 ActionBanner(
                     modifier = Modifier.padding(top = 10.dp),
-                    onClick = { openAppSettings(context) },
+                    onClick = { openAppNotificationSetting(context) },
                     title = R.string.system_notification_banner_title,
                     body = R.string.system_notification_banner_body
                 )
             }
             NotificationSwitch(
-                modifier = Modifier.padding(top = if(hasPermission) 10.dp else 24.dp),
+                modifier = Modifier.padding(top = if (hasPermission) 10.dp else 24.dp),
                 title = R.string.goal_notification_title,
                 body = R.string.goal_notification_body,
                 checked = uiState.goalNotificationEnabled,
                 isAllChecked = uiState.goalNotificationEnabled,
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(GoalNotificationUiEvent.OnChangedGoalNotification(currentChecked))
+                    onAction(GoalNotificationUiEvent.OnGoalNotificationChanged(currentChecked))
                 }
             )
         }
@@ -117,7 +119,7 @@ private fun SettingGoalNotificationScreenPreview() {
     SeeDayTheme {
         SettingGoalNotificationScreen(
             uiState = GoalNotificationUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }

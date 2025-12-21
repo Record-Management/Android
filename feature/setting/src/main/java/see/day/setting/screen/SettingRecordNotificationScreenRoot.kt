@@ -31,7 +31,7 @@ import see.day.setting.state.record.RecordNotificationUiEffect
 import see.day.setting.state.record.RecordNotificationUiEvent
 import see.day.setting.state.record.RecordNotificationUiState
 import see.day.setting.util.isNotificationPermissionGranted
-import see.day.setting.util.openAppSettings
+import see.day.setting.util.openAppNotificationSetting
 import see.day.setting.viewModel.RecordNotificationViewModel
 import see.day.ui.card.ActionBanner
 import see.day.ui.topbar.CommonAppBar
@@ -46,7 +46,7 @@ internal fun SettingRecordNotificationScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                RecordNotificationUiEffect.OnGoBack -> {
+                RecordNotificationUiEffect.NavigateToBackStack -> {
                     onBack()
                 }
             }
@@ -55,7 +55,7 @@ internal fun SettingRecordNotificationScreenRoot(
 
     SettingRecordNotificationScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 
 }
@@ -64,7 +64,7 @@ internal fun SettingRecordNotificationScreenRoot(
 internal fun SettingRecordNotificationScreen(
     modifier: Modifier = Modifier,
     uiState: RecordNotificationUiState,
-    uiEvent: (RecordNotificationUiEvent) -> Unit,
+    onAction: (RecordNotificationUiEvent) -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -88,20 +88,20 @@ internal fun SettingRecordNotificationScreen(
                 modifier = modifier,
                 title = R.string.blank_string,
                 onClickBackButton = {
-                    uiEvent(RecordNotificationUiEvent.OnGoBack)
+                    onAction(RecordNotificationUiEvent.OnClickBack)
                 }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
             if (!hasPermission) {
                 ActionBanner(
                     modifier = Modifier.padding(top = 10.dp),
-                    onClick = { openAppSettings(context) },
+                    onClick = { openAppNotificationSetting(context) },
                     title = R.string.system_notification_banner_title,
                     body = R.string.system_notification_banner_body
                 )
@@ -113,8 +113,8 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.isAllNotificationEnabled(),
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                    onAction(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             dailyRecordNotificationEnabled = currentChecked,
                             exerciseRecordNotificationEnabled = currentChecked,
                             habitRecordNotificationEnabled = currentChecked
@@ -138,8 +138,8 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.dailyRecordNotificationEnabled,
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                    onAction(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             dailyRecordNotificationEnabled = currentChecked,
                         )
                     )
@@ -153,8 +153,8 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.exerciseRecordNotificationEnabled,
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                    onAction(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             exerciseRecordNotificationEnabled = currentChecked,
                         )
                     )
@@ -168,8 +168,8 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.habitRecordNotificationEnabled,
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                    onAction(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             habitRecordNotificationEnabled = currentChecked,
                         )
                     )
@@ -185,7 +185,7 @@ private fun SettingRecordNotificationScreenPreview() {
     SeeDayTheme {
         SettingRecordNotificationScreen(
             uiState = RecordNotificationUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }

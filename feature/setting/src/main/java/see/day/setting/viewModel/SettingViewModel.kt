@@ -56,31 +56,36 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: SettingUiEvent) {
+    fun onAction(uiEvent: SettingUiEvent) {
         when (uiEvent) {
-            is SettingUiEvent.OnPopBack -> {
+            is SettingUiEvent.OnClickBack -> {
                 onPopBack()
             }
 
-            is SettingUiEvent.OnChangedNickname -> {
+            is SettingUiEvent.OnNicknameChanged -> {
                 onChangedNickname(uiEvent.nickname)
             }
 
-            is SettingUiEvent.OnChangedBirthDate -> {
+            is SettingUiEvent.OnBirthDateChanged -> {
                 onChangedBirthday(uiEvent.birthDate)
             }
+
             is SettingUiEvent.OnClickLogout -> {
                 onClickLogout()
             }
+
             is SettingUiEvent.OnClickWithdrawal -> {
                 onClickWithdrawal()
             }
+
             is SettingUiEvent.OnClickGoalNotification -> {
                 onClickGoalNotification()
             }
+
             is SettingUiEvent.OnClickRecordNotification -> {
                 onClickRecordNotification()
             }
+
             is SettingUiEvent.OnClickDeleteCurrentGoal -> {
                 viewModelScope.launch {
                     deleteCurrentGoalUseCase()
@@ -91,7 +96,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onPopBack() {
         viewModelScope.launch {
-            _uiEffect.emit(SettingUiEffect.OnPopBack)
+            _uiEffect.emit(SettingUiEffect.NavigateToBackStack)
         }
     }
 
@@ -137,13 +142,13 @@ class SettingViewModel @Inject constructor(
 
     private fun onClickGoalNotification() {
         viewModelScope.launch {
-            _uiEffect.emit(SettingUiEffect.OnGoGoalNotification)
+            _uiEffect.emit(SettingUiEffect.NavigateToGoalNotificationSetting)
         }
     }
 
     private fun onClickRecordNotification() {
         viewModelScope.launch {
-            _uiEffect.emit(SettingUiEffect.OnGoRecordNotification)
+            _uiEffect.emit(SettingUiEffect.NavigateToRecordNotificationSetting)
         }
     }
 }

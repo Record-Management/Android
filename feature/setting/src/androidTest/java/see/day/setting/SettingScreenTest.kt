@@ -31,7 +31,7 @@ class SettingScreenTest {
         composeTestRule.setContent {
             SettingScreen(
                 uiState = SettingUiState.init,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -49,7 +49,7 @@ class SettingScreenTest {
         composeTestRule.setContent {
             SettingScreen(
                 uiState = SettingUiState.init,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -75,7 +75,7 @@ class SettingScreenTest {
         composeTestRule.setContent {
             SettingScreen(
                 uiState = SettingUiState.init.copy(birthDate = "2000-01-16"),
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -101,7 +101,7 @@ class SettingScreenTest {
         composeTestRule.setContent {
             SettingScreen(
                 uiState = SettingUiState.init,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -127,7 +127,7 @@ class SettingScreenTest {
         composeTestRule.setContent {
             SettingScreen(
                 uiState = SettingUiState.init,
-                uiEvent = {}
+                onAction = {}
             )
         }
 

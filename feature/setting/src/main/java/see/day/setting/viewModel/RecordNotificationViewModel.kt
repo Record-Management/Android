@@ -46,12 +46,13 @@ class RecordNotificationViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: RecordNotificationUiEvent) {
+    fun onAction(uiEvent: RecordNotificationUiEvent) {
         when (uiEvent) {
-            RecordNotificationUiEvent.OnGoBack -> {
+            RecordNotificationUiEvent.OnClickBack -> {
                 onGoBack()
             }
-            is RecordNotificationUiEvent.OnChangedRecordNotification -> {
+
+            is RecordNotificationUiEvent.OnRecordNotificationChanged -> {
                 onChangedRecordNotification(
                     dailyRecordEnabled = uiEvent.dailyRecordNotificationEnabled,
                     exerciseRecordEnabled = uiEvent.exerciseRecordNotificationEnabled,
@@ -63,7 +64,7 @@ class RecordNotificationViewModel @Inject constructor(
 
     private fun onGoBack() {
         viewModelScope.launch {
-            _uiEffect.emit(RecordNotificationUiEffect.OnGoBack)
+            _uiEffect.emit(RecordNotificationUiEffect.NavigateToBackStack)
         }
     }
 

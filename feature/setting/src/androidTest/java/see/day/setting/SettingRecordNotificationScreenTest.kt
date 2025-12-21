@@ -31,7 +31,7 @@ class SettingRecordNotificationScreenTest {
                 SeeDayTheme {
                     SettingRecordNotificationScreen(
                         uiState = RecordNotificationUiState.init,
-                        uiEvent = {}
+                        onAction = {}
                     )
                 }
             }
@@ -48,7 +48,7 @@ class SettingRecordNotificationScreenTest {
                 SeeDayTheme {
                     SettingRecordNotificationScreen(
                         uiState = RecordNotificationUiState.init,
-                        uiEvent = {}
+                        onAction = {}
                     )
                 }
             }
