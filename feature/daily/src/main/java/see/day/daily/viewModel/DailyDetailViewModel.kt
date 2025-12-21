@@ -85,7 +85,7 @@ class DailyDetailViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: DailyDetailUiEvent) {
+    fun onAction(uiEvent: DailyDetailUiEvent) {
         when (uiEvent) {
             DailyDetailUiEvent.OnPopHome -> {
                 onPopHome()
@@ -118,7 +118,7 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onPopHome() {
         viewModelScope.launch {
-            _uiEffect.emit(DailyDetailUiEffect.OnPopHome(false))
+            _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(false))
         }
     }
 
@@ -191,7 +191,7 @@ class DailyDetailViewModel @Inject constructor(
                 photoUrls
             )
         ).fold(
-            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true)) },
+            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(true)) },
             onFailure = {  }
         )
     }
@@ -207,7 +207,7 @@ class DailyDetailViewModel @Inject constructor(
                 urls
             )
         ).onSuccess {
-            _uiEffect.emit(DailyDetailUiEffect.OnPopHome(true))
+            _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(true))
         }
     }
 
@@ -229,7 +229,7 @@ class DailyDetailViewModel @Inject constructor(
         viewModelScope.launch {
             deleteDailyRecordUseCase(recordId)
                 .onSuccess {
-                    _uiEffect.emit(DailyDetailUiEffect.OnPopHome(isUpdated = true))
+                    _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(isUpdated = true))
                     _toastMessage.emit("기록이 삭제 되었습니다.")
                 }
         }

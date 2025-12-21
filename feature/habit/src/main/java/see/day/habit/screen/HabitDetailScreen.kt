@@ -77,7 +77,7 @@ internal fun HabitDetailScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                is HabitDetailUiEffect.OnPopHome -> {
+                is HabitDetailUiEffect.NavigateToHome -> {
                     onClickPopHome(effect.isUpdated)
                 }
             }
@@ -128,7 +128,7 @@ internal fun HabitDetailScreenRoot(
 
     HabitDetailScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent,
+        onAction = viewModel::onAction,
         onClickBackButton = {
             if (uiState.isEditing()) {
                 openBackDialog = true
@@ -144,7 +144,7 @@ internal fun HabitDetailScreenRoot(
 internal fun  HabitDetailScreen(
     modifier: Modifier = Modifier,
     uiState: HabitDetailUiState,
-    uiEvent: (HabitDetailUiEvent) -> Unit,
+    onAction: (HabitDetailUiEvent) -> Unit,
     onClickBackButton: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -155,7 +155,7 @@ internal fun  HabitDetailScreen(
             sheetState = sheetState,
             onDismiss = { openSelectEmotionDialog = false },
             onClickHabit = { newHabitType ->
-                uiEvent(HabitDetailUiEvent.OnHabitTypeChanged(newHabitType))
+                onAction(HabitDetailUiEvent.OnHabitTypeChanged(newHabitType))
             }
         )
     }
@@ -173,7 +173,7 @@ internal fun  HabitDetailScreen(
             onClickConfirmButton = {
                 val editMode = uiState.editMode
                 if (editMode is HabitDetailUiState.EditMode.Edit) {
-                    uiEvent(HabitDetailUiEvent.DeleteRecord(editMode.recordId))
+                    onAction(HabitDetailUiEvent.DeleteRecord(editMode.recordId))
                 }
             }
         )
@@ -212,7 +212,7 @@ internal fun  HabitDetailScreen(
                 ),
                 isEnabled = uiState.canSubmit,
                 onClick = {
-                    uiEvent(HabitDetailUiEvent.OnSaveRecord)
+                    onAction(HabitDetailUiEvent.OnSaveRecord)
                 }
             )
         }
@@ -223,7 +223,7 @@ internal fun  HabitDetailScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             TypeTitle(
-                modifier = modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(top = 10.dp),
                 typeIcon = uiState.habitType.getIconRes,
                 typeName = uiState.habitType.displayName,
                 onClickType = {
@@ -235,7 +235,7 @@ internal fun  HabitDetailScreen(
                     modifier = Modifier.padding(top = 24.dp),
                     isMainHabit = uiState.hasBeenSetAsMain,
                     onChangedMainHabit = { changed ->
-                        uiEvent(HabitDetailUiEvent.OnSetAsMainHabit(changed))
+                        onAction(HabitDetailUiEvent.OnSetAsMainHabit(changed))
                     }
                 )
             }
@@ -247,13 +247,13 @@ internal fun  HabitDetailScreen(
                 hour = uiState.hour,
                 minute = uiState.minute,
                 onClickSwitch = { enabled ->
-                    uiEvent(HabitDetailUiEvent.OnNotificationEnabledChanged(enabled))
+                    onAction(HabitDetailUiEvent.OnNotificationEnabledChanged(enabled))
                 },
                 onTimeChanged = { hour, minute ->
-                    uiEvent(HabitDetailUiEvent.OnAlertTimeChanged(hour, minute))
+                    onAction(HabitDetailUiEvent.OnAlertTimeChanged(hour, minute))
                 },
                 onTimeSpinnerDisplayed = { displayed ->
-                    uiEvent(HabitDetailUiEvent.OnTimeSpinnerDisplay(displayed))
+                    onAction(HabitDetailUiEvent.OnTimeSpinnerDisplay(displayed))
                 }
             )
             Spacer(
@@ -283,7 +283,7 @@ internal fun  HabitDetailScreen(
                 placeHolder = R.string.memo,
                 text = uiState.memo,
                 onChangedText = { changedText ->
-                    uiEvent(HabitDetailUiEvent.OnMemoChanged(changedText))
+                    onAction(HabitDetailUiEvent.OnMemoChanged(changedText))
                 }
             )
         }
@@ -296,7 +296,7 @@ private fun HabitDetailScreenPreview() {
     SeeDayTheme {
         HabitDetailScreen(
             uiState = HabitDetailUiState.init,
-            uiEvent = {},
+            onAction = {},
             onClickBackButton = {}
         )
     }
@@ -308,7 +308,7 @@ private fun HabitDetailScreenCanBeMainHabitPreview() {
     SeeDayTheme {
         HabitDetailScreen(
             uiState = HabitDetailUiState.init.copy(canBeMain = true, hasBeenSetAsMain = false),
-            uiEvent = {},
+            onAction = {},
             onClickBackButton = {}
         )
     }
@@ -320,7 +320,7 @@ private fun HabitDetailScreenEditModePreview() {
     SeeDayTheme {
         HabitDetailScreen(
             uiState = HabitDetailUiState.init.copy(editMode = HabitDetailUiState.EditMode.Edit(originalRecord = HabitRecordUiModel("",HabitType.EXERCISE,false,0,0,"",true, false),"")),
-            uiEvent = {},
+            onAction = {},
             onClickBackButton = {}
        )
     }

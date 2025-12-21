@@ -76,7 +76,7 @@ fun ExerciseDetailScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                is ExerciseDailyUiEffect.OnPopHome -> {
+                is ExerciseDailyUiEffect.NavigateToHome -> {
                     onClickPopHome(effect.isUpdated)
                 }
             }
@@ -126,7 +126,7 @@ fun ExerciseDetailScreenRoot(
 
     ExerciseDetailScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent,
+        uiEvent = viewModel::onAction,
         onClickBackButton = {
             if (uiState.isEditing()) {
                 openBackDialog = true

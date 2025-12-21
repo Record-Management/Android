@@ -47,7 +47,7 @@ class DailyDetailScreenTest {
             SeeDayTheme {
                 DailyDetailScreen(
                     uiState = uiState,
-                    uiEvent = {},
+                    onAction = {},
                     onClickBackButton = {}
                 )
             }
@@ -87,7 +87,7 @@ class DailyDetailScreenTest {
             SeeDayTheme {
                 DailyDetailScreen(
                     uiState = uiState,
-                    uiEvent = {},
+                    onAction = {},
                     onClickBackButton = {}
                 )
             }
@@ -115,7 +115,7 @@ class DailyDetailScreenTest {
             SeeDayTheme {
                 DailyDetailScreen(
                     uiState = uiState,
-                    uiEvent = { event ->
+                    onAction = { event ->
                         when(event) {
                             is DailyDetailUiEvent.OnChangedText -> {
                                 uiState = uiState.copy(text = event.text)
@@ -155,7 +155,7 @@ class DailyDetailScreenTest {
             SeeDayTheme {
                 DailyDetailScreen(
                     uiState = uiState,
-                    uiEvent = { event ->
+                    onAction = { event ->
                         when(event) {
                             is DailyDetailUiEvent.OnChangedText -> {
                                 uiState = uiState.copy(text = event.text)

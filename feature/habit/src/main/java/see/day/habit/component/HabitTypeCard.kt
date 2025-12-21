@@ -41,18 +41,18 @@ internal fun HabitTypeCard(
         Image(
             painter = painterResource(habitType.getIconRes),
             contentDescription = habitType.displayName,
-            modifier = modifier.size(50.dp)
+            modifier = Modifier.size(50.dp)
                 .align(Alignment.CenterStart)
         )
         Text(
             text = habitType.displayName,
             style = MaterialTheme.typography.titleSmall,
-            modifier = modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center)
         )
         Image(
             imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
             contentDescription = "선택 버튼",
-            modifier = modifier.size(20.dp).align(Alignment.CenterEnd)
+            modifier = Modifier.size(20.dp).align(Alignment.CenterEnd)
         )
     }
 }
