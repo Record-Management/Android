@@ -1,6 +1,6 @@
 package see.day.goal.state.reset
 
 sealed interface ResetGoalUiEffect {
-    data object OnBack: ResetGoalUiEffect
-    data object OnFinishResetGoal: ResetGoalUiEffect
+    data object NavigateToBack: ResetGoalUiEffect
+    data object NavigateToFinishResetGoal: ResetGoalUiEffect
 }

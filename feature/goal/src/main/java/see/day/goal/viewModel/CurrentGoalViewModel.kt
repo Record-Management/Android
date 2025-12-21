@@ -60,13 +60,13 @@ class CurrentGoalViewModel @Inject constructor(
 
     private fun onClickBack() {
         viewModelScope.launch {
-            _uiEffect.emit(CurrentGoalUiEffect.OnGoBack)
+            _uiEffect.emit(CurrentGoalUiEffect.NavigateToBack)
         }
     }
 
     private fun onClickGoalBanner() {
         viewModelScope.launch {
-            _uiEffect.emit(CurrentGoalUiEffect.OnGoGoalSetting)
+            _uiEffect.emit(CurrentGoalUiEffect.NavigateToResetGoalSetting)
         }
     }
 }
