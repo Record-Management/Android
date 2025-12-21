@@ -10,7 +10,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +38,7 @@ class RecordScreenTest {
             SeeDayTheme {
                 OnboardingScreen(
                     uiState = uiState,
-                    uiEvent = {}
+                    onAction = {}
                 )
             }
         }
@@ -59,7 +58,7 @@ class RecordScreenTest {
             SeeDayTheme {
                 OnboardingScreen(
                     uiState = OnboardingUiState.init.copy(OnboardingScreenState.RECORD),
-                    uiEvent = {}
+                    onAction = {}
                 )
             }
         }
@@ -85,7 +84,7 @@ class RecordScreenTest {
             SeeDayTheme {
                 OnboardingScreen(
                     uiState = OnboardingUiState.init.copy(OnboardingScreenState.RECORD),
-                    uiEvent = {}
+                    onAction = {}
                 )
             }
         }

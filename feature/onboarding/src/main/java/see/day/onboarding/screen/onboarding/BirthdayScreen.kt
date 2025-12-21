@@ -62,9 +62,9 @@ internal fun BirthdayScreen(modifier: Modifier = Modifier, birthDay: String, onC
             month = snappedDate.monthValue
             day = snappedDate.dayOfMonth
         }
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
         CompleteButton(
-            modifier = modifier,
+            modifier = Modifier,
             text = "다음",
             isEnabled = true,
             onClick = { onClickComplete(OnboardingUiEvent.EnterBirthDay("%04d-%02d-%02d".format(year, month, day))) }

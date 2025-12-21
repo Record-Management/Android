@@ -30,7 +30,7 @@ internal fun OnboardingTopBar(modifier: Modifier = Modifier, uiState: Onboarding
     ) {
         if (uiState.onboardingScreenState != RECORD) {
             Image(
-                modifier = modifier
+                modifier = Modifier
                     .padding(vertical = 16.dp)
                     .padding(start = 16.dp)
                     .clickable { uiEvent(OnClickBack) },
@@ -38,10 +38,10 @@ internal fun OnboardingTopBar(modifier: Modifier = Modifier, uiState: Onboarding
                 contentDescription = stringResource(R.string.back_button_desc)
             )
         }
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
         LinearProgressIndicator(
             progress = { uiState.onboardingScreenState.getProgress() },
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(4.dp),
             color = MaterialTheme.colorScheme.primary,

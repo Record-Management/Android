@@ -13,7 +13,6 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.R
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.onboarding.OnboardingUiState
-import java.time.LocalDate
 
 class BirthdayScreenTest {
 
@@ -33,7 +32,7 @@ class BirthdayScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -53,7 +52,7 @@ class BirthdayScreenTest {
             SeeDayTheme {
                 OnboardingScreen(
                     uiState = uiState,
-                    uiEvent = {}
+                    onAction = {}
                 )
             }
 

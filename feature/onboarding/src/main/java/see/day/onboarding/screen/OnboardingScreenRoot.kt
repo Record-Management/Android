@@ -59,15 +59,15 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
 
     OnboardingScreen(
         uiState = uiState,
-        uiEvent = viewModel::onAction
+        onAction = viewModel::onAction
     )
 }
 
 @Composable
-internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUiEvent) -> Unit, modifier: Modifier = Modifier) {
-    if(uiState.onboardingScreenState == TERMS) {
+internal fun OnboardingScreen(uiState: OnboardingUiState, onAction: (OnboardingUiEvent) -> Unit, modifier: Modifier = Modifier) {
+    if (uiState.onboardingScreenState == TERMS) {
         TermsScreen(
-            onClick = {uiEvent(OnboardingUiEvent.ConfirmTerms)}
+            onClick = { onAction(OnboardingUiEvent.ConfirmTerms) }
         )
         return
     }
@@ -77,21 +77,24 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
             OnboardingTopBar(
                 modifier,
                 uiState,
-                uiEvent
+                onAction
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp).fillMaxSize(),
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
+                .fillMaxSize(),
         ) {
-            TitleDescription(modifier, uiState)
-            Spacer(modifier = modifier.height(50.dp))
+            TitleDescription(Modifier, uiState)
+            Spacer(modifier = Modifier.height(50.dp))
             when (uiState.onboardingScreenState) {
                 RECORD -> {
-                    RecordTypeScreen (
+                    RecordTypeScreen(
                         selectedRecordType = uiState.mainRecordType,
                         onClickCompleteButton = { recordType ->
-                            uiEvent(OnboardingUiEvent.SetRecordType(recordType))
+                            onAction(OnboardingUiEvent.SetRecordType(recordType))
                         }
                     )
                 }
@@ -99,29 +102,32 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                 NICKNAME -> {
                     NicknameScreen(
                         nickname = uiState.nickname,
-                        onComplete = uiEvent
+                        onComplete = onAction
                     )
                 }
 
                 BIRTHDAY -> {
                     BirthdayScreen(
                         birthDay = uiState.birthDate,
-                        onClickComplete = uiEvent
+                        onClickComplete = onAction
                     )
                 }
+
                 GOAL -> {
                     GoalsScreen(
                         goalDays = uiState.goalDays,
                         onComplete = { goalDays ->
-                            uiEvent(OnboardingUiEvent.SetGoalDays(goalDays))
+                            onAction(OnboardingUiEvent.SetGoalDays(goalDays))
                         }
                     )
                 }
+
                 ALERT -> {
                     AlertScreen(
-                        onClickComplete = uiEvent
+                        onClickComplete = onAction
                     )
                 }
+
                 TERMS -> {}
             }
         }
@@ -134,7 +140,7 @@ private fun OnboardingScreenPreview() {
     SeeDayTheme {
         OnboardingScreen(
             uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY),
-            uiEvent = {}
+            onAction = {}
         )
     }
 }
@@ -145,7 +151,7 @@ private fun OnboardingScreenInitPreview() {
     SeeDayTheme {
         OnboardingScreen(
             uiState = OnboardingUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }
