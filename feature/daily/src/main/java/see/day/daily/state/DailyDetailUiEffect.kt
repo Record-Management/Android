@@ -2,5 +2,5 @@ package see.day.daily.state
 
 interface DailyDetailUiEffect {
 
-    data class OnPopHome(val isUpdated: Boolean = false) : DailyDetailUiEffect
+    data class NavigateToHome(val isUpdated: Boolean = false) : DailyDetailUiEffect
 }

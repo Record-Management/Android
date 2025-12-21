@@ -60,7 +60,7 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect {
             when (val effect = it) {
-                is DailyDetailUiEffect.OnPopHome -> {
+                is DailyDetailUiEffect.NavigateToHome -> {
                     onClickPopHome(effect.isUpdated)
                 }
             }
@@ -119,13 +119,13 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
                 onClickPopHome(false)
             }
         },
-        uiEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, uiEvent: (DailyDetailUiEvent) -> Unit) {
+internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDetailUiState, onClickBackButton: () -> Unit, onAction: (DailyDetailUiEvent) -> Unit) {
     val context = LocalContext.current
     var openSelectEmotionDialog by remember { mutableStateOf(false) }
 
@@ -136,7 +136,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
             sheetState = sheetState,
             onDismiss = { openSelectEmotionDialog = false },
             onClickChangeEmotion = { emotion ->
-                uiEvent(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
+                onAction(DailyDetailUiEvent.OnChangeDailyEmotion(emotion))
             }
         )
     }
@@ -148,7 +148,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
             onClickConfirmButton = {
                 val editMode = uiState.editMode
                 if (editMode is DailyDetailUiState.EditMode.Edit) {
-                    uiEvent(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
+                    onAction(DailyDetailUiEvent.DeleteRecord(editMode.recordId))
                 }
             }
         )
@@ -190,7 +190,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 ),
                 isEnabled = uiState.canSubmit,
                 onClick = {
-                    uiEvent(DailyDetailUiEvent.OnSaveRecord)
+                    onAction(DailyDetailUiEvent.OnSaveRecord)
                 }
             )
         }
@@ -212,7 +212,7 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 text = uiState.text,
                 placeHolder = R.string.record_daily_place_holder,
                 onChangedText = { changedText ->
-                    uiEvent(DailyDetailUiEvent.OnChangedText(changedText))
+                    onAction(DailyDetailUiEvent.OnChangedText(changedText))
                 }
             )
             RecordDetailPhotoRow(
@@ -220,10 +220,10 @@ internal fun DailyDetailScreen(modifier: Modifier = Modifier, uiState: DailyDeta
                 context = context,
                 uris = uiState.photos,
                 onRemovePhotos = { photo ->
-                    uiEvent(DailyDetailUiEvent.OnRemovePhoto(photo))
+                    onAction(DailyDetailUiEvent.OnRemovePhoto(photo))
                 },
                 { photos ->
-                    uiEvent(DailyDetailUiEvent.OnAddPhotos(photos))
+                    onAction(DailyDetailUiEvent.OnAddPhotos(photos))
                 }
             )
             Text(
@@ -243,7 +243,7 @@ private fun DailyDetailWriteScreen() {
         DailyDetailScreen(
             onClickBackButton = { },
             uiState = DailyDetailUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }

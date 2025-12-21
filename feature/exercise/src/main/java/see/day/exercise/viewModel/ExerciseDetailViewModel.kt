@@ -93,7 +93,7 @@ class ExerciseDetailViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: ExerciseDetailUiEvent) {
+    fun onAction(uiEvent: ExerciseDetailUiEvent) {
         when (uiEvent) {
             is ExerciseDetailUiEvent.OnExerciseTypeChanged -> onChangedExerciseType(uiEvent.exerciseType)
             is ExerciseDetailUiEvent.OnDailyNoteChanged -> onDailyNoteChanged(dailyNote = uiEvent.dailyNote)
@@ -218,7 +218,7 @@ class ExerciseDetailViewModel @Inject constructor(
                 imageUrls = imageUrls,
             )
         ).fold(
-            onSuccess = { _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(true)) },
+            onSuccess = { _uiEffect.emit(ExerciseDailyUiEffect.NavigateToHome(true)) },
             onFailure = {}
         )
     }
@@ -239,7 +239,7 @@ class ExerciseDetailViewModel @Inject constructor(
                 recordTime = uiState.value.recordDate.formatTime(),
             )
         ).onSuccess {
-            _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(true))
+            _uiEffect.emit(ExerciseDailyUiEffect.NavigateToHome(true))
         }
     }
 
@@ -261,7 +261,7 @@ class ExerciseDetailViewModel @Inject constructor(
         viewModelScope.launch {
             deleteExerciseRecordUseCase(recordId)
                 .onSuccess {
-                    _uiEffect.emit(ExerciseDailyUiEffect.OnPopHome(isUpdated = true))
+                    _uiEffect.emit(ExerciseDailyUiEffect.NavigateToHome(isUpdated = true))
                     _toastMessage.emit("기록이 삭제 되었습니다.")
                 }
         }
