@@ -31,7 +31,7 @@ class SettingGoalNotificationScreenTest {
                 SeeDayTheme {
                     SettingGoalNotificationScreen(
                         uiState = GoalNotificationUiState.init,
-                        uiEvent = {}
+                        onAction = {}
                     )
                 }
             }

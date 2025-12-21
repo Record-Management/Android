@@ -55,7 +55,7 @@ internal fun SettingRecordNotificationScreenRoot(
 
     SettingRecordNotificationScreen(
         uiState = uiState,
-        uiEvent = viewModel::onAction
+        onAction = viewModel::onAction
     )
 
 }
@@ -64,7 +64,7 @@ internal fun SettingRecordNotificationScreenRoot(
 internal fun SettingRecordNotificationScreen(
     modifier: Modifier = Modifier,
     uiState: RecordNotificationUiState,
-    uiEvent: (RecordNotificationUiEvent) -> Unit,
+    onAction: (RecordNotificationUiEvent) -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -88,13 +88,13 @@ internal fun SettingRecordNotificationScreen(
                 modifier = modifier,
                 title = R.string.blank_string,
                 onClickBackButton = {
-                    uiEvent(RecordNotificationUiEvent.OnClickBack)
+                    onAction(RecordNotificationUiEvent.OnClickBack)
                 }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
@@ -113,7 +113,7 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.isAllNotificationEnabled(),
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
+                    onAction(
                         RecordNotificationUiEvent.OnChangedRecordNotification(
                             dailyRecordNotificationEnabled = currentChecked,
                             exerciseRecordNotificationEnabled = currentChecked,
@@ -138,7 +138,7 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.dailyRecordNotificationEnabled,
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
+                    onAction(
                         RecordNotificationUiEvent.OnChangedRecordNotification(
                             dailyRecordNotificationEnabled = currentChecked,
                         )
@@ -153,7 +153,7 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.exerciseRecordNotificationEnabled,
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
+                    onAction(
                         RecordNotificationUiEvent.OnChangedRecordNotification(
                             exerciseRecordNotificationEnabled = currentChecked,
                         )
@@ -168,7 +168,7 @@ internal fun SettingRecordNotificationScreen(
                 checked = uiState.habitRecordNotificationEnabled,
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
-                    uiEvent(
+                    onAction(
                         RecordNotificationUiEvent.OnChangedRecordNotification(
                             habitRecordNotificationEnabled = currentChecked,
                         )
@@ -185,7 +185,7 @@ private fun SettingRecordNotificationScreenPreview() {
     SeeDayTheme {
         SettingRecordNotificationScreen(
             uiState = RecordNotificationUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }

@@ -62,7 +62,7 @@ fun SettingScreenRoot(
 
     SettingScreen(
         uiState = uiState,
-        uiEvent = viewModel::onAction,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -70,7 +70,7 @@ fun SettingScreenRoot(
 internal fun SettingScreen(
     modifier: Modifier = Modifier,
     uiState: SettingUiState,
-    uiEvent: (SettingUiEvent) -> Unit,
+    onAction: (SettingUiEvent) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -81,12 +81,12 @@ internal fun SettingScreen(
                 modifier = Modifier,
                 title = R.string.setting,
                 backgroundColor = gray20,
-                onClickBackButton = { uiEvent(SettingUiEvent.OnClickBack) }
+                onClickBackButton = { onAction(SettingUiEvent.OnClickBack) }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .background(gray20)
@@ -98,31 +98,31 @@ internal fun SettingScreen(
                 birthDate = uiState.birthDate,
                 socialType = SocialType.KAKAO,
                 onNicknameChanged = { nickname ->
-                    uiEvent(SettingUiEvent.OnChangedNickname(nickname))
+                    onAction(SettingUiEvent.OnChangedNickname(nickname))
                 },
                 onBirthDateChanged = { birthdate ->
-                    uiEvent(SettingUiEvent.OnChangedBirthDate(birthdate))
+                    onAction(SettingUiEvent.OnChangedBirthDate(birthdate))
                 },
                 onClickDeleteCurrentGoal = {
-                    uiEvent(SettingUiEvent.OnClickDeleteCurrentGoal)
+                    onAction(SettingUiEvent.OnClickDeleteCurrentGoal)
                 }
             )
             AlertSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
                 onClickAppAlert = {
-                    uiEvent(SettingUiEvent.OnClickGoalNotification)
+                    onAction(SettingUiEvent.OnClickGoalNotification)
                 },
                 onClickRecordsAlert = {
-                    uiEvent(SettingUiEvent.OnClickRecordNotification)
+                    onAction(SettingUiEvent.OnClickRecordNotification)
                 }
             )
             ExtSettingComponent(
                 modifier = Modifier.padding(top = 24.dp),
                 onClickLogout = {
-                    uiEvent(SettingUiEvent.OnClickLogout)
+                    onAction(SettingUiEvent.OnClickLogout)
                 },
                 onClickWithdrawal = {
-                    uiEvent(SettingUiEvent.OnClickWithdrawal)
+                    onAction(SettingUiEvent.OnClickWithdrawal)
                 }
             )
         }
@@ -135,7 +135,7 @@ private fun SettingScreenPreview() {
     SeeDayTheme {
         SettingScreen(
             uiState = SettingUiState.init,
-            uiEvent = {}
+            onAction = {}
         )
     }
 }
