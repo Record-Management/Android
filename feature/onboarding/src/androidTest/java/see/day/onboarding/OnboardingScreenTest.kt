@@ -71,7 +71,7 @@ class OnboardingScreenTest {
             OnboardingScreen(
                 uiState = uiState,
                 uiEvent = {
-                    if (it is OnboardingUiEvent.OnBack) {
+                    if (it is OnboardingUiEvent.OnClickBack) {
                         uiState = uiState.copy(
                             onboardingScreenState = OnboardingScreenState.entries[uiState.onboardingScreenState.ordinal - 1]
                         )

@@ -40,7 +40,7 @@ import see.day.ui.screen.RecordTypeScreen
 internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoOnboardingComplete: (CompleteType) -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     BackHandler(true) {
-        viewModel.onAction(OnboardingUiEvent.OnBack)
+        viewModel.onAction(OnboardingUiEvent.OnClickBack)
     }
 
     LaunchedEffect(Unit) {
@@ -50,7 +50,7 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
                     onBack()
                 }
 
-                OnboardingUiEffect.GoOnboardingComplete -> {
+                OnboardingUiEffect.NavigateToOnboardingComplete -> {
                     onGoOnboardingComplete(CompleteType.ONBOARDING)
                 }
             }
@@ -67,7 +67,7 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
 internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUiEvent) -> Unit, modifier: Modifier = Modifier) {
     if(uiState.onboardingScreenState == TERMS) {
         TermsScreen(
-            onClick = {uiEvent(OnboardingUiEvent.ConformTerms)}
+            onClick = {uiEvent(OnboardingUiEvent.ConfirmTerms)}
         )
         return
     }
@@ -113,7 +113,7 @@ internal fun OnboardingScreen(uiState: OnboardingUiState, uiEvent: (OnboardingUi
                     GoalsScreen(
                         goalDays = uiState.goalDays,
                         onComplete = { goalDays ->
-                            uiEvent(OnboardingUiEvent.EnterGoal(goalDays))
+                            uiEvent(OnboardingUiEvent.SetGoalDays(goalDays))
                         }
                     )
                 }

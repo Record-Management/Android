@@ -19,6 +19,7 @@ data class OnboardingUiState(
             birthDate = todayDate(),
             goalDays = 0
         )
+        
         private fun todayDate(): String {
             val now = LocalDate.now()
             return "%04d-%02d-%02d".format(now.year, now.monthValue, now.dayOfMonth)

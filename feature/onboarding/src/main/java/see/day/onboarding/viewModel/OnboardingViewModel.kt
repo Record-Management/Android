@@ -43,7 +43,7 @@ class OnboardingViewModel @Inject constructor(
 
     fun onAction(event: OnboardingUiEvent) {
         when (event) {
-            is OnboardingUiEvent.ConformTerms -> {
+            is OnboardingUiEvent.ConfirmTerms -> {
                 confirmTerms()
             }
 
@@ -59,15 +59,15 @@ class OnboardingViewModel @Inject constructor(
                 setBirthday(event.birthDay)
             }
 
-            is OnboardingUiEvent.EnterGoal -> {
+            is OnboardingUiEvent.SetGoalDays -> {
                 setGoalDay(event.goalDay)
             }
 
-            is OnboardingUiEvent.FinishOnboarding -> {
+            is OnboardingUiEvent.OnClickFinishOnboarding -> {
                 finishOnboarding()
             }
 
-            OnboardingUiEvent.OnBack -> {
+            OnboardingUiEvent.OnClickBack -> {
                 onBack()
             }
         }
@@ -131,7 +131,7 @@ class OnboardingViewModel @Inject constructor(
                     getFcmTokenUseCase()
                         .onSuccess { token ->
                             updateFcmTokenUseCase(token).onSuccess {
-                                _uiEffect.emit(OnboardingUiEffect.GoOnboardingComplete)
+                                _uiEffect.emit(OnboardingUiEffect.NavigateToOnboardingComplete)
                             }
                         }
                 }.onFailure {

@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -54,7 +53,7 @@ internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (Onboar
             modifier = modifier,
             text = "다음",
             isEnabled = true,
-            onClick = { onClickComplete(OnboardingUiEvent.FinishOnboarding) }
+            onClick = { onClickComplete(OnboardingUiEvent.OnClickFinishOnboarding) }
         )
     }
 }
