@@ -52,7 +52,7 @@ class RecordNotificationViewModel @Inject constructor(
                 onGoBack()
             }
 
-            is RecordNotificationUiEvent.OnChangedRecordNotification -> {
+            is RecordNotificationUiEvent.OnRecordNotificationChanged -> {
                 onChangedRecordNotification(
                     dailyRecordEnabled = uiEvent.dailyRecordNotificationEnabled,
                     exerciseRecordEnabled = uiEvent.exerciseRecordNotificationEnabled,

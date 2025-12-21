@@ -98,10 +98,10 @@ internal fun SettingScreen(
                 birthDate = uiState.birthDate,
                 socialType = SocialType.KAKAO,
                 onNicknameChanged = { nickname ->
-                    onAction(SettingUiEvent.OnChangedNickname(nickname))
+                    onAction(SettingUiEvent.OnNicknameChanged(nickname))
                 },
                 onBirthDateChanged = { birthdate ->
-                    onAction(SettingUiEvent.OnChangedBirthDate(birthdate))
+                    onAction(SettingUiEvent.OnBirthDateChanged(birthdate))
                 },
                 onClickDeleteCurrentGoal = {
                     onAction(SettingUiEvent.OnClickDeleteCurrentGoal)

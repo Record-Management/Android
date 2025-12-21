@@ -62,11 +62,11 @@ class SettingViewModel @Inject constructor(
                 onPopBack()
             }
 
-            is SettingUiEvent.OnChangedNickname -> {
+            is SettingUiEvent.OnNicknameChanged -> {
                 onChangedNickname(uiEvent.nickname)
             }
 
-            is SettingUiEvent.OnChangedBirthDate -> {
+            is SettingUiEvent.OnBirthDateChanged -> {
                 onChangedBirthday(uiEvent.birthDate)
             }
 

@@ -106,7 +106,7 @@ internal fun SettingGoalNotificationScreen(
                 checked = uiState.goalNotificationEnabled,
                 isAllChecked = uiState.goalNotificationEnabled,
                 onCheckedChanged = { currentChecked ->
-                    onAction(GoalNotificationUiEvent.OnChangedGoalNotification(currentChecked))
+                    onAction(GoalNotificationUiEvent.OnGoalNotificationChanged(currentChecked))
                 }
             )
         }

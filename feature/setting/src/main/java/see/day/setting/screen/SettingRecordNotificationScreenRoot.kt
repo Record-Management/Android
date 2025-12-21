@@ -114,7 +114,7 @@ internal fun SettingRecordNotificationScreen(
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
                     onAction(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             dailyRecordNotificationEnabled = currentChecked,
                             exerciseRecordNotificationEnabled = currentChecked,
                             habitRecordNotificationEnabled = currentChecked
@@ -139,7 +139,7 @@ internal fun SettingRecordNotificationScreen(
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
                     onAction(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             dailyRecordNotificationEnabled = currentChecked,
                         )
                     )
@@ -154,7 +154,7 @@ internal fun SettingRecordNotificationScreen(
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
                     onAction(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             exerciseRecordNotificationEnabled = currentChecked,
                         )
                     )
@@ -169,7 +169,7 @@ internal fun SettingRecordNotificationScreen(
                 isAllChecked = uiState.isAllNotificationEnabled(),
                 onCheckedChanged = { currentChecked ->
                     onAction(
-                        RecordNotificationUiEvent.OnChangedRecordNotification(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
                             habitRecordNotificationEnabled = currentChecked,
                         )
                     )
