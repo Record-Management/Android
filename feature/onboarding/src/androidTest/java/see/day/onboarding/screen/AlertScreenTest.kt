@@ -31,7 +31,7 @@ class AlertScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 

@@ -10,7 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.model.notification.NotificationType
-import see.day.model.record.RecordType
 import see.day.notification.screen.NotificationScreen
 import see.day.notification.state.NotificationHistoryUiModel
 import see.day.notification.state.NotificationUiState
@@ -34,7 +33,7 @@ class NotificationScreenTest {
                 SeeDayTheme {
                     NotificationScreen(
                         uiState = NotificationUiState.init,
-                        uiEvent = {}
+                        onAction = {}
                     )
                 }
             }
@@ -55,7 +54,7 @@ class NotificationScreenTest {
                 SeeDayTheme {
                     NotificationScreen(
                         uiState = NotificationUiState.init.copy(notificationHistories = listOf(NotificationHistoryUiModel(NotificationType.HABIT_REMINDER,"1일 전","없슴","1일 전",true))),
-                        uiEvent = {}
+                        onAction = {}
                     )
                 }
             }
@@ -72,7 +71,7 @@ class NotificationScreenTest {
                 SeeDayTheme {
                     NotificationScreen(
                         uiState = NotificationUiState.init.copy(hasNoGoal = true),
-                        uiEvent = {}
+                        onAction = {}
                     )
                 }
             }

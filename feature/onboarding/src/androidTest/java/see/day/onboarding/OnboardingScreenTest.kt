@@ -40,7 +40,7 @@ class OnboardingScreenTest {
             var uiState by remember { mutableStateOf(OnboardingUiState.init.copy(onboardingScreenState = ALERT)) }
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {
+                onAction = {
                     uiState = uiState.copy(
                         onboardingScreenState = GOAL
                     )
@@ -70,8 +70,8 @@ class OnboardingScreenTest {
             var uiState by remember { mutableStateOf(OnboardingUiState.init.copy(onboardingScreenState = ALERT)) }
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {
-                    if (it is OnboardingUiEvent.OnBack) {
+                onAction = {
+                    if (it is OnboardingUiEvent.OnClickBack) {
                         uiState = uiState.copy(
                             onboardingScreenState = OnboardingScreenState.entries[uiState.onboardingScreenState.ordinal - 1]
                         )

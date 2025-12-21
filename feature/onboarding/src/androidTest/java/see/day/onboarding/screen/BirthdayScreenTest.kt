@@ -13,7 +13,6 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.onboarding.R
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.onboarding.OnboardingUiState
-import java.time.LocalDate
 
 class BirthdayScreenTest {
 
@@ -33,7 +32,7 @@ class BirthdayScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -47,20 +46,20 @@ class BirthdayScreenTest {
     }
 
     @Test
-    fun givenEmptyNickname_whenScreening_shownEnableNextButton() {
+    fun givenEmptyNickname_whenScreening_shownBirthday() {
         val uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY)
         composeTestRule.setContent {
             SeeDayTheme {
                 OnboardingScreen(
-                    uiState = uiState,
-                    uiEvent = {}
+                    uiState = uiState   ,
+                    onAction = {}
                 )
             }
 
         }
 
         composeTestRule
-            .onNodeWithText(uiState.birthDate.split("-")[0] +"년")
+            .onNodeWithText(uiState.birthDate.split("-")[0] + "년")
             .assertIsDisplayed()
 
         composeTestRule

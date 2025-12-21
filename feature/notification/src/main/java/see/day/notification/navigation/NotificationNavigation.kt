@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import see.day.model.record.RecordType
-import see.day.navigation.notification.NotificationRoute
 import see.day.navigation.notification.NotificationRoute.History
 import see.day.notification.screen.NotificationScreenRoute
 
@@ -21,8 +20,8 @@ fun NavGraphBuilder.notificationNavigation(
     composable<History> {
         NotificationScreenRoute(
             onBack = onBack,
-            onClickAddRecord = onClickAddRecord,
-            onClickResetGoal = onClickResetGoal
+            onNavigateToWriteRecord = onClickAddRecord,
+            onNavigateToResetGoal = onClickResetGoal
         )
     }
 }

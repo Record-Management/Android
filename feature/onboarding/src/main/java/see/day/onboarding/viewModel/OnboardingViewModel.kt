@@ -41,11 +41,12 @@ class OnboardingViewModel @Inject constructor(
     private val _uiEffect: MutableSharedFlow<OnboardingUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<OnboardingUiEffect> = _uiEffect.asSharedFlow()
 
-    fun onEvent(event: OnboardingUiEvent) {
+    fun onAction(event: OnboardingUiEvent) {
         when (event) {
-            is OnboardingUiEvent.ConformTerms -> {
+            is OnboardingUiEvent.ConfirmTerms -> {
                 confirmTerms()
             }
+
             is OnboardingUiEvent.SetRecordType -> {
                 setRecordType(event.recordType)
             }
@@ -58,13 +59,15 @@ class OnboardingViewModel @Inject constructor(
                 setBirthday(event.birthDay)
             }
 
-            is OnboardingUiEvent.EnterGoal -> {
+            is OnboardingUiEvent.SetGoalDays -> {
                 setGoalDay(event.goalDay)
             }
-            is OnboardingUiEvent.FinishOnboarding -> {
+
+            is OnboardingUiEvent.OnClickFinishOnboarding -> {
                 finishOnboarding()
             }
-            OnboardingUiEvent.OnBack -> {
+
+            OnboardingUiEvent.OnClickBack -> {
                 onBack()
             }
         }
@@ -77,6 +80,7 @@ class OnboardingViewModel @Inject constructor(
             )
         }
     }
+
     private fun setRecordType(recordType: RecordType) {
         _uiState.update {
             it.copy(
@@ -127,7 +131,7 @@ class OnboardingViewModel @Inject constructor(
                     getFcmTokenUseCase()
                         .onSuccess { token ->
                             updateFcmTokenUseCase(token).onSuccess {
-                                _uiEffect.emit(OnboardingUiEffect.GoOnboardingComplete)
+                                _uiEffect.emit(OnboardingUiEffect.NavigateToOnboardingComplete)
                             }
                         }
                 }.onFailure {

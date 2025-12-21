@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -45,16 +44,16 @@ internal fun AlertScreen(modifier: Modifier = Modifier, onClickComplete: (Onboar
         Image(
             painter = painterResource(R.drawable.alert_image),
             contentDescription = "알람 요청 이미지",
-            modifier = modifier.fillMaxWidth().offset(x = 16.dp),
+            modifier = Modifier.fillMaxWidth().offset(x = 16.dp),
             contentScale = ContentScale.FillWidth
         )
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
 
         CompleteButton(
-            modifier = modifier,
+            modifier = Modifier,
             text = "다음",
             isEnabled = true,
-            onClick = { onClickComplete(OnboardingUiEvent.FinishOnboarding) }
+            onClick = { onClickComplete(OnboardingUiEvent.OnClickFinishOnboarding) }
         )
     }
 }

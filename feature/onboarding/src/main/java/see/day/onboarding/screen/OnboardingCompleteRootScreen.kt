@@ -59,12 +59,13 @@ internal fun OnboardingCompleteScreenRoot(modifier: Modifier = Modifier, complet
         titleText = "하루를 채울 준비를 마쳤어요!"
     }
 
-    when(completeType) {
+    when (completeType) {
         CompleteType.ONBOARDING -> {
             if (!isNotificationPermissionGranted(context)) {
                 Toast.makeText(context, stringResource(R.string.notification_setting_denied), Toast.LENGTH_SHORT).show()
             }
         }
+
         CompleteType.RESET_GOAL -> {
 
         }
@@ -82,10 +83,13 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, titleText: 
     val scrollState = rememberScrollState()
 
     Column(
-        modifier = modifier.padding(horizontal = 16.dp).fillMaxHeight().verticalScroll(scrollState)
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxHeight()
+            .verticalScroll(scrollState)
     ) {
         Image(
-            modifier = modifier
+            modifier = Modifier
                 .padding(top = 66.dp)
                 .systemBarsPadding()
                 .height(height = 216.dp)
@@ -96,7 +100,7 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, titleText: 
             contentScale = ContentScale.FillWidth
         )
         Text(
-            modifier = modifier
+            modifier = Modifier
                 .padding(top = 28.dp)
                 .fillMaxWidth(),
             text = titleText,
@@ -104,9 +108,9 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, titleText: 
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = modifier.height(51.dp))
+        Spacer(modifier = Modifier.height(51.dp))
         Column(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             labelList().forEachIndexed { index, labelText ->
@@ -118,8 +122,8 @@ internal fun OnboardingCompleteScreen(modifier: Modifier = Modifier, titleText: 
         }
 
 
-        Spacer(modifier = modifier.weight(1f))
-        FadeEffect(2100,scrollState = scrollState) { modifier ->
+        Spacer(modifier = Modifier.weight(1f))
+        FadeEffect(2100, scrollState = scrollState) { modifier ->
             CompleteButton(
                 modifier = modifier.navigationBarsPadding(),
                 isEnabled = true,
@@ -152,12 +156,12 @@ fun FadeInLabel(@StringRes labelText: Int, delayMills: Int) {
 }
 
 @Composable
-fun FadeEffect(delayMills: Int,scrollState: ScrollState, content: @Composable (modifier: Modifier) -> Unit) {
+fun FadeEffect(delayMills: Int, scrollState: ScrollState, content: @Composable (modifier: Modifier) -> Unit) {
     val alpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
         delay(delayMills.toLong())
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.Main) {
             scrollState.animateScrollTo(scrollState.maxValue)
         }
         withContext(Dispatchers.Main) {

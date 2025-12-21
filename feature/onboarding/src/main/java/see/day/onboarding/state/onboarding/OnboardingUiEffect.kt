@@ -2,5 +2,5 @@ package see.day.onboarding.state.onboarding
 
 sealed interface OnboardingUiEffect {
     data object FinishApp : OnboardingUiEffect
-    data object GoOnboardingComplete : OnboardingUiEffect
+    data object NavigateToOnboardingComplete : OnboardingUiEffect
 }

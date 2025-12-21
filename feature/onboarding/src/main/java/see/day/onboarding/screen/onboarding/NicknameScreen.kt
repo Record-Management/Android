@@ -24,15 +24,15 @@ internal fun NicknameScreen(modifier: Modifier = Modifier, nickname: String, onC
             .fillMaxWidth()
     ) {
         NicknameChangedComponent(
-            modifier = modifier,
+            modifier = Modifier,
             nickname = nicknameValue,
             onChangedNickname = onNicknameChanged
         )
 
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
 
         CompleteButton(
-            modifier = modifier.imePadding(),
+            modifier = Modifier.imePadding(),
             text = "다음",
             isEnabled = !isError && nicknameValue.isNotEmpty(),
             onClick = { onComplete(OnboardingUiEvent.EnterNickname(nicknameValue)) }

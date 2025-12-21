@@ -33,7 +33,7 @@ class NicknameScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -52,7 +52,7 @@ class NicknameScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -72,7 +72,7 @@ class NicknameScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 
@@ -92,7 +92,7 @@ class NicknameScreenTest {
         composeTestRule.setContent {
             OnboardingScreen(
                 uiState = uiState,
-                uiEvent = {}
+                onAction = {}
             )
         }
 

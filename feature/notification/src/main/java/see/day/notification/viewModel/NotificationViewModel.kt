@@ -92,7 +92,7 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: NotificationUiEvent) {
+    fun onAction(uiEvent: NotificationUiEvent) {
         when (uiEvent) {
             NotificationUiEvent.OnClickBack -> {
                 onClickBack()
@@ -101,6 +101,7 @@ class NotificationViewModel @Inject constructor(
             is NotificationUiEvent.OnClickItem -> {
                 onClickItem(uiEvent.recordType, uiEvent.relativeTime)
             }
+
             NotificationUiEvent.OnClickResetGoalBanner -> {
                 onClickResetGoalBanner()
             }
@@ -109,7 +110,7 @@ class NotificationViewModel @Inject constructor(
 
     private fun onClickBack() {
         viewModelScope.launch {
-            _uiEffect.emit(NotificationUiEffect.OnPopBack)
+            _uiEffect.emit(NotificationUiEffect.NavigateToBackStack)
         }
     }
 
@@ -122,19 +123,19 @@ class NotificationViewModel @Inject constructor(
             if (isTodayNotification) {
                 if (hasAlreadyRecordedToday) {
                     _toastMessage.emit("이미 기록을 작성했어요.")
-                    _uiEffect.emit(NotificationUiEffect.OnPopBack)
+                    _uiEffect.emit(NotificationUiEffect.NavigateToBackStack)
                 } else {
-                    _uiEffect.emit(NotificationUiEffect.GoWriteRecord(recordType))
+                    _uiEffect.emit(NotificationUiEffect.NavigateToWriteRecord(recordType))
                 }
             } else {
                 if (hasAlreadyRecordedToday) {
                     _toastMessage.emit("지나간 기록은 기록할 수 없어요. 내일 또 만나요!")
-                    _uiEffect.emit(NotificationUiEffect.OnPopBack)
+                    _uiEffect.emit(NotificationUiEffect.NavigateToBackStack)
                 } else {
                     _toastMessage.emit(
                         "지나간 기록은 기록할 수 없어요. 오늘의 기록을 작성해 보는건 어떨까요?"
                     )
-                    _uiEffect.emit(NotificationUiEffect.GoWriteRecord(recordType))
+                    _uiEffect.emit(NotificationUiEffect.NavigateToWriteRecord(recordType))
                 }
             }
         }
@@ -142,7 +143,7 @@ class NotificationViewModel @Inject constructor(
 
     private fun onClickResetGoalBanner() {
         viewModelScope.launch {
-            _uiEffect.emit(NotificationUiEffect.OnResetGoal)
+            _uiEffect.emit(NotificationUiEffect.NavigateToResetGoal)
         }
     }
 
