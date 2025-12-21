@@ -41,11 +41,12 @@ class OnboardingViewModel @Inject constructor(
     private val _uiEffect: MutableSharedFlow<OnboardingUiEffect> = MutableSharedFlow()
     val uiEffect: SharedFlow<OnboardingUiEffect> = _uiEffect.asSharedFlow()
 
-    fun onEvent(event: OnboardingUiEvent) {
+    fun onAction(event: OnboardingUiEvent) {
         when (event) {
             is OnboardingUiEvent.ConformTerms -> {
                 confirmTerms()
             }
+
             is OnboardingUiEvent.SetRecordType -> {
                 setRecordType(event.recordType)
             }
@@ -61,9 +62,11 @@ class OnboardingViewModel @Inject constructor(
             is OnboardingUiEvent.EnterGoal -> {
                 setGoalDay(event.goalDay)
             }
+
             is OnboardingUiEvent.FinishOnboarding -> {
                 finishOnboarding()
             }
+
             OnboardingUiEvent.OnBack -> {
                 onBack()
             }
@@ -77,6 +80,7 @@ class OnboardingViewModel @Inject constructor(
             )
         }
     }
+
     private fun setRecordType(recordType: RecordType) {
         _uiState.update {
             it.copy(

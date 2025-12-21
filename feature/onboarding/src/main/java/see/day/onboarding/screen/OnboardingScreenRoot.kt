@@ -23,7 +23,6 @@ import see.day.onboarding.screen.onboarding.AlertScreen
 import see.day.onboarding.screen.onboarding.BirthdayScreen
 import see.day.onboarding.screen.onboarding.NicknameScreen
 import see.day.onboarding.screen.onboarding.TermsScreen
-import see.day.onboarding.state.OnboardingScreenState
 import see.day.onboarding.state.OnboardingScreenState.ALERT
 import see.day.onboarding.state.OnboardingScreenState.BIRTHDAY
 import see.day.onboarding.state.OnboardingScreenState.GOAL
@@ -41,7 +40,7 @@ import see.day.ui.screen.RecordTypeScreen
 internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel(), onBack: () -> Unit, onGoOnboardingComplete: (CompleteType) -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     BackHandler(true) {
-        viewModel.onEvent(OnboardingUiEvent.OnBack)
+        viewModel.onAction(OnboardingUiEvent.OnBack)
     }
 
     LaunchedEffect(Unit) {
@@ -60,7 +59,7 @@ internal fun OnboardingScreenRoot(viewModel: OnboardingViewModel = hiltViewModel
 
     OnboardingScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        uiEvent = viewModel::onAction
     )
 }
 
