@@ -16,12 +16,12 @@ data class OnboardingUiState(
             onboardingScreenState = OnboardingScreenState.TERMS,
             mainRecordType = null,
             nickname = "",
-            birthDate = todayDate(),
+            birthDate = initDate(),
             goalDays = 0
         )
-        
-        private fun todayDate(): String {
-            val now = LocalDate.now()
+
+        private fun initDate(): String {
+            val now = LocalDate.now().minusYears(3)
             return "%04d-%02d-%02d".format(now.year, now.monthValue, now.dayOfMonth)
         }
     }

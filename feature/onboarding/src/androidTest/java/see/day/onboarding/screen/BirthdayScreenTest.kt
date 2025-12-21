@@ -46,12 +46,12 @@ class BirthdayScreenTest {
     }
 
     @Test
-    fun givenEmptyNickname_whenScreening_shownEnableNextButton() {
+    fun givenEmptyNickname_whenScreening_shownBirthday() {
         val uiState = OnboardingUiState.init.copy(onboardingScreenState = BIRTHDAY)
         composeTestRule.setContent {
             SeeDayTheme {
                 OnboardingScreen(
-                    uiState = uiState,
+                    uiState = uiState   ,
                     onAction = {}
                 )
             }
@@ -59,7 +59,7 @@ class BirthdayScreenTest {
         }
 
         composeTestRule
-            .onNodeWithText(uiState.birthDate.split("-")[0] +"년")
+            .onNodeWithText(uiState.birthDate.split("-")[0] + "년")
             .assertIsDisplayed()
 
         composeTestRule
