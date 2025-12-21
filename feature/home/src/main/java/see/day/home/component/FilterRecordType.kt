@@ -64,7 +64,7 @@ internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFil
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = if (selectedFilterType == type) {
-                            modifier
+                            Modifier
                                 .size(30.dp)
                                 .border(width = 1.dp, color = MaterialTheme.colorScheme.primary, CircleShape)
                                 .clip(CircleShape)
@@ -73,7 +73,7 @@ internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFil
                                     balloonWindow?.dismiss()
                                 }
                         } else {
-                            modifier
+                            Modifier
                                 .size(30.dp)
                                 .clip(CircleShape)
                                 .background(Color.White)
