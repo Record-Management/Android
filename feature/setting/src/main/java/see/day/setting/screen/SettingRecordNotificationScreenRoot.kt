@@ -55,7 +55,7 @@ internal fun SettingRecordNotificationScreenRoot(
 
     SettingRecordNotificationScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        uiEvent = viewModel::onAction
     )
 
 }

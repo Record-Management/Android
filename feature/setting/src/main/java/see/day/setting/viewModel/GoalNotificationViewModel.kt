@@ -44,7 +44,7 @@ class GoalNotificationViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: GoalNotificationUiEvent) {
+    fun onAction(uiEvent: GoalNotificationUiEvent) {
         when (uiEvent) {
             is GoalNotificationUiEvent.OnChangedGoalNotification -> {
                 onChangedGoalNotification(enabled = uiEvent.enabled)

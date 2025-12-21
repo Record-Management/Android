@@ -62,7 +62,7 @@ fun SettingScreenRoot(
 
     SettingScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent,
+        uiEvent = viewModel::onAction,
     )
 }
 

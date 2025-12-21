@@ -46,11 +46,12 @@ class RecordNotificationViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: RecordNotificationUiEvent) {
+    fun onAction(uiEvent: RecordNotificationUiEvent) {
         when (uiEvent) {
             RecordNotificationUiEvent.OnGoBack -> {
                 onGoBack()
             }
+
             is RecordNotificationUiEvent.OnChangedRecordNotification -> {
                 onChangedRecordNotification(
                     dailyRecordEnabled = uiEvent.dailyRecordNotificationEnabled,

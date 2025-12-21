@@ -56,7 +56,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(uiEvent: SettingUiEvent) {
+    fun onAction(uiEvent: SettingUiEvent) {
         when (uiEvent) {
             is SettingUiEvent.OnPopBack -> {
                 onPopBack()
@@ -69,18 +69,23 @@ class SettingViewModel @Inject constructor(
             is SettingUiEvent.OnChangedBirthDate -> {
                 onChangedBirthday(uiEvent.birthDate)
             }
+
             is SettingUiEvent.OnClickLogout -> {
                 onClickLogout()
             }
+
             is SettingUiEvent.OnClickWithdrawal -> {
                 onClickWithdrawal()
             }
+
             is SettingUiEvent.OnClickGoalNotification -> {
                 onClickGoalNotification()
             }
+
             is SettingUiEvent.OnClickRecordNotification -> {
                 onClickRecordNotification()
             }
+
             is SettingUiEvent.OnClickDeleteCurrentGoal -> {
                 viewModelScope.launch {
                     deleteCurrentGoalUseCase()

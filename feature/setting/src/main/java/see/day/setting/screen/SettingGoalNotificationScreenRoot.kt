@@ -49,7 +49,7 @@ internal fun SettingGoalNotificationScreenRoot(
     }
     SettingGoalNotificationScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        uiEvent = viewModel::onAction
     )
 }
 
