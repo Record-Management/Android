@@ -80,7 +80,7 @@ class HabitDetailViewModel @Inject constructor(
 
     }
 
-    fun onEvent(uiEvent: HabitDetailUiEvent) {
+    fun onAction(uiEvent: HabitDetailUiEvent) {
         when (uiEvent) {
             is HabitDetailUiEvent.OnHabitTypeChanged -> {
                 onHabitTypeChanged(uiEvent.habitType)
@@ -179,7 +179,7 @@ class HabitDetailViewModel @Inject constructor(
                 isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
-            _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
+            _uiEffect.emit(HabitDetailUiEffect.NavigateToHome(true))
         }.onFailure {
 
         }
@@ -197,7 +197,7 @@ class HabitDetailViewModel @Inject constructor(
                 isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
-            _uiEffect.emit(HabitDetailUiEffect.OnPopHome(true))
+            _uiEffect.emit(HabitDetailUiEffect.NavigateToHome(true))
         }
     }
 
@@ -205,7 +205,7 @@ class HabitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             deleteHabitRecordUseCase(recordId)
                 .onSuccess {
-                    _uiEffect.emit(HabitDetailUiEffect.OnPopHome(isUpdated = true))
+                    _uiEffect.emit(HabitDetailUiEffect.NavigateToHome(isUpdated = true))
                     _toastMessage.emit("기록이 삭제 되었습니다.")
                 }
         }

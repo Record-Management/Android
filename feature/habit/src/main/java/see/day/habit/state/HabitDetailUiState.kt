@@ -1,6 +1,5 @@
 package see.day.habit.state
 
-import see.day.model.record.habit.HabitRecordInput
 import see.day.model.record.habit.HabitRecordUiModel
 import see.day.model.record.habit.HabitType
 import see.day.model.time.DateTime

@@ -77,7 +77,7 @@ internal fun HabitDetailScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                is HabitDetailUiEffect.OnPopHome -> {
+                is HabitDetailUiEffect.NavigateToHome -> {
                     onClickPopHome(effect.isUpdated)
                 }
             }
@@ -128,7 +128,7 @@ internal fun HabitDetailScreenRoot(
 
     HabitDetailScreen(
         uiState = uiState,
-        uiEvent = viewModel::onEvent,
+        uiEvent = viewModel::onAction,
         onClickBackButton = {
             if (uiState.isEditing()) {
                 openBackDialog = true
