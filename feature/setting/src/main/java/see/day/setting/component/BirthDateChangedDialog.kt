@@ -101,7 +101,7 @@ internal fun BirthDateChangedDialog(
                         onClick = {
                             onDismiss()
                         },
-                        modifier = modifier
+                        modifier = Modifier
                             .weight(1f)
                             .heightIn(min = 52.dp)
                             .padding(end = 5.dp),
