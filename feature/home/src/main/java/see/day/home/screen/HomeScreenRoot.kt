@@ -94,7 +94,7 @@ fun HomeScreenRoot(
         snapshotFlow { isRefresh }
             .collect { refresh ->
                 if (refresh) {
-                    viewModel.onEvent(HomeUiEvent.OnRefresh)
+                    viewModel.onAction(HomeUiEvent.OnRefresh)
                 }
             }
     }
@@ -102,25 +102,25 @@ fun HomeScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                is HomeUiEffect.OnGoAddRecord -> {
+                is HomeUiEffect.NavigateToAddRecord -> {
                     onClickAddRecord(effect.recordType)
                 }
 
-                is HomeUiEffect.OnGoDetailRecord -> {
+                is HomeUiEffect.NavigateToDetailRecord -> {
                     onClickDetailRecord(effect.recordType, effect.recordId)
                 }
 
-                is HomeUiEffect.OnGoSetting -> {
+                is HomeUiEffect.NavigateToSetting -> {
                     onClickSetting()
                 }
 
-                is HomeUiEffect.OnGoNotification -> {
+                is HomeUiEffect.NavigateToNotification -> {
                     onClickNotification()
                 }
-                is HomeUiEffect.OnGoCurrentGoal -> {
+                is HomeUiEffect.NavigateToCurrentGoal -> {
                     onGoCurrentGoal()
                 }
-                is HomeUiEffect.OnGoSetNewGoal -> {
+                is HomeUiEffect.NavigateToResetGoal -> {
                     onGoSetNewGoal()
                 }
             }
@@ -136,7 +136,7 @@ fun HomeScreenRoot(
     HomeScreen(
         modifier,
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        uiEvent = viewModel::onAction
     )
 }
 

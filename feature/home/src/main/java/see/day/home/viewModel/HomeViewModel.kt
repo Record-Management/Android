@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
                         true
                     }
                     if(shouldShowGoalPrompt) {
-                        _uiEffect.emit(HomeUiEffect.OnGoCurrentGoal)
+                        _uiEffect.emit(HomeUiEffect.NavigateToCurrentGoal)
                     }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
                     return@launch
@@ -112,8 +112,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    // 얘는 날짜 정보와 월간
-    fun onEvent(uiEvent: HomeUiEvent) {
+    fun onAction(uiEvent: HomeUiEvent) {
         when (uiEvent) {
             is HomeUiEvent.OnRefresh -> {
                 onRefresh()
@@ -259,19 +258,19 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoAddRecord(recordType))
+            _uiEffect.emit(HomeUiEffect.NavigateToAddRecord(recordType))
         }
     }
 
     private fun onClickDetailRecord(recordType: RecordType, recordId: String) {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoDetailRecord(recordType, recordId))
+            _uiEffect.emit(HomeUiEffect.NavigateToDetailRecord(recordType, recordId))
         }
     }
 
     private fun onClickSetting() {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoSetting)
+            _uiEffect.emit(HomeUiEffect.NavigateToSetting)
         }
     }
 
@@ -353,13 +352,13 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickNotification() {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoNotification)
+            _uiEffect.emit(HomeUiEffect.NavigateToNotification)
         }
     }
 
     private fun onClickGoalSetting() {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.OnGoSetNewGoal
+            _uiEffect.emit(HomeUiEffect.NavigateToResetGoal
             )
         }
     }
