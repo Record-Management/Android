@@ -66,7 +66,7 @@ fun CalendarDetail(
             color = gray100
         )
         Column(
-            modifier = modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             dailyRecordDetails.records.forEach { record ->

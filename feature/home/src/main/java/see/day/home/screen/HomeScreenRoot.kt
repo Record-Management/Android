@@ -94,7 +94,7 @@ fun HomeScreenRoot(
         snapshotFlow { isRefresh }
             .collect { refresh ->
                 if (refresh) {
-                    viewModel.onEvent(HomeUiEvent.OnRefresh)
+                    viewModel.onAction(HomeUiEvent.OnRefresh)
                 }
             }
     }
@@ -102,25 +102,25 @@ fun HomeScreenRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                is HomeUiEffect.OnGoAddRecord -> {
+                is HomeUiEffect.NavigateToAddRecord -> {
                     onClickAddRecord(effect.recordType)
                 }
 
-                is HomeUiEffect.OnGoDetailRecord -> {
+                is HomeUiEffect.NavigateToDetailRecord -> {
                     onClickDetailRecord(effect.recordType, effect.recordId)
                 }
 
-                is HomeUiEffect.OnGoSetting -> {
+                is HomeUiEffect.NavigateToSetting -> {
                     onClickSetting()
                 }
 
-                is HomeUiEffect.OnGoNotification -> {
+                is HomeUiEffect.NavigateToNotification -> {
                     onClickNotification()
                 }
-                is HomeUiEffect.OnGoCurrentGoal -> {
+                is HomeUiEffect.NavigateToCurrentGoal -> {
                     onGoCurrentGoal()
                 }
-                is HomeUiEffect.OnGoSetNewGoal -> {
+                is HomeUiEffect.NavigateToResetGoal -> {
                     onGoSetNewGoal()
                 }
             }
@@ -136,14 +136,14 @@ fun HomeScreenRoot(
     HomeScreen(
         modifier,
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (HomeUiEvent) -> Unit) {
+fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (HomeUiEvent) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberStandardBottomSheetState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState)
@@ -218,7 +218,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             sheetSwipeEnabled = !isDateSelectMode,
             topBar = {
                 HomeTopBar(
-                    modifier = modifier,
+                    modifier = Modifier,
                     alpha = topAppBarAlpha,
                     mainRecordType = uiState.mainRecordType,
                     goalDays = uiState.goalDays,
@@ -227,21 +227,21 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                         onDownBottomSheet()
                     },
                     onClickSetting = {
-                        uiEvent(HomeUiEvent.OnClickSetting)
+                        onAction(HomeUiEvent.OnClickSetting)
                     },
                     onClickNotification = {
-                        uiEvent(HomeUiEvent.OnClickNotification)
+                        onAction(HomeUiEvent.OnClickNotification)
                     }
                 )
             },
             sheetContent = {
                 HomeBottomSheetContent(
-                    modifier,
+                    Modifier,
                     topPaddingFraction,
                     bottomSheetContentScroll,
                     bottomSheetState,
                     uiState,
-                    uiEvent,
+                    onAction,
                     isDateSelectMode = isDateSelectMode,
                     onDateSelectModeChanged = onDateSelectModeChanged
                 )
@@ -259,8 +259,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
             ActionBanner(
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp, start = 26.dp, end = 26.dp).systemBarsPadding(),
                 onClick = {
-                  // TODO 현재는 목포레포트로 이동 추후 목표 재설정 하면이 나오면 이벤트 변경
-                    uiEvent(HomeUiEvent.OnClickGoalSetting)
+                    onAction(HomeUiEvent.OnClickGoalSetting)
                 },
                 title = see.day.ui.R.string.current_goal_banner_title,
                 body = see.day.ui.R.string.current_goal_banner_body
@@ -271,7 +270,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, uiEvent: (Ho
                     if (uiState.todayRecords.records.size >= 2) {
                         openTodayRecordOverDialog = true
                     } else {
-                        uiEvent(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                        onAction(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
                     }
                 },
                 modifier = modifier
@@ -313,14 +312,14 @@ private fun HomeBottomSheetContent(
             .verticalScroll(bottomSheetContentScroll, (bottomSheetState.currentValue == SheetValue.Expanded))
     ) {
         Row(
-            modifier = modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SelectedDateComponent(modifier, uiState.currentYear, uiState.currentMonth, isDateSelectMode, onDateSelectModeChanged)
-            Spacer(modifier = modifier.weight(1f))
-            SelectedFilterRecordType(modifier, uiState.selectedFilterType, uiEvent)
+            SelectedDateComponent(Modifier, uiState.currentYear, uiState.currentMonth, isDateSelectMode, onDateSelectModeChanged)
+            Spacer(modifier = Modifier.weight(1f))
+            SelectedFilterRecordType(Modifier, uiState.selectedFilterType, uiEvent)
         }
-        Spacer(modifier = modifier.padding(top = 10.dp))
+        Spacer(modifier = Modifier.padding(top = 10.dp))
         if (isDateSelectMode) {
             WheelDatePicker(
                 modifier = Modifier.fillMaxWidth(),
@@ -341,7 +340,7 @@ private fun HomeBottomSheetContent(
         }
         Box {
             CustomCalendar(
-                modifier = modifier,
+                modifier = Modifier,
                 currentYear = uiState.currentYear,
                 currentMonth = uiState.currentMonth,
                 selectedMonth = uiState.selectedMonth,
@@ -358,7 +357,7 @@ private fun HomeBottomSheetContent(
             )
         }
         Spacer(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
                 .height(1.dp)
@@ -388,7 +387,7 @@ private fun HomeBottomSheetContent(
                 }
             )
             Spacer(modifier = Modifier.height(100.dp))
-            Spacer(modifier = modifier.systemBarsPadding())
+            Spacer(modifier = Modifier.systemBarsPadding())
         }
     }
 }
@@ -414,7 +413,7 @@ private fun HomeScreenPreview() {
     SeeDayTheme {
         HomeScreen(
             uiState = HomeUiState.init,
-            uiEvent = { }
+            onAction = { }
         )
     }
 }

@@ -64,7 +64,7 @@ internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFil
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = if (selectedFilterType == type) {
-                            modifier
+                            Modifier
                                 .size(30.dp)
                                 .border(width = 1.dp, color = MaterialTheme.colorScheme.primary, CircleShape)
                                 .clip(CircleShape)
@@ -73,7 +73,7 @@ internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFil
                                     balloonWindow?.dismiss()
                                 }
                         } else {
-                            modifier
+                            Modifier
                                 .size(30.dp)
                                 .clip(CircleShape)
                                 .background(Color.White)
@@ -102,7 +102,7 @@ internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFil
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .size(30.dp)
                     .clip(CircleShape)
                     .background(Color.White),
@@ -112,13 +112,13 @@ internal fun SelectedFilterRecordType(modifier: Modifier = Modifier, selectedFil
                 Image(
                     painter = painterResource(selectedFilterType.iconRes),
                     contentDescription = "기록 타입 필터",
-                    modifier = modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
             Image(
                 painter = painterResource(R.drawable.ic_arrow_down),
                 contentDescription = "아래꺽쇠 아이콘",
-                modifier = modifier
+                modifier = Modifier
                     .size(20.dp)
                     .padding(start = 2.dp)
             )
