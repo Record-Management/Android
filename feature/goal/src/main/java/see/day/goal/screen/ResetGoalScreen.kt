@@ -36,16 +36,16 @@ internal fun ResetGoalScreenRoot(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     BackHandler(true) {
-        viewModel.onAction(ResetGoalUiEvent.OnBack)
+        viewModel.onAction(ResetGoalUiEvent.OnClickBack)
     }
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                ResetGoalUiEffect.OnBack -> {
+                ResetGoalUiEffect.NavigateToBack -> {
                     onBack()
                 }
-                ResetGoalUiEffect.OnFinishResetGoal -> {
+                ResetGoalUiEffect.NavigateToFinishResetGoal -> {
                     onGoResetGoalComplete(CompleteType.RESET_GOAL)
                 }
             }
@@ -70,7 +70,7 @@ internal fun ResetGoalScreen(
             ResetGoalTopBar(
                 step = uiState.step,
                 onClickBackButton = {
-                    onAction(ResetGoalUiEvent.OnBack)
+                    onAction(ResetGoalUiEvent.OnClickBack)
                 }
             )
         }

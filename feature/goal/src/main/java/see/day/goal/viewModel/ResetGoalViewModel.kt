@@ -40,7 +40,7 @@ class ResetGoalViewModel @Inject constructor(
             is ResetGoalUiEvent.SetGoalDays -> {
                 setGoalDays(event.goalDays)
             }
-            ResetGoalUiEvent.OnBack -> {
+            ResetGoalUiEvent.OnClickBack -> {
                 onBack()
             }
         }
@@ -60,7 +60,7 @@ class ResetGoalViewModel @Inject constructor(
             uiState.value.recordType?.let {  recordType ->
                 postNewGoalUseCase(NewGoal(recordType,goalDays))
                     .onSuccess {
-                        _uiEffect.emit(ResetGoalUiEffect.OnFinishResetGoal)
+                        _uiEffect.emit(ResetGoalUiEffect.NavigateToFinishResetGoal)
                     }
             }
         }
@@ -76,7 +76,7 @@ class ResetGoalViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                _uiEffect.emit(ResetGoalUiEffect.OnBack)
+                _uiEffect.emit(ResetGoalUiEffect.NavigateToBack)
             }
         }
     }
