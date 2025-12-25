@@ -58,7 +58,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             modifier = if (isSelected) {
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 17.dp)
+                    .padding(horizontal = 12.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .background(MaterialTheme.colorScheme.primary)
             } else {
