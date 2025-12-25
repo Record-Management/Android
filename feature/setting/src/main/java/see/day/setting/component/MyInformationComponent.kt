@@ -34,12 +34,13 @@ import see.day.designsystem.theme.gray90
 import see.day.designsystem.util.getIconRes
 import see.day.model.login.SocialType
 import see.day.setting.R
+import java.time.LocalDate
 
 @Composable
 internal fun MyInformationComponent(
     modifier: Modifier = Modifier,
     nickname: String,
-    birthDate: String,
+    birthDate: String?,
     socialType: SocialType,
     onNicknameChanged: (String) -> Unit,
     onBirthDateChanged: (String) -> Unit,
@@ -111,12 +112,12 @@ private fun NicknameComponent(modifier: Modifier, nickname: String, onNicknameCh
 }
 
 @Composable
-private fun BirthDateComponent(modifier: Modifier, birthDate: String, onBirthDateChanged: (String) -> Unit) {
+private fun BirthDateComponent(modifier: Modifier, birthDate: String?, onBirthDateChanged: (String) -> Unit) {
     var openBirthDateDialog by remember { mutableStateOf(false) }
 
     if(openBirthDateDialog) {
         BirthDateChangedDialog(
-            birthDate = birthDate,
+            birthDate = birthDate.orDefaultBirthDate(),
             onDismiss = { openBirthDateDialog = false},
             onBirthDateChanged = { newBirthDate ->
                 openBirthDateDialog = false
@@ -135,17 +136,33 @@ private fun BirthDateComponent(modifier: Modifier, birthDate: String, onBirthDat
             style = MaterialTheme.typography.labelMedium.copy(color = gray90)
         )
         Spacer(modifier = modifier.weight(1f))
-        Text(
-            text = birthDate.replace('-','/'),
-            style = MaterialTheme.typography.labelSmall.copy(color = gray60),
-            modifier = Modifier.padding(end = 1.dp)
-        )
+        if(birthDate == null) {
+            Text(
+                text = "-",
+                style = MaterialTheme.typography.labelSmall.copy(color = gray60),
+                modifier = Modifier.padding(end = 1.dp)
+            )
+        } else {
+            Text(
+                text = birthDate.replace('-','/'),
+                style = MaterialTheme.typography.labelSmall.copy(color = gray60),
+                modifier = Modifier.padding(end = 1.dp)
+            )
+        }
+
         Image(
             painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
             contentDescription = "생일 선택 버튼",
             modifier = Modifier.size(12.dp),
             colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(gray50)
         )
+    }
+}
+
+fun String?.orDefaultBirthDate(): String {
+    return this ?: run {
+        val threeYearsAgo = LocalDate.now().minusYears(3)
+        "${threeYearsAgo.year}-${threeYearsAgo.monthValue.toString().padStart(2, '0')}-${threeYearsAgo.dayOfMonth.toString().padStart(2, '0')}"
     }
 }
 

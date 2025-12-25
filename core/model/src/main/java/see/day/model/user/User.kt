@@ -11,7 +11,7 @@ data class User(
     val email: String,
     val socialType: SocialType,
     val mainRecordType: RecordType?,
-    val birthDate: String,
+    val birthDate: String?,
     val goalDays: Int?,
     val onboardingCompleted: Boolean,
     val createdAt: String,

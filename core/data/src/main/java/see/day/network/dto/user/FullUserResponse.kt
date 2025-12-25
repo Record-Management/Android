@@ -15,7 +15,7 @@ data class FullUserResponse(
     val socialType: String,
     val mainRecordType: RecordType? = null,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
-    val birthDate: String,
+    val birthDate: String? = null,
     val goalDays: Int? ,
     val onboardingCompleted: Boolean,
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
