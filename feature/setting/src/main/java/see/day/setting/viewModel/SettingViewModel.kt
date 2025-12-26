@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
 import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
 import see.day.domain.usecase.login.LogoutUseCase
 import see.day.domain.usecase.user.DeleteUserUseCase
@@ -28,7 +30,8 @@ class SettingViewModel @Inject constructor(
     private val updateUserProfileUseCase: UpdateUserProfileUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
-    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase
+    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SettingUiState> = MutableStateFlow(SettingUiState.init)
@@ -131,12 +134,18 @@ class SettingViewModel @Inject constructor(
     private fun onClickLogout() {
         viewModelScope.launch {
             logoutUseCase()
+                .onSuccess {
+                    analyticsLogger.log(AnalyticsEvent.Logout)
+                }
         }
     }
 
     private fun onClickWithdrawal() {
         viewModelScope.launch {
             deleteUserUseCase()
+                .onSuccess {
+                    analyticsLogger.log(AnalyticsEvent.Withdrawal)
+                }
         }
     }
 

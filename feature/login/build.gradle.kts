@@ -7,5 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
+
     implementation(libs.kakao.v2.user)
 }
