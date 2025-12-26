@@ -33,7 +33,8 @@ include(
     "core:designsystem",
     "core:ui",
     "core:navigation",
-    "core:messaging"
+    "core:messaging",
+    "core:analytics"
 )
 
 include(
