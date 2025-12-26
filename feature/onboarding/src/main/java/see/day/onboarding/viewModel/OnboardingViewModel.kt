@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
 import see.day.domain.usecase.fcm.GetFcmTokenUseCase
 import see.day.domain.usecase.user.PostOnboardCompleteUseCase
 import see.day.domain.usecase.user.UpdateFcmTokenUseCase
@@ -32,7 +34,8 @@ import timber.log.Timber
 class OnboardingViewModel @Inject constructor(
     private val postOnboardCompleteUseCase: PostOnboardCompleteUseCase,
     private val getFcmTokenUseCase: GetFcmTokenUseCase,
-    private val updateFcmTokenUseCase: UpdateFcmTokenUseCase
+    private val updateFcmTokenUseCase: UpdateFcmTokenUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<OnboardingUiState> = MutableStateFlow(OnboardingUiState.init)
@@ -128,6 +131,7 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             postOnboardCompleteUseCase(onboardingComplete)
                 .onSuccess {
+                    analyticsLogger.log(AnalyticsEvent.OnboardingComplete)
                     getFcmTokenUseCase()
                         .onSuccess { token ->
                             updateFcmTokenUseCase(token).onSuccess {

@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import record.daily.login.state.login.LoginUiEffect
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
 import see.day.domain.usecase.login.GetAppFirstLaunchUseCase
 import see.day.domain.usecase.login.PostLoginUseCase
 import see.day.model.login.SocialLogin
@@ -19,7 +21,8 @@ import see.day.model.navigation.AppStartState.ONBOARDING
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val postLoginUseCase: PostLoginUseCase,
-    private val getAppFirstLaunchUseCase: GetAppFirstLaunchUseCase
+    private val getAppFirstLaunchUseCase: GetAppFirstLaunchUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiEffect: MutableSharedFlow<LoginUiEffect> = MutableSharedFlow()
@@ -38,8 +41,10 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             postLoginUseCase(SocialLogin(socialType, accessToken)).onSuccess {
                 if (it == ONBOARDING) {
+                    analyticsLogger.log(AnalyticsEvent.SignUp)
                     _uiEffect.emit(LoginUiEffect.GoOnboarding)
                 } else if (it == HOME) {
+                    analyticsLogger.log(AnalyticsEvent.Login)
                     _uiEffect.emit(LoginUiEffect.GoHome)
                 }
             }.onFailure {
