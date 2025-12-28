@@ -106,7 +106,11 @@ private fun PastDayImages(filterType: RecordType?, mainRecordType: RecordType?, 
                                 mainRecordType.getGrayIcon()
                             }
                         } else {
-                            mainRecordType.getIcon()
+                            if(records.any { it.type == mainRecordType }) {
+                                mainRecordType.getIcon()
+                            } else {
+                                mainRecordType.getGrayIcon()
+                            }
                         }
                     ),
                     modifier = Modifier.size(24.dp),
