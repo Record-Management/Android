@@ -172,24 +172,24 @@ private fun SocialTypeComponent(
     socialType: SocialType,
     onClickDeleteCurrentGoal: () -> Unit
 ) {
-    var showDeleteCurrentGoalDialog by remember { mutableStateOf(false) }
-    if(showDeleteCurrentGoalDialog) {
-        Dialog({
-            showDeleteCurrentGoalDialog = false
-        }) {
-            Column(
-                modifier = Modifier.background(Color.White).clickable {
-                    onClickDeleteCurrentGoal()
-                    showDeleteCurrentGoalDialog = false
-                }
-            ) {
-                Text("이거 누르면 목표 삭제됨")
-            }
-        }
-    }
+//    var showDeleteCurrentGoalDialog by remember { mutableStateOf(false) }
+//    if(showDeleteCurrentGoalDialog) {
+//        Dialog({
+//            showDeleteCurrentGoalDialog = false
+//        }) {
+//            Column(
+//                modifier = Modifier.background(Color.White).clickable {
+//                    onClickDeleteCurrentGoal()
+//                    showDeleteCurrentGoalDialog = false
+//                }
+//            ) {
+//                Text("이거 누르면 목표 삭제됨")
+//            }
+//        }
+//    }
     Row(
         modifier = Modifier
-            .fillMaxWidth().clickable { showDeleteCurrentGoalDialog = true },
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
