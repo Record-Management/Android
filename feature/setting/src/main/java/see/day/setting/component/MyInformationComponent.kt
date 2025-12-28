@@ -172,6 +172,7 @@ private fun SocialTypeComponent(
     socialType: SocialType,
     onClickDeleteCurrentGoal: () -> Unit
 ) {
+    // TODO: [QA-21] 다음 QA 사이클에서 재활성화 예정 (혹은 다른 장소로 이동예정)
 //    var showDeleteCurrentGoalDialog by remember { mutableStateOf(false) }
 //    if(showDeleteCurrentGoalDialog) {
 //        Dialog({
