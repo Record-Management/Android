@@ -2,7 +2,6 @@ package see.day.home.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -32,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,11 +54,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray30
-import see.day.designsystem.theme.gray40
 import see.day.home.R
 import see.day.home.component.CalendarDetail
+import see.day.home.component.DateSelectBottomSheet
 import see.day.home.component.HomeImage
 import see.day.home.component.HomeTopBar
 import see.day.home.component.SelectedDateComponent
@@ -72,9 +71,6 @@ import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 import see.day.ui.card.ActionBanner
 import see.day.ui.dialog.OneButtonDialog
-import see.day.ui.picker.WheelDatePicker
-import see.day.ui.picker.WheelPickerDefaults
-import java.time.LocalDate
 
 @Composable
 fun HomeScreenRoot(
@@ -117,9 +113,11 @@ fun HomeScreenRoot(
                 is HomeUiEffect.NavigateToNotification -> {
                     onClickNotification()
                 }
+
                 is HomeUiEffect.NavigateToCurrentGoal -> {
                     onGoCurrentGoal()
                 }
+
                 is HomeUiEffect.NavigateToResetGoal -> {
                     onGoSetNewGoal()
                 }
@@ -207,7 +205,22 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
         )
     }
 
-    val (isDateSelectMode, onDateSelectModeChanged) = remember { mutableStateOf(false) }
+    var isDateSelectSheetOpen by remember { mutableStateOf(false) }
+
+    if (isDateSelectSheetOpen) {
+        DateSelectBottomSheet(
+            modifier = Modifier,
+            sheetState = rememberModalBottomSheetState(),
+            year = uiState.currentYear,
+            month = uiState.selectedMonth,
+            dayOfMonth = uiState.selectedDay,
+            onDismiss = { isDateSelectSheetOpen = false },
+            onClickTodayDate = { onAction(HomeUiEvent.OnClickToday) },
+            onClickDate = { year, month, dayOfMonth ->
+                onAction(HomeUiEvent.OnClickCell(year, month, dayOfMonth))
+            }
+        )
+    }
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -215,7 +228,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
         HomeImage(Modifier, uiState.treeStage)
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
-            sheetSwipeEnabled = !isDateSelectMode,
             topBar = {
                 HomeTopBar(
                     modifier = Modifier,
@@ -242,8 +254,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
                     bottomSheetState,
                     uiState,
                     onAction,
-                    isDateSelectMode = isDateSelectMode,
-                    onDateSelectModeChanged = onDateSelectModeChanged
+                    onClickDateField = { isDateSelectSheetOpen = true }
                 )
             },
             sheetPeekHeight = bottomSheetMinHeight,
@@ -255,9 +266,12 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
             sheetContainerColor = Color.White
         ) { innerPadding ->
         }
-        if(uiState.mainRecordType == null) {
+        if (uiState.mainRecordType == null) {
             ActionBanner(
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp, start = 26.dp, end = 26.dp).systemBarsPadding(),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp, start = 26.dp, end = 26.dp)
+                    .systemBarsPadding(),
                 onClick = {
                     onAction(HomeUiEvent.OnClickGoalSetting)
                 },
@@ -302,8 +316,7 @@ private fun HomeBottomSheetContent(
     bottomSheetState: SheetState,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
-    isDateSelectMode: Boolean,
-    onDateSelectModeChanged: (Boolean) -> Unit
+    onClickDateField: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -315,29 +328,11 @@ private fun HomeBottomSheetContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SelectedDateComponent(Modifier, uiState.currentYear, uiState.currentMonth, isDateSelectMode, onDateSelectModeChanged)
+            SelectedDateComponent(Modifier, uiState.currentYear, uiState.currentMonth, onClickDateField)
             Spacer(modifier = Modifier.weight(1f))
             SelectedFilterRecordType(Modifier, uiState.selectedFilterType, uiEvent)
         }
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        if (isDateSelectMode) {
-            WheelDatePicker(
-                modifier = Modifier.fillMaxWidth(),
-                rowCount = 5,
-                selectorProperties = WheelPickerDefaults.selectorProperties(
-                    color = gray40,
-                    shape = RoundedCornerShape(0),
-                    border = BorderStroke(0.dp, gray40)
-                ),
-                startDate = LocalDate.of(uiState.currentYear, uiState.selectedMonth, uiState.selectedDay),
-                maxDate = LocalDate.now(),
-                textStyle = MaterialTheme.typography.titleMedium,
-                textColor = gray100
-            ) { snappedDate ->
-                uiEvent(HomeUiEvent.OnClickCell(snappedDate.year, snappedDate.monthValue, snappedDate.dayOfMonth))
-            }
-            return@Column
-        }
         Box {
             CustomCalendar(
                 modifier = Modifier,
