@@ -206,11 +206,12 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
     }
 
     var isDateSelectSheetOpen by remember { mutableStateOf(false) }
+    val dateSelectSheetState = rememberModalBottomSheetState()
 
     if (isDateSelectSheetOpen) {
         DateSelectBottomSheet(
             modifier = Modifier,
-            sheetState = rememberModalBottomSheetState(),
+            sheetState = dateSelectSheetState,
             year = uiState.currentYear,
             month = uiState.selectedMonth,
             dayOfMonth = uiState.selectedDay,
