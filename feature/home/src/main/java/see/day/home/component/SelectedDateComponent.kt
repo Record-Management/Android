@@ -21,12 +21,11 @@ internal fun SelectedDateComponent(
     modifier: Modifier = Modifier,
     currentYear: Int,
     currentMonth: Int,
-    isDateSelectMode: Boolean,
-    onClickDate: (Boolean) -> Unit
+    onClickDateField: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { onClickDate(!isDateSelectMode) }
+        modifier = modifier.clickable { onClickDateField() }
     ) {
         Text(
             text = "$currentYear.$currentMonth",
@@ -49,8 +48,7 @@ private fun SelectedDateComponentPreview() {
         SelectedDateComponent(
             currentYear = 2025,
             currentMonth = 10,
-            isDateSelectMode = false,
-            onClickDate = {}
+            onClickDateField = {}
         )
     }
 }
