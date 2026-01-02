@@ -32,6 +32,8 @@ import see.day.model.date.CalendarDayInfo
 import see.day.model.record.RecordType
 import timber.log.Timber
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -128,6 +130,11 @@ class HomeViewModel @Inject constructor(
 
             is HomeUiEvent.OnClickCell -> {
                 onClickCell(uiEvent.year, uiEvent.month, uiEvent.day)
+            }
+
+            is HomeUiEvent.OnClickToday -> {
+                val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                onClickCell(now.year, now.monthValue, now.dayOfMonth)
             }
 
             is HomeUiEvent.OnClickAddButton -> {
