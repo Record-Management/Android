@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
+import see.day.analytics.types.GoalSettingType
 import see.day.domain.usecase.fcm.GetFcmTokenUseCase
 import see.day.domain.usecase.user.PostOnboardCompleteUseCase
 import see.day.domain.usecase.user.UpdateFcmTokenUseCase
@@ -131,7 +131,7 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             postOnboardCompleteUseCase(onboardingComplete)
                 .onSuccess {
-                    analyticsLogger.log(AnalyticsEvent.OnboardingComplete)
+                    analyticsLogger.goalSettingLog(GoalSettingType.ONBOARDING, onboardingComplete.mainRecordType.name.lowercase(), onboardingComplete.goalDays)
                     getFcmTokenUseCase()
                         .onSuccess { token ->
                             updateFcmTokenUseCase(token).onSuccess {
