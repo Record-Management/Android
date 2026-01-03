@@ -79,6 +79,9 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         if (uiState.isEditing()) {
             openBackDialog = true
         } else {
+            if(uiState.editMode is DailyDetailUiState.EditMode.Create) {
+                viewModel.writeRecordCancelLog()
+            }
             onClickPopHome(false)
         }
     }
@@ -87,7 +90,12 @@ internal fun DailyDetailScreenRoot(modifier: Modifier = Modifier, viewModel: Dai
         RecordDetailBackDialog(
             modifier = modifier,
             onDismiss = { openBackDialog = false },
-            onBackRecordDetail = { onClickPopHome(false) },
+            onBackRecordDetail = {
+                if(uiState.editMode is DailyDetailUiState.EditMode.Create) {
+                    viewModel.writeRecordCancelLog()
+                }
+                onClickPopHome(false)
+            },
             title = when (uiState.editMode) {
                 is DailyDetailUiState.EditMode.Create -> {
                     see.day.ui.R.string.record_close_dialog_title

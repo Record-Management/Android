@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
+import see.day.analytics.types.WriteType
 import see.day.daily.state.DailyDetailUiEffect
 import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
@@ -33,8 +36,9 @@ class DailyDetailViewModel @Inject constructor(
     private val insertPhotosUseCase: InsertPhotosUseCase,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
     private val getDetailRecordUseCase: GetRecordDetailUseCase,
-    private val updateDetailRecordUseCase : UpdateDailyRecordUseCase,
-    private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase
+    private val updateDetailRecordUseCase: UpdateDailyRecordUseCase,
+    private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DailyDetailUiState> = MutableStateFlow(DailyDetailUiState.init)
@@ -59,8 +63,8 @@ class DailyDetailViewModel @Inject constructor(
 
             is DailyRecordPostType.EditDailyRecordPost -> {
                 viewModelScope.launch {
-                    getDetailRecordUseCase(type.id).onSuccess {  record ->
-                        if(record is DailyRecordDetail) {
+                    getDetailRecordUseCase(type.id).onSuccess { record ->
+                        if (record is DailyRecordDetail) {
                             _uiState.update {
                                 it.copy(
                                     emotion = record.emotion,
@@ -110,10 +114,15 @@ class DailyDetailViewModel @Inject constructor(
             is DailyDetailUiEvent.OnSaveRecord -> {
                 onSaveRecord()
             }
+
             is DailyDetailUiEvent.DeleteRecord -> {
                 onDeleteRecord(uiEvent.recordId)
             }
         }
+    }
+
+    fun writeRecordCancelLog() {
+        analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord("daily", WriteType.CANCEL))
     }
 
     private fun onPopHome() {
@@ -175,7 +184,7 @@ class DailyDetailViewModel @Inject constructor(
         if (photos.isNotEmpty()) {
             insertPhotosUseCase(photos).fold(
                 onSuccess = { photoUrls -> saveDailyRecord(photoUrls) },
-                onFailure = {  }
+                onFailure = { }
             )
         } else {
             saveDailyRecord(emptyList())
@@ -191,8 +200,11 @@ class DailyDetailViewModel @Inject constructor(
                 photoUrls
             )
         ).fold(
-            onSuccess = { _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(true)) },
-            onFailure = {  }
+            onSuccess = {
+                analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord("daily", WriteType.COMPLETE))
+                _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(true))
+            },
+            onFailure = { }
         )
     }
 
