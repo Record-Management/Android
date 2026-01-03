@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# see.day.analytics.types 패키지의 모든 enum class 보호
+-keep enum see.day.analytics.types.** { *; }
