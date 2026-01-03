@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
+import see.day.analytics.types.WriteType
 import see.day.domain.usecase.record.habit.CanSetAsMainRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.GetHabitRecordUseCase
@@ -31,7 +34,8 @@ class HabitDetailViewModel @Inject constructor(
     private val updateHabitRecordUseCase: UpdateHabitRecordUseCase,
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
     private val getHabitRecordUseCase: GetHabitRecordUseCase,
-    private val canSetAsMainRecordUseCase: CanSetAsMainRecordUseCase
+    private val canSetAsMainRecordUseCase: CanSetAsMainRecordUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HabitDetailUiState> = MutableStateFlow(HabitDetailUiState.init)
@@ -111,12 +115,17 @@ class HabitDetailViewModel @Inject constructor(
                     it.copy(isTimeSpinnerDisplayed = uiEvent.displayed)
                 }
             }
+
             is HabitDetailUiEvent.OnSetAsMainHabit -> {
                 _uiState.update {
                     it.copy(hasBeenSetAsMain = uiEvent.changed)
                 }
             }
         }
+    }
+
+    fun writeHabitRecordCancelLog() {
+        analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord("habit", WriteType.CANCEL))
     }
 
     private fun onHabitTypeChanged(habitType: HabitType) {
@@ -179,6 +188,7 @@ class HabitDetailViewModel @Inject constructor(
                 isMainRecord = uiState.value.hasBeenSetAsMain
             )
         ).onSuccess {
+            analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord("habit", WriteType.COMPLETE))
             _uiEffect.emit(HabitDetailUiEffect.NavigateToHome(true))
         }.onFailure {
 

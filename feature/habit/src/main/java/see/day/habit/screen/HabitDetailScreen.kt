@@ -76,7 +76,7 @@ internal fun HabitDetailScreenRoot(
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
-            when(effect) {
+            when (effect) {
                 is HabitDetailUiEffect.NavigateToHome -> {
                     onClickPopHome(effect.isUpdated)
                 }
@@ -96,6 +96,9 @@ internal fun HabitDetailScreenRoot(
         if (uiState.isEditing()) {
             openBackDialog = true
         } else {
+            if (uiState.editMode is HabitDetailUiState.EditMode.Create) {
+                viewModel.writeHabitRecordCancelLog()
+            }
             onClickPopHome(false)
         }
     }
@@ -104,7 +107,12 @@ internal fun HabitDetailScreenRoot(
         RecordDetailBackDialog(
             modifier = Modifier,
             onDismiss = { openBackDialog = false },
-            onBackRecordDetail = { onClickPopHome(false) },
+            onBackRecordDetail = {
+                if (uiState.editMode is HabitDetailUiState.EditMode.Create) {
+                    viewModel.writeHabitRecordCancelLog()
+                }
+                onClickPopHome(false)
+            },
             title = when (uiState.editMode) {
                 is HabitDetailUiState.EditMode.Create -> {
                     see.day.ui.R.string.record_close_dialog_title
@@ -141,7 +149,7 @@ internal fun HabitDetailScreenRoot(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun  HabitDetailScreen(
+internal fun HabitDetailScreen(
     modifier: Modifier = Modifier,
     uiState: HabitDetailUiState,
     onAction: (HabitDetailUiEvent) -> Unit,
@@ -168,7 +176,7 @@ internal fun  HabitDetailScreen(
             false
         }
         ConfirmDialog(
-            body = if(isMainRecord) R.string.delete_main_record_body else see.day.ui.R.string.record_delete_body,
+            body = if (isMainRecord) R.string.delete_main_record_body else see.day.ui.R.string.record_delete_body,
             onDismiss = { openDeleteDialog = false },
             onClickConfirmButton = {
                 val editMode = uiState.editMode
@@ -193,7 +201,7 @@ internal fun  HabitDetailScreen(
                     is HabitDetailUiState.EditMode.Edit -> EditMode.UPDATE
                 },
                 onClickCloseButton = onClickBackButton,
-                onClickDeleteButton = { openDeleteDialog = true}
+                onClickDeleteButton = { openDeleteDialog = true }
             )
         },
         bottomBar = {
@@ -230,7 +238,7 @@ internal fun  HabitDetailScreen(
                     openSelectEmotionDialog = true
                 }
             )
-            if(uiState.canBeMain) {
+            if (uiState.canBeMain) {
                 ChangeMainHabitRecordComponent(
                     modifier = Modifier.padding(top = 24.dp),
                     isMainHabit = uiState.hasBeenSetAsMain,
@@ -319,9 +327,9 @@ private fun HabitDetailScreenCanBeMainHabitPreview() {
 private fun HabitDetailScreenEditModePreview() {
     SeeDayTheme {
         HabitDetailScreen(
-            uiState = HabitDetailUiState.init.copy(editMode = HabitDetailUiState.EditMode.Edit(originalRecord = HabitRecordUiModel("",HabitType.EXERCISE,false,0,0,"",true, false),"")),
+            uiState = HabitDetailUiState.init.copy(editMode = HabitDetailUiState.EditMode.Edit(originalRecord = HabitRecordUiModel("", HabitType.EXERCISE, false, 0, 0, "", true, false), "")),
             onAction = {},
             onClickBackButton = {}
-       )
+        )
     }
 }
