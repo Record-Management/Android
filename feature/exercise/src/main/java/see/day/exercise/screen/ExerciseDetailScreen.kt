@@ -95,6 +95,9 @@ fun ExerciseDetailScreenRoot(
         if (uiState.isEditing()) {
             openBackDialog = true
         } else {
+            if (uiState.editMode is ExerciseDetailUiState.EditMode.Create) {
+                viewModel.writeExerciseRecordCancelLog()
+            }
             onClickPopHome(false)
         }
     }
@@ -102,7 +105,12 @@ fun ExerciseDetailScreenRoot(
         RecordDetailBackDialog(
             modifier = Modifier,
             onDismiss = { openBackDialog = false },
-            onBackRecordDetail = { onClickPopHome(false) },
+            onBackRecordDetail = {
+                if (uiState.editMode is ExerciseDetailUiState.EditMode.Create) {
+                    viewModel.writeExerciseRecordCancelLog()
+                }
+                onClickPopHome(false)
+            },
             title = when (uiState.editMode) {
                 is ExerciseDetailUiState.EditMode.Create -> {
                     see.day.ui.R.string.record_close_dialog_title

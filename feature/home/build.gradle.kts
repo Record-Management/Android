@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":core:analytics"))
     implementation(libs.balloon)
     implementation(libs.balloon.compose)
 }

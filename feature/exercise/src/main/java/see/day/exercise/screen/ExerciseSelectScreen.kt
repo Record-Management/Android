@@ -23,9 +23,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.exercise.R
 import see.day.exercise.component.ExerciseTypeCard
+import see.day.exercise.viewModel.ExerciseSelectViewModel
 import see.day.model.record.RecordType
 import see.day.model.record.exercise.ExerciseType
 import see.day.ui.dialog.RecordTypePickerDialog
@@ -33,14 +35,21 @@ import see.day.ui.topbar.RecordSelectTopBar
 
 @Composable
 fun ExerciseSelectScreenRoot(
+    viewModel: ExerciseSelectViewModel = hiltViewModel(),
     onClickChangeRecordType: (RecordType, Boolean) -> Unit,
     onBack: () -> Unit,
     onClickExerciseType: (ExerciseType) -> Unit
 ) {
     ExerciseSelectScreen(
         onClickChangeRecordType = onClickChangeRecordType,
-        onBack = onBack,
-        onClickExerciseType = onClickExerciseType
+        onBack = {
+            viewModel.writeExerciseRecordCancelLog()
+            onBack()
+        },
+        onClickExerciseType = { exerciseType ->
+            viewModel.writeExerciseRecordDetailLog()
+            onClickExerciseType(exerciseType)
+        }
     )
 }
 
@@ -66,17 +75,17 @@ internal fun ExerciseSelectScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            RecordSelectTopBar(modifier,RecordType.EXERCISE ,onBack)
+            RecordSelectTopBar(modifier, RecordType.EXERCISE, onBack)
         }
     ) { innerPadding ->
-        LazyColumn (
+        LazyColumn(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(ExerciseType.entries, key = { it}) { exerciseType ->
+            items(ExerciseType.entries, key = { it }) { exerciseType ->
                 ExerciseTypeCard(exerciseType = exerciseType, onClickExerciseType = onClickExerciseType)
             }
 

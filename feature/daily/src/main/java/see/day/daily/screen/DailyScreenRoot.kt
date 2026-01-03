@@ -31,7 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import see.day.daily.R
+import see.day.daily.viewModel.DailyViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.util.largeIconRes
 import see.day.model.record.RecordType
@@ -40,8 +42,25 @@ import see.day.ui.dialog.RecordTypePickerDialog
 import see.day.ui.topbar.RecordSelectTopBar
 
 @Composable
-internal fun DailyScreenRoot(modifier: Modifier = Modifier, onClickBackButton: () -> Unit, onChangedRecordType: (RecordType, Boolean) -> Unit, onClickEmotion: (DailyEmotion) -> Unit) {
-    DailyScreen(modifier, onClickBackButton, onChangedRecordType, onClickEmotion)
+internal fun DailyScreenRoot(
+    modifier: Modifier = Modifier,
+    viewModel: DailyViewModel = hiltViewModel(),
+    onClickBackButton: () -> Unit,
+    onChangedRecordType: (RecordType, Boolean) -> Unit,
+    onClickEmotion: (DailyEmotion) -> Unit
+) {
+    DailyScreen(
+        modifier,
+        onClickBackButton = {
+            viewModel.writeRecordCancelLog()
+            onClickBackButton()
+        },
+        onChangedRecordType,
+        onClickEmotion = { dailyEmotion ->
+            viewModel.writeRecordDetailLog()
+            onClickEmotion(dailyEmotion)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

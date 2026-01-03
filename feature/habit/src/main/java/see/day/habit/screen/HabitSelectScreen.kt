@@ -22,9 +22,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.habit.R
 import see.day.habit.component.HabitTypeCard
+import see.day.habit.viewModel.HabitSelectViewModel
 import see.day.model.record.RecordType
 import see.day.model.record.habit.HabitType
 import see.day.ui.dialog.RecordTypePickerDialog
@@ -32,14 +34,21 @@ import see.day.ui.topbar.RecordSelectTopBar
 
 @Composable
 fun HabitSelectScreenRoot(
+    viewModel: HabitSelectViewModel = hiltViewModel(),
     onClickChangedRecordType: (RecordType, Boolean) -> Unit,
     onBack: () -> Unit,
     onClickHabitType: (HabitType) -> Unit
 ) {
     HabitSelectScreen(
         onClickChangedRecordType = onClickChangedRecordType,
-        onBack = onBack,
-        onClickHabitType = onClickHabitType
+        onBack = {
+            viewModel.writeHabitRecordCancelLog()
+            onBack()
+        },
+        onClickHabitType = { habitType ->
+            viewModel.writeHabitRecordDetailLog()
+            onClickHabitType(habitType)
+        }
     )
 }
 

@@ -12,8 +12,18 @@ class AnalyticsLogger @Inject constructor(){
     private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
 
     fun log(event: AnalyticsEvent) {
-        firebaseAnalytics.logEvent(event.name) {
+        if(!BuildConfig.DEBUG) {
+            firebaseAnalytics.logEvent(event.name) {
 
+            }
+        }
+    }
+
+    fun writeRecordLog(event: AnalyticsEvent.WriteRecord) {
+        if(!BuildConfig.DEBUG) {
+            firebaseAnalytics.logEvent(event.name) {
+
+            }
         }
     }
 }

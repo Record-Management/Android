@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
+import see.day.analytics.types.WriteType
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
@@ -45,7 +48,8 @@ class HomeViewModel @Inject constructor(
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
     private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
     private val getStoredDateUseCase: GetStoredDateUseCase,
-    private val updateStoredDateUseCase: UpdateStoredDateUseCase
+    private val updateStoredDateUseCase: UpdateStoredDateUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init)
@@ -265,6 +269,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickAddRecord(recordType: RecordType) {
         viewModelScope.launch {
+            analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord(recordType.name.lowercase(), WriteType.START))
             _uiEffect.emit(HomeUiEffect.NavigateToAddRecord(recordType))
         }
     }
