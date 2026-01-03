@@ -16,4 +16,10 @@ class AnalyticsLogger @Inject constructor(){
 
         }
     }
+
+    fun writeRecordLog(event: AnalyticsEvent.WriteRecord) {
+        firebaseAnalytics.logEvent(event.name) {
+
+        }
+    }
 }
