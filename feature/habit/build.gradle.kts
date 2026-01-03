@@ -8,5 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
+    
     implementation(libs.wheelpickercompose)
 }
