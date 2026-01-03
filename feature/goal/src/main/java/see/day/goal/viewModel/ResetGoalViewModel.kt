@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsLogger
+import see.day.analytics.types.GoalSettingType
 import see.day.domain.usecase.goal.PostNewGoalUseCase
 import see.day.goal.state.reset.GoalResetStep.DAY
 import see.day.goal.state.reset.GoalResetStep.RECORD
@@ -23,23 +25,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResetGoalViewModel @Inject constructor(
-    private val postNewGoalUseCase: PostNewGoalUseCase
+    private val postNewGoalUseCase: PostNewGoalUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ResetGoalUiState> = MutableStateFlow(ResetGoalUiState.init)
     val uiState: StateFlow<ResetGoalUiState> = _uiState.asStateFlow()
 
     private val _uiEffect: MutableSharedFlow<ResetGoalUiEffect> = MutableSharedFlow()
-    val uiEffect : SharedFlow<ResetGoalUiEffect> = _uiEffect.asSharedFlow()
+    val uiEffect: SharedFlow<ResetGoalUiEffect> = _uiEffect.asSharedFlow()
 
     fun onAction(event: ResetGoalUiEvent) {
-        when(event) {
+        when (event) {
             is ResetGoalUiEvent.SetRecordType -> {
                 setRecordType(event.recordType)
             }
+
             is ResetGoalUiEvent.SetGoalDays -> {
                 setGoalDays(event.goalDays)
             }
+
             ResetGoalUiEvent.OnClickBack -> {
                 onBack()
             }
@@ -57,9 +62,10 @@ class ResetGoalViewModel @Inject constructor(
 
     private fun setGoalDays(goalDays: Int) {
         viewModelScope.launch {
-            uiState.value.recordType?.let {  recordType ->
-                postNewGoalUseCase(NewGoal(recordType,goalDays))
+            uiState.value.recordType?.let { recordType ->
+                postNewGoalUseCase(NewGoal(recordType, goalDays))
                     .onSuccess {
+                        analyticsLogger.goalSettingLog(GoalSettingType.GOAL_RESET, recordType.name.lowercase(), goalDays)
                         _uiEffect.emit(ResetGoalUiEffect.NavigateToFinishResetGoal)
                     }
             }
@@ -68,7 +74,7 @@ class ResetGoalViewModel @Inject constructor(
 
     private fun onBack() {
         val step = uiState.value.step
-        if(step == DAY) {
+        if (step == DAY) {
             _uiState.update {
                 it.copy(
                     step = RECORD,
