@@ -31,7 +31,7 @@ class AnalyticsLogger @Inject constructor(){
         if(!BuildConfig.DEBUG) {
             firebaseAnalytics.logEvent(goalSettingType.name.lowercase()) {
                 param("recordType", recordType)
-                param("goalDays", goalDays.toString())
+                param("goalDays", goalDays.toLong())
             }
         }
     }
