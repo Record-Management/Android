@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.analytics.AnalyticsEvent
+import see.day.analytics.AnalyticsLogger
+import see.day.analytics.types.WriteType
 import see.day.domain.usecase.photo.InsertPhotosUseCase
 import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
@@ -34,7 +37,8 @@ class ExerciseDetailViewModel @Inject constructor(
     val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
     val getRecordDetailUseCase: GetRecordDetailUseCase,
     val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase,
-    val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase
+    val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
+    private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ExerciseDetailUiState> = MutableStateFlow(ExerciseDetailUiState.init)
@@ -106,6 +110,10 @@ class ExerciseDetailViewModel @Inject constructor(
             is ExerciseDetailUiEvent.OnSaveRecord -> onSaveRecord()
             is ExerciseDetailUiEvent.DeleteRecord -> deleteRecord(uiEvent.recordId)
         }
+    }
+
+    fun writeExerciseRecordCancelLog() {
+        analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord("exercise", WriteType.CANCEL))
     }
 
     private fun onChangedExerciseType(exerciseType: ExerciseType) {
@@ -218,7 +226,10 @@ class ExerciseDetailViewModel @Inject constructor(
                 imageUrls = imageUrls,
             )
         ).fold(
-            onSuccess = { _uiEffect.emit(ExerciseDailyUiEffect.NavigateToHome(true)) },
+            onSuccess = {
+                analyticsLogger.writeRecordLog(AnalyticsEvent.WriteRecord("exercise", WriteType.COMPLETE))
+                _uiEffect.emit(ExerciseDailyUiEffect.NavigateToHome(true))
+            },
             onFailure = {}
         )
     }
