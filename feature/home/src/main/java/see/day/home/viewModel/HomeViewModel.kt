@@ -22,6 +22,7 @@ import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.UpdateHabitRecordIsCompletedUseCase
+import see.day.domain.usecase.user.GetIsShownTutorialUseCase
 import see.day.domain.usecase.user.GetStoredDateUseCase
 import see.day.domain.usecase.user.GetUserUseCase
 import see.day.domain.usecase.user.UpdateStoredDateUseCase
@@ -49,6 +50,7 @@ class HomeViewModel @Inject constructor(
     private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
     private val getStoredDateUseCase: GetStoredDateUseCase,
     private val updateStoredDateUseCase: UpdateStoredDateUseCase,
+    private val getIsShownTutorialUseCase: GetIsShownTutorialUseCase,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -112,6 +114,12 @@ class HomeViewModel @Inject constructor(
                         updateStoredDateUseCase(HomeUiState.getTodayDate())
                     }
                 }
+                getIsShownTutorialUseCase().onSuccess { isShownTutorial ->
+                    if(!isShownTutorial) {
+                        _uiEffect.emit(HomeUiEffect.NavigateToTutorial)
+                    }
+                }
+
             } catch (e: Exception) {
                 Timber.e("HomeViewModel is not init ${e.message}")
             }
