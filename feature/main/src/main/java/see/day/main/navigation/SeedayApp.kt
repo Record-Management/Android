@@ -22,6 +22,7 @@ import see.day.habit.navigation.habitNavigation
 import see.day.habit.navigation.navigateHabitWrite
 import see.day.home.navigation.homeNavigation
 import see.day.home.navigation.navigateBackToHome
+import see.day.home.navigation.navigateTutorial
 import see.day.setting.navigation.navigateSetting
 import see.day.setting.navigation.settingNavigation
 import see.day.main.viewmodel.MainViewModel
@@ -55,7 +56,9 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onClickSetting = navigationState.navController::navigateSetting,
                 onClickNotification = navigationState.navController::navigateNotificationHistory,
                 onGoCurrentGoal = navigationState.navController::navigateCurrentGoal,
-                onGoSetNewGoal = navigationState.navController::navigateResetGoal
+                onGoSetNewGoal = navigationState.navController::navigateResetGoal,
+                onGoTutorial = navigationState.navController::navigateTutorial,
+                onBack = navigationState.navController::popBackStack
             )
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,

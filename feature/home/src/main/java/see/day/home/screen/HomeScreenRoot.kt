@@ -82,6 +82,7 @@ fun HomeScreenRoot(
     onClickNotification: () -> Unit,
     onGoCurrentGoal: () -> Unit,
     onGoSetNewGoal: () -> Unit,
+    onGoTutorial: () -> Unit
 ) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -120,6 +121,9 @@ fun HomeScreenRoot(
 
                 is HomeUiEffect.NavigateToResetGoal -> {
                     onGoSetNewGoal()
+                }
+                is HomeUiEffect.NavigateToTutorial -> {
+                    onGoTutorial()
                 }
             }
         }
