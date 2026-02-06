@@ -96,4 +96,16 @@ class UserRepositoryImpl @Inject constructor(
             dataSource.saveTodayDate(date)
         }
     }
+
+    override suspend fun getIsShownTutorial(): Result<Boolean> {
+        return runCatching {
+            dataSource.getIsShownTutorial().first() ?: false
+        }
+    }
+
+    override suspend fun updateShownTutorial(): Result<Unit> {
+        return runCatching {
+            dataSource.setShownTutorial()
+        }
+    }
 }
