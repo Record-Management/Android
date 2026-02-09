@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TutorialViewModel @Inject constructor(
     private val updateShownTutorialUseCase: UpdateShownTutorialUseCase
-) : ViewModel(){
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<TutorialUiState> = MutableStateFlow(TutorialUiState.Tutorial)
     val uiState: StateFlow<TutorialUiState> = _uiState
@@ -36,11 +36,16 @@ class TutorialViewModel @Inject constructor(
     }
 
     private fun onClickBackButton() {
+        if (uiState.value is TutorialUiState.Loading) return
+
         viewModelScope.launch {
             _uiState.update { TutorialUiState.Loading }
             delay(300L)
-            updateShownTutorialUseCase()
-            _uiEffect.emit(TutorialUiEffect.NavigateToHome)
+            try {
+                updateShownTutorialUseCase()
+            } finally {
+                _uiEffect.emit(TutorialUiEffect.NavigateToHome)
+            }
         }
 
     }
