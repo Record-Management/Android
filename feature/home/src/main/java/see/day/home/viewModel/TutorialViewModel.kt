@@ -39,8 +39,7 @@ class TutorialViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { TutorialUiState.Loading }
             delay(300L)
-            // 배포 전 활성화
-//            updateShownTutorialUseCase()
+            updateShownTutorialUseCase()
             _uiEffect.emit(TutorialUiEffect.NavigateToHome)
         }
 
