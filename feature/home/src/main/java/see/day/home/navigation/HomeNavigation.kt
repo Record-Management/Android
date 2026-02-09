@@ -5,8 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import see.day.home.screen.HomeScreenRoot
+import see.day.home.screen.TutorialScreenRoot
 import see.day.model.record.RecordType
 import see.day.navigation.home.Home
+import see.day.navigation.home.Tutorial
 
 
 fun NavController.navigateHome(navOptions: NavOptions? = null) {
@@ -19,6 +21,10 @@ fun NavController.navigateBackToHome(isUpdated: Boolean = false) {
     popBackStack(Home, inclusive = false)
 }
 
+fun NavController.navigateTutorial(navOptions: NavOptions? = null) {
+    navigate(Tutorial, navOptions)
+}
+
 fun NavGraphBuilder.homeNavigation(
     onClickAddRecord: (RecordType) -> Unit,
     onClickDetailRecord: (RecordType, String) -> Unit,
@@ -26,6 +32,8 @@ fun NavGraphBuilder.homeNavigation(
     onClickNotification: () -> Unit,
     onGoCurrentGoal: () -> Unit,
     onGoSetNewGoal: () -> Unit,
+    onGoTutorial: () -> Unit,
+    onBack: () -> Unit
 ) {
     composable<Home> { navBackStack ->
         val isUpdated = navBackStack.savedStateHandle.get<Boolean>("record_updated") ?: false
@@ -39,7 +47,14 @@ fun NavGraphBuilder.homeNavigation(
             onClickSetting = onClickSetting,
             onClickNotification = onClickNotification,
             onGoCurrentGoal = onGoCurrentGoal,
-            onGoSetNewGoal = onGoSetNewGoal
+            onGoSetNewGoal = onGoSetNewGoal,
+            onGoTutorial = onGoTutorial
+        )
+    }
+
+    composable<Tutorial> {
+        TutorialScreenRoot(
+            onBack = onBack
         )
     }
 }

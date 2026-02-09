@@ -16,4 +16,6 @@ interface UserRepository {
     suspend fun deleteFcmToken(): Result<Unit>
     suspend fun getStoredDate() : Result<String?>
     suspend fun updateStoredDate(date: String) : Result<Unit>
+    suspend fun getIsShownTutorial() : Result<Boolean>
+    suspend fun updateShownTutorial() : Result<Unit>
 }
