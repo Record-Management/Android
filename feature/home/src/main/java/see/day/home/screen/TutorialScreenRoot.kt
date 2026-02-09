@@ -5,10 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,20 +88,32 @@ private fun TutorialPage(
         modifier = modifier
             .background(Color(0xBF111111))
             .fillMaxSize()
-            .systemBarsPadding()
     ) {
         Image(
             painter = painterResource(R.drawable.tutorial),
             contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
-        )
-        Spacer(
+            contentScale = ContentScale.FillWidth,
+            alignment = Alignment.TopCenter,
             modifier = Modifier
-                .size(34.dp)
-                .padding(top = 20.dp, end = 16.dp)
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+        )
+        Image(
+            painter = painterResource(R.drawable.coach_mark_close),
+            modifier = Modifier
+                .padding(top = 36.dp, end = 16.dp)
                 .align(Alignment.TopEnd)
-                .clickable { onClickBackButton() }
+                .clickable { onClickBackButton() },
+            contentScale = ContentScale.Crop,
+            contentDescription = "뒤로가기 버튼"
+        )
+        Image(
+            painter = painterResource(R.drawable.coach_mark_floating),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .padding(end = 16.dp, bottom = 30.dp)
+                .align(Alignment.BottomEnd),
+            contentDescription = "플로팅 버튼"
         )
     }
 }
