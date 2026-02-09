@@ -85,7 +85,7 @@ class DataStoreDataSource @Inject constructor(
 
     suspend fun setShownTutorial() {
         dataStore.edit { prefs ->
-            prefs[IS_FIRST_LAUNCH] = true
+            prefs[IS_SHOWN_TUTORIAL] = true
         }
     }
 
