@@ -103,7 +103,7 @@ private fun TutorialPage(
         Image(
             painter = painterResource(R.drawable.coach_mark_close),
             modifier = Modifier
-                .padding(top = 36.dp, end = 16.dp)
+                .padding(top = 40.dp, end = 16.dp)
                 .align(Alignment.TopEnd)
                 .clickable { onClickBackButton() },
             contentScale = ContentScale.Crop,
