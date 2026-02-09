@@ -5,8 +5,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
@@ -111,9 +113,11 @@ private fun TutorialPage(
             painter = painterResource(R.drawable.coach_mark_floating),
             contentScale = ContentScale.Fit,
             modifier = Modifier
+                .navigationBarsPadding()
                 .padding(end = 16.dp, bottom = 30.dp)
                 .align(Alignment.BottomEnd),
-            contentDescription = "플로팅 버튼"
+            contentDescription = "플로팅 버튼",
+            alignment = Alignment.BottomEnd
         )
     }
 }
