@@ -8,14 +8,14 @@ plugins {
 
 android {
     namespace = "see.day.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "see.day.app"
         minSdk = 28
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
     }
 
     fun getApiKey(propertyKey: String): String {
