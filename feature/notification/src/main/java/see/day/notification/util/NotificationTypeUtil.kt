@@ -11,6 +11,7 @@ fun NotificationType.getIcon(): Int {
         NotificationType.DAILY_RECORD_REMINDER -> R.drawable.ic_daily_notification
         NotificationType.EXERCISE_REMINDER -> R.drawable.ic_exercise_notification
         NotificationType.HABIT_REMINDER -> R.drawable.ic_habit_notification
+        NotificationType.HABIT_TIME_BASED_REMINDER -> R.drawable.ic_habit_notification
         NotificationType.GOAL_SETTING_REMINDER -> R.drawable.ic_goal_notification
         else -> R.drawable.ic_goal_notification
     }
