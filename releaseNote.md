@@ -1,3 +1,21 @@
+씨드데이 1.0.3 릴리즈 노트
+=================
+- 홈 화면 튜토리얼 추가
+- 시간 지정 습관 알림 추가
+- z플립에서 홈 화면 진척도 UI가 늘어나던 문제 수정
+
+개발자 노트
+---
+홈 화면 튜토리얼 추가
+https://github.com/Record-Management/Android/pull/189
+
+시간 지정 습관 알림 추가
+https://github.com/Record-Management/Android/pull/190
+
+z플립에서 홈 화면 진척도 UI가 늘어나던 문제 수정
+https://github.com/Record-Management/Android/pull/191
+
+
 씨드데이 1.0.2 릴리즈 노트
 =================
 - 홈 화면 날짜 변경 바텀시트로 전환
