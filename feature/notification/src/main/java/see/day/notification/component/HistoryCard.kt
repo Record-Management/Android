@@ -151,3 +151,20 @@ private fun HistoryCardsPreview() {
         }
     }
 }
+
+@Preview
+@Composable
+private fun HistoryCardTypeTimeBasedHabitPreview() {
+    val time = TimeFormatUtil.getRelativeTimeString(hourBefore(5))
+    SeeDayTheme {
+        HistoryCard(
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+            notificationType = NotificationType.HABIT_TIME_BASED_REMINDER,
+            title = "습관 기록",
+            message = "지금 물 마시기 할 시간이에요. 이 작은 순간이 쌓여 진짜 나만의 습관이 될 거예요.",
+            isChecked = false,
+            relativeTime = time,
+            onClickCard = { type, relativeTime -> }
+        )
+    }
+}
