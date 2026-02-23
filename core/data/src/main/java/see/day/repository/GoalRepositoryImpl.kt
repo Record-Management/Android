@@ -34,7 +34,6 @@ class GoalRepositoryImpl @Inject constructor(
         }
     }
 
-    // TODO 현재 목표삭제 (배포 전 삭제)
     override suspend fun deleteCurrentGoal(): Result<Unit> {
         return createResult {
             goalService.deleteCurrentGoal()
