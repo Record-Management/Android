@@ -16,4 +16,5 @@ sealed interface HomeUiEvent {
     data class OnClickUpdateHabitIsComplete(val recordId: String, val isCompleted: Boolean, val recordDate: String) : HomeUiEvent
     data object OnClickNotification : HomeUiEvent
     data object OnClickGoalSetting: HomeUiEvent
+    data object OnClickGoalReset: HomeUiEvent
 }

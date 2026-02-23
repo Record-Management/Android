@@ -18,6 +18,7 @@ import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
+import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
@@ -51,6 +52,7 @@ class HomeViewModel @Inject constructor(
     private val getStoredDateUseCase: GetStoredDateUseCase,
     private val updateStoredDateUseCase: UpdateStoredDateUseCase,
     private val getIsShownTutorialUseCase: GetIsShownTutorialUseCase,
+    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -173,6 +175,9 @@ class HomeViewModel @Inject constructor(
             }
             is HomeUiEvent.OnClickGoalSetting -> {
                 onClickGoalSetting()
+            }
+            is HomeUiEvent.OnClickGoalReset -> {
+                onClickGoalReset()
             }
         }
     }
@@ -326,7 +331,22 @@ class HomeViewModel @Inject constructor(
 //                }
             }
         }
+    }
 
+    private fun onClickGoalReset() {
+        onRefresh()
+        viewModelScope.launch {
+            deleteCurrentGoalUseCase()
+            // 결과와는 관계 없이 목표 재설정으로 이동
+            _uiState.update {
+                it.copy(
+                    mainRecordType = null,
+                    goalDays = null,
+                    treeStage = null
+                )
+            }
+            _uiEffect.emit(HomeUiEffect.NavigateToResetGoal)
+        }
     }
 
     private fun List<CalendarDayInfo>.filterMonthlyRecords(recordType: RecordType): List<CalendarDayInfo> {
@@ -378,8 +398,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickGoalSetting() {
         viewModelScope.launch {
-            _uiEffect.emit(HomeUiEffect.NavigateToResetGoal
-            )
+            _uiEffect.emit(HomeUiEffect.NavigateToResetGoal)
         }
     }
 }
