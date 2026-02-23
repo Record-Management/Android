@@ -139,7 +139,8 @@ private fun TutorialLoader(
             isFullExpand = false,
             onClickBackButton = {},
             onClickNotification = {},
-            onClickSetting = {}
+            onClickSetting = {},
+            onClickResetGoal = {}
         )
 
         Image(

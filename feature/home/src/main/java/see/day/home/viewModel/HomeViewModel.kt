@@ -334,18 +334,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onClickGoalReset() {
-        onRefresh()
         viewModelScope.launch {
-            deleteCurrentGoalUseCase()
-            // 결과와는 관계 없이 목표 재설정으로 이동
-            _uiState.update {
-                it.copy(
-                    mainRecordType = null,
-                    goalDays = null,
-                    treeStage = null
-                )
+            deleteCurrentGoalUseCase().onSuccess {
+                _uiState.update {
+                    it.copy(
+                        mainRecordType = null,
+                        goalDays = null,
+                        treeStage = null
+                    )
+                }
+                _uiEffect.emit(HomeUiEffect.NavigateToResetGoal)
             }
-            _uiEffect.emit(HomeUiEffect.NavigateToResetGoal)
         }
     }
 

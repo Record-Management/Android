@@ -36,7 +36,7 @@ import see.day.util.getIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType?, goalDays: Int?, isFullExpand: Boolean, onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
+internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType?, goalDays: Int?, isFullExpand: Boolean, onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit, onClickResetGoal: () -> Unit) {
     var showGoalResetDialog by remember { mutableStateOf(false) }
 
     if (showGoalResetDialog) {
@@ -46,7 +46,10 @@ internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordT
             cancel = R.string.cancel_dialog,
             confirm = R.string.goal_reset_confirm,
             onDismiss = { showGoalResetDialog = false },
-            onClickConfirmButton = { showGoalResetDialog = false }
+            onClickConfirmButton = {
+                onClickResetGoal()
+                showGoalResetDialog = false
+            }
         )
     }
 
@@ -154,7 +157,8 @@ private fun HomeTopBarPreview() {
             isFullExpand = false,
             onClickBackButton = {},
             onClickSetting = {},
-            onClickNotification = {}
+            onClickNotification = {},
+            onClickResetGoal = {}
         )
     }
 }
@@ -170,7 +174,8 @@ private fun HomeTopBarNoGoalPreview() {
             isFullExpand = false,
             onClickBackButton = {},
             onClickSetting = {},
-            onClickNotification = {}
+            onClickNotification = {},
+            onClickResetGoal = {}
         )
     }
 }
