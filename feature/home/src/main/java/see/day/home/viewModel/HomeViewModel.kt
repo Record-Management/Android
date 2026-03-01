@@ -343,7 +343,6 @@ class HomeViewModel @Inject constructor(
                         treeStage = null
                     )
                 }
-                _uiEffect.emit(HomeUiEffect.NavigateToResetGoal)
             }
         }
     }
