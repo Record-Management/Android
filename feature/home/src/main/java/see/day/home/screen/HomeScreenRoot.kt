@@ -248,6 +248,9 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
                     },
                     onClickNotification = {
                         onAction(HomeUiEvent.OnClickNotification)
+                    },
+                    onClickResetGoal = {
+                        onAction(HomeUiEvent.OnClickGoalReset)
                     }
                 )
             },

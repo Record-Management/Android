@@ -16,6 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,17 +31,34 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.home.R
 import see.day.model.record.RecordType
+import see.day.ui.dialog.ConfirmDialog
 import see.day.util.getIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType?, goalDays: Int?, isFullExpand: Boolean,onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit) {
+internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordType: RecordType?, goalDays: Int?, isFullExpand: Boolean, onClickBackButton: () -> Unit, onClickSetting: () -> Unit, onClickNotification: () -> Unit, onClickResetGoal: () -> Unit) {
+    var showGoalResetDialog by remember { mutableStateOf(false) }
+
+    if (showGoalResetDialog) {
+        ConfirmDialog(
+            title = R.string.goal_reset_title,
+            body = R.string.goal_reset_body,
+            cancel = R.string.cancel_dialog,
+            confirm = R.string.goal_reset_confirm,
+            onDismiss = { showGoalResetDialog = false },
+            onClickConfirmButton = {
+                onClickResetGoal()
+                showGoalResetDialog = false
+            }
+        )
+    }
+
     TopAppBar(
         title = {
             Box(
                 modifier = modifier.fillMaxWidth(),
             ) {
-                if(mainRecordType != null && goalDays != null) {
+                if (mainRecordType != null && goalDays != null) {
                     val goalDaysAlignment = if (isFullExpand) {
                         Alignment.Center
                     } else {
@@ -46,7 +67,8 @@ internal fun HomeTopBar(modifier: Modifier = Modifier, alpha: Float, mainRecordT
                     GoalDays(
                         modifier = Modifier
                             .align(goalDaysAlignment)
-                            .offset(x = if (isFullExpand) (-40).dp else (-16).dp),
+                            .offset(x = if (isFullExpand) (-40).dp else (-16).dp)
+                            .clickable { showGoalResetDialog = true },
                         recordType = mainRecordType,
                         goalDays = goalDays
                     )
@@ -135,7 +157,8 @@ private fun HomeTopBarPreview() {
             isFullExpand = false,
             onClickBackButton = {},
             onClickSetting = {},
-            onClickNotification = {}
+            onClickNotification = {},
+            onClickResetGoal = {}
         )
     }
 }
@@ -151,7 +174,8 @@ private fun HomeTopBarNoGoalPreview() {
             isFullExpand = false,
             onClickBackButton = {},
             onClickSetting = {},
-            onClickNotification = {}
+            onClickNotification = {},
+            onClickResetGoal = {}
         )
     }
 }

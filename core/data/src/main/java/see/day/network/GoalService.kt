@@ -22,7 +22,6 @@ interface GoalService {
     @GET("api/goals/achievement/report")
     suspend fun getGoalReport() : CommonResponse<GoalReportResponse>
 
-    // TODO 테스트용 API 추후에 삭제 예정
     @PATCH("api/goals/current/force-complete")
     suspend fun deleteCurrentGoal() : Unit
 }
