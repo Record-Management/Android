@@ -29,7 +29,7 @@ fun CompleteButton(modifier: Modifier = Modifier, text: String, isEnabled: Boole
             .fillMaxWidth()
             .padding(vertical = 12.dp)
             .heightIn(min = 52.dp),
-        onClick = onClick,
+        onClick = debounceClick { onClick() },
         shape = RoundedCornerShape(8.dp),
         enabled = isEnabled,
         colors = ButtonColors(
@@ -45,6 +45,22 @@ fun CompleteButton(modifier: Modifier = Modifier, text: String, isEnabled: Boole
             style = MaterialTheme.typography.displayLarge,
             color = if (isEnabled) Color.White else MaterialTheme.colorScheme.onPrimary
         )
+    }
+}
+
+@Composable
+fun debounceClick(
+    debounceTime: Long = 300L,
+    onClick: () -> Unit
+): () -> Unit {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
+    return {
+        val currentTime = android.os.SystemClock.elapsedRealtime()
+        if (currentTime - lastClickTime > debounceTime) {
+            lastClickTime = currentTime
+            onClick()
+        }
     }
 }
 
