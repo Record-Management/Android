@@ -22,7 +22,7 @@ data class ExerciseDetailUiState(
         data class Edit(val originalRecord: ExerciseRecordInput, val recordId: String) : EditMode()
     }
 
-    val canSubmit: Boolean = if (dailyNote.isEmpty()) {
+    val canSubmit: Boolean = if (dailyNote.isBlank()) {
         false
     } else if (!hasExerciseData()) {
         false
