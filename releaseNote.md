@@ -1,3 +1,20 @@
+씨드데이 1.0.4 릴리즈 노트
+=================
+- 홈 화면에서 기록 초기화
+- 기록 작성이 중첩해서 등록 가능한점 수정
+- 공백일 경우 기록 작성 버튼 활성화되는것 수정
+
+개발자 노트
+---
+기록 초기화
+https://github.com/Record-Management/Android/pull/193
+
+중첩해서 등록 가능한점 수정
+https://github.com/Record-Management/Android/pull/194
+
+공백일 경우 기록 작성 버튼 활성화되는것 수정
+https://github.com/Record-Management/Android/pull/195
+
 씨드데이 1.0.3 릴리즈 노트
 =================
 - 홈 화면 튜토리얼 추가
