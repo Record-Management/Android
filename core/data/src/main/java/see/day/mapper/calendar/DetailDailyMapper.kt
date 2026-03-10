@@ -1,6 +1,7 @@
 package see.day.mapper.calendar
 
 import see.day.model.calendar.DailyRecordDetails
+import see.day.model.calendar.HabitRecordDetail
 import see.day.model.calendar.RecordDetail
 import see.day.network.dto.calendar.DailyDetailRecordResponse
 import see.day.network.dto.record.RecordResponse
@@ -14,4 +15,11 @@ fun DailyDetailRecordResponse.toModel(): DailyRecordDetails {
 
 fun List<RecordResponse>.toModel(): List<RecordDetail> {
     return this.map { it.toModel() }
+        .sortedByDescending { record ->
+            if (record is HabitRecordDetail) {
+                record.isMainRecord
+            } else {
+                false
+            }
+        }
 }
