@@ -421,4 +421,4 @@ private fun HomeScreenPreview() {
     }
 }
 
-val topBarHeight = 56.dp
+val topBarHeight = 64.dp
