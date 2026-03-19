@@ -52,6 +52,8 @@ balloon = "1.6.13"
 firebase-crashlytics = "3.0.6"
 wheelpickercompose = "1.1.11"
 
+inapp-review = "2.0.2"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 balloon = { module = "com.github.skydoves:balloon", version.ref = "balloon" }
@@ -136,6 +138,10 @@ kakao-v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 
 balloon-compose = { group = "com.github.skydoves", name = "balloon-compose", version.ref = "balloon"}
 wheelpickercompose = { module = "com.github.commandiron:WheelPickerCompose", version.ref = "wheelpickercompose" }
+
+#inapp-review
+inapp-review = { group = "com.google.android.play", name = "review", version.ref = "inapp-review"}
+inapp-review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "inapp-review"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
