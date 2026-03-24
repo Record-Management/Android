@@ -1,6 +1,7 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
@@ -124,6 +126,19 @@ fun HomeScreenRoot(
                 }
                 is HomeUiEffect.NavigateToTutorial -> {
                     onGoTutorial()
+                }
+                is HomeUiEffect.ShowInAppReview -> {
+                    val reviewManager = ReviewManagerFactory.create(context)
+                    val request = reviewManager.requestReviewFlow()
+                    request.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val reviewInfo = task.result
+                            // 리뷰 플로우를 시작하기 직전에 상태 업데이트
+                            viewModel.onAction(HomeUiEvent.OnClickInAppReview)
+                            // 실제 UI를 띄우는곳은 여기
+                            reviewManager.launchReviewFlow(context as Activity, reviewInfo)
+                        }
+                    }
                 }
             }
         }
