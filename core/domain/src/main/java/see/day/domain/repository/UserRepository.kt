@@ -18,4 +18,6 @@ interface UserRepository {
     suspend fun updateStoredDate(date: String) : Result<Unit>
     suspend fun getIsShownTutorial() : Result<Boolean>
     suspend fun updateShownTutorial() : Result<Unit>
+    suspend fun getIsShownInAppReview() : Result<Boolean>
+    suspend fun updateIsShownInAppReview() : Result<Unit>
 }

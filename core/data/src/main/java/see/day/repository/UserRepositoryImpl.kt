@@ -108,4 +108,16 @@ class UserRepositoryImpl @Inject constructor(
             dataSource.setShownTutorial()
         }
     }
+
+    override suspend fun getIsShownInAppReview(): Result<Boolean> {
+        return runCatching {
+            dataSource.getIsShownInAppReview().first() ?: false
+        }
+    }
+
+    override suspend fun updateIsShownInAppReview(): Result<Unit> {
+        return runCatching {
+            dataSource.setIsShownInAppReview()
+        }
+    }
 }

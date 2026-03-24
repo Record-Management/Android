@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import see.day.datastore.DataStoreDataSource.PreferencesKey.ACCESS_TOKEN
 import see.day.datastore.DataStoreDataSource.PreferencesKey.IS_FIRST_LAUNCH
+import see.day.datastore.DataStoreDataSource.PreferencesKey.IS_SHOWN_IN_APP_REVIEW
 import see.day.datastore.DataStoreDataSource.PreferencesKey.IS_SHOWN_TUTORIAL
 import see.day.datastore.DataStoreDataSource.PreferencesKey.REFRESH_TOKEN
 import see.day.datastore.DataStoreDataSource.PreferencesKey.TODAY_DATE
@@ -23,6 +24,7 @@ class DataStoreDataSource @Inject constructor(
         val TODAY_DATE = stringPreferencesKey("TODAY_TOKEN")
         val IS_FIRST_LAUNCH = booleanPreferencesKey("FIRST_LAUNCH")
         val IS_SHOWN_TUTORIAL = booleanPreferencesKey("SHOWN_TUTORIAL")
+        val IS_SHOWN_IN_APP_REVIEW = booleanPreferencesKey("SHOWN_IN_APP_REVIEW")
     }
 
     override fun hasToken(): Flow<Boolean> = dataStore.data.map { preferences ->
@@ -59,6 +61,12 @@ class DataStoreDataSource @Inject constructor(
         }
     }
 
+    fun getIsShownInAppReview() : Flow<Boolean?> {
+        return dataStore.data.map { prefs ->
+            prefs[IS_SHOWN_IN_APP_REVIEW]
+        }
+    }
+
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { prefs ->
             prefs[ACCESS_TOKEN] = token
@@ -89,11 +97,18 @@ class DataStoreDataSource @Inject constructor(
         }
     }
 
+    suspend fun setIsShownInAppReview() {
+        dataStore.edit { prefs ->
+            prefs[IS_SHOWN_IN_APP_REVIEW] = true
+        }
+    }
+
     override suspend fun clearData() {
         dataStore.edit { prefs ->
             prefs.clear()
             prefs[IS_FIRST_LAUNCH] = false
             prefs[IS_SHOWN_TUTORIAL] = true
+            prefs[IS_SHOWN_IN_APP_REVIEW] = true
         }
     }
 }
