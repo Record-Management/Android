@@ -17,4 +17,5 @@ sealed interface HomeUiEvent {
     data object OnClickNotification : HomeUiEvent
     data object OnClickGoalSetting: HomeUiEvent
     data object OnClickGoalReset: HomeUiEvent
+    data object OnClickInAppReview : HomeUiEvent
 }
