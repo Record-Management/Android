@@ -14,8 +14,8 @@ android {
         applicationId = "see.day.app"
         minSdk = 28
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.0.4"
+        versionCode = 16
+        versionName = "1.0.41"
     }
 
     fun getApiKey(propertyKey: String): String {
