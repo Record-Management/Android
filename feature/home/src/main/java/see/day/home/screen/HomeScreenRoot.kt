@@ -1,7 +1,10 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -73,6 +76,8 @@ import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 import see.day.ui.card.ActionBanner
 import see.day.ui.dialog.OneButtonDialog
+import androidx.core.net.toUri
+import see.day.ui.dialog.ConfirmDialog
 
 @Composable
 fun HomeScreenRoot(
@@ -96,6 +101,23 @@ fun HomeScreenRoot(
                     viewModel.onAction(HomeUiEvent.OnRefresh)
                 }
             }
+    }
+
+    var showReviewDialog by remember { mutableStateOf(false) }
+
+    if(showReviewDialog) {
+        ConfirmDialog(
+            title = R.string.review_title,
+            body = R.string.review_body,
+            cancel = R.string.review_cancel,
+            confirm = R.string.review_confirm,
+            onDismiss = { showReviewDialog = false},
+            onClickConfirmButton =  {
+                viewModel.onAction(HomeUiEvent.OnClickInAppReview)
+                openReviewPage(context)
+                showReviewDialog = false
+            }
+        )
     }
 
     LaunchedEffect(Unit) {
@@ -128,17 +150,7 @@ fun HomeScreenRoot(
                     onGoTutorial()
                 }
                 is HomeUiEffect.ShowInAppReview -> {
-                    val reviewManager = ReviewManagerFactory.create(context)
-                    val request = reviewManager.requestReviewFlow()
-                    request.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val reviewInfo = task.result
-                            // 리뷰 플로우를 시작하기 직전에 상태 업데이트
-                            viewModel.onAction(HomeUiEvent.OnClickInAppReview)
-                            // 실제 UI를 띄우는곳은 여기
-                            reviewManager.launchReviewFlow(context as Activity, reviewInfo)
-                        }
-                    }
+                    showReviewDialog = true
                 }
             }
         }
@@ -421,6 +433,22 @@ fun RecordFilterType.toRecordType(): RecordType? {
         RecordFilterType.EXERCISE -> RecordType.EXERCISE
 //        RecordFilterType.SCHEDULE -> RecordType.SCHEDULE
         RecordFilterType.HABIT -> RecordType.HABIT
+    }
+}
+
+private fun openReviewPage(context: Context) {
+    try {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "market://details?id=blueberry.gunhee.expensediary&showAllReviews=true".toUri()
+        )
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "https://play.google.com/store/apps/details?id=blueberry.gunhee.expensediary&showAllReviews=true".toUri()
+        )
+        context.startActivity(intent)
     }
 }
 
