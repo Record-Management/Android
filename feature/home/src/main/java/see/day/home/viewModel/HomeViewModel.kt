@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
+import see.day.domain.repository.UserRepository
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
@@ -53,6 +54,7 @@ class HomeViewModel @Inject constructor(
     private val updateStoredDateUseCase: UpdateStoredDateUseCase,
     private val getIsShownTutorialUseCase: GetIsShownTutorialUseCase,
     private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
+    private val userRepository: UserRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -96,14 +98,14 @@ class HomeViewModel @Inject constructor(
                 val storedDateString = getStoredDateUseCase().getOrThrow()
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
 
-                if(user.await().mainRecordType == null) {
-                    val shouldShowGoalPrompt = if(storedDateString != null) {
+                if (user.await().mainRecordType == null) {
+                    val shouldShowGoalPrompt = if (storedDateString != null) {
                         val storedDate = LocalDate.parse(storedDateString)
                         storedDate < todayDate
                     } else {
                         true
                     }
-                    if(shouldShowGoalPrompt) {
+                    if (shouldShowGoalPrompt) {
                         _uiEffect.emit(HomeUiEffect.NavigateToCurrentGoal)
                     }
                     updateStoredDateUseCase(HomeUiState.getTodayDate())
@@ -112,12 +114,12 @@ class HomeViewModel @Inject constructor(
 
                 storedDateString?.let { dateString ->
                     val storedDate = LocalDate.parse(dateString)
-                    if(storedDate < todayDate) {
+                    if (storedDate < todayDate) {
                         updateStoredDateUseCase(HomeUiState.getTodayDate())
                     }
                 }
                 getIsShownTutorialUseCase().onSuccess { isShownTutorial ->
-                    if(!isShownTutorial) {
+                    if (!isShownTutorial) {
                         _uiEffect.emit(HomeUiEffect.NavigateToTutorial)
                     }
                 }
@@ -170,14 +172,24 @@ class HomeViewModel @Inject constructor(
             is HomeUiEvent.OnClickUpdateHabitIsComplete -> {
                 onClickHabitRecordIsCompleted(recordId = uiEvent.recordId, isCompleted = uiEvent.isCompleted, recordDate = uiEvent.recordDate)
             }
+
             is HomeUiEvent.OnClickNotification -> {
                 onClickNotification()
             }
+
             is HomeUiEvent.OnClickGoalSetting -> {
                 onClickGoalSetting()
             }
+
             is HomeUiEvent.OnClickGoalReset -> {
                 onClickGoalReset()
+            }
+
+            is HomeUiEvent.OnClickInAppReview -> {
+                viewModelScope.launch {
+                    userRepository.updateIsShownInAppReview()
+                }
+
             }
         }
     }
@@ -209,6 +221,16 @@ class HomeViewModel @Inject constructor(
                         todayRecords = todayRecords
                     )
                 }
+                if (HomeUiState.getTodayDate() < uiState.value.createdAt) {
+                    return@launch
+                }
+
+                userRepository.getIsShownInAppReview().onSuccess { isShownInAppReview ->
+                    if (!isShownInAppReview) {
+                        _uiEffect.emit(HomeUiEffect.ShowInAppReview)
+                    }
+                }
+
             } catch (e: Exception) {
 
             }
@@ -363,7 +385,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onClickHabitRecordIsCompleted(recordId: String, isCompleted: Boolean, recordDate: String) {
-        if(recordDate != HomeUiState.getTodayDate()) {
+        if (recordDate != HomeUiState.getTodayDate()) {
             return
         }
         viewModelScope.launch {

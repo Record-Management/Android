@@ -1,6 +1,10 @@
 package see.day.home.screen
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -71,6 +75,8 @@ import see.day.model.record.RecordType
 import see.day.ui.calendar.CustomCalendar
 import see.day.ui.card.ActionBanner
 import see.day.ui.dialog.OneButtonDialog
+import androidx.core.net.toUri
+import see.day.ui.dialog.ConfirmDialog
 
 @Composable
 fun HomeScreenRoot(
@@ -94,6 +100,23 @@ fun HomeScreenRoot(
                     viewModel.onAction(HomeUiEvent.OnRefresh)
                 }
             }
+    }
+
+    var showReviewDialog by remember { mutableStateOf(false) }
+
+    if(showReviewDialog) {
+        ConfirmDialog(
+            title = R.string.review_title,
+            body = R.string.review_body,
+            cancel = R.string.review_cancel,
+            confirm = R.string.review_confirm,
+            onDismiss = { showReviewDialog = false},
+            onClickConfirmButton =  {
+                viewModel.onAction(HomeUiEvent.OnClickInAppReview)
+                openReviewPage(context)
+                showReviewDialog = false
+            }
+        )
     }
 
     LaunchedEffect(Unit) {
@@ -124,6 +147,9 @@ fun HomeScreenRoot(
                 }
                 is HomeUiEffect.NavigateToTutorial -> {
                     onGoTutorial()
+                }
+                is HomeUiEffect.ShowInAppReview -> {
+                    showReviewDialog = true
                 }
             }
         }
@@ -409,6 +435,22 @@ fun RecordFilterType.toRecordType(): RecordType? {
     }
 }
 
+private fun openReviewPage(context: Context) {
+    try {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "market://details?id=see.day.app&showAllReviews=true".toUri()
+        )
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "https://play.google.com/store/apps/details?id=see.day.app&showAllReviews=true".toUri()
+        )
+        context.startActivity(intent)
+    }
+}
+
 
 @Preview
 @Composable
@@ -421,4 +463,23 @@ private fun HomeScreenPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun ReviewDialogPreview() {
+    var showReviewDialog by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    SeeDayTheme {
+        ConfirmDialog(
+            title = R.string.review_title,
+            body = R.string.review_body,
+            cancel = R.string.review_cancel,
+            confirm = R.string.review_confirm,
+            onDismiss = { showReviewDialog = false},
+            onClickConfirmButton =  {
+                openReviewPage(context)
+                showReviewDialog = false
+            }
+        )
+    }
+}
 val topBarHeight = 64.dp

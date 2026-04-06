@@ -4,4 +4,8 @@
     <string name="goal_reset_body">기존 설정된 목표를 초기화합니다.\n초기화 후에는 새로운 목표를 설정해주세요</string>
     <string name="cancel_dialog">닫기</string>
     <string name="goal_reset_confirm">초기화</string>
+    <string name="review_title">리뷰를 남겨주세요!</string>
+    <string name="review_body">저의 앱이 조금이나마 도움이 되고 있나요?\n잠시만 시간을 내어 리뷰를 남겨주시면, 씨드데이에\n큰 도움이 됩니다. 감사합니다.</string>
+    <string name="review_cancel">나중에</string>
+    <string name="review_confirm">별점주기</string>
 </resources>
