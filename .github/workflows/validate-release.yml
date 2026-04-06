@@ -33,14 +33,16 @@ jobs:
       - name: Get current versionCode
         id: current-version
         run: |
-          CURRENT_VERSION_CODE=$(grep "versionCode = " app/build.gradle.kts | sed 's/.*versionCode = //' | tr -d ' ')
+          CURRENT_VERSION_CODE=$(sed -nE 's/^[[:space:]]*versionCode[[:space:]]*=[[:space:]]*([0-9]+)[[:space:]]*$/\1/p' app/build.gradle.kts | head -n1)
+          [[ "$CURRENT_VERSION_CODE" =~ ^[0-9]+$ ]] || { echo "❌ Invalid current versionCode: $CURRENT_VERSION_CODE"; exit 1; } 
           echo "current_version_code=$CURRENT_VERSION_CODE" >> $GITHUB_OUTPUT
           echo "Current versionCode: $CURRENT_VERSION_CODE"
 
       - name: Get main branch versionCode
         id: main-version
         run: |
-          MAIN_VERSION_CODE=$(grep "versionCode = " main-branch/app/build.gradle.kts | sed 's/.*versionCode = //' | tr -d ' ')
+          MAIN_VERSION_CODE=$(sed -nE 's/^[[:space:]]*versionCode[[:space:]]*=[[:space:]]*([0-9]+)[[:space:]]*$/\1/p' main-branch/app/build.gradle.kts | head -n1)
+          [[ "$MAIN_VERSION_CODE" =~ ^[0-9]+$ ]] || { echo "❌ Invalid main versionCode: $MAIN_VERSION_CODE"; exit 1; }
           echo "main_version_code=$MAIN_VERSION_CODE" >> $GITHUB_OUTPUT
           echo "Main branch versionCode: $MAIN_VERSION_CODE"
 
@@ -52,7 +54,7 @@ jobs:
           echo "Current versionCode: $CURRENT"
           echo "Main versionCode: $MAIN"
           
-          if [ "$CURRENT" -le "$MAIN" ]; then
+          if (( CURRENT <= MAIN )); then
             echo "❌ Error: Current versionCode ($CURRENT) must be greater than main branch versionCode ($MAIN)"
             exit 1
           else
