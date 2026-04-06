@@ -463,4 +463,23 @@ private fun HomeScreenPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun ReviewDialogPreview() {
+    var showReviewDialog by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    SeeDayTheme {
+        ConfirmDialog(
+            title = R.string.review_title,
+            body = R.string.review_body,
+            cancel = R.string.review_cancel,
+            confirm = R.string.review_confirm,
+            onDismiss = { showReviewDialog = false},
+            onClickConfirmButton =  {
+                openReviewPage(context)
+                showReviewDialog = false
+            }
+        )
+    }
+}
 val topBarHeight = 64.dp
