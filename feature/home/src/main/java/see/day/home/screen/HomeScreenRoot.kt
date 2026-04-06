@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray30
@@ -440,13 +439,13 @@ private fun openReviewPage(context: Context) {
     try {
         val intent = Intent(
             Intent.ACTION_VIEW,
-            "market://details?id=blueberry.gunhee.expensediary&showAllReviews=true".toUri()
+            "market://details?id=see.day.app&showAllReviews=true".toUri()
         )
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
         val intent = Intent(
             Intent.ACTION_VIEW,
-            "https://play.google.com/store/apps/details?id=blueberry.gunhee.expensediary&showAllReviews=true".toUri()
+            "https://play.google.com/store/apps/details?id=see.day.app&showAllReviews=true".toUri()
         )
         context.startActivity(intent)
     }
