@@ -15,7 +15,7 @@ android {
         minSdk = 28
         targetSdk = 35
         versionCode = 17
-        versionName = "1.0.41"
+        versionName = "1.0.5"
     }
 
     fun getApiKey(propertyKey: String): String {
