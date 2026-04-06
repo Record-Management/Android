@@ -1,0 +1,87 @@
+name: Validate Release
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'release-')
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-branch
+
+      - name: Extract version from branch name
+        id: extract-version
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          VERSION=$(echo $BRANCH_NAME | sed 's/release-//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
+
+      - name: Get current versionCode
+        id: current-version
+        run: |
+          CURRENT_VERSION_CODE=$(grep "versionCode = " app/build.gradle.kts | sed 's/.*versionCode = //' | tr -d ' ')
+          echo "current_version_code=$CURRENT_VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "Current versionCode: $CURRENT_VERSION_CODE"
+
+      - name: Get main branch versionCode
+        id: main-version
+        run: |
+          MAIN_VERSION_CODE=$(grep "versionCode = " main-branch/app/build.gradle.kts | sed 's/.*versionCode = //' | tr -d ' ')
+          echo "main_version_code=$MAIN_VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "Main branch versionCode: $MAIN_VERSION_CODE"
+
+      - name: Compare versionCode
+        run: |
+          CURRENT=${{ steps.current-version.outputs.current_version_code }}
+          MAIN=${{ steps.main-version.outputs.main_version_code }}
+          
+          echo "Current versionCode: $CURRENT"
+          echo "Main versionCode: $MAIN"
+          
+          if [ "$CURRENT" -le "$MAIN" ]; then
+            echo "❌ Error: Current versionCode ($CURRENT) must be greater than main branch versionCode ($MAIN)"
+            exit 1
+          else
+            echo "✅ versionCode validation passed: $CURRENT > $MAIN"
+          fi
+
+      - name: Check release note exists
+        run: |
+          VERSION="${{ steps.extract-version.outputs.version }}"
+          RELEASE_NOTE_PATH="docs/releaseNote/v$VERSION/release.md"
+          
+          echo "Checking for release note at: $RELEASE_NOTE_PATH"
+          
+          if [ ! -f "$RELEASE_NOTE_PATH" ]; then
+            echo "❌ Error: Release note not found at $RELEASE_NOTE_PATH"
+            echo "Please create a release note for version $VERSION"
+            exit 1
+          else
+            echo "✅ Release note found at $RELEASE_NOTE_PATH"
+            echo ""
+            echo "Release note content:"
+            cat "$RELEASE_NOTE_PATH"
+          fi
+
+      - name: Validation Summary
+        if: success()
+        run: |
+          echo "🎉 All validations passed!"
+          echo "- Version: ${{ steps.extract-version.outputs.version }}"
+          echo "- versionCode: ${{ steps.current-version.outputs.current_version_code }} (main: ${{ steps.main-version.outputs.main_version_code }})"
+          echo "- Release note: ✅ exists"
