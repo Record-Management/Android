@@ -19,11 +19,9 @@ import see.day.daily.state.DailyDetailUiEffect
 import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
+import see.day.domain.repository.DailyRecordRepository
 import see.day.domain.repository.PhotoRepository
-import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
-import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
-import see.day.domain.usecase.record.daily.UpdateDailyRecordUseCase
 import see.day.model.calendar.DailyRecordDetail
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
@@ -34,10 +32,8 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 @HiltViewModel
 class DailyDetailViewModel @Inject constructor(
     private val photoRepository: PhotoRepository,
-    private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
+    private val dailyRecordRepository: DailyRecordRepository,
     private val getDetailRecordUseCase: GetRecordDetailUseCase,
-    private val updateDetailRecordUseCase: UpdateDailyRecordUseCase,
-    private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -192,7 +188,7 @@ class DailyDetailViewModel @Inject constructor(
     }
 
     private suspend fun saveDailyRecord(photoUrls: List<String>) {
-        insertDailyRecordUseCase(
+        dailyRecordRepository.insertRecord(
             DailyRecordInput(
                 uiState.value.text,
                 uiState.value.emotion,
@@ -211,7 +207,7 @@ class DailyDetailViewModel @Inject constructor(
     private suspend fun updateRecord(recordId: String) {
         val urls = processPhotoUrls(uiState.value.photos)
 
-        updateDetailRecordUseCase(
+        dailyRecordRepository.updateRecord(
             DailyRecordEdit(
                 recordId,
                 uiState.value.text,
@@ -239,7 +235,7 @@ class DailyDetailViewModel @Inject constructor(
 
     private fun onDeleteRecord(recordId: String) {
         viewModelScope.launch {
-            deleteDailyRecordUseCase(recordId)
+            dailyRecordRepository.deleteRecord(recordId)
                 .onSuccess {
                     _uiEffect.emit(DailyDetailUiEffect.NavigateToHome(isUpdated = true))
                     _toastMessage.emit("기록이 삭제 되었습니다.")
