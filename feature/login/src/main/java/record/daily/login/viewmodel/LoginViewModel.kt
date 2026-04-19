@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 import record.daily.login.state.login.LoginUiEffect
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
+import see.day.domain.repository.FcmRepository
 import see.day.domain.repository.LoginRepository
 import see.day.domain.repository.UserRepository
-import see.day.domain.usecase.fcm.GetFcmTokenUseCase
 import see.day.model.login.SocialLogin
 import see.day.model.login.SocialType
 import see.day.model.navigation.AppStartState.HOME
@@ -23,8 +23,8 @@ import see.day.model.navigation.AppStartState.ONBOARDING
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val loginRepository: LoginRepository,
+    private val fcmRepository: FcmRepository,
     private val analyticsLogger: AnalyticsLogger,
-    private val getFcmTokenUseCase: GetFcmTokenUseCase,
 ) : ViewModel() {
 
     private val _uiEffect: MutableSharedFlow<LoginUiEffect> = MutableSharedFlow()
@@ -46,7 +46,7 @@ class LoginViewModel @Inject constructor(
                     analyticsLogger.log(AnalyticsEvent.SignUp)
                     _uiEffect.emit(LoginUiEffect.GoOnboarding)
                 } else if (it == HOME) {
-                    getFcmTokenUseCase().onSuccess { fcmToken ->
+                    fcmRepository.getFcmToken().onSuccess { fcmToken ->
                         userRepository.updateFcmToken(fcmToken)
                     }
                     analyticsLogger.log(AnalyticsEvent.Login)
