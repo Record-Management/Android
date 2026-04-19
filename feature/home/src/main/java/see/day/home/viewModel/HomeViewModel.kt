@@ -24,10 +24,6 @@ import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.UpdateHabitRecordIsCompletedUseCase
-import see.day.domain.usecase.user.GetIsShownTutorialUseCase
-import see.day.domain.usecase.user.GetStoredDateUseCase
-import see.day.domain.usecase.user.GetUserUseCase
-import see.day.domain.usecase.user.UpdateStoredDateUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
@@ -43,16 +39,12 @@ import java.time.ZoneId
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase,
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
     private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
     private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
     private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
-    private val getStoredDateUseCase: GetStoredDateUseCase,
-    private val updateStoredDateUseCase: UpdateStoredDateUseCase,
-    private val getIsShownTutorialUseCase: GetIsShownTutorialUseCase,
     private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
     private val userRepository: UserRepository,
     private val analyticsLogger: AnalyticsLogger
@@ -73,7 +65,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val state = uiState.value
             try {
-                val user = async { getUserUseCase().getOrThrow() }
+                val user = async { userRepository.getUser().getOrThrow() }
                 val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
                 val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
 
@@ -95,7 +87,7 @@ class HomeViewModel @Inject constructor(
                     )
                 }
 
-                val storedDateString = getStoredDateUseCase().getOrThrow()
+                val storedDateString = userRepository.getStoredDate().getOrThrow()
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
 
                 if (user.await().mainRecordType == null) {
@@ -108,17 +100,17 @@ class HomeViewModel @Inject constructor(
                     if (shouldShowGoalPrompt) {
                         _uiEffect.emit(HomeUiEffect.NavigateToCurrentGoal)
                     }
-                    updateStoredDateUseCase(HomeUiState.getTodayDate())
+                    userRepository.updateStoredDate(HomeUiState.getTodayDate())
                     return@launch
                 }
 
                 storedDateString?.let { dateString ->
                     val storedDate = LocalDate.parse(dateString)
                     if (storedDate < todayDate) {
-                        updateStoredDateUseCase(HomeUiState.getTodayDate())
+                        userRepository.updateStoredDate(HomeUiState.getTodayDate())
                     }
                 }
-                getIsShownTutorialUseCase().onSuccess { isShownTutorial ->
+                userRepository.getIsShownTutorial().onSuccess { isShownTutorial ->
                     if (!isShownTutorial) {
                         _uiEffect.emit(HomeUiEffect.NavigateToTutorial)
                     }

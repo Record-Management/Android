@@ -13,11 +13,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
+import see.day.domain.repository.UserRepository
 import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
-import see.day.domain.usecase.login.LogoutUseCase
-import see.day.domain.usecase.user.DeleteUserUseCase
-import see.day.domain.usecase.user.GetUserUseCase
-import see.day.domain.usecase.user.UpdateUserProfileUseCase
 import see.day.model.user.UserProfileChangedInput
 import see.day.setting.state.SettingUiEffect
 import see.day.setting.state.SettingUiEvent
@@ -26,10 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase,
-    private val updateUserProfileUseCase: UpdateUserProfileUseCase,
-    private val logoutUseCase: LogoutUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase,
+    private val userRepository: UserRepository,
     private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
@@ -45,7 +39,7 @@ class SettingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getUserUseCase()
+            userRepository.getUser()
                 .onSuccess { user ->
                     _uiState.update {
                         it.copy(
@@ -105,7 +99,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onChangedNickname(nickname: String) {
         viewModelScope.launch {
-            updateUserProfileUseCase(UserProfileChangedInput.ofNickname(nickname))
+            userRepository.updateUser((UserProfileChangedInput.ofNickname(nickname)))
                 .onSuccess { user ->
                     _uiState.update {
                         it.copy(
@@ -119,7 +113,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onChangedBirthday(birthDate: String) {
         viewModelScope.launch {
-            updateUserProfileUseCase(UserProfileChangedInput.ofBirthDate(birthDate))
+            userRepository.updateUser(UserProfileChangedInput.ofBirthDate(birthDate))
                 .onSuccess { user ->
                     _uiState.update {
                         it.copy(
@@ -133,7 +127,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onClickLogout() {
         viewModelScope.launch {
-            logoutUseCase()
+            userRepository.logout(allDevices = true)
                 .onSuccess {
                     analyticsLogger.log(AnalyticsEvent.Logout)
                 }
@@ -142,7 +136,7 @@ class SettingViewModel @Inject constructor(
 
     private fun onClickWithdrawal() {
         viewModelScope.launch {
-            deleteUserUseCase()
+            userRepository.deleteUser()
                 .onSuccess {
                     analyticsLogger.log(AnalyticsEvent.Withdrawal)
                 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.user.UpdateShownTutorialUseCase
+import see.day.domain.repository.UserRepository
 import see.day.home.state.tutorial.TutorialUiEffect
 import see.day.home.state.tutorial.TutorialUiEvent
 import see.day.home.state.tutorial.TutorialUiState
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TutorialViewModel @Inject constructor(
-    private val updateShownTutorialUseCase: UpdateShownTutorialUseCase
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<TutorialUiState> = MutableStateFlow(TutorialUiState.Tutorial)
@@ -42,7 +42,7 @@ class TutorialViewModel @Inject constructor(
             _uiState.update { TutorialUiState.Loading }
             delay(300L)
             try {
-                updateShownTutorialUseCase()
+                userRepository.updateShownTutorial()
             } finally {
                 _uiEffect.emit(TutorialUiEffect.NavigateToHome)
             }
