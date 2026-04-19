@@ -28,7 +28,6 @@ internal fun Project.configureKotlinAndroid() {
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-            buildConfigField("String","SERVER_API_KEY", getApiKey("server.api.key"))
             buildConfigField("String", "KAKAO_API_KEY", getApiKey("kakao.api.key"))
             addManifestPlaceholders(mapOf("KAKAO_API_KEY" to getApiKey("kakao.api.xml.key")))
         }
@@ -36,6 +35,10 @@ internal fun Project.configureKotlinAndroid() {
         buildTypes {
             getByName("release") {
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                buildConfigField("String","SERVER_API_KEY", getApiKey("prod.server.api.key"))
+            }
+            getByName("debug") {
+                buildConfigField("String","SERVER_API_KEY", getApiKey("stg.server.api.key"))
             }
         }
 
