@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.domain.repository.UserRepository
-import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
 import see.day.model.user.UserProfileChangedInput
 import see.day.setting.state.SettingUiEffect
 import see.day.setting.state.SettingUiEvent
@@ -24,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -81,12 +79,6 @@ class SettingViewModel @Inject constructor(
 
             is SettingUiEvent.OnClickRecordNotification -> {
                 onClickRecordNotification()
-            }
-
-            is SettingUiEvent.OnClickDeleteCurrentGoal -> {
-                viewModelScope.launch {
-                    deleteCurrentGoalUseCase()
-                }
             }
         }
     }

@@ -44,7 +44,6 @@ internal fun MyInformationComponent(
     socialType: SocialType,
     onNicknameChanged: (String) -> Unit,
     onBirthDateChanged: (String) -> Unit,
-    onClickDeleteCurrentGoal: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -202,7 +201,6 @@ private fun MyInformationComponentPreview() {
             socialType = SocialType.KAKAO,
             onNicknameChanged = {},
             onBirthDateChanged = {},
-            onClickDeleteCurrentGoal = {}
         )
     }
 }
