@@ -44,7 +44,6 @@ internal fun MyInformationComponent(
     socialType: SocialType,
     onNicknameChanged: (String) -> Unit,
     onBirthDateChanged: (String) -> Unit,
-    onClickDeleteCurrentGoal: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -63,7 +62,7 @@ internal fun MyInformationComponent(
         ) {
             NicknameComponent(Modifier, nickname, onNicknameChanged)
             BirthDateComponent(Modifier, birthDate, onBirthDateChanged)
-            SocialTypeComponent(Modifier, socialType, onClickDeleteCurrentGoal)
+            SocialTypeComponent(Modifier, socialType)
         }
     }
 }
@@ -170,24 +169,7 @@ fun String?.orDefaultBirthDate(): String {
 private fun SocialTypeComponent(
     modifier: Modifier,
     socialType: SocialType,
-    onClickDeleteCurrentGoal: () -> Unit
 ) {
-    // TODO: [QA-21] 다음 QA 사이클에서 재활성화 예정 (혹은 다른 장소로 이동예정)
-//    var showDeleteCurrentGoalDialog by remember { mutableStateOf(false) }
-//    if(showDeleteCurrentGoalDialog) {
-//        Dialog({
-//            showDeleteCurrentGoalDialog = false
-//        }) {
-//            Column(
-//                modifier = Modifier.background(Color.White).clickable {
-//                    onClickDeleteCurrentGoal()
-//                    showDeleteCurrentGoalDialog = false
-//                }
-//            ) {
-//                Text("이거 누르면 목표 삭제됨")
-//            }
-//        }
-//    }
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -219,7 +201,6 @@ private fun MyInformationComponentPreview() {
             socialType = SocialType.KAKAO,
             onNicknameChanged = {},
             onBirthDateChanged = {},
-            onClickDeleteCurrentGoal = {}
         )
     }
 }

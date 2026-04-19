@@ -8,5 +8,4 @@ sealed interface SettingUiEvent {
     data object OnClickWithdrawal : SettingUiEvent
     data object OnClickGoalNotification : SettingUiEvent
     data object OnClickRecordNotification : SettingUiEvent
-    data object OnClickDeleteCurrentGoal : SettingUiEvent
 }
