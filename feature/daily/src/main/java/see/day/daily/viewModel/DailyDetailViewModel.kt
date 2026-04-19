@@ -21,7 +21,7 @@ import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
 import see.day.domain.repository.DailyRecordRepository
 import see.day.domain.repository.PhotoRepository
-import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
+import see.day.domain.repository.RecordRepository
 import see.day.model.calendar.DailyRecordDetail
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyEmotion
@@ -33,7 +33,7 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 class DailyDetailViewModel @Inject constructor(
     private val photoRepository: PhotoRepository,
     private val dailyRecordRepository: DailyRecordRepository,
-    private val getDetailRecordUseCase: GetRecordDetailUseCase,
+    private val recordRepository: RecordRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -59,7 +59,7 @@ class DailyDetailViewModel @Inject constructor(
 
             is DailyRecordPostType.EditDailyRecordPost -> {
                 viewModelScope.launch {
-                    getDetailRecordUseCase(type.id).onSuccess { record ->
+                    recordRepository.getRecord(type.id).onSuccess { record ->
                         if (record is DailyRecordDetail) {
                             _uiState.update {
                                 it.copy(

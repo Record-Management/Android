@@ -16,7 +16,7 @@ import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
 import see.day.domain.repository.ExerciseRecordRepository
 import see.day.domain.repository.PhotoRepository
-import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
+import see.day.domain.repository.RecordRepository
 import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class ExerciseDetailViewModel @Inject constructor(
     private val photoRepository: PhotoRepository,
     private val exerciseRecordRepository: ExerciseRecordRepository,
-    val getRecordDetailUseCase: GetRecordDetailUseCase,
+    private val recordRepository: RecordRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -58,7 +58,7 @@ class ExerciseDetailViewModel @Inject constructor(
 
             is ExerciseRecordPostType.Edit -> {
                 viewModelScope.launch {
-                    getRecordDetailUseCase(type.id).onSuccess { record ->
+                    recordRepository.getRecord(type.id).onSuccess { record ->
                         if (record is ExerciseRecordDetail) {
                             _uiState.update {
                                 it.copy(
