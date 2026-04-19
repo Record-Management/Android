@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.repository.GoalRepository
 import see.day.domain.repository.NotificationRepository
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
-import see.day.domain.usecase.goal.GetCurrentGoalUseCase
 import see.day.domain.usecase.user.GetMainRecordTypeUseCase
 import see.day.model.record.RecordType
 import see.day.notification.state.NotificationHistoryUiModel
@@ -29,9 +29,9 @@ import kotlin.text.format
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
+    private val goalRepository: GoalRepository,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
     private val getMainRecordTypeUseCase: GetMainRecordTypeUseCase,
-    private val getCurrentGoalUseCase: GetCurrentGoalUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NotificationUiState> = MutableStateFlow(NotificationUiState.init)
@@ -75,7 +75,7 @@ class NotificationViewModel @Inject constructor(
                     val todayRecords = getDailyRecordsUseCase(todayDateString).getOrNull()?.records ?: listOf()
                     val mainRecordType = getMainRecordTypeUseCase()
 
-                    val hasNoGoal = getCurrentGoalUseCase().getOrNull()?.canCreateNew ?: true
+                    val hasNoGoal = goalRepository.getCurrentGoal().getOrNull()?.canCreateNew ?: true
 
                     _uiState.update {
                         it.copy(

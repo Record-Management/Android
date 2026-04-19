@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
+import see.day.domain.repository.GoalRepository
 import see.day.domain.repository.HabitRecordRepository
 import see.day.domain.repository.UserRepository
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
-import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.home.screen.toRecordType
@@ -39,11 +39,11 @@ import java.time.ZoneId
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val habitRecordRepository: HabitRecordRepository,
+    private val goalRepository: GoalRepository,
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
     private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
-    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
     private val userRepository: UserRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
@@ -347,7 +347,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickGoalReset() {
         viewModelScope.launch {
-            deleteCurrentGoalUseCase().onSuccess {
+            goalRepository.deleteCurrentGoal().onSuccess {
                 _uiState.update {
                     it.copy(
                         mainRecordType = null,

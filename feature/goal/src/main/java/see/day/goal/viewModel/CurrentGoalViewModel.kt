@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.goal.GetRecentGoalReportUseCase
+import see.day.domain.repository.GoalRepository
 import see.day.goal.state.CurrentGoalUiEffect
 import see.day.goal.state.CurrentGoalUiEvent
 import see.day.goal.state.CurrentGoalUiState
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrentGoalViewModel @Inject constructor(
-    private val getRecentGoalReportUseCase: GetRecentGoalReportUseCase
+    private val goalRepository: GoalRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CurrentGoalUiState> = MutableStateFlow(CurrentGoalUiState.init)
@@ -30,7 +30,7 @@ class CurrentGoalViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getRecentGoalReportUseCase().onSuccess { recentGoalReport ->
+            goalRepository.getRecentGoalReport().onSuccess { recentGoalReport ->
                 _uiState.update {
                     it.copy(
                         treeStage = recentGoalReport.treeStage,
