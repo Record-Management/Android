@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import see.day.domain.repository.CalendarRepository
 import see.day.domain.repository.GoalRepository
 import see.day.domain.repository.NotificationRepository
-import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.user.GetMainRecordTypeUseCase
 import see.day.model.record.RecordType
 import see.day.notification.state.NotificationHistoryUiModel
@@ -30,7 +30,7 @@ import kotlin.text.format
 class NotificationViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
     private val goalRepository: GoalRepository,
-    private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
+    private val calendarRepository: CalendarRepository,
     private val getMainRecordTypeUseCase: GetMainRecordTypeUseCase,
 ) : ViewModel() {
 
@@ -72,7 +72,7 @@ class NotificationViewModel @Inject constructor(
                         notificationRepository.updateNotificationHistoryAllRead()
                     }
 
-                    val todayRecords = getDailyRecordsUseCase(todayDateString).getOrNull()?.records ?: listOf()
+                    val todayRecords = calendarRepository.getDailyRecords(todayDateString).getOrNull()?.records ?: listOf()
                     val mainRecordType = getMainRecordTypeUseCase()
 
                     val hasNoGoal = goalRepository.getCurrentGoal().getOrNull()?.canCreateNew ?: true
