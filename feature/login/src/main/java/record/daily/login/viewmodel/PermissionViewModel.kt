@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import record.daily.login.state.permission.PermissionUiEffect
 import record.daily.login.state.permission.PermissionUiEvent
-import see.day.domain.usecase.login.SetAppFirstLaunchUseCase
+import see.day.domain.repository.LoginRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class PermissionViewModel @Inject constructor(
-    private val setAppFirstLaunchUseCase: SetAppFirstLaunchUseCase
+    private val loginRepository: LoginRepository,
 ) : ViewModel() {
 
     private val _uiEffect: MutableSharedFlow<PermissionUiEffect> = MutableSharedFlow()
@@ -30,7 +30,7 @@ class PermissionViewModel @Inject constructor(
 
     private fun setAppFirstLaunch() {
         viewModelScope.launch {
-            setAppFirstLaunchUseCase()
+            loginRepository.setAppIsLaunched()
             _uiEffect.emit(PermissionUiEffect.OnGoLogin)
         }
     }
