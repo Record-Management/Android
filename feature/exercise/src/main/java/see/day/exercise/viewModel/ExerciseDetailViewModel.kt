@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
-import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.repository.PhotoRepository
 import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
 import see.day.domain.usecase.record.exercise.InsertExerciseRecordUseCase
@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
-    val insertPhotosUseCase: InsertPhotosUseCase,
+    private val photoRepository: PhotoRepository,
     val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
     val getRecordDetailUseCase: GetRecordDetailUseCase,
     val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase,
@@ -204,7 +204,7 @@ class ExerciseDetailViewModel @Inject constructor(
     private suspend fun saveExerciseRecordForCreateMode() {
         val imageUrls = uiState.value.imageUrls
         if (imageUrls.isNotEmpty()) {
-            insertPhotosUseCase(imageUrls).fold(
+            photoRepository.insertPhotos(imageUrls).fold(
                 onSuccess = { urls -> saveExerciseRecord(urls) },
                 onFailure = {}
             )
@@ -260,7 +260,7 @@ class ExerciseDetailViewModel @Inject constructor(
         } else {
             photoUrls.map { url ->
                 if (url.contains("content")) {
-                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                    photoRepository.insertPhotos(listOf(url)).getOrElse { listOf("") }[0]
                 } else {
                     url
                 }

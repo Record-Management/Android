@@ -19,7 +19,7 @@ import see.day.daily.state.DailyDetailUiEffect
 import see.day.daily.state.DailyDetailUiEvent
 import see.day.daily.state.DailyDetailUiState
 import see.day.daily.util.DailyRecordPostType
-import see.day.domain.usecase.photo.InsertPhotosUseCase
+import see.day.domain.repository.PhotoRepository
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
 import see.day.domain.usecase.record.daily.InsertDailyRecordUseCase
@@ -33,7 +33,7 @@ import see.day.model.time.formatter.KoreanDateTimeFormatter
 
 @HiltViewModel
 class DailyDetailViewModel @Inject constructor(
-    private val insertPhotosUseCase: InsertPhotosUseCase,
+    private val photoRepository: PhotoRepository,
     private val insertDailyRecordUseCase: InsertDailyRecordUseCase,
     private val getDetailRecordUseCase: GetRecordDetailUseCase,
     private val updateDetailRecordUseCase: UpdateDailyRecordUseCase,
@@ -182,7 +182,7 @@ class DailyDetailViewModel @Inject constructor(
     private suspend fun saveDailyRecordForCreateMode() {
         val photos = uiState.value.photos
         if (photos.isNotEmpty()) {
-            insertPhotosUseCase(photos).fold(
+            photoRepository.insertPhotos(photos).fold(
                 onSuccess = { photoUrls -> saveDailyRecord(photoUrls) },
                 onFailure = { }
             )
@@ -229,7 +229,7 @@ class DailyDetailViewModel @Inject constructor(
         } else {
             photoUrls.map { url ->
                 if (url.contains("content")) {
-                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                    photoRepository.insertPhotos(listOf(url)).getOrElse { listOf("") }[0]
                 } else {
                     url
                 }
