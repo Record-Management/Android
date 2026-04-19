@@ -14,11 +14,9 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
+import see.day.domain.repository.HabitRecordRepository
 import see.day.domain.usecase.record.habit.CanSetAsMainRecordUseCase
-import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
 import see.day.domain.usecase.record.habit.GetHabitRecordUseCase
-import see.day.domain.usecase.record.habit.InsertHabitRecordUseCase
-import see.day.domain.usecase.record.habit.UpdateHabitRecordUseCase
 import see.day.habit.state.HabitDetailUiEffect
 import see.day.habit.state.HabitDetailUiEvent
 import see.day.habit.state.HabitDetailUiState
@@ -30,9 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HabitDetailViewModel @Inject constructor(
-    private val insertHabitRecordUseCase: InsertHabitRecordUseCase,
-    private val updateHabitRecordUseCase: UpdateHabitRecordUseCase,
-    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
+    private val habitRecordRepository: HabitRecordRepository,
     private val getHabitRecordUseCase: GetHabitRecordUseCase,
     private val canSetAsMainRecordUseCase: CanSetAsMainRecordUseCase,
     private val analyticsLogger: AnalyticsLogger
@@ -177,7 +173,7 @@ class HabitDetailViewModel @Inject constructor(
     }
 
     private suspend fun saveHabitRecordForCreateMode() {
-        insertHabitRecordUseCase(
+        habitRecordRepository.insertHabitRecord(
             HabitRecordInput(
                 habitType = uiState.value.habitType,
                 notificationEnabled = uiState.value.notificationEnabled,
@@ -196,7 +192,7 @@ class HabitDetailViewModel @Inject constructor(
     }
 
     private suspend fun updateHabitRecord(recordId: String) {
-        updateHabitRecordUseCase(
+        habitRecordRepository.updateHabitRecord(
             recordId = recordId,
             habitRecordEdit = HabitRecordEdit(
                 habitType = uiState.value.habitType,
@@ -213,7 +209,7 @@ class HabitDetailViewModel @Inject constructor(
 
     private fun deleteRecord(recordId: String) {
         viewModelScope.launch {
-            deleteHabitRecordUseCase(recordId)
+            habitRecordRepository.deleteHabitRecord(recordId)
                 .onSuccess {
                     _uiEffect.emit(HabitDetailUiEffect.NavigateToHome(isUpdated = true))
                     _toastMessage.emit("기록이 삭제 되었습니다.")
