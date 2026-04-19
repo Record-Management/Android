@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.notifiaction.GetNotificationSettingUseCase
-import see.day.domain.usecase.notifiaction.UpdateNotificationSettingUseCase
+import see.day.domain.repository.NotificationRepository
 import see.day.model.notification.NotificationSettingsEdit
 import see.day.setting.state.goal.GoalNotificationUiEffect
 import see.day.setting.state.goal.GoalNotificationUiEvent
@@ -21,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoalNotificationViewModel @Inject constructor(
-    private val getNotificationSettingUseCase: GetNotificationSettingUseCase,
-    private val updateNotificationSettingUseCase: UpdateNotificationSettingUseCase
+    private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<GoalNotificationUiState> = MutableStateFlow(GoalNotificationUiState.init)
@@ -33,7 +31,7 @@ class GoalNotificationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getNotificationSettingUseCase()
+            notificationRepository.getNotificationSetting()
                 .onSuccess { notificationSetting ->
                     _uiState.update {
                         it.copy(
@@ -58,7 +56,7 @@ class GoalNotificationViewModel @Inject constructor(
 
     private fun onChangedGoalNotification(enabled: Boolean) {
         viewModelScope.launch {
-            updateNotificationSettingUseCase(
+            notificationRepository.updateNotificationSetting(
                 NotificationSettingsEdit(
                     goalSettingNotificationEnabled = enabled
                 )

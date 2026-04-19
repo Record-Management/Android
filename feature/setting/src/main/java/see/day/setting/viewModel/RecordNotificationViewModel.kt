@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.notifiaction.GetNotificationSettingUseCase
-import see.day.domain.usecase.notifiaction.UpdateNotificationSettingUseCase
+import see.day.domain.repository.NotificationRepository
 import see.day.model.notification.NotificationSettingsEdit
 import see.day.setting.state.record.RecordNotificationUiEffect
 import see.day.setting.state.record.RecordNotificationUiEvent
@@ -21,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecordNotificationViewModel @Inject constructor(
-    private val getNotificationSettingUseCase: GetNotificationSettingUseCase,
-    private val updateNotificationSettingUseCase: UpdateNotificationSettingUseCase
+    private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<RecordNotificationUiState> = MutableStateFlow(RecordNotificationUiState.init)
@@ -33,7 +31,7 @@ class RecordNotificationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getNotificationSettingUseCase()
+            notificationRepository.getNotificationSetting()
                 .onSuccess { notificationSetting ->
                     _uiState.update {
                         it.copy(
@@ -74,7 +72,7 @@ class RecordNotificationViewModel @Inject constructor(
         habitRecordEnabled: Boolean?
     ) {
         viewModelScope.launch {
-            updateNotificationSettingUseCase(
+            notificationRepository.updateNotificationSetting(
                 NotificationSettingsEdit(
                     dailyRecordNotificationEnabled = dailyRecordEnabled,
                     exerciseNotificationEnabled = exerciseRecordEnabled,
