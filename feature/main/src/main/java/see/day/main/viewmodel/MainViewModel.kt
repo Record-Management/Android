@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.login.GetLoginStateUseCase
+import see.day.domain.repository.LoginRepository
 import see.day.model.navigation.AppStartState
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getLoginStateUseCase: GetLoginStateUseCase
+    private val loginRepository: LoginRepository,
 ) : ViewModel() {
 
     private val _startDestination: MutableStateFlow<AppStartState?> = MutableStateFlow(null)
@@ -24,7 +24,7 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getLoginStateUseCase().collect { newLoginState ->
+            loginRepository.getLoginState().collect { newLoginState ->
                 if (startDestination.value == null) {
                     _startDestination.emit(newLoginState)
                 } else {
