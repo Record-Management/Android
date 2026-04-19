@@ -16,18 +16,12 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
+import see.day.domain.repository.CalendarRepository
+import see.day.domain.repository.DailyRecordRepository
+import see.day.domain.repository.ExerciseRecordRepository
+import see.day.domain.repository.GoalRepository
+import see.day.domain.repository.HabitRecordRepository
 import see.day.domain.repository.UserRepository
-import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
-import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
-import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
-import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
-import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
-import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
-import see.day.domain.usecase.record.habit.UpdateHabitRecordIsCompletedUseCase
-import see.day.domain.usecase.user.GetIsShownTutorialUseCase
-import see.day.domain.usecase.user.GetStoredDateUseCase
-import see.day.domain.usecase.user.GetUserUseCase
-import see.day.domain.usecase.user.UpdateStoredDateUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
@@ -43,17 +37,11 @@ import java.time.ZoneId
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase,
-    private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
-    private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
-    private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
-    private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
-    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
-    private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
-    private val getStoredDateUseCase: GetStoredDateUseCase,
-    private val updateStoredDateUseCase: UpdateStoredDateUseCase,
-    private val getIsShownTutorialUseCase: GetIsShownTutorialUseCase,
-    private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
+    private val habitRecordRepository: HabitRecordRepository,
+    private val goalRepository: GoalRepository,
+    private val exerciseRecordRepository: ExerciseRecordRepository,
+    private val dailyRecordRepository: DailyRecordRepository,
+    private val calendarRepository: CalendarRepository,
     private val userRepository: UserRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
@@ -73,9 +61,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val state = uiState.value
             try {
-                val user = async { getUserUseCase().getOrThrow() }
-                val monthlyRecords = async { getMonthlyRecordsUseCase(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
-                val detailDailyRecords = getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
+                val user = async { userRepository.getUser().getOrThrow() }
+                val monthlyRecords = async { calendarRepository.getMonthlyRecords(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
+                val detailDailyRecords = calendarRepository.getDailyRecords(HomeUiState.getTodayDate()).getOrThrow()
 
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
@@ -95,7 +83,7 @@ class HomeViewModel @Inject constructor(
                     )
                 }
 
-                val storedDateString = getStoredDateUseCase().getOrThrow()
+                val storedDateString = userRepository.getStoredDate().getOrThrow()
                 val todayDate = LocalDate.parse(HomeUiState.getTodayDate())
 
                 if (user.await().mainRecordType == null) {
@@ -108,17 +96,17 @@ class HomeViewModel @Inject constructor(
                     if (shouldShowGoalPrompt) {
                         _uiEffect.emit(HomeUiEffect.NavigateToCurrentGoal)
                     }
-                    updateStoredDateUseCase(HomeUiState.getTodayDate())
+                    userRepository.updateStoredDate(HomeUiState.getTodayDate())
                     return@launch
                 }
 
                 storedDateString?.let { dateString ->
                     val storedDate = LocalDate.parse(dateString)
                     if (storedDate < todayDate) {
-                        updateStoredDateUseCase(HomeUiState.getTodayDate())
+                        userRepository.updateStoredDate(HomeUiState.getTodayDate())
                     }
                 }
-                getIsShownTutorialUseCase().onSuccess { isShownTutorial ->
+                userRepository.getIsShownTutorial().onSuccess { isShownTutorial ->
                     if (!isShownTutorial) {
                         _uiEffect.emit(HomeUiEffect.NavigateToTutorial)
                     }
@@ -200,8 +188,8 @@ class HomeViewModel @Inject constructor(
                 return@launch
             }
             try {
-                val monthlyRecords = async { getMonthlyRecordsUseCase(uiState.value.currentYear, uiState.value.currentMonth, arrayOf()).getOrThrow() }
-                val detailDailyRecords = getDailyRecordsUseCase(uiState.value.todayFormat()).getOrThrow()
+                val monthlyRecords = async { calendarRepository.getMonthlyRecords(uiState.value.currentYear, uiState.value.currentMonth, arrayOf()).getOrThrow() }
+                val detailDailyRecords = calendarRepository.getDailyRecords(uiState.value.todayFormat()).getOrThrow()
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
                 monthlyRecord.update {
@@ -211,7 +199,7 @@ class HomeViewModel @Inject constructor(
                 val todayRecords = if (detailDailyRecords.date == HomeUiState.getTodayDate()) {
                     detailDailyRecords
                 } else {
-                    getDailyRecordsUseCase(HomeUiState.getTodayDate()).getOrThrow()
+                    calendarRepository.getDailyRecords(HomeUiState.getTodayDate()).getOrThrow()
                 }
 
                 _uiState.update {
@@ -240,7 +228,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickSelectedDate(year: Int, month: Int) {
         viewModelScope.launch {
-            getMonthlyRecordsUseCase(year, month, arrayOf())
+            calendarRepository.getMonthlyRecords(year, month, arrayOf())
                 .onSuccess {
                     val calendarDayInfos = CalendarDayInfo.of(it)
                     monthlyRecord.update {
@@ -286,7 +274,7 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            getDailyRecordsUseCase("$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}")
+            calendarRepository.getDailyRecords("$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}")
                 .onSuccess { dailyRecords ->
                     _uiState.update {
                         it.copy(
@@ -325,7 +313,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             when (recordType) {
                 RecordType.DAILY -> {
-                    deleteDailyRecordUseCase(recordId)
+                    dailyRecordRepository.deleteRecord(recordId)
                         .onSuccess {
                             onRefresh()
                             _toastMessage.emit("기록이 삭제 되었습니다.")
@@ -333,7 +321,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 RecordType.EXERCISE -> {
-                    deleteExerciseRecordUseCase(recordId)
+                    exerciseRecordRepository.deleteExerciseRecord(recordId)
                         .onSuccess {
                             onRefresh()
                             _toastMessage.emit("기록이 삭제 되었습니다.")
@@ -341,7 +329,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 RecordType.HABIT -> {
-                    deleteHabitRecordUseCase(recordId)
+                    habitRecordRepository.deleteHabitRecord(recordId)
                         .onSuccess {
                             onRefresh()
                             _toastMessage.emit("기록이 삭제 되었습니다.")
@@ -357,7 +345,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onClickGoalReset() {
         viewModelScope.launch {
-            deleteCurrentGoalUseCase().onSuccess {
+            goalRepository.deleteCurrentGoal().onSuccess {
                 _uiState.update {
                     it.copy(
                         mainRecordType = null,
@@ -389,7 +377,7 @@ class HomeViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            updateHabitRecordIsCompletedUseCase(recordId, isCompleted)
+            habitRecordRepository.updateHabitRecordIsCompleted(recordId, isCompleted)
                 .onSuccess {
                     _uiState.update {
                         it.copy(

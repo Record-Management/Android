@@ -14,11 +14,9 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
-import see.day.domain.usecase.photo.InsertPhotosUseCase
-import see.day.domain.usecase.record.daily.GetRecordDetailUseCase
-import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
-import see.day.domain.usecase.record.exercise.InsertExerciseRecordUseCase
-import see.day.domain.usecase.record.exercise.UpdateExerciseRecordUseCase
+import see.day.domain.repository.ExerciseRecordRepository
+import see.day.domain.repository.PhotoRepository
+import see.day.domain.repository.RecordRepository
 import see.day.exercise.state.ExerciseDailyUiEffect
 import see.day.exercise.state.ExerciseDetailUiEvent
 import see.day.exercise.state.ExerciseDetailUiState
@@ -33,11 +31,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
-    val insertPhotosUseCase: InsertPhotosUseCase,
-    val insertExerciseRecordUseCase: InsertExerciseRecordUseCase,
-    val getRecordDetailUseCase: GetRecordDetailUseCase,
-    val updateExerciseRecordUseCase: UpdateExerciseRecordUseCase,
-    val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
+    private val photoRepository: PhotoRepository,
+    private val exerciseRecordRepository: ExerciseRecordRepository,
+    private val recordRepository: RecordRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -62,7 +58,7 @@ class ExerciseDetailViewModel @Inject constructor(
 
             is ExerciseRecordPostType.Edit -> {
                 viewModelScope.launch {
-                    getRecordDetailUseCase(type.id).onSuccess { record ->
+                    recordRepository.getRecord(type.id).onSuccess { record ->
                         if (record is ExerciseRecordDetail) {
                             _uiState.update {
                                 it.copy(
@@ -204,7 +200,7 @@ class ExerciseDetailViewModel @Inject constructor(
     private suspend fun saveExerciseRecordForCreateMode() {
         val imageUrls = uiState.value.imageUrls
         if (imageUrls.isNotEmpty()) {
-            insertPhotosUseCase(imageUrls).fold(
+            photoRepository.insertPhotos(imageUrls).fold(
                 onSuccess = { urls -> saveExerciseRecord(urls) },
                 onFailure = {}
             )
@@ -214,7 +210,7 @@ class ExerciseDetailViewModel @Inject constructor(
     }
 
     private suspend fun saveExerciseRecord(imageUrls: List<String>) {
-        insertExerciseRecordUseCase(
+        exerciseRecordRepository.insertExerciseRecord(
             ExerciseRecordInput(
                 uiState.value.exerciseType,
                 dailyNote = uiState.value.dailyNote,
@@ -237,7 +233,7 @@ class ExerciseDetailViewModel @Inject constructor(
     private suspend fun updateRecord(recordId: String) {
         val urls = processPhotoUrls(uiState.value.imageUrls)
 
-        updateExerciseRecordUseCase(
+        exerciseRecordRepository.updateExerciseRecord(
             ExerciseRecordEdit(
                 recordId,
                 exerciseType = uiState.value.exerciseType,
@@ -260,7 +256,7 @@ class ExerciseDetailViewModel @Inject constructor(
         } else {
             photoUrls.map { url ->
                 if (url.contains("content")) {
-                    insertPhotosUseCase(listOf(url)).getOrElse { listOf("") }[0]
+                    photoRepository.insertPhotos(listOf(url)).getOrElse { listOf("") }[0]
                 } else {
                     url
                 }
@@ -270,7 +266,7 @@ class ExerciseDetailViewModel @Inject constructor(
 
     private fun deleteRecord(recordId: String) {
         viewModelScope.launch {
-            deleteExerciseRecordUseCase(recordId)
+            exerciseRecordRepository.deleteExerciseRecord(recordId)
                 .onSuccess {
                     _uiEffect.emit(ExerciseDailyUiEffect.NavigateToHome(isUpdated = true))
                     _toastMessage.emit("기록이 삭제 되었습니다.")

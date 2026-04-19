@@ -11,10 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
-import see.day.domain.usecase.goal.GetCurrentGoalUseCase
-import see.day.domain.usecase.notifiaction.GetNotificationHistoryUseCase
-import see.day.domain.usecase.notifiaction.UpdateNotificationHistoryAllReadUseCase
+import see.day.domain.repository.CalendarRepository
+import see.day.domain.repository.GoalRepository
+import see.day.domain.repository.NotificationRepository
 import see.day.domain.usecase.user.GetMainRecordTypeUseCase
 import see.day.model.record.RecordType
 import see.day.notification.state.NotificationHistoryUiModel
@@ -29,11 +28,10 @@ import kotlin.text.format
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    private val getNotificationHistoryUseCase: GetNotificationHistoryUseCase,
-    private val updateNotificationHistoryAllReadUseCase: UpdateNotificationHistoryAllReadUseCase,
-    private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
+    private val notificationRepository: NotificationRepository,
+    private val goalRepository: GoalRepository,
+    private val calendarRepository: CalendarRepository,
     private val getMainRecordTypeUseCase: GetMainRecordTypeUseCase,
-    private val getCurrentGoalUseCase: GetCurrentGoalUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<NotificationUiState> = MutableStateFlow(NotificationUiState.init)
@@ -47,14 +45,14 @@ class NotificationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getNotificationHistoryUseCase()
+            notificationRepository.getNotificationHistory()
                 .onSuccess { history ->
                     val now = LocalDate.now(ZoneId.of("Asia/Seoul"))
                     val todayDateString = now.toFormattedString()
 
                     // 첫 방문이거나 recentCheckedAt이 없으면 전체 읽음 처리
                     val recentCheckedAt = history.recentCheckedAt ?: run {
-                        updateNotificationHistoryAllReadUseCase()
+                        notificationRepository.updateNotificationHistoryAllRead()
                         todayDateString
                     }
 
@@ -71,13 +69,13 @@ class NotificationViewModel @Inject constructor(
 
                     // 읽지 않은 알림이 있으면 읽음 처리
                     if (uiModel.any { !it.isChecked }) {
-                        updateNotificationHistoryAllReadUseCase()
+                        notificationRepository.updateNotificationHistoryAllRead()
                     }
 
-                    val todayRecords = getDailyRecordsUseCase(todayDateString).getOrNull()?.records ?: listOf()
+                    val todayRecords = calendarRepository.getDailyRecords(todayDateString).getOrNull()?.records ?: listOf()
                     val mainRecordType = getMainRecordTypeUseCase()
 
-                    val hasNoGoal = getCurrentGoalUseCase().getOrNull()?.canCreateNew ?: true
+                    val hasNoGoal = goalRepository.getCurrentGoal().getOrNull()?.canCreateNew ?: true
 
                     _uiState.update {
                         it.copy(

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.GoalSettingType
-import see.day.domain.usecase.goal.PostNewGoalUseCase
+import see.day.domain.repository.GoalRepository
 import see.day.goal.state.reset.GoalResetStep.DAY
 import see.day.goal.state.reset.GoalResetStep.RECORD
 import see.day.goal.state.reset.ResetGoalUiEffect
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResetGoalViewModel @Inject constructor(
-    private val postNewGoalUseCase: PostNewGoalUseCase,
+    private val goalRepository: GoalRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -63,7 +63,7 @@ class ResetGoalViewModel @Inject constructor(
     private fun setGoalDays(goalDays: Int) {
         viewModelScope.launch {
             uiState.value.recordType?.let { recordType ->
-                postNewGoalUseCase(NewGoal(recordType, goalDays))
+                goalRepository.postNewGoal(NewGoal(recordType, goalDays))
                     .onSuccess {
                         analyticsLogger.goalSettingLog(GoalSettingType.GOAL_RESET, recordType.name.lowercase(), goalDays)
                         _uiEffect.emit(ResetGoalUiEffect.NavigateToFinishResetGoal)

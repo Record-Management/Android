@@ -6,20 +6,22 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import see.day.domain.usecase.user.UpdateFcmTokenUseCase
+import see.day.domain.repository.UserRepository
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SeedayFirebaseMessagingService(
-    private val updateFcmTokenUseCase: UpdateFcmTokenUseCase
-) : FirebaseMessagingService() {
+class SeedayFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
         Timber.i("newToken : $token")
         CoroutineScope(Dispatchers.IO).launch {
-            updateFcmTokenUseCase(token)
+            userRepository.updateFcmToken(token)
         }
     }
 

@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.GoalSettingType
-import see.day.domain.usecase.fcm.GetFcmTokenUseCase
-import see.day.domain.usecase.user.PostOnboardCompleteUseCase
-import see.day.domain.usecase.user.UpdateFcmTokenUseCase
+import see.day.domain.repository.FcmRepository
+import see.day.domain.repository.UserRepository
 import see.day.model.record.RecordType
 import see.day.model.user.OnboardingComplete
 import see.day.onboarding.state.OnboardingScreenState
@@ -32,9 +31,8 @@ import timber.log.Timber
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val postOnboardCompleteUseCase: PostOnboardCompleteUseCase,
-    private val getFcmTokenUseCase: GetFcmTokenUseCase,
-    private val updateFcmTokenUseCase: UpdateFcmTokenUseCase,
+    private val userRepository: UserRepository,
+    private val fcmRepository: FcmRepository,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
 
@@ -129,12 +127,12 @@ class OnboardingViewModel @Inject constructor(
             goalDays = onboardState.goalDays
         )
         viewModelScope.launch {
-            postOnboardCompleteUseCase(onboardingComplete)
+            userRepository.onboardComplete(onboardingComplete)
                 .onSuccess {
                     analyticsLogger.goalSettingLog(GoalSettingType.ONBOARDING, onboardingComplete.mainRecordType.name.lowercase(), onboardingComplete.goalDays)
-                    getFcmTokenUseCase()
+                    fcmRepository.getFcmToken()
                         .onSuccess { token ->
-                            updateFcmTokenUseCase(token).onSuccess {
+                            userRepository.updateFcmToken(token).onSuccess {
                                 _uiEffect.emit(OnboardingUiEffect.NavigateToOnboardingComplete)
                             }
                         }
