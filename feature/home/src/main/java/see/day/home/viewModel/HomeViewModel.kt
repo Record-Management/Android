@@ -16,14 +16,13 @@ import kotlinx.coroutines.launch
 import see.day.analytics.AnalyticsEvent
 import see.day.analytics.AnalyticsLogger
 import see.day.analytics.types.WriteType
+import see.day.domain.repository.HabitRecordRepository
 import see.day.domain.repository.UserRepository
 import see.day.domain.usecase.calendar.GetDailyRecordsUseCase
 import see.day.domain.usecase.calendar.GetMonthlyRecordsUseCase
 import see.day.domain.usecase.goal.DeleteCurrentGoalUseCase
 import see.day.domain.usecase.record.daily.DeleteDailyRecordUseCase
 import see.day.domain.usecase.record.exercise.DeleteExerciseRecordUseCase
-import see.day.domain.usecase.record.habit.DeleteHabitRecordUseCase
-import see.day.domain.usecase.record.habit.UpdateHabitRecordIsCompletedUseCase
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
 import see.day.home.state.HomeUiEvent
@@ -39,12 +38,11 @@ import java.time.ZoneId
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val habitRecordRepository: HabitRecordRepository,
     private val getMonthlyRecordsUseCase: GetMonthlyRecordsUseCase,
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
     private val deleteDailyRecordUseCase: DeleteDailyRecordUseCase,
     private val deleteExerciseRecordUseCase: DeleteExerciseRecordUseCase,
-    private val deleteHabitRecordUseCase: DeleteHabitRecordUseCase,
-    private val updateHabitRecordIsCompletedUseCase: UpdateHabitRecordIsCompletedUseCase,
     private val deleteCurrentGoalUseCase: DeleteCurrentGoalUseCase,
     private val userRepository: UserRepository,
     private val analyticsLogger: AnalyticsLogger
@@ -333,7 +331,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 RecordType.HABIT -> {
-                    deleteHabitRecordUseCase(recordId)
+                    habitRecordRepository.deleteHabitRecord(recordId)
                         .onSuccess {
                             onRefresh()
                             _toastMessage.emit("기록이 삭제 되었습니다.")
@@ -381,7 +379,7 @@ class HomeViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            updateHabitRecordIsCompletedUseCase(recordId, isCompleted)
+            habitRecordRepository.updateHabitRecordIsCompleted(recordId, isCompleted)
                 .onSuccess {
                     _uiState.update {
                         it.copy(
