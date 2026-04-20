@@ -69,9 +69,6 @@ class NavigationState(
             RecordType.HABIT -> {
                 navController.navigateHabit(navOptions)
             }
-//            RecordType.SCHEDULE -> {
-//                navController.navigateSchedule(navOptions)
-//            }
         }
     }
 
@@ -88,9 +85,6 @@ class NavigationState(
             RecordType.HABIT -> {
                 navController.navigateHabitDetail(recordId)
             }
-//            RecordType.SCHEDULE -> {
-//
-//            }
         }
     }
 }

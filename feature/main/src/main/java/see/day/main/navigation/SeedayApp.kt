@@ -31,6 +31,8 @@ import see.day.notification.navigation.navigateNotificationHistory
 import see.day.notification.navigation.notificationNavigation
 import see.day.onboarding.navigation.navigateOnboardingComplete
 import see.day.onboarding.navigation.onboardingNavigation
+import see.day.schedule.navigation.navigateSchedule
+import see.day.schedule.navigation.scheduleNavigation
 import see.day.setting.navigation.navigateSettingGoalNotification
 import see.day.setting.navigation.navigateSettingRecordNotification
 
@@ -58,7 +60,8 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onGoCurrentGoal = navigationState.navController::navigateCurrentGoal,
                 onGoSetNewGoal = navigationState.navController::navigateResetGoal,
                 onGoTutorial = navigationState.navController::navigateTutorial,
-                onBack = navigationState.navController::popBackStack
+                onBack = navigationState.navController::popBackStack,
+                onClickAddSchedule = navigationState.navController::navigateSchedule
             )
             dailyNavigation(
                 onClickBackButton = navigationState.navController::popBackStack,
@@ -78,9 +81,10 @@ fun SeedayApp(navigationState: NavigationState = rememberNavigationState(), view
                 onClickHabitType = navigationState.navController::navigateHabitWrite,
                 onClickPopHome = navigationState.navController::navigateBackToHome
             )
-//            scheduleNavigation(
-//                onClickChangeRecordType = navigationState::navigateAddRecord
-//            )
+            scheduleNavigation(
+                onBack = navigationState.navController::popBackStack,
+                onClickPopHome = navigationState.navController::navigateBackToHome
+            )
             settingNavigation(
                 onBack = navigationState.navController::popBackStack,
                 onGoSettingGoalNotification = navigationState.navController::navigateSettingGoalNotification,

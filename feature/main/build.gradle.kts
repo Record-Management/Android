@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":feature:setting"))
     implementation(project(":feature:notification"))
     implementation(project(":feature:goal"))
+    implementation(project(":feature:schedule"))
 
     implementation(libs.androidx.core.splashscreen)
 }

@@ -49,3 +49,4 @@ include(
     "feature:notification",
     "feature:goal"
 )
+include(":feature:schedule")

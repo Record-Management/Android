@@ -11,4 +11,5 @@ sealed interface HomeUiEffect {
     data object NavigateToResetGoal : HomeUiEffect
     data object NavigateToTutorial : HomeUiEffect
     data object ShowInAppReview: HomeUiEffect
+    data object NavigateToAddSchedule: HomeUiEffect
 }

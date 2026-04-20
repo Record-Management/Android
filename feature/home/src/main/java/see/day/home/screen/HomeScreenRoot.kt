@@ -86,6 +86,7 @@ fun HomeScreenRoot(
     onClickDetailRecord: (RecordType, String) -> Unit,
     onClickSetting: () -> Unit,
     onClickNotification: () -> Unit,
+    onClickAddSchedule: () -> Unit,
     onGoCurrentGoal: () -> Unit,
     onGoSetNewGoal: () -> Unit,
     onGoTutorial: () -> Unit
@@ -150,6 +151,9 @@ fun HomeScreenRoot(
                 }
                 is HomeUiEffect.ShowInAppReview -> {
                     showReviewDialog = true
+                }
+                is HomeUiEffect.NavigateToAddSchedule -> {
+                    onClickAddSchedule()
                 }
             }
         }
@@ -413,6 +417,9 @@ private fun HomeBottomSheetContent(
                 },
                 onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted, recordDate ->
                     uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted, recordDate))
+                },
+                onClickAddSchedule = {
+                    uiEvent(HomeUiEvent.OnClickAddSchedule)
                 }
             )
             Spacer(modifier = Modifier.height(100.dp))
