@@ -30,10 +30,11 @@ fun NavGraphBuilder.homeNavigation(
     onClickDetailRecord: (RecordType, String) -> Unit,
     onClickSetting: () -> Unit,
     onClickNotification: () -> Unit,
+    onClickAddSchedule: () -> Unit,
     onGoCurrentGoal: () -> Unit,
     onGoSetNewGoal: () -> Unit,
     onGoTutorial: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     composable<Home> { navBackStack ->
         val isUpdated = navBackStack.savedStateHandle.get<Boolean>("record_updated") ?: false
@@ -46,6 +47,7 @@ fun NavGraphBuilder.homeNavigation(
             onClickDetailRecord = onClickDetailRecord,
             onClickSetting = onClickSetting,
             onClickNotification = onClickNotification,
+            onClickAddSchedule = onClickAddSchedule,
             onGoCurrentGoal = onGoCurrentGoal,
             onGoSetNewGoal = onGoSetNewGoal,
             onGoTutorial = onGoTutorial

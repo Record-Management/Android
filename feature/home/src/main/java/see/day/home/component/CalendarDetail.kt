@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +43,8 @@ fun CalendarDetail(
     dailyRecordDetails: DailyRecordDetails,
     onClickRevise: (RecordType, String) -> Unit,
     onClickDelete: (RecordType, String) -> Unit,
-    onClickUpdateHabitRecordIsCompleted: (String, Boolean, String) -> Unit
+    onClickUpdateHabitRecordIsCompleted: (String, Boolean, String) -> Unit,
+    onClickAddSchedule: () -> Unit,
 ) {
     var openLongPressureDialog by remember { mutableStateOf(Triple(false, RecordType.DAILY, "")) }
     if (openLongPressureDialog.first) {
@@ -65,6 +67,11 @@ fun CalendarDetail(
             style = MaterialTheme.typography.titleLarge,
             color = gray100
         )
+        Button(
+            onClick = onClickAddSchedule
+        ) {
+            Text("스케줄 추가")
+        }
         Column(
             modifier = Modifier.padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -180,7 +187,8 @@ private fun CalendarDetailPreview() {
             ),
             onClickRevise = { recordType, recordId -> },
             onClickDelete = { recordType, recordId -> },
-            onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted, recordDate -> }
+            onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted, recordDate -> },
+            onClickAddSchedule = {}
         )
     }
 }

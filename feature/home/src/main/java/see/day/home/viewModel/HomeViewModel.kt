@@ -177,7 +177,11 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     userRepository.updateIsShownInAppReview()
                 }
-
+            }
+            is HomeUiEvent.OnClickAddSchedule -> {
+                viewModelScope.launch {
+                    _uiEffect.emit(HomeUiEffect.NavigateToAddSchedule)
+                }
             }
         }
     }
