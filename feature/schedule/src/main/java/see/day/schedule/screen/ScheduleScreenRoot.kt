@@ -1,4 +1,4 @@
-package see.day.schedule
+package see.day.schedule.screen
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -6,7 +6,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import see.day.designsystem.theme.SeeDayTheme
 
 @Composable
-fun ScheduleScreen() {
+fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
     Text("Hello")
 }
 
@@ -14,6 +14,9 @@ fun ScheduleScreen() {
 @Composable
 private fun ScheduleScreenPreview() {
     SeeDayTheme {
-        ScheduleScreen()
+        ScheduleScreenRoot(
+            onBack = {},
+            onClickPopHome = {}
+        )
     }
 }
