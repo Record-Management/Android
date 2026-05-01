@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alert_set">알림 설정</string>
+    <string name="complete">완료</string>
+    <string name="alert_time_no">알림 없음</string>
+    <string name="alert_time_one_hour">1시간 전</string>
+    <string name="alert_time_two_hour">2시간 전</string>
+    <string name="alert_time_twelve_hour">12시간 전</string>
+    <string name="alert_time_one_day">1일 전</string>
+</resources>
