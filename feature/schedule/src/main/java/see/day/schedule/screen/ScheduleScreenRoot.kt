@@ -43,6 +43,7 @@ import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.gray50
+import see.day.designsystem.theme.gray70
 import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
 import see.day.schedule.component.AlertBottomSheet
@@ -115,11 +116,13 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
         checkedColor = checkedColor,
         startDate = startDate,
         endDate = endDate,
+        checkedTime = checkedTime,
         onBack = onBack,
         onClickPopHome = onClickPopHome,
         onScheduleTitleChange = { scheduleTitle = it },
         onStartDateChange = { startDate = it },
         onEndDateChange = { endDate = it },
+        onCheckedTimeChange = { checkedTime = it },
     )
 }
 
@@ -130,11 +133,13 @@ internal fun ScheduleDetailScreen(
     checkedColor: Color,
     startDate: LocalDate,
     endDate: LocalDate,
+    checkedTime: AlertTime,
     onBack: () -> Unit,
     onClickPopHome: (Boolean) -> Unit,
     onScheduleTitleChange: (String) -> Unit,
     onStartDateChange: (LocalDate) -> Unit,
     onEndDateChange: (LocalDate) -> Unit,
+    onCheckedTimeChange: (AlertTime) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -161,7 +166,66 @@ internal fun ScheduleDetailScreen(
                 setStartDate = onStartDateChange,
                 setEndDate = onEndDateChange,
             )
+            AlertSetting(
+                checkedTime = checkedTime,
+                onCheckedTimeChange = onCheckedTimeChange
+            )
         }
+    }
+}
+
+@Composable
+private fun AlertSetting(
+    checkedTime: AlertTime,
+    onCheckedTimeChange: (AlertTime) -> Unit,
+) {
+    var isShowAlertBottomSheet by remember { mutableStateOf(false) }
+
+    if (isShowAlertBottomSheet) {
+        AlertBottomSheet(
+            onDismiss = {
+                isShowAlertBottomSheet = false
+            },
+            checkedTime = checkedTime,
+            onCheckedChange = onCheckedTimeChange
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .clickable {
+                isShowAlertBottomSheet = true
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_notification),
+            contentDescription = "알림 설정",
+            modifier = Modifier.size(24.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            modifier = Modifier.padding(start = 6.dp),
+            text = "알림",
+            style = MaterialTheme.typography.titleSmall
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(checkedTime.textRes),
+            style = MaterialTheme.typography.labelSmall.copy(
+                color = gray70
+            )
+        )
+        Icon(
+            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+            contentDescription = "알림 설정",
+            modifier = Modifier
+                .size(20.dp)
+                .padding(start = 6.dp),
+            tint = Color.Unspecified
+        )
     }
 }
 
@@ -248,10 +312,10 @@ private fun CalendarSetting(
             date = startDate,
             isClicked = isShowStartDatePicker,
             onClickDate = {
-                if(!isShowStartDatePicker) {
+                if (!isShowStartDatePicker) {
                     isShowStartDatePicker = true
                 }
-                if(isShowEndDatePicker) {
+                if (isShowEndDatePicker) {
                     isShowEndDatePicker = false
                 }
             }
@@ -266,10 +330,10 @@ private fun CalendarSetting(
             date = endDate,
             isClicked = isShowEndDatePicker,
             onClickDate = {
-                if(!isShowEndDatePicker) {
+                if (!isShowEndDatePicker) {
                     isShowEndDatePicker = true
                 }
-                if(isShowStartDatePicker) {
+                if (isShowStartDatePicker) {
                     isShowStartDatePicker = false
                 }
             }
