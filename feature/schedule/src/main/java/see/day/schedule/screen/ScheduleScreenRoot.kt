@@ -1,7 +1,8 @@
 package see.day.schedule.screen
 
-import android.widget.Space
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
@@ -45,6 +47,7 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.gray50
+import see.day.designsystem.theme.gray60
 import see.day.designsystem.theme.gray70
 import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
@@ -78,6 +81,8 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
 
     var showColorPaletteBottomSheet by remember { mutableStateOf(false) }
     var checkedColor by remember { mutableStateOf(primaryColor) }
+
+    var memoText by remember { mutableStateOf("") }
 
     if (showAlertBottomSheet) {
         AlertBottomSheet(
@@ -124,6 +129,7 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
         repeatTime = checkedRepeatTime,
         repeatEndTime = checkedRepeatEndTime,
         locationText = locationText,
+        memoText = memoText,
         onBack = onBack,
         onClickPopHome = onClickPopHome,
         onScheduleTitleChange = { scheduleTitle = it },
@@ -135,6 +141,8 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
             checkedRepeatEndTime = repeatEndTime
         },
         onLocationChange = { locationText = it },
+        onColorChange = { checkedColor = it },
+        onMemoChange = { memoText = it }
     )
 }
 
@@ -149,6 +157,7 @@ internal fun ScheduleDetailScreen(
     repeatTime: RepeatTime,
     repeatEndTime: RepeatEndTime?,
     locationText: String,
+    memoText: String,
     onBack: () -> Unit,
     onClickPopHome: (Boolean) -> Unit,
     onScheduleTitleChange: (String) -> Unit,
@@ -157,6 +166,8 @@ internal fun ScheduleDetailScreen(
     onCheckedTimeChange: (AlertTime) -> Unit,
     onRepeatTimeChange: (RepeatTime, RepeatEndTime?) -> Unit,
     onLocationChange: (String) -> Unit,
+    onColorChange: (Color) -> Unit,
+    onMemoChange: (String) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -201,6 +212,21 @@ internal fun ScheduleDetailScreen(
                     .background(gray30),
             )
             LocationSetting(locationText, onLocationChange)
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(gray30),
+            )
+            ColorSetting(
+                selectedColor = checkedColor,
+                onColorChange = onColorChange,
+            )
+            MemoTextField(
+                text = memoText,
+                onChangedText = onMemoChange,
+            )
         }
     }
 }
@@ -554,6 +580,115 @@ private fun LocationSetting(
                     innerTextField()
                 }
             }
+        )
+    }
+}
+
+@Composable
+private fun ColorSetting(
+    selectedColor: Color,
+    onColorChange: (Color) -> Unit,
+) {
+    var isShowColorBottomSheet by remember { mutableStateOf(false) }
+
+    if (isShowColorBottomSheet) {
+        ColorPaletteBottomSheet(
+            selectedColor = selectedColor,
+            onColorSelected = onColorChange,
+            onDismiss = {
+                isShowColorBottomSheet = false
+            }
+        )
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp)
+            .clickable {
+                isShowColorBottomSheet = true
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_palette),
+            contentDescription = "색상 설정",
+            modifier = Modifier.size(24.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            modifier = Modifier.padding(start = 6.dp),
+            text = "색상",
+            style = MaterialTheme.typography.titleSmall
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Box(
+            modifier = Modifier
+                .size(20.dp)
+                .background(selectedColor, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+        }
+        Icon(
+            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+            contentDescription = "색상 설정",
+            modifier = Modifier
+                .size(20.dp)
+                .padding(start = 6.dp),
+            tint = Color.Unspecified
+        )
+    }
+}
+
+@Composable
+fun MemoTextField(modifier: Modifier = Modifier, text: String, onChangedText: (String) -> Unit) {
+    Row(
+        modifier = Modifier.padding(top = 16.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_article),
+            contentDescription = stringResource(R.string.memo),
+            modifier = Modifier.size(24.dp)
+        )
+        Text(
+            text = stringResource(R.string.memo),
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.padding(start = 6.dp)
+        )
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(251.dp)
+            .padding(top = 10.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(gray20)
+    ) {
+        BasicTextField(
+            value = text,
+            onValueChange = { newValue ->
+                onChangedText(newValue)
+            },
+            textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 14.dp).padding(top = 14.dp, bottom = 45.dp),
+            decorationBox = { innerTextField ->
+                if (text.isEmpty()) {
+                    Text(
+                        text = "메모",
+                        style = MaterialTheme.typography.displayMedium,
+                        color = gray50
+                    )
+                }
+                innerTextField()
+            }
+        )
+        Text(
+            text = "${text.length} / 1000",
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 14.dp, bottom = 14.dp),
+            color = if (text.isEmpty()) gray60 else gray100
         )
     }
 }
