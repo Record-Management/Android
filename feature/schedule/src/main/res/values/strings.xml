@@ -19,4 +19,6 @@
     <string name="schedule_top_bar_title">일정 기록</string>
     <string name="schedule_hint">일정명</string>
     <string name="calendar">날짜</string>
+    <string name="location">위치</string>
+    <string name="location_hint">위치를 입력해 주세요</string>
 </resources>

@@ -1,5 +1,6 @@
 package see.day.schedule.screen
 
+import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
+import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray70
@@ -71,6 +73,8 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
     var showRepeatTimeBottomSheet by remember { mutableStateOf(false) }
     var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
     var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
+
+    var locationText by remember { mutableStateOf("") }
 
     var showColorPaletteBottomSheet by remember { mutableStateOf(false) }
     var checkedColor by remember { mutableStateOf(primaryColor) }
@@ -119,6 +123,7 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
         checkedTime = checkedTime,
         repeatTime = checkedRepeatTime,
         repeatEndTime = checkedRepeatEndTime,
+        locationText = locationText,
         onBack = onBack,
         onClickPopHome = onClickPopHome,
         onScheduleTitleChange = { scheduleTitle = it },
@@ -129,6 +134,7 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
             checkedRepeatTime = repeatTime
             checkedRepeatEndTime = repeatEndTime
         },
+        onLocationChange = { locationText = it },
     )
 }
 
@@ -142,6 +148,7 @@ internal fun ScheduleDetailScreen(
     checkedTime: AlertTime,
     repeatTime: RepeatTime,
     repeatEndTime: RepeatEndTime?,
+    locationText: String,
     onBack: () -> Unit,
     onClickPopHome: (Boolean) -> Unit,
     onScheduleTitleChange: (String) -> Unit,
@@ -149,6 +156,7 @@ internal fun ScheduleDetailScreen(
     onEndDateChange: (LocalDate) -> Unit,
     onCheckedTimeChange: (AlertTime) -> Unit,
     onRepeatTimeChange: (RepeatTime, RepeatEndTime?) -> Unit,
+    onLocationChange: (String) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -185,6 +193,14 @@ internal fun ScheduleDetailScreen(
                 repeatEndTime = repeatEndTime,
                 onCheckedChange = onRepeatTimeChange
             )
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(gray30),
+            )
+            LocationSetting(locationText, onLocationChange)
         }
     }
 }
@@ -211,6 +227,7 @@ private fun ScheduleTitle(
                 .fillMaxWidth()
                 .background(gray20)
                 .padding(horizontal = 14.dp),
+            maxLines = 1,
             value = scheduleTitle,
             textStyle = MaterialTheme.typography.displayMedium,
             onValueChange = onScheduleTitleChange,
@@ -440,7 +457,7 @@ private fun RepeatSetting(
 ) {
     var isShowRepeatBottomSheet by remember { mutableStateOf(false) }
 
-    if(isShowRepeatBottomSheet) {
+    if (isShowRepeatBottomSheet) {
         RepeatTimeBottomSheet(
             startDate = startDate,
             repeatTime = repeatTime,
@@ -473,7 +490,7 @@ private fun RepeatSetting(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = stringResource(repeatTime.textRes) + if(repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
+            text = stringResource(repeatTime.textRes) + if (repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
             style = MaterialTheme.typography.labelSmall.copy(
                 color = gray70
             )
@@ -485,6 +502,58 @@ private fun RepeatSetting(
                 .size(20.dp)
                 .padding(start = 6.dp),
             tint = Color.Unspecified
+        )
+    }
+}
+
+@Composable
+private fun LocationSetting(
+    locationText: String,
+    onLocationChange: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_compass),
+            contentDescription = "위치 설정",
+            modifier = Modifier.size(24.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            modifier = Modifier.padding(start = 6.dp),
+            text = stringResource(id = R.string.location),
+            style = MaterialTheme.typography.titleSmall,
+        )
+        BasicTextField(
+            modifier = Modifier
+                .padding(start = 10.dp)
+                .height(height = 52.dp)
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 14.dp),
+            value = locationText,
+            textStyle = MaterialTheme.typography.displayMedium,
+            maxLines = 1,
+            onValueChange = onLocationChange,
+            decorationBox = { innerTextField ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (locationText.isEmpty()) {
+                        Text(
+                            text = stringResource(id = R.string.location_hint),
+                            style = MaterialTheme.typography.displayMedium,
+                            color = gray50
+                        )
+                    }
+                    innerTextField()
+                }
+            }
         )
     }
 }
