@@ -147,7 +147,7 @@ internal fun RepeatTimeBottomSheet(
                                     }
                                 }
                             )
-                            if (index < AlertTime.entries.lastIndex) {
+                            if (index < RepeatTime.entries.lastIndex) {
                                 HorizontalDivider(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     color = gray30,
