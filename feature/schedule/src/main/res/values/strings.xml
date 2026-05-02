@@ -16,4 +16,5 @@
     <string name="year_repeat">매년</string>
     <string name="color">색상</string>
     <string name="color_set">색상 설정</string>
+    <string name="schedule_top_bar_title">일정 기록</string>
 </resources>
