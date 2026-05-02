@@ -7,4 +7,11 @@
     <string name="alert_time_two_hour">2시간 전</string>
     <string name="alert_time_twelve_hour">12시간 전</string>
     <string name="alert_time_one_day">1일 전</string>
+    <string name="repeat_set">반복 설정</string>
+    <string name="repeat_end_time">반복 종료일</string>
+    <string name="no_repeat">반복 없음</string>
+    <string name="day_repeat">매일</string>
+    <string name="week_repeat">매주</string>
+    <string name="month_repeat">매월</string>
+    <string name="year_repeat">매년</string>
 </resources>
