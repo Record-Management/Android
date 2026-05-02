@@ -102,7 +102,7 @@ internal fun ColorPaletteBottomSheet(
                     )
 
                     Text(
-                        stringResource(R.string.repeat_set),
+                        stringResource(R.string.color_set),
                         style = Typography.titleSmall,
                     )
                     Text(
