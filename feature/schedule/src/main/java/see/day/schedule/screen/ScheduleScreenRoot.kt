@@ -117,12 +117,18 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
         startDate = startDate,
         endDate = endDate,
         checkedTime = checkedTime,
+        repeatTime = checkedRepeatTime,
+        repeatEndTime = checkedRepeatEndTime,
         onBack = onBack,
         onClickPopHome = onClickPopHome,
         onScheduleTitleChange = { scheduleTitle = it },
         onStartDateChange = { startDate = it },
         onEndDateChange = { endDate = it },
         onCheckedTimeChange = { checkedTime = it },
+        onRepeatTimeChange = { repeatTime, repeatEndTime ->
+            checkedRepeatTime = repeatTime
+            checkedRepeatEndTime = repeatEndTime
+        },
     )
 }
 
@@ -134,12 +140,15 @@ internal fun ScheduleDetailScreen(
     startDate: LocalDate,
     endDate: LocalDate,
     checkedTime: AlertTime,
+    repeatTime: RepeatTime,
+    repeatEndTime: RepeatEndTime?,
     onBack: () -> Unit,
     onClickPopHome: (Boolean) -> Unit,
     onScheduleTitleChange: (String) -> Unit,
     onStartDateChange: (LocalDate) -> Unit,
     onEndDateChange: (LocalDate) -> Unit,
     onCheckedTimeChange: (AlertTime) -> Unit,
+    onRepeatTimeChange: (RepeatTime, RepeatEndTime?) -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -170,62 +179,13 @@ internal fun ScheduleDetailScreen(
                 checkedTime = checkedTime,
                 onCheckedTimeChange = onCheckedTimeChange
             )
-        }
-    }
-}
-
-@Composable
-private fun AlertSetting(
-    checkedTime: AlertTime,
-    onCheckedTimeChange: (AlertTime) -> Unit,
-) {
-    var isShowAlertBottomSheet by remember { mutableStateOf(false) }
-
-    if (isShowAlertBottomSheet) {
-        AlertBottomSheet(
-            onDismiss = {
-                isShowAlertBottomSheet = false
-            },
-            checkedTime = checkedTime,
-            onCheckedChange = onCheckedTimeChange
-        )
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .clickable {
-                isShowAlertBottomSheet = true
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_notification),
-            contentDescription = "알림 설정",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = "알림",
-            style = MaterialTheme.typography.titleSmall
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = stringResource(checkedTime.textRes),
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = gray70
+            RepeatSetting(
+                startDate = startDate,
+                repeatTime = repeatTime,
+                repeatEndTime = repeatEndTime,
+                onCheckedChange = onRepeatTimeChange
             )
-        )
-        Icon(
-            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
-            contentDescription = "알림 설정",
-            modifier = Modifier
-                .size(20.dp)
-                .padding(start = 6.dp),
-            tint = Color.Unspecified
-        )
+        }
     }
 }
 
@@ -357,12 +317,15 @@ private fun CalendarSetting(
                 ),
                 startDate = if (isShowStartDatePicker) startDate else endDate,
                 minDate = if (isShowStartDatePicker) LocalDate.MIN else startDate,
-                maxDate = if (isShowStartDatePicker) endDate else LocalDate.MAX,
+                maxDate = LocalDate.MAX,
                 textStyle = MaterialTheme.typography.titleMedium,
                 textColor = gray100
             ) { snappedDate ->
                 if (isShowStartDatePicker) {
                     setStartDate(snappedDate)
+                    if (snappedDate > endDate) {
+                        setEndDate(snappedDate)
+                    }
                 }
                 if (isShowEndDatePicker) {
                     setEndDate(snappedDate)
@@ -408,6 +371,120 @@ private fun ScheduleDateText(
             style = MaterialTheme.typography.titleSmall.copy(
                 color = if (isClicked) gray100 else gray50
             )
+        )
+    }
+}
+
+@Composable
+private fun AlertSetting(
+    checkedTime: AlertTime,
+    onCheckedTimeChange: (AlertTime) -> Unit,
+) {
+    var isShowAlertBottomSheet by remember { mutableStateOf(false) }
+
+    if (isShowAlertBottomSheet) {
+        AlertBottomSheet(
+            onDismiss = {
+                isShowAlertBottomSheet = false
+            },
+            checkedTime = checkedTime,
+            onCheckedChange = onCheckedTimeChange
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .clickable {
+                isShowAlertBottomSheet = true
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_notification),
+            contentDescription = "알림 설정",
+            modifier = Modifier.size(24.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            modifier = Modifier.padding(start = 6.dp),
+            text = "알림",
+            style = MaterialTheme.typography.titleSmall
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(checkedTime.textRes),
+            style = MaterialTheme.typography.labelSmall.copy(
+                color = gray70
+            )
+        )
+        Icon(
+            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+            contentDescription = "알림 설정",
+            modifier = Modifier
+                .size(20.dp)
+                .padding(start = 6.dp),
+            tint = Color.Unspecified
+        )
+    }
+}
+
+@Composable
+private fun RepeatSetting(
+    modifier: Modifier = Modifier,
+    startDate: LocalDate,
+    repeatTime: RepeatTime,
+    repeatEndTime: RepeatEndTime?,
+    onCheckedChange: (RepeatTime, RepeatEndTime?) -> Unit,
+) {
+    var isShowRepeatBottomSheet by remember { mutableStateOf(false) }
+
+    if(isShowRepeatBottomSheet) {
+        RepeatTimeBottomSheet(
+            startDate = startDate,
+            repeatTime = repeatTime,
+            repeatEndTime = repeatEndTime,
+            onCheckedChange = onCheckedChange,
+            onDismiss = {
+                isShowRepeatBottomSheet = false
+            }
+        )
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .clickable {
+                isShowRepeatBottomSheet = true
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_repeat),
+            contentDescription = "반복 설정",
+            modifier = Modifier.size(24.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            modifier = Modifier.padding(start = 6.dp),
+            text = "반복",
+            style = MaterialTheme.typography.titleSmall
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(repeatTime.textRes) + if(repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
+            style = MaterialTheme.typography.labelSmall.copy(
+                color = gray70
+            )
+        )
+        Icon(
+            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
+            contentDescription = "반복 설정",
+            modifier = Modifier
+                .size(20.dp)
+                .padding(start = 6.dp),
+            tint = Color.Unspecified
         )
     }
 }
