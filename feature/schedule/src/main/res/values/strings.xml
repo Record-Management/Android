@@ -14,4 +14,5 @@
     <string name="week_repeat">매주</string>
     <string name="month_repeat">매월</string>
     <string name="year_repeat">매년</string>
+    <string name="color">색상</string>
 </resources>
