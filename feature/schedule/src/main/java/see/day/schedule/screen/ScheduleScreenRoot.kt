@@ -15,11 +15,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.schedule.component.AlertBottomSheet
 import see.day.schedule.component.AlertTime
+import see.day.schedule.component.RepeatEndTime
+import see.day.schedule.component.RepeatTime
+import see.day.schedule.component.RepeatTimeBottomSheet
+import java.time.LocalDate
 
 @Composable
 fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
     var showAlertBottomSheet by remember { mutableStateOf(false) }
     var checkedTime by remember { mutableStateOf(AlertTime.NO) }
+
+    var showRepeatTimeBottomSheet by remember { mutableStateOf(false) }
+    var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
+    var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
 
     if (showAlertBottomSheet) {
         AlertBottomSheet (
@@ -28,6 +36,21 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
             },
             checkedTime = checkedTime,
             onCheckedChange = { checkedTime = it }
+        )
+    }
+    if (showRepeatTimeBottomSheet) {
+        RepeatTimeBottomSheet(
+            repeatTime = checkedRepeatTime,
+            repeatEndTime = checkedRepeatEndTime,
+            startDate = LocalDate.now(),
+            onDismiss = {
+                showRepeatTimeBottomSheet = false
+            },
+            onCheckedChange = { repeatTime, repeatEndTime ->
+                checkedRepeatTime = repeatTime
+                checkedRepeatEndTime = repeatEndTime
+                showRepeatTimeBottomSheet = false
+            }
         )
     }
     Column(
@@ -42,6 +65,17 @@ fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
         }
         Text("반복 시간")
         Text(stringResource(checkedTime.textRes))
+
+        Button(
+            onClick = {
+                showRepeatTimeBottomSheet = true
+            }
+        ) {
+            Text("반복 시간")
+        }
+        Text("반복 시간")
+        Text(stringResource(checkedRepeatTime.textRes))
+        Text("반복 종료일 : ${checkedRepeatEndTime?.dateStr ?: ""}")
     }
 }
 
