@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -58,6 +59,7 @@ import see.day.schedule.component.RepeatEndTime
 import see.day.schedule.component.RepeatTime
 import see.day.schedule.component.RepeatTimeBottomSheet
 import see.day.schedule.component.ScheduleTopBar
+import see.day.ui.button.CompleteButton
 import see.day.ui.picker.WheelDatePicker
 import see.day.ui.picker.WheelPickerDefaults
 import java.time.LocalDate
@@ -179,7 +181,17 @@ internal fun ScheduleDetailScreen(
             ScheduleTopBar(
                 onClickCloseButton = onBack
             )
-        }
+        },
+        bottomBar = {
+            CompleteButton(
+                modifier = Modifier.navigationBarsPadding(),
+                text = stringResource(see.day.ui.R.string.write_record_text),
+                isEnabled = scheduleTitle.isNotBlank(),
+                onClick = {
+                    // TODO 클릭시 이벤트 필요
+                }
+            )
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -670,7 +682,10 @@ fun MemoTextField(modifier: Modifier = Modifier, text: String, onChangedText: (S
                 onChangedText(newValue)
             },
             textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
-            modifier = Modifier.fillMaxSize().padding(horizontal = 14.dp).padding(top = 14.dp, bottom = 45.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 14.dp)
+                .padding(top = 14.dp, bottom = 45.dp),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
                     Text(
