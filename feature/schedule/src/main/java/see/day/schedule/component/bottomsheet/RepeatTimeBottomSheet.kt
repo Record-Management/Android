@@ -1,4 +1,4 @@
-package see.day.schedule.component
+package see.day.schedule.component.bottomsheet
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
