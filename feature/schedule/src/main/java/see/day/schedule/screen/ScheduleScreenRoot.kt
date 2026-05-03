@@ -53,6 +53,7 @@ import see.day.schedule.component.AlertSetting
 import see.day.schedule.component.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorPaletteBottomSheet
+import see.day.schedule.component.ColorSetting
 import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.RepeatEndTime
 import see.day.schedule.component.RepeatSetting
@@ -199,6 +200,7 @@ internal fun ScheduleDetailScreen(
                     .background(gray30),
             )
             ColorSetting(
+                modifier = Modifier.padding(top = 24.dp),
                 selectedColor = checkedColor,
                 onColorChange = onColorChange,
             )
@@ -251,61 +253,6 @@ private fun ScheduleTitle(
                     innerTextField()
                 }
             }
-        )
-    }
-}
-
-@Composable
-private fun ColorSetting(
-    selectedColor: Color,
-    onColorChange: (Color) -> Unit,
-) {
-    var isShowColorBottomSheet by remember { mutableStateOf(false) }
-
-    if (isShowColorBottomSheet) {
-        ColorPaletteBottomSheet(
-            selectedColor = selectedColor,
-            onColorSelected = onColorChange,
-            onDismiss = {
-                isShowColorBottomSheet = false
-            }
-        )
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp)
-            .clickable {
-                isShowColorBottomSheet = true
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_palette),
-            contentDescription = "색상 설정",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = "색상",
-            style = MaterialTheme.typography.titleSmall
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Box(
-            modifier = Modifier
-                .size(20.dp)
-                .background(selectedColor, shape = CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-        }
-        Icon(
-            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
-            contentDescription = "색상 설정",
-            modifier = Modifier
-                .size(20.dp)
-                .padding(start = 6.dp),
-            tint = Color.Unspecified
         )
     }
 }
