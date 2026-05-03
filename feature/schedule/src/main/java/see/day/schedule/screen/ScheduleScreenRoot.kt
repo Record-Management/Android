@@ -2,7 +2,6 @@ package see.day.schedule.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,23 +39,19 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
-import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.gray60
-import see.day.designsystem.theme.gray70
 import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
-import see.day.schedule.component.AlertBottomSheet
 import see.day.schedule.component.AlertSetting
 import see.day.schedule.component.AlertTime
 import see.day.schedule.component.CalendarSetting
-import see.day.schedule.component.ColorPaletteBottomSheet
 import see.day.schedule.component.ColorSetting
 import see.day.schedule.component.LocationSetting
+import see.day.schedule.component.MemoSetting
 import see.day.schedule.component.RepeatEndTime
 import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.RepeatTime
-import see.day.schedule.component.RepeatTimeBottomSheet
 import see.day.schedule.component.ScheduleTopBar
 import see.day.ui.button.CompleteButton
 import java.time.LocalDate
@@ -204,7 +197,8 @@ internal fun ScheduleDetailScreen(
                 selectedColor = checkedColor,
                 onColorChange = onColorChange,
             )
-            MemoTextField(
+            MemoSetting(
+                modifier = Modifier.padding(top = 16.dp),
                 text = memoText,
                 onChangedText = onMemoChange,
             )
@@ -253,65 +247,6 @@ private fun ScheduleTitle(
                     innerTextField()
                 }
             }
-        )
-    }
-}
-
-@Composable
-fun MemoTextField(modifier: Modifier = Modifier, text: String, onChangedText: (String) -> Unit) {
-    Row(
-        modifier = Modifier.padding(top = 16.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Image(
-            painter = painterResource(R.drawable.ic_article),
-            contentDescription = stringResource(R.string.memo),
-            modifier = Modifier.size(24.dp)
-        )
-        Text(
-            text = stringResource(R.string.memo),
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(start = 6.dp)
-        )
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(251.dp)
-            .padding(top = 10.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(gray20)
-    ) {
-        BasicTextField(
-            value = text,
-            onValueChange = { newValue ->
-                if(newValue.length <= 1000) {
-                    onChangedText(newValue)
-                }
-            },
-            textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 14.dp)
-                .padding(top = 14.dp, bottom = 45.dp),
-            decorationBox = { innerTextField ->
-                if (text.isEmpty()) {
-                    Text(
-                        text = "메모",
-                        style = MaterialTheme.typography.displayMedium,
-                        color = gray50
-                    )
-                }
-                innerTextField()
-            }
-        )
-        Text(
-            text = "${text.length} / 1000",
-            style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 14.dp, bottom = 14.dp),
-            color = if (text.isEmpty()) gray60 else gray100
         )
     }
 }
