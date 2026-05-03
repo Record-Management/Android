@@ -1,6 +1,5 @@
 package see.day.schedule.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,27 +30,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
-import see.day.designsystem.theme.gray60
 import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
 import see.day.schedule.component.AlertSetting
-import see.day.schedule.component.AlertTime
+import see.day.schedule.component.bottomsheet.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorSetting
 import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.MemoSetting
-import see.day.schedule.component.RepeatEndTime
+import see.day.schedule.component.bottomsheet.RepeatEndTime
 import see.day.schedule.component.RepeatSetting
-import see.day.schedule.component.RepeatTime
+import see.day.schedule.component.bottomsheet.RepeatTime
 import see.day.schedule.component.ScheduleTopBar
 import see.day.ui.button.CompleteButton
 import java.time.LocalDate
