@@ -50,6 +50,7 @@ import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.bottomsheet.RepeatTime
 import see.day.schedule.component.ScheduleTopBar
 import see.day.ui.button.CompleteButton
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -138,7 +139,17 @@ internal fun ScheduleDetailScreen(
                 text = stringResource(see.day.ui.R.string.write_record_text),
                 isEnabled = scheduleTitle.isNotBlank(),
                 onClick = {
-                    // TODO 클릭시 이벤트 필요
+                    Timber.d(
+                        "scheduleTitle: $scheduleTitle\n" +
+                            "checkedColor: $checkedColor\n" +
+                            "startDate: $startDate\n" +
+                            "endDate: $endDate\n" +
+                            "checkedTime: $checkedTime\n" +
+                            "repeatTime: $repeatTime\n" +
+                            "repeatEndTime: $repeatEndTime\n" +
+                            "locationText: $locationText\n" +
+                            "memoText: $memoText\n"
+                    )
                 }
             )
         },
