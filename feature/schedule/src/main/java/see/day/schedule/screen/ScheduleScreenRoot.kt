@@ -53,6 +53,7 @@ import see.day.schedule.component.AlertSetting
 import see.day.schedule.component.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorPaletteBottomSheet
+import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.RepeatEndTime
 import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.RepeatTime
@@ -185,7 +186,11 @@ internal fun ScheduleDetailScreen(
                     .height(1.dp)
                     .background(gray30),
             )
-            LocationSetting(locationText, onLocationChange)
+            LocationSetting(
+                modifier = Modifier.padding(top = 10.dp),
+                locationText = locationText,
+                onLocationChange = onLocationChange,
+            )
             Spacer(
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -239,58 +244,6 @@ private fun ScheduleTitle(
                     if (scheduleTitle.isEmpty()) {
                         Text(
                             text = stringResource(id = R.string.schedule_hint),
-                            style = MaterialTheme.typography.displayMedium,
-                            color = gray50
-                        )
-                    }
-                    innerTextField()
-                }
-            }
-        )
-    }
-}
-
-@Composable
-private fun LocationSetting(
-    locationText: String,
-    onLocationChange: (String) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_compass),
-            contentDescription = "위치 설정",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = stringResource(id = R.string.location),
-            style = MaterialTheme.typography.titleSmall,
-        )
-        BasicTextField(
-            modifier = Modifier
-                .padding(start = 10.dp)
-                .height(height = 52.dp)
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(horizontal = 14.dp),
-            value = locationText,
-            textStyle = MaterialTheme.typography.displayMedium,
-            maxLines = 1,
-            onValueChange = onLocationChange,
-            decorationBox = { innerTextField ->
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    if (locationText.isEmpty()) {
-                        Text(
-                            text = stringResource(id = R.string.location_hint),
                             style = MaterialTheme.typography.displayMedium,
                             color = gray50
                         )
