@@ -54,6 +54,7 @@ import see.day.schedule.component.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorPaletteBottomSheet
 import see.day.schedule.component.RepeatEndTime
+import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.RepeatTime
 import see.day.schedule.component.RepeatTimeBottomSheet
 import see.day.schedule.component.ScheduleTopBar
@@ -171,6 +172,7 @@ internal fun ScheduleDetailScreen(
                 onCheckedTimeChange = onCheckedTimeChange
             )
             RepeatSetting(
+                modifier = Modifier.padding(top = 16.dp),
                 startDate = startDate,
                 repeatTime = repeatTime,
                 repeatEndTime = repeatEndTime,
@@ -244,65 +246,6 @@ private fun ScheduleTitle(
                     innerTextField()
                 }
             }
-        )
-    }
-}
-
-@Composable
-private fun RepeatSetting(
-    modifier: Modifier = Modifier,
-    startDate: LocalDate,
-    repeatTime: RepeatTime,
-    repeatEndTime: RepeatEndTime?,
-    onCheckedChange: (RepeatTime, RepeatEndTime?) -> Unit,
-) {
-    var isShowRepeatBottomSheet by remember { mutableStateOf(false) }
-
-    if (isShowRepeatBottomSheet) {
-        RepeatTimeBottomSheet(
-            startDate = startDate,
-            repeatTime = repeatTime,
-            repeatEndTime = repeatEndTime,
-            onCheckedChange = onCheckedChange,
-            onDismiss = {
-                isShowRepeatBottomSheet = false
-            }
-        )
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .clickable {
-                isShowRepeatBottomSheet = true
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_repeat),
-            contentDescription = "반복 설정",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = "반복",
-            style = MaterialTheme.typography.titleSmall
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = stringResource(repeatTime.textRes) + if (repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = gray70
-            )
-        )
-        Icon(
-            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
-            contentDescription = "반복 설정",
-            modifier = Modifier
-                .size(20.dp)
-                .padding(start = 6.dp),
-            tint = Color.Unspecified
         )
     }
 }
