@@ -71,54 +71,16 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
     var startDate by remember { mutableStateOf(LocalDate.now()) }
     var endDate by remember { mutableStateOf(LocalDate.now()) }
 
-    var showAlertBottomSheet by remember { mutableStateOf(false) }
     var checkedTime by remember { mutableStateOf(AlertTime.NO) }
 
-    var showRepeatTimeBottomSheet by remember { mutableStateOf(false) }
     var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
     var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
 
     var locationText by remember { mutableStateOf("") }
 
-    var showColorPaletteBottomSheet by remember { mutableStateOf(false) }
     var checkedColor by remember { mutableStateOf(primaryColor) }
 
     var memoText by remember { mutableStateOf("") }
-
-    if (showAlertBottomSheet) {
-        AlertBottomSheet(
-            onDismiss = {
-                showAlertBottomSheet = false
-            },
-            checkedTime = checkedTime,
-            onCheckedChange = { checkedTime = it }
-        )
-    }
-    if (showRepeatTimeBottomSheet) {
-        RepeatTimeBottomSheet(
-            repeatTime = checkedRepeatTime,
-            repeatEndTime = checkedRepeatEndTime,
-            startDate = LocalDate.now(),
-            onDismiss = {
-                showRepeatTimeBottomSheet = false
-            },
-            onCheckedChange = { repeatTime, repeatEndTime ->
-                checkedRepeatTime = repeatTime
-                checkedRepeatEndTime = repeatEndTime
-                showRepeatTimeBottomSheet = false
-            }
-        )
-    }
-
-    if (showColorPaletteBottomSheet) {
-        ColorPaletteBottomSheet(
-            selectedColor = checkedColor,
-            onDismiss = {
-                showColorPaletteBottomSheet = false
-            },
-            onColorSelected = { checkedColor = it }
-        )
-    }
 
     ScheduleDetailScreen(
         modifier = Modifier.systemBarsPadding(),
