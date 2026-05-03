@@ -1,10 +1,8 @@
 package see.day.schedule.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,14 +50,13 @@ import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
 import see.day.schedule.component.AlertBottomSheet
 import see.day.schedule.component.AlertTime
+import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorPaletteBottomSheet
 import see.day.schedule.component.RepeatEndTime
 import see.day.schedule.component.RepeatTime
 import see.day.schedule.component.RepeatTimeBottomSheet
 import see.day.schedule.component.ScheduleTopBar
 import see.day.ui.button.CompleteButton
-import see.day.ui.picker.WheelDatePicker
-import see.day.ui.picker.WheelPickerDefaults
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -162,6 +158,7 @@ internal fun ScheduleDetailScreen(
             // 색상하고 일정명 텍스트 필드
             ScheduleTitle(checkedColor, scheduleTitle, onScheduleTitleChange)
             CalendarSetting(
+                modifier = Modifier.padding(top = 10.dp),
                 startDate = startDate,
                 endDate = endDate,
                 setStartDate = onStartDateChange,
@@ -249,147 +246,6 @@ private fun ScheduleTitle(
     }
 }
 
-@Composable
-private fun CalendarSetting(
-    modifier: Modifier = Modifier,
-    startDate: LocalDate,
-    endDate: LocalDate,
-    setStartDate: (LocalDate) -> Unit,
-    setEndDate: (LocalDate) -> Unit
-) {
-    var isShowStartDatePicker by remember { mutableStateOf(false) }
-    var isShowEndDatePicker by remember { mutableStateOf(false) }
-
-
-    Row(
-        modifier = Modifier.padding(top = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_calendar),
-            contentDescription = "달력 아이콘",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = stringResource(R.string.calendar),
-            style = MaterialTheme.typography.titleSmall
-        )
-    }
-    Row(
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        ScheduleDateText(
-            date = startDate,
-            isClicked = isShowStartDatePicker,
-            onClickDate = {
-                if (!isShowStartDatePicker) {
-                    isShowStartDatePicker = true
-                }
-                if (isShowEndDatePicker) {
-                    isShowEndDatePicker = false
-                }
-            }
-        )
-        Icon(
-            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
-            contentDescription = "체크 아이콘",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        ScheduleDateText(
-            date = endDate,
-            isClicked = isShowEndDatePicker,
-            onClickDate = {
-                if (!isShowEndDatePicker) {
-                    isShowEndDatePicker = true
-                }
-                if (isShowStartDatePicker) {
-                    isShowStartDatePicker = false
-                }
-            }
-        )
-    }
-
-    if (isShowStartDatePicker || isShowEndDatePicker) {
-        val selectedDatePickerKey = if (isShowStartDatePicker) "start" else "end"
-
-        key(selectedDatePickerKey) {
-            WheelDatePicker(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .fillMaxWidth()
-                    .height(170.dp),
-                rowCount = 5,
-                selectorProperties = WheelPickerDefaults.selectorProperties(
-                    color = gray40,
-                    shape = RoundedCornerShape(0),
-                    border = BorderStroke(0.dp, gray40)
-                ),
-                startDate = if (isShowStartDatePicker) startDate else endDate,
-                minDate = if (isShowStartDatePicker) LocalDate.MIN else startDate,
-                maxDate = LocalDate.MAX,
-                textStyle = MaterialTheme.typography.titleMedium,
-                textColor = gray100
-            ) { snappedDate ->
-                if (isShowStartDatePicker) {
-                    setStartDate(snappedDate)
-                    if (snappedDate > endDate) {
-                        setEndDate(snappedDate)
-                    }
-                }
-                if (isShowEndDatePicker) {
-                    setEndDate(snappedDate)
-                }
-            }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(top = 10.dp)
-                    .clickable {
-                        isShowStartDatePicker = false
-                        isShowEndDatePicker = false
-                    },
-                text = "완료",
-                style = MaterialTheme.typography.titleSmall,
-                color = gray100
-            )
-        }
-    }
-}
-
-@Composable
-private fun ScheduleDateText(
-    date: LocalDate,
-    isClicked: Boolean,
-    onClickDate: () -> Unit,
-) {
-
-    Box(
-        modifier = Modifier
-            .size(height = 40.dp, width = 148.dp)
-            .clickable { onClickDate() }
-            .background(gray20, RoundedCornerShape(8.dp))
-            .padding(horizontal = 14.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Text(
-            text = date.toDateString(),
-            style = MaterialTheme.typography.titleSmall.copy(
-                color = if (isClicked) gray100 else gray50
-            )
-        )
-    }
-}
 
 @Composable
 private fun AlertSetting(
