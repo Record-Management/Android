@@ -39,9 +39,7 @@ fun RecordWriteTextField(modifier: Modifier = Modifier, text: String, @StringRes
         BasicTextField(
             value = text,
             onValueChange = { newValue ->
-                if(newValue.length <= 1000) {
-                    onChangedText(newValue)
-                }
+                onChangedText(newValue.take(1000))
 
             },
             textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),

@@ -54,9 +54,7 @@ internal fun MemoSetting(modifier: Modifier = Modifier, text: String, onChangedT
         BasicTextField(
             value = text,
             onValueChange = { newValue ->
-                if(newValue.length <= 1000) {
-                    onChangedText(newValue)
-                }
+                onChangedText(newValue.take(1000))
             },
             textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
             modifier = Modifier
