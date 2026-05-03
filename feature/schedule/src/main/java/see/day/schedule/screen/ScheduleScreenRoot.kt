@@ -49,6 +49,7 @@ import see.day.designsystem.theme.gray70
 import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
 import see.day.schedule.component.AlertBottomSheet
+import see.day.schedule.component.AlertSetting
 import see.day.schedule.component.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorPaletteBottomSheet
@@ -165,6 +166,7 @@ internal fun ScheduleDetailScreen(
                 setEndDate = onEndDateChange,
             )
             AlertSetting(
+                modifier = Modifier.padding(top = 16.dp),
                 checkedTime = checkedTime,
                 onCheckedTimeChange = onCheckedTimeChange
             )
@@ -242,62 +244,6 @@ private fun ScheduleTitle(
                     innerTextField()
                 }
             }
-        )
-    }
-}
-
-
-@Composable
-private fun AlertSetting(
-    checkedTime: AlertTime,
-    onCheckedTimeChange: (AlertTime) -> Unit,
-) {
-    var isShowAlertBottomSheet by remember { mutableStateOf(false) }
-
-    if (isShowAlertBottomSheet) {
-        AlertBottomSheet(
-            onDismiss = {
-                isShowAlertBottomSheet = false
-            },
-            checkedTime = checkedTime,
-            onCheckedChange = onCheckedTimeChange
-        )
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .clickable {
-                isShowAlertBottomSheet = true
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_notification),
-            contentDescription = "알림 설정",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Unspecified
-        )
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = "알림",
-            style = MaterialTheme.typography.titleSmall
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = stringResource(checkedTime.textRes),
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = gray70
-            )
-        )
-        Icon(
-            painter = painterResource(see.day.ui.R.drawable.ic_arrow_right),
-            contentDescription = "알림 설정",
-            modifier = Modifier
-                .size(20.dp)
-                .padding(start = 6.dp),
-            tint = Color.Unspecified
         )
     }
 }
