@@ -1,6 +1,5 @@
 package see.day.schedule.screen
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,7 +65,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ScheduleScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
+fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
     var scheduleTitle by remember { mutableStateOf("") }
 
     var startDate by remember { mutableStateOf(LocalDate.now()) }
@@ -679,7 +678,9 @@ fun MemoTextField(modifier: Modifier = Modifier, text: String, onChangedText: (S
         BasicTextField(
             value = text,
             onValueChange = { newValue ->
-                onChangedText(newValue)
+                if(newValue.length <= 1000) {
+                    onChangedText(newValue)
+                }
             },
             textStyle = MaterialTheme.typography.displayMedium.copy(color = gray100),
             modifier = Modifier
@@ -719,7 +720,7 @@ fun LocalDate.toDateString(): String {
 private fun ScheduleScreenPreview() {
     var checkedTime by remember { mutableStateOf(AlertTime.NO) }
     SeeDayTheme {
-        ScheduleScreenRoot(
+        ScheduleDetailScreenRoot(
             onBack = {},
             onClickPopHome = {}
         )
