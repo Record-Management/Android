@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,8 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
@@ -76,7 +79,12 @@ import see.day.ui.calendar.CustomCalendar
 import see.day.ui.card.ActionBanner
 import see.day.ui.dialog.OneButtonDialog
 import androidx.core.net.toUri
+import see.day.designsystem.theme.Typography
+import see.day.designsystem.theme.gray100
+import see.day.designsystem.theme.gray50
 import see.day.ui.dialog.ConfirmDialog
+import see.day.util.getGrayIcon
+import see.day.util.getIcon
 
 @Composable
 fun HomeScreenRoot(
@@ -317,31 +325,133 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
                 body = see.day.ui.R.string.current_goal_banner_body
             )
         } else {
+            var isFabMenuOpen by remember { mutableStateOf(false) }
+
+            if (isFabMenuOpen) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.45f))
+                        .clickable {
+                            isFabMenuOpen = false
+                        }
+                )
+
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 16.dp, bottom = 86.dp)
+                        .systemBarsPadding(),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    AddRecordMenu(
+                        onClickSchedule = {
+                            isFabMenuOpen = false
+                            onAction(HomeUiEvent.OnClickAddSchedule)
+                        },
+                        onClickExercise = {
+                            isFabMenuOpen = false
+                            if (uiState.todayRecords.records.size >= 2) {
+                                openTodayRecordOverDialog = true
+                            } else {
+                                onAction(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
+                            }
+                        },
+                        recordType = uiState.mainRecordType,
+                        isScheduleEnabled = true, // 추후 서버로부터 데이터를 받으면 수정
+                        isRecordEnabled = uiState.todayRecords.records.filter { it.type == uiState.mainRecordType }.size < 2,
+                    )
+                }
+            }
+
             FloatingActionButton(
                 onClick = {
-                    if (uiState.todayRecords.records.size >= 2) {
-                        openTodayRecordOverDialog = true
-                    } else {
-                        onAction(HomeUiEvent.OnClickAddButton(uiState.mainRecordType))
-                    }
+                    isFabMenuOpen = !isFabMenuOpen
                 },
                 modifier = modifier
-                    .padding(
-                        end = 16.dp, bottom = 20.dp
-                    )
+                    .padding(end = 16.dp, bottom = 20.dp)
                     .systemBarsPadding()
                     .align(Alignment.BottomEnd),
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = if (isFabMenuOpen) Color.White else MaterialTheme.colorScheme.primary,
                 shape = CircleShape,
                 elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp)
             ) {
-                Image(
-                    painter = painterResource(R.drawable.image_edit),
-                    contentDescription = "추가하기 버튼",
-                    modifier = modifier.size(24.dp)
-                )
+                if (isFabMenuOpen) {
+                    Image(
+                        painter = painterResource(see.day.ui.R.drawable.ic_close),
+                        contentDescription = "뒤로가기 버튼",
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.image_edit),
+                        contentDescription = "추가하기 버튼",
+                        modifier = modifier.size(24.dp)
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun AddRecordMenu(
+    onClickSchedule: () -> Unit,
+    onClickExercise: () -> Unit,
+    recordType: RecordType,
+    isRecordEnabled: Boolean,
+    isScheduleEnabled: Boolean,
+) {
+    Surface(
+        modifier = Modifier
+            .width(126.dp)
+            .height(92.dp),
+        shape = RoundedCornerShape(8.dp),
+        color = Color.White
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            AddRecordMenuRow(
+                modifier = Modifier.weight(1f),
+                iconRes = if(isScheduleEnabled) see.day.ui.R.drawable.filter_schedule else see.day.ui.R.drawable.filter_schedule_gray,
+                text = "일정 기록",
+                isEnabled = isScheduleEnabled,
+                onClick = onClickSchedule
+            )
+            AddRecordMenuRow(
+                modifier = Modifier.weight(1f),
+                iconRes = if(isRecordEnabled) recordType.getIcon() else recordType.getGrayIcon(),
+                text = recordType.title,
+                isEnabled = isRecordEnabled,
+                onClick = onClickExercise
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddRecordMenuRow(
+    modifier: Modifier = Modifier,
+    iconRes: Int,
+    text: String,
+    isEnabled: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = text,
+            modifier = Modifier.size(24.dp),
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(text = text, style = Typography.displayLarge.copy(color = if(isEnabled) gray100 else gray50))
     }
 }
 
@@ -418,9 +528,6 @@ private fun HomeBottomSheetContent(
                 onClickUpdateHabitRecordIsCompleted = { recordId, isCompleted, recordDate ->
                     uiEvent(HomeUiEvent.OnClickUpdateHabitIsComplete(recordId, isCompleted, recordDate))
                 },
-                onClickAddSchedule = {
-                    uiEvent(HomeUiEvent.OnClickAddSchedule)
-                }
             )
             Spacer(modifier = Modifier.height(100.dp))
             Spacer(modifier = Modifier.systemBarsPadding())
