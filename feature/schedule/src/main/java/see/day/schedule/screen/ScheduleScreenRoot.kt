@@ -162,7 +162,7 @@ internal fun ScheduleDetailScreen(
             // 색상하고 일정명 텍스트 필드
             ScheduleTitle(checkedColor, scheduleTitle, onScheduleTitleChange)
             CalendarSetting(
-                modifier = Modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(top = 24.dp),
                 startDate = startDate,
                 endDate = endDate,
                 setStartDate = onStartDateChange,
