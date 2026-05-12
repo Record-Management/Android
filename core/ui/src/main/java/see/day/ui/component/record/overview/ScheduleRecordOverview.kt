@@ -56,7 +56,7 @@ fun ScheduleRecordOverview(
         ) {
             Text(text = title, style = Typography.titleSmall)
             Text(modifier = Modifier.padding(top = 6.dp), text = formatScheduleDateRange(startDate, endDate), style = Typography.headlineMedium.copy(color = gray60))
-            Text(modifier = Modifier.padding(top = 4.dp), text = memo, style = Typography.headlineMedium.copy(color = gray60), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(modifier = Modifier.padding(top = 4.dp), text = memo.ifEmpty { "-" }, style = Typography.headlineMedium.copy(color = gray60), maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
