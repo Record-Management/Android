@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
@@ -46,6 +47,7 @@ internal fun CalendarSetting(
 ) {
     var isShowStartDatePicker by remember { mutableStateOf(false) }
     var isShowEndDatePicker by remember { mutableStateOf(false) }
+    val isAnyDatePickerOpen = isShowStartDatePicker || isShowEndDatePicker
 
     Row(
         modifier = modifier,
@@ -73,6 +75,7 @@ internal fun CalendarSetting(
         ScheduleDateText(
             date = startDate,
             isClicked = isShowStartDatePicker,
+            isAnyDatePickerOpen = isAnyDatePickerOpen,
             onClickDate = {
                 if (!isShowStartDatePicker) {
                     isShowStartDatePicker = true
@@ -91,6 +94,7 @@ internal fun CalendarSetting(
         ScheduleDateText(
             date = endDate,
             isClicked = isShowEndDatePicker,
+            isAnyDatePickerOpen = isAnyDatePickerOpen,
             onClickDate = {
                 if (!isShowEndDatePicker) {
                     isShowEndDatePicker = true
@@ -157,6 +161,7 @@ internal fun CalendarSetting(
 private fun ScheduleDateText(
     date: LocalDate,
     isClicked: Boolean,
+    isAnyDatePickerOpen: Boolean,
     onClickDate: () -> Unit,
 ) {
 
@@ -169,10 +174,12 @@ private fun ScheduleDateText(
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = date.toDateString(),
             style = MaterialTheme.typography.titleSmall.copy(
-                color = if (isClicked) gray100 else gray50
-            )
+                color = if (!isAnyDatePickerOpen || isClicked) gray100 else gray50
+            ),
+            textAlign = TextAlign.Center
         )
     }
 }
