@@ -2,10 +2,13 @@ package see.day.ui.calendar
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -25,12 +28,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.R
 import see.day.designsystem.theme.SeeDayTheme
+import see.day.designsystem.theme.Typography
 import see.day.designsystem.theme.gray100
+import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray40
+import see.day.designsystem.theme.primaryColor
 import see.day.model.calendar.DailyRecord
 import see.day.model.record.RecordType
 import see.day.model.record.RecordType.DAILY
@@ -42,7 +49,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 @Composable
-fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>, schedules: List<String>, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
+fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>, scheduleFilter : Boolean = false, schedules: List<String>, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
     Column(
         modifier = modifier
             .heightIn(min = 80.dp)
@@ -66,13 +73,16 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             }
         )
         if (!isSameMonth || isAfterToday(year, month, day) || isBeforeCreatedAt(createdAt, year, month, day)) {
-            return
-        }
-        if (isBeforeToday(year, month, day)) {
+
+        } else if (isBeforeToday(year, month, day) && !scheduleFilter) {
             PastDayImages(filterType, mainRecordType, records)
-        } else if (LocalDate.of(year, month, day).isEqual(now)) {
+        } else if (LocalDate.of(year, month, day).isEqual(now) && !scheduleFilter) {
             TodayImages(filterType, mainRecordType, records)
         }
+        if(filterType == null || scheduleFilter) {
+            ScheduleCalendar(modifier = Modifier.padding(top = 6.dp), color = primaryColor, title = "dasdadas", scheduleSize = 2)
+        }
+
     }
 }
 
@@ -241,6 +251,39 @@ private fun TodayImages(filterType: RecordType?, mainRecordType: RecordType?, re
                     tint = Color.Unspecified
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun ScheduleCalendar(
+    modifier: Modifier,
+    color: Color,
+    title: String,
+    scheduleSize: Int,
+) {
+    Column(
+        modifier = modifier.padding(end = 4.dp),
+    ) {
+        Row(
+            modifier = Modifier.background(color = gray20, shape = RoundedCornerShape(2.dp)).padding(horizontal = 2.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.padding(top = 2.dp, bottom = 2.dp,end = 2.dp).size(width = 2.dp, height = 10.dp).background(color))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        if(scheduleSize > 1) {
+            Text(
+                modifier = Modifier.padding(top = 2.dp).background(color = gray20, shape = RoundedCornerShape(4.dp)).padding(vertical = 1.dp, horizontal = 2.dp),
+                text = "+${scheduleSize-1}",
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
     }
 }
@@ -482,5 +525,13 @@ private fun TodayCellFilterAllAndNoHabit() {
                 isSameMonth = true
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ScheduleCalendarPreview() {
+    SeeDayTheme {
+        ScheduleCalendar(modifier = Modifier.padding(bottom = 6.dp), color = primaryColor, "일정명ㅁㄴㅇㅁㄴㅇㄴㅁ", scheduleSize = 2)
     }
 }
