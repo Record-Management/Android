@@ -2,7 +2,9 @@ package see.day.schedule.component.bottomsheet
 
 import AlertTime
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,24 +26,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.commandiron.wheel_picker_compose.core.TimeFormat
+import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
+import kotlinx.coroutines.launch
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.Typography
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
+import see.day.designsystem.theme.gray40
 import see.day.schedule.R
-import kotlinx.coroutines.launch
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,11 +67,13 @@ internal fun AlertBottomSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
     var bottomSheetCheckedTime by remember { mutableStateOf(checkedTime) }
+    var currentNotificationHour by remember { mutableIntStateOf(notificationHour) }
+    var currentNotificationMinute by remember { mutableIntStateOf(notificationMinute) }
     val dismissBottomSheet: (isChanged: Boolean) -> Unit = { shouldApplyChange ->
         coroutineScope.launch {
             sheetState.hide()
             if (shouldApplyChange) {
-                onCheckedChange(bottomSheetCheckedTime, notificationHour, notificationMinute)
+                onCheckedChange(bottomSheetCheckedTime, currentNotificationHour, currentNotificationMinute)
             }
             onDismiss()
         }
@@ -139,6 +153,17 @@ internal fun AlertBottomSheet(
                             }
                         }
                     }
+                    if(bottomSheetCheckedTime == AlertTime.CUSTOM) {
+                        CustomAlertTimeSetting(
+                            modifier = Modifier.padding(16.dp),
+                            notificationHour = currentNotificationHour,
+                            notificationMinute = currentNotificationMinute,
+                            onNotificationTimeChanged = { hour, minute ->
+                                currentNotificationHour = hour
+                                currentNotificationMinute = minute
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -182,6 +207,68 @@ private fun AlertText(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun CustomAlertTimeSetting(
+    modifier: Modifier,
+    notificationHour: Int,
+    notificationMinute: Int,
+    onNotificationTimeChanged: (Int, Int) -> Unit,
+) {
+    var isShowTimePicker by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(shape = RoundedCornerShape(8.dp), color = Color.White)
+            .padding(16.dp)
+    ) {
+        Text(
+            modifier = Modifier.padding(bottom = 16.dp),
+            text = stringResource(R.string.time_set),
+            style = Typography.titleSmall
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth().border(width = 1.dp, shape =  RoundedCornerShape(10.dp), color = gray20).clickable {
+                isShowTimePicker = true
+            }.padding(vertical = 12.dp),
+            text = formatTimeToKorean(notificationHour, notificationMinute),
+            style = Typography.titleSmall,
+            textAlign = TextAlign.Center
+        )
+        if (isShowTimePicker) {
+            WheelTimePicker(
+                timeFormat = TimeFormat.AM_PM,
+                startTime = LocalTime.of(notificationHour, notificationMinute),
+                selectorProperties = WheelPickerDefaults.selectorProperties(
+                    color = gray40,
+                    shape = RoundedCornerShape(0),
+                    border = BorderStroke(0.dp, gray40)
+                ),
+                size = DpSize(200.dp, 161.dp),
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .width(200.dp)
+                    .align(Alignment.CenterHorizontally),
+                rowCount = 7,
+                onSnappedTime = { time ->
+                    onNotificationTimeChanged(time.hour, time.minute)
+                },
+                textStyle = Typography.titleMedium,
+                textColor = gray100
+            )
+            Text(
+                text = stringResource(R.string.complete),
+                style = Typography.titleSmall,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .clickable {
+                        isShowTimePicker = false
+                    }
+            )
         }
     }
 }
