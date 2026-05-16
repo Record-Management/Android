@@ -1,5 +1,6 @@
 package see.day.schedule.screen
 
+import AlertTime
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,7 +41,6 @@ import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.primaryColor
 import see.day.schedule.R
 import see.day.schedule.component.AlertSetting
-import see.day.schedule.component.bottomsheet.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorSetting
 import see.day.schedule.component.LocationSetting
@@ -61,7 +61,7 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
     var startDate by remember { mutableStateOf(LocalDate.now()) }
     var endDate by remember { mutableStateOf(LocalDate.now()) }
 
-    var checkedTime by remember { mutableStateOf(AlertTime.NO) }
+    var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
 
     var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
     var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
@@ -267,7 +267,7 @@ fun LocalDate.toDateString(): String {
 @Preview
 @Composable
 private fun ScheduleScreenPreview() {
-    var checkedTime by remember { mutableStateOf(AlertTime.NO) }
+    var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
     SeeDayTheme {
         ScheduleDetailScreenRoot(
             onBack = {},

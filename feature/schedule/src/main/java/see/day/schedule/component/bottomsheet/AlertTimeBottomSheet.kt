@@ -1,5 +1,7 @@
 package see.day.schedule.component.bottomsheet
 
+import AlertTime
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -124,6 +125,7 @@ internal fun AlertBottomSheet(
                             AlertText(
                                 checkedTime = bottomSheetCheckedTime,
                                 time = alertTime,
+                                customTime = null, // TODO: CUSTOM 시간이 설정되면 여기에 전달
                                 onCheckedChange = { selectedTime ->
                                     bottomSheetCheckedTime = selectedTime
                                 }
@@ -147,6 +149,7 @@ private fun AlertText(
     modifier: Modifier = Modifier,
     checkedTime: AlertTime,
     time: AlertTime,
+    customTime: String? = null,
     onCheckedChange: (AlertTime) -> Unit,
 ) {
     Column(
@@ -161,7 +164,11 @@ private fun AlertText(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(time.textRes),
+                text = if (time == AlertTime.CUSTOM && customTime != null) {
+                    "${stringResource(time.getTextRes())}, $customTime"
+                } else {
+                    stringResource(time.getTextRes())
+                },
                 style = Typography.displayMedium,
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -186,7 +193,7 @@ private fun AlertText(
 @Preview
 @Composable
 private fun AlertTimeBottomSheetPreview() {
-    var checkedTime by remember { mutableStateOf(AlertTime.NO) }
+    var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
     var isBottomSheetOpen by remember { mutableStateOf(false) }
 
     SeeDayTheme {
@@ -203,7 +210,7 @@ private fun AlertTimeBottomSheetPreview() {
                 style = Typography.displayMedium,
             )
             Text(
-                text = stringResource(id = checkedTime.textRes),
+                text = stringResource(id = checkedTime.getTextRes()),
                 style = Typography.displayMedium,
             )
         }
@@ -221,17 +228,43 @@ private fun AlertTimeBottomSheetPreview() {
 @Preview
 @Composable
 private fun AlertTextPreview() {
-    var checkedTime by remember { mutableStateOf(AlertTime.ONE_HOUR) }
+    var checkedTime by remember { mutableStateOf(AlertTime.ONE_DAY_BEFORE) }
 
     SeeDayTheme {
         AlertText(
             checkedTime = checkedTime,
-            time = AlertTime.ONE_HOUR,
+            time = AlertTime.ONE_DAY_BEFORE,
             onCheckedChange = { checkedTime = it }
         )
     }
 }
 
-enum class AlertTime(val textRes: Int) {
-    NO(R.string.alert_time_no), ONE_HOUR(R.string.alert_time_one_hour), TWO_HOUR(R.string.alert_time_two_hour), TWELVE_HOUR(R.string.alert_time_twelve_hour), ONE_DAY(R.string.alert_time_one_day)
+fun AlertTime.getTextRes(): Int {
+    return when (this) {
+        AlertTime.NONE -> R.string.alert_time_no
+        AlertTime.ONE_DAY_BEFORE -> R.string.alert_time_one_day
+        AlertTime.TWO_DAYS_BEFORE -> R.string.alert_time_two_day
+        AlertTime.CUSTOM -> R.string.alert_time_custom
+    }
+}
+
+/**
+ * 시간(0-23)과 분(0-59)을 받아서 "오전/오후 HH:MM" 형식으로 변환
+ * @param hour 0-23 사이의 시간
+ * @param minute 0-59 사이의 분 (기본값 0)
+ * @return "오전 03:00" 또는 "오후 09:30" 형식의 문자열
+ */
+@SuppressLint("DefaultLocale")
+fun formatTimeToKorean(hour: Int, minute: Int = 0): String {
+    require(hour in 0..23) { "Hour must be between 0 and 23" }
+    require(minute in 0..59) { "Minute must be between 0 and 59" }
+
+    val period = if (hour < 12) "오전" else "오후"
+    val displayHour = when (hour) {
+        0 -> 12
+        in 1..12 -> hour
+        else -> hour - 12
+    }
+
+    return String.format("%s %02d:%02d", period, displayHour, minute)
 }

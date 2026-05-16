@@ -1,0 +1,7 @@
+
+enum class AlertTime {
+    NONE,
+    ONE_DAY_BEFORE,
+    TWO_DAYS_BEFORE,
+    CUSTOM
+}

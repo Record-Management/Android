@@ -1,5 +1,6 @@
 package see.day.schedule.component
 
+import AlertTime
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.gray70
 import see.day.schedule.R
 import see.day.schedule.component.bottomsheet.AlertBottomSheet
-import see.day.schedule.component.bottomsheet.AlertTime
+import see.day.schedule.component.bottomsheet.getTextRes
 
 @Composable
 internal fun AlertSetting(
@@ -64,7 +65,7 @@ internal fun AlertSetting(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = stringResource(checkedTime.textRes),
+            text = stringResource(checkedTime.getTextRes()),
             style = MaterialTheme.typography.labelSmall.copy(
                 color = gray70
             )
