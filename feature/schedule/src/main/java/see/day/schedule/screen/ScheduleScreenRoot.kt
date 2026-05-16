@@ -38,9 +38,9 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.primaryColor
+import see.day.model.schedule.AlertTime
 import see.day.schedule.R
 import see.day.schedule.component.AlertSetting
-import see.day.schedule.component.bottomsheet.AlertTime
 import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorSetting
 import see.day.schedule.component.LocationSetting
@@ -61,7 +61,9 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
     var startDate by remember { mutableStateOf(LocalDate.now()) }
     var endDate by remember { mutableStateOf(LocalDate.now()) }
 
-    var checkedTime by remember { mutableStateOf(AlertTime.NO) }
+    var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
+    var checkedTimeHour by remember { mutableStateOf(9) }
+    var checkedTimeMinute by remember { mutableStateOf(0) }
 
     var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
     var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
@@ -79,6 +81,8 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
         startDate = startDate,
         endDate = endDate,
         checkedTime = checkedTime,
+        checkedTimeHour = checkedTimeHour,
+        checkedTimeMinute = checkedTimeMinute,
         repeatTime = checkedRepeatTime,
         repeatEndTime = checkedRepeatEndTime,
         locationText = locationText,
@@ -88,7 +92,11 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
         onScheduleTitleChange = { scheduleTitle = it },
         onStartDateChange = { startDate = it },
         onEndDateChange = { endDate = it },
-        onCheckedTimeChange = { checkedTime = it },
+        onCheckedTimeChange = { newCheckedTime, newHour, newMinute ->
+            checkedTime = newCheckedTime
+            checkedTimeHour = newHour
+            checkedTimeMinute = newMinute
+        },
         onRepeatTimeChange = { repeatTime, repeatEndTime ->
             checkedRepeatTime = repeatTime
             checkedRepeatEndTime = repeatEndTime
@@ -107,6 +115,8 @@ internal fun ScheduleDetailScreen(
     startDate: LocalDate,
     endDate: LocalDate,
     checkedTime: AlertTime,
+    checkedTimeHour: Int,
+    checkedTimeMinute: Int,
     repeatTime: RepeatTime,
     repeatEndTime: RepeatEndTime?,
     locationText: String,
@@ -116,7 +126,7 @@ internal fun ScheduleDetailScreen(
     onScheduleTitleChange: (String) -> Unit,
     onStartDateChange: (LocalDate) -> Unit,
     onEndDateChange: (LocalDate) -> Unit,
-    onCheckedTimeChange: (AlertTime) -> Unit,
+    onCheckedTimeChange: (AlertTime, Int, Int) -> Unit,
     onRepeatTimeChange: (RepeatTime, RepeatEndTime?) -> Unit,
     onLocationChange: (String) -> Unit,
     onColorChange: (Color) -> Unit,
@@ -171,6 +181,8 @@ internal fun ScheduleDetailScreen(
             AlertSetting(
                 modifier = Modifier.padding(top = 16.dp),
                 checkedTime = checkedTime,
+                checkedTimeHour = checkedTimeHour,
+                checkedTimeMinute = checkedTimeMinute,
                 onCheckedTimeChange = onCheckedTimeChange
             )
             RepeatSetting(
@@ -267,7 +279,7 @@ fun LocalDate.toDateString(): String {
 @Preview
 @Composable
 private fun ScheduleScreenPreview() {
-    var checkedTime by remember { mutableStateOf(AlertTime.NO) }
+    var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
     SeeDayTheme {
         ScheduleDetailScreenRoot(
             onBack = {},
