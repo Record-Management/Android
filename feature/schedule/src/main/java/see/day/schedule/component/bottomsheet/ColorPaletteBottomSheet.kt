@@ -65,9 +65,12 @@ internal fun ColorPaletteBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     var currentColor by remember { mutableStateOf(selectedColor) }
     val colors = SchedulePaletteColor.entries.toList()
-    val dismissBottomSheet: () -> Unit = {
+    val dismissBottomSheet: (isChanged: Boolean) -> Unit = { shouldApplyChange ->
         coroutineScope.launch {
             sheetState.hide()
+            if (shouldApplyChange) {
+                onColorSelected(currentColor)
+            }
             onDismiss()
         }
     }
@@ -76,9 +79,10 @@ internal fun ColorPaletteBottomSheet(
     ) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = dismissBottomSheet,
+            onDismissRequest = { dismissBottomSheet(false) },
             dragHandle = {},
             containerColor = Color.White,
+            sheetGesturesEnabled = false,
         ) {
             Column(
                 modifier = Modifier
@@ -98,7 +102,7 @@ internal fun ColorPaletteBottomSheet(
                         tint = gray100,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { dismissBottomSheet() },
+                            .clickable { dismissBottomSheet(false) },
                     )
 
                     Text(
@@ -107,8 +111,7 @@ internal fun ColorPaletteBottomSheet(
                     )
                     Text(
                         modifier = Modifier.clickable {
-                            onColorSelected(currentColor)
-                            dismissBottomSheet()
+                            dismissBottomSheet(true)
                         },
                         text = stringResource(R.string.complete),
                         style = Typography.titleSmall
