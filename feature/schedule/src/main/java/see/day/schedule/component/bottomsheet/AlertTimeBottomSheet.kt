@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -48,12 +49,15 @@ internal fun AlertBottomSheet(
     onDismiss: () -> Unit,
     onCheckedChange: (AlertTime) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = { false })
     val coroutineScope = rememberCoroutineScope()
     var bottomSheetCheckedTime by remember { mutableStateOf(checkedTime) }
-    val dismissBottomSheet: () -> Unit = {
+    val dismissBottomSheet: (isChanged: Boolean) -> Unit = { shouldApplyChange ->
         coroutineScope.launch {
             sheetState.hide()
+            if (shouldApplyChange) {
+                onCheckedChange(bottomSheetCheckedTime)
+            }
             onDismiss()
         }
     }
@@ -63,7 +67,7 @@ internal fun AlertBottomSheet(
     ) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = dismissBottomSheet,
+            onDismissRequest = { dismissBottomSheet(false) },
             dragHandle = {},
             containerColor = Color.White,
         ) {
@@ -85,7 +89,7 @@ internal fun AlertBottomSheet(
                         tint = gray100,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { dismissBottomSheet() },
+                            .clickable { dismissBottomSheet(false) },
                     )
 
                     Text(
@@ -94,8 +98,7 @@ internal fun AlertBottomSheet(
                     )
                     Text(
                         modifier = Modifier.clickable {
-                            onCheckedChange(bottomSheetCheckedTime)
-                            dismissBottomSheet()
+                            dismissBottomSheet(true)
                         },
                         text = stringResource(R.string.complete),
                         style = Typography.titleSmall
