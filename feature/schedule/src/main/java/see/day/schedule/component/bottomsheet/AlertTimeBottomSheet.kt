@@ -47,8 +47,10 @@ import kotlinx.coroutines.launch
 internal fun AlertBottomSheet(
     modifier: Modifier = Modifier,
     checkedTime: AlertTime,
+    notificationHour: Int = 9,
+    notificationMinute: Int = 0,
     onDismiss: () -> Unit,
-    onCheckedChange: (AlertTime) -> Unit,
+    onCheckedChange: (AlertTime, Int, Int) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -57,7 +59,7 @@ internal fun AlertBottomSheet(
         coroutineScope.launch {
             sheetState.hide()
             if (shouldApplyChange) {
-                onCheckedChange(bottomSheetCheckedTime)
+                onCheckedChange(bottomSheetCheckedTime, notificationHour, notificationMinute)
             }
             onDismiss()
         }
@@ -125,7 +127,6 @@ internal fun AlertBottomSheet(
                             AlertText(
                                 checkedTime = bottomSheetCheckedTime,
                                 time = alertTime,
-                                customTime = null, // TODO: CUSTOM 시간이 설정되면 여기에 전달
                                 onCheckedChange = { selectedTime ->
                                     bottomSheetCheckedTime = selectedTime
                                 }
@@ -149,7 +150,6 @@ private fun AlertText(
     modifier: Modifier = Modifier,
     checkedTime: AlertTime,
     time: AlertTime,
-    customTime: String? = null,
     onCheckedChange: (AlertTime) -> Unit,
 ) {
     Column(
@@ -164,11 +164,7 @@ private fun AlertText(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (time == AlertTime.CUSTOM && customTime != null) {
-                    "${stringResource(time.getTextRes())}, $customTime"
-                } else {
-                    stringResource(time.getTextRes())
-                },
+                text = stringResource(time.getTextRes()),
                 style = Typography.displayMedium,
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -219,7 +215,9 @@ private fun AlertTimeBottomSheetPreview() {
             AlertBottomSheet(
                 checkedTime = checkedTime,
                 onDismiss = { isBottomSheetOpen = false },
-                onCheckedChange = { checkedTime = it }
+                onCheckedChange = { checkedNewTime, hour, minute ->
+                    checkedTime = checkedNewTime
+                }
             )
         }
     }

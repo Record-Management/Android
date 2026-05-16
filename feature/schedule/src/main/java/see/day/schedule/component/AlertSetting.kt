@@ -24,13 +24,16 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.gray70
 import see.day.schedule.R
 import see.day.schedule.component.bottomsheet.AlertBottomSheet
+import see.day.schedule.component.bottomsheet.formatTimeToKorean
 import see.day.schedule.component.bottomsheet.getTextRes
 
 @Composable
 internal fun AlertSetting(
     modifier: Modifier = Modifier,
     checkedTime: AlertTime,
-    onCheckedTimeChange: (AlertTime) -> Unit,
+    checkedTimeHour: Int,
+    checkedTimeMinute: Int,
+    onCheckedTimeChange: (AlertTime, Int, Int) -> Unit,
 ) {
     var isShowAlertBottomSheet by remember { mutableStateOf(false) }
 
@@ -40,6 +43,8 @@ internal fun AlertSetting(
                 isShowAlertBottomSheet = false
             },
             checkedTime = checkedTime,
+            notificationHour = checkedTimeHour,
+            notificationMinute = checkedTimeMinute,
             onCheckedChange = onCheckedTimeChange
         )
     }
@@ -65,7 +70,11 @@ internal fun AlertSetting(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = stringResource(checkedTime.getTextRes()),
+            text = if (checkedTime == AlertTime.CUSTOM) {
+                formatTimeToKorean(checkedTimeHour, checkedTimeMinute)
+            } else {
+                stringResource(checkedTime.getTextRes())
+            },
             style = MaterialTheme.typography.labelSmall.copy(
                 color = gray70
             )

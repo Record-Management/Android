@@ -62,6 +62,8 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
     var endDate by remember { mutableStateOf(LocalDate.now()) }
 
     var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
+    var checkedTimeHour by remember { mutableStateOf(9) }
+    var checkedTimeMinute by remember { mutableStateOf(0) }
 
     var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
     var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
@@ -79,6 +81,8 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
         startDate = startDate,
         endDate = endDate,
         checkedTime = checkedTime,
+        checkedTimeHour = checkedTimeHour,
+        checkedTimeMinute = checkedTimeMinute,
         repeatTime = checkedRepeatTime,
         repeatEndTime = checkedRepeatEndTime,
         locationText = locationText,
@@ -88,7 +92,11 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
         onScheduleTitleChange = { scheduleTitle = it },
         onStartDateChange = { startDate = it },
         onEndDateChange = { endDate = it },
-        onCheckedTimeChange = { checkedTime = it },
+        onCheckedTimeChange = { newCheckedTime, newHour, newMinute ->
+            checkedTime = newCheckedTime
+            checkedTimeHour = newHour
+            checkedTimeMinute = newMinute
+        },
         onRepeatTimeChange = { repeatTime, repeatEndTime ->
             checkedRepeatTime = repeatTime
             checkedRepeatEndTime = repeatEndTime
@@ -107,6 +115,8 @@ internal fun ScheduleDetailScreen(
     startDate: LocalDate,
     endDate: LocalDate,
     checkedTime: AlertTime,
+    checkedTimeHour: Int,
+    checkedTimeMinute: Int,
     repeatTime: RepeatTime,
     repeatEndTime: RepeatEndTime?,
     locationText: String,
@@ -116,7 +126,7 @@ internal fun ScheduleDetailScreen(
     onScheduleTitleChange: (String) -> Unit,
     onStartDateChange: (LocalDate) -> Unit,
     onEndDateChange: (LocalDate) -> Unit,
-    onCheckedTimeChange: (AlertTime) -> Unit,
+    onCheckedTimeChange: (AlertTime, Int, Int) -> Unit,
     onRepeatTimeChange: (RepeatTime, RepeatEndTime?) -> Unit,
     onLocationChange: (String) -> Unit,
     onColorChange: (Color) -> Unit,
@@ -171,6 +181,8 @@ internal fun ScheduleDetailScreen(
             AlertSetting(
                 modifier = Modifier.padding(top = 16.dp),
                 checkedTime = checkedTime,
+                checkedTimeHour = checkedTimeHour,
+                checkedTimeMinute = checkedTimeMinute,
                 onCheckedTimeChange = onCheckedTimeChange
             )
             RepeatSetting(
