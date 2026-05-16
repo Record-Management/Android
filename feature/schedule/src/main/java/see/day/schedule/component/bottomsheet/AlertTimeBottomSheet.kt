@@ -49,7 +49,7 @@ internal fun AlertBottomSheet(
     onDismiss: () -> Unit,
     onCheckedChange: (AlertTime) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = { false })
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
     var bottomSheetCheckedTime by remember { mutableStateOf(checkedTime) }
     val dismissBottomSheet: (isChanged: Boolean) -> Unit = { shouldApplyChange ->
@@ -70,6 +70,7 @@ internal fun AlertBottomSheet(
             onDismissRequest = { dismissBottomSheet(false) },
             dragHandle = {},
             containerColor = Color.White,
+            sheetGesturesEnabled = false,
         ) {
             Column(
                 modifier = Modifier
