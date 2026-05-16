@@ -24,6 +24,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -70,9 +71,12 @@ internal fun RepeatTimeBottomSheet(
     var bottomSheetCheckedRepeat by remember { mutableStateOf(repeatTime) }
     var bottomSheetRepeatEndTime by remember { mutableStateOf(repeatEndTime) }
     var timeSpinnerDisplayed by remember { mutableStateOf(false) }
-    val dismissBottomSheet: () -> Unit = {
+    val dismissBottomSheet: (isChanged: Boolean) -> Unit = { shouldApplyChange ->
         coroutineScope.launch {
             sheetState.hide()
+            if (shouldApplyChange) {
+                onCheckedChange(bottomSheetCheckedRepeat, bottomSheetRepeatEndTime)
+            }
             onDismiss()
         }
     }
@@ -82,9 +86,10 @@ internal fun RepeatTimeBottomSheet(
     ) {
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = dismissBottomSheet,
+            onDismissRequest = { dismissBottomSheet(false) },
             dragHandle = {},
             containerColor = Color.White,
+            sheetGesturesEnabled = false,
         ) {
             Column(
                 modifier = Modifier
@@ -104,7 +109,7 @@ internal fun RepeatTimeBottomSheet(
                         tint = gray100,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { dismissBottomSheet() },
+                            .clickable { dismissBottomSheet(false) },
                     )
 
                     Text(
@@ -113,8 +118,7 @@ internal fun RepeatTimeBottomSheet(
                     )
                     Text(
                         modifier = Modifier.clickable {
-                            onCheckedChange(bottomSheetCheckedRepeat, bottomSheetRepeatEndTime)
-                            dismissBottomSheet()
+                            dismissBottomSheet(true)
                         },
                         text = stringResource(R.string.complete),
                         style = Typography.titleSmall
@@ -239,7 +243,9 @@ internal fun RepeatTimeBottomSheet(
                                         horizontalArrangement = Arrangement.End
                                     ) {
                                         Text(
-                                            modifier = Modifier.padding(top = 15.dp, end = 16.dp, bottom = 16.dp).clickable { timeSpinnerDisplayed = false },
+                                            modifier = Modifier
+                                                .padding(top = 15.dp, end = 16.dp, bottom = 16.dp)
+                                                .clickable { timeSpinnerDisplayed = false },
                                             text = stringResource(R.string.complete),
                                             style = MaterialTheme.typography.titleSmall,
                                         )
@@ -361,5 +367,7 @@ data class RepeatEndTime(
     val year: Int,
     val month: Int,
     val dayOfMonth: Int,
-    val dateStr: String = "${year}년 ${month}월 ${dayOfMonth}일",
-)
+) {
+    val dateStr: String
+        get() = "${year}년 ${month}월 ${dayOfMonth}일"
+}
