@@ -1,6 +1,5 @@
 package see.day.schedule.screen
 
-import AlertTime
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +38,7 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.primaryColor
+import see.day.model.schedule.AlertTime
 import see.day.schedule.R
 import see.day.schedule.component.AlertSetting
 import see.day.schedule.component.CalendarSetting

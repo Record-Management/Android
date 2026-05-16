@@ -1,6 +1,5 @@
 package see.day.schedule.component
 
-import AlertTime
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.gray70
+import see.day.model.schedule.AlertTime
 import see.day.schedule.R
 import see.day.schedule.component.bottomsheet.AlertBottomSheet
 import see.day.schedule.component.bottomsheet.formatTimeToKorean

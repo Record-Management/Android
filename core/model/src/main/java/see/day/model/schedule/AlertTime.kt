@@ -1,3 +1,4 @@
+package see.day.model.schedule
 
 enum class AlertTime {
     NONE,

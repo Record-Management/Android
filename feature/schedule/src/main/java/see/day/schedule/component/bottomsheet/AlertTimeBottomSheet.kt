@@ -1,6 +1,5 @@
 package see.day.schedule.component.bottomsheet
 
-import AlertTime
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -51,6 +50,7 @@ import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray40
+import see.day.model.schedule.AlertTime
 import see.day.schedule.R
 import java.time.LocalTime
 
