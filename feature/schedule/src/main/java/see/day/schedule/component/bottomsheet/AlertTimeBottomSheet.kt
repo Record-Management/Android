@@ -339,7 +339,6 @@ fun AlertTime.getTextRes(): Int {
  * @param minute 0-59 사이의 분 (기본값 0)
  * @return "오전 03:00" 또는 "오후 09:30" 형식의 문자열
  */
-@SuppressLint("DefaultLocale")
 fun formatTimeToKorean(hour: Int, minute: Int = 0): String {
     require(hour in 0..23) { "Hour must be between 0 and 23" }
     require(minute in 0..59) { "Minute must be between 0 and 59" }
@@ -351,5 +350,5 @@ fun formatTimeToKorean(hour: Int, minute: Int = 0): String {
         else -> hour - 12
     }
 
-    return String.format("%s %02d:%02d", period, displayHour, minute)
+    return String.format(java.util.Locale.KOREAN, "%s %02d:%02d", period, displayHour, minute)
 }
