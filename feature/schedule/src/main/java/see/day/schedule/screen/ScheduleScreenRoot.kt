@@ -39,6 +39,7 @@ import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.primaryColor
 import see.day.model.schedule.AlertTime
+import see.day.model.schedule.RepeatTime
 import see.day.schedule.R
 import see.day.schedule.component.AlertSetting
 import see.day.schedule.component.CalendarSetting
@@ -47,7 +48,6 @@ import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.MemoSetting
 import see.day.schedule.component.bottomsheet.RepeatEndTime
 import see.day.schedule.component.RepeatSetting
-import see.day.schedule.component.bottomsheet.RepeatTime
 import see.day.schedule.component.ScheduleTopBar
 import see.day.ui.button.CompleteButton
 import timber.log.Timber

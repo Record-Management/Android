@@ -37,20 +37,20 @@ import see.day.designsystem.theme.Typography
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.primaryColor
+import see.day.model.schedule.SchedulePaletteColor
 import see.day.schedule.R
 
-internal enum class SchedulePaletteColor(
-    val colorName: String,
-    val color: Color,
-) {
-    Red("red", Color(0xFFFF3635)),
-    Orange("orange", Color(0xFFFF9528)),
-    Yellow("yellow", Color(0xFFFFFC3A)),
-    Green("green", Color(0xFF26D552)),
-    Blue("blue", Color(0xFF2D69E1)),
-    Indigo("indigo", Color(0xFF362C9B)),
-    Magenta("magenta", Color(0xFFF304F7)),
-    LightGray("light_gray", Color(0xFFE9E9E9)),
+internal fun SchedulePaletteColor.toColor(): Color {
+    return when (this) {
+        SchedulePaletteColor.RED -> Color(0xFFFF3635)
+        SchedulePaletteColor.ORANGE -> Color(0xFFFF9528)
+        SchedulePaletteColor.YELLOW -> Color(0xFFFFFC3A)
+        SchedulePaletteColor.GREEN -> Color(0xFF26D552)
+        SchedulePaletteColor.BLUE -> Color(0xFF2D69E1)
+        SchedulePaletteColor.INDIGO -> Color(0xFF362C9B)
+        SchedulePaletteColor.PINK -> Color(0xFFF304F7)
+        SchedulePaletteColor.GRAY -> Color(0xFFE9E9E9)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -154,13 +154,13 @@ internal fun ColorPaletteBottomSheet(
                                             modifier = Modifier
                                                 .size(40.dp)
                                                 .background(
-                                                    color = paletteColor.color,
+                                                    color = paletteColor.toColor(),
                                                     shape = CircleShape
                                                 )
-                                                .clickable { currentColor = paletteColor.color },
+                                                .clickable { currentColor = paletteColor.toColor() },
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            if (currentColor == paletteColor.color) {
+                                            if (currentColor == paletteColor.toColor()) {
                                                 Icon(
                                                     painter = painterResource(R.drawable.ic_checked),
                                                     contentDescription = "체크 아이콘",

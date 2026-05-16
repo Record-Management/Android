@@ -21,10 +21,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.gray70
+import see.day.model.schedule.RepeatTime
 import see.day.schedule.R
 import see.day.schedule.component.bottomsheet.RepeatEndTime
-import see.day.schedule.component.bottomsheet.RepeatTime
 import see.day.schedule.component.bottomsheet.RepeatTimeBottomSheet
+import see.day.schedule.component.bottomsheet.toTextRes
 import java.time.LocalDate
 
 @Composable
@@ -69,7 +70,7 @@ internal fun RepeatSetting(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = stringResource(repeatTime.textRes) + if (repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
+            text = stringResource(repeatTime.toTextRes()) + if (repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
             style = MaterialTheme.typography.labelSmall.copy(
                 color = gray70
             )

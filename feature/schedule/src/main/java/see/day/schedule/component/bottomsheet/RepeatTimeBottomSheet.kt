@@ -51,10 +51,21 @@ import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray40
+import see.day.model.schedule.RepeatTime
 import see.day.schedule.R
 import see.day.ui.picker.WheelDatePicker
 import see.day.ui.picker.WheelPickerDefaults
 import java.time.LocalDate
+
+internal fun RepeatTime.toTextRes(): Int {
+    return when (this) {
+        RepeatTime.NO -> R.string.no_repeat
+        RepeatTime.DAILY -> R.string.day_repeat
+        RepeatTime.WEEKLY -> R.string.week_repeat
+        RepeatTime.MONTHLY -> R.string.month_repeat
+        RepeatTime.YEARLY -> R.string.year_repeat
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -281,7 +292,7 @@ private fun RepeatText(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(time.textRes),
+                text = stringResource(time.toTextRes()),
                 style = Typography.displayMedium,
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -324,7 +335,7 @@ private fun RepeatTimeBottomSheetPreview() {
                 style = Typography.displayMedium,
             )
             Text(
-                text = stringResource(id = checkedTime.textRes),
+                text = stringResource(id = checkedTime.toTextRes()),
                 style = Typography.displayMedium,
             )
             Text(
@@ -350,17 +361,6 @@ private fun RepeatTimeBottomSheetPreview() {
             )
         }
     }
-}
-
-// 이것도 텍스트를 동일하게 사용해야함
-// 반복 종료일 설정은 따로 두도록 해야함
-
-enum class RepeatTime(val textRes: Int) {
-    NO(R.string.no_repeat),
-    DAILY(R.string.day_repeat),
-    WEEKLY(R.string.week_repeat),
-    MONTHLY(R.string.month_repeat),
-    YEARLY(R.string.year_repeat)
 }
 
 data class RepeatEndTime(
