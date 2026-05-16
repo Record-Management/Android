@@ -36,5 +36,7 @@ dependencies {
     implementation(libs.coil3.coil.network.okttp)
     implementation(libs.coil3.coil.compose)
 
+    implementation(libs.androidx.material.icons.extended)
+
     implementation("dev.chrisbanes.snapper:snapper:0.3.0")
 }
