@@ -16,6 +16,7 @@ import see.day.domain.repository.LoginRepository
 import see.day.domain.repository.NotificationRepository
 import see.day.domain.repository.PhotoRepository
 import see.day.domain.repository.RecordRepository
+import see.day.domain.repository.ScheduleRepository
 import see.day.domain.repository.UserRepository
 import see.day.network.fcm.FcmTokenProvider
 import see.day.network.fcm.FcmTokenProviderImpl
@@ -29,6 +30,7 @@ import see.day.repository.LoginRepositoryImpl
 import see.day.repository.NotificationRepositoryImpl
 import see.day.repository.PhotoRepositoryImpl
 import see.day.repository.RecordRepositoryImpl
+import see.day.repository.ScheduleRepositoryImpl
 import see.day.repository.UserRepositoryImpl
 
 @Module
@@ -73,4 +75,7 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsGoalRepository(goalRepositoryImpl: GoalRepositoryImpl) : GoalRepository
+
+    @Binds
+    abstract fun bindsScheduleRepository(scheduleRepositoryImpl: ScheduleRepositoryImpl) : ScheduleRepository
 }

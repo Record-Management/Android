@@ -24,6 +24,7 @@ import see.day.network.HabitRecordService
 import see.day.network.NotificationService
 import see.day.network.PhotoService
 import see.day.network.RecordService
+import see.day.network.ScheduleService
 import see.day.network.UserService
 
 @Module
@@ -180,5 +181,11 @@ class ApiModule {
     @Singleton
     fun provideGoalService(@Main retrofit: Retrofit) : GoalService {
         return retrofit.create(GoalService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideScheduleService(@Main retrofit: Retrofit) : ScheduleService {
+        return retrofit.create(ScheduleService::class.java)
     }
 }
