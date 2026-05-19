@@ -1,6 +1,7 @@
 package see.day.network.decoder
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -19,15 +20,21 @@ object LocalDateSerializer : KSerializer<LocalDate> {
 
     override fun deserialize(decoder: Decoder): LocalDate {
         val jsonDecoder = decoder as? JsonDecoder
-        return when (val element = jsonDecoder?.decodeJsonElement()) {
+            ?: return LocalDate.parse(decoder.decodeString())
+
+        return when (val element = jsonDecoder.decodeJsonElement()) {
             is JsonPrimitive -> LocalDate.parse(element.content)
             is JsonArray -> {
+                if (element.size != 3) {
+                    throw SerializationException("LocalDate array must contain exactly 3 elements [year, month, day]")
+                }
                 val year = element[0].jsonPrimitive.int
                 val month = element[1].jsonPrimitive.int
                 val day = element[2].jsonPrimitive.int
                 LocalDate.of(year, month, day)
             }
-            else -> LocalDate.parse(decoder.decodeString())
+
+            else -> throw SerializationException("Unsupported JSON type for LocalDate: ${element::class.simpleName}")
         }
     }
 
