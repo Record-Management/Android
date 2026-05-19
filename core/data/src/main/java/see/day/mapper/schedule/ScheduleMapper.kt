@@ -16,8 +16,8 @@ fun ScheduleInput.toDto(): ScheduleInputRequest {
         notificationCustomMinutes = if(notificationType == AlertTime.CUSTOM) notificationCustomMinutes else null,
         repeatType = repeatType.name,
         repeatEndsOn = if(repeatType != RepeatTime.NONE) repeatEndsOn?.formatIsoDate() else null,
-        location = location.ifEmpty { null },
+        location = location.trim().ifEmpty { null },
         color = color.name,
-        memo = memo.ifEmpty { null },
+        memo = memo.trim().ifEmpty { null },
     )
 }
