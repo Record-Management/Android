@@ -65,7 +65,7 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
     var checkedTimeHour by remember { mutableStateOf(9) }
     var checkedTimeMinute by remember { mutableStateOf(0) }
 
-    var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NO) }
+    var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NONE) }
     var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
 
     var locationText by remember { mutableStateOf("") }

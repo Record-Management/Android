@@ -24,7 +24,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -59,7 +58,7 @@ import java.time.LocalDate
 
 internal fun RepeatTime.toTextRes(): Int {
     return when (this) {
-        RepeatTime.NO -> R.string.no_repeat
+        RepeatTime.NONE -> R.string.no_repeat
         RepeatTime.DAILY -> R.string.day_repeat
         RepeatTime.WEEKLY -> R.string.week_repeat
         RepeatTime.MONTHLY -> R.string.month_repeat
@@ -157,7 +156,7 @@ internal fun RepeatTimeBottomSheet(
                                 time = repeatTime,
                                 onCheckedChange = { selectedTime ->
                                     bottomSheetCheckedRepeat = selectedTime
-                                    if (selectedTime == RepeatTime.NO) {
+                                    if (selectedTime == RepeatTime.NONE) {
                                         bottomSheetRepeatEndTime = null
                                     }
                                 }
@@ -172,7 +171,7 @@ internal fun RepeatTimeBottomSheet(
                     }
                     // 반복 종료일 설정
                     AnimatedVisibility(
-                        visible = bottomSheetCheckedRepeat != RepeatTime.NO,
+                        visible = bottomSheetCheckedRepeat != RepeatTime.NONE,
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {
@@ -317,7 +316,7 @@ private fun RepeatText(
 @Preview
 @Composable
 private fun RepeatTimeBottomSheetPreview() {
-    var checkedTime by remember { mutableStateOf(RepeatTime.NO) }
+    var checkedTime by remember { mutableStateOf(RepeatTime.NONE) }
     var checkedEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
     var isBottomSheetOpen by remember { mutableStateOf(false) }
 
