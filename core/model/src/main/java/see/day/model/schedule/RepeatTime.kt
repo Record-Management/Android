@@ -1,7 +1,7 @@
 package see.day.model.schedule
 
 enum class RepeatTime {
-    NO,
+    NONE,
     DAILY,
     WEEKLY,
     MONTHLY,
