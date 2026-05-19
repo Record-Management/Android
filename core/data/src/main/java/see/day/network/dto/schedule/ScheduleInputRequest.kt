@@ -12,7 +12,7 @@ data class ScheduleInputRequest(
     val notificationCustomMinutes: Int?,
     val repeatType: String,
     val repeatEndsOn: String?,
-    val location: String,
+    val location: String? = null,
     val color: String,
-    val memo: String,
+    val memo: String? = null,
 )

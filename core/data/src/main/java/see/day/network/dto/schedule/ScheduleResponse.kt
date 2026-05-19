@@ -21,7 +21,7 @@ data class ScheduleResponse(
     val repeatType: RepeatTime,
     @Serializable(with = LocalDateSerializer::class)
     val repeatEndsOn: LocalDate? = null,
-    val location: String,
+    val location: String? = null,
     val color: SchedulePaletteColor,
-    val memo: String,
+    val memo: String? = null,
 )
