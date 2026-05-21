@@ -51,3 +51,32 @@ const val postScheduleBadRequestResponse = """
   "data": null
 }
 """
+
+const val getScheduleFullFieldSuccessResponse = """
+{
+  "scheduleRecordId": "schedule-record-id",
+  "userId": "user-id",
+  "title": "매장 점검",
+  "startDate": [2026, 3, 21],
+  "endDate": [2026, 3, 21],
+  "notificationType": "CUSTOM",
+  "notificationCustomHours": 9,
+  "notificationCustomMinutes": 30,
+  "repeatType": "NONE",
+  "repeatEndsOn": [2026, 8, 10],
+  "location": "도쿄점",
+  "color": "ORANGE",
+  "memo": "오픈 전 냉장고 점검",
+  "createdAt": "2026-03-20T10:00:00",
+  "updatedAt": "2026-03-20T10:30:00"
+}
+"""
+
+const val getScheduleBadRequestResponse = """
+{
+  "statusCode": 400,
+  "code": "C400",
+  "message": "존재하지 않는 일정입니다.",
+  "data": null
+}
+"""

@@ -105,6 +105,81 @@ class ScheduleRepositoryTest {
         }
     }
 
+    // 일정 조회에 성공하면 응답으로 받은 ScheduleResponse를 ScheduleDetail 모델로 변환해서 반환한다.
+    @Test
+    fun givenScheduleRecordId_whenGetSchedule_thenReturnsScheduleDetail() {
+        runTest {
+            // given
+            val scheduleRecordId = "schedule-record-id"
+            val scheduleResponse = ScheduleResponse(
+                scheduleRecordId = scheduleRecordId,
+                title = "매장 점검",
+                startDate = LocalDate.of(2026, 3, 21),
+                endDate = LocalDate.of(2026, 3, 21),
+                notificationType = AlertTime.CUSTOM,
+                notificationCustomHours = 9,
+                notificationCustomMinutes = 30,
+                repeatType = RepeatTime.NONE,
+                repeatEndsOn = LocalDate.of(2026, 8, 10),
+                location = "도쿄점",
+                color = SchedulePaletteColor.ORANGE,
+                memo = "오픈 전 냉장고 점검"
+            )
+
+            whenever(scheduleService.getSchedule(scheduleRecordId)).thenReturn(scheduleResponse)
+
+            // when
+            val result = sut.getSchedule(scheduleRecordId).getOrThrow()
+
+            // then
+            assertEquals(scheduleRecordId, result.scheduleRecordId)
+            assertEquals("매장 점검", result.title)
+            assertEquals(LocalDate.of(2026, 3, 21), result.startDate)
+            assertEquals(LocalDate.of(2026, 3, 21), result.endDate)
+            assertEquals(AlertTime.CUSTOM, result.alertType)
+            assertEquals(9, result.notificationCustomHours)
+            assertEquals(30, result.notificationCustomMinutes)
+            assertEquals(RepeatTime.NONE, result.repeatType)
+            assertEquals(LocalDate.of(2026, 8, 10), result.repeatEndsOn)
+            assertEquals("도쿄점", result.location)
+            assertEquals(SchedulePaletteColor.ORANGE, result.color)
+            assertEquals("오픈 전 냉장고 점검", result.memo)
+            verify(scheduleService).getSchedule(scheduleRecordId)
+        }
+    }
+
+    // 일정 조회 중 400 에러가 발생하면 BadRequestException으로 변환하고 에러 메시지를 유지한다.
+    @Test
+    fun givenInvalidScheduleRecordId_whenGetSchedule_thenThrowsBadRequestException() {
+        runTest {
+            // given
+            val scheduleRecordId = "invalid-schedule-record-id"
+            val errorMessage = "존재하지 않는 일정입니다."
+
+            whenever(scheduleService.getSchedule(scheduleRecordId)).thenThrow(
+                HttpException(
+                    Response.error<Any?>(
+                        400,
+                        toResponseBody<Unit?>(CommonResponse(400, "C400", errorMessage, null))
+                    )
+                )
+            )
+
+            // when
+            assertThrows(BadRequestException::class.java) {
+                runBlocking {
+                    sut.getSchedule(scheduleRecordId)
+                        .onFailure {
+                            assertEquals(errorMessage, it.message)
+                        }.getOrThrow()
+                }
+            }
+
+            // then
+            verify(scheduleService).getSchedule(scheduleRecordId)
+        }
+    }
+
     private fun createScheduleInput(
         title: String = "매장 점검",
         notificationType: AlertTime = AlertTime.ONE_DAY_BEFORE,
