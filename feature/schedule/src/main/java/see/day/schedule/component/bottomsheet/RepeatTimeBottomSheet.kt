@@ -55,6 +55,7 @@ import see.day.schedule.R
 import see.day.ui.picker.WheelDatePicker
 import see.day.ui.picker.WheelPickerDefaults
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 internal fun RepeatTime.toTextRes(): Int {
     return when (this) {
@@ -66,15 +67,19 @@ internal fun RepeatTime.toTextRes(): Int {
     }
 }
 
+internal fun LocalDate.toKoreanDateText(): String {
+    return format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"))
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RepeatTimeBottomSheet(
     modifier: Modifier = Modifier,
     repeatTime: RepeatTime,
-    repeatEndTime: RepeatEndTime?,
+    repeatEndTime: LocalDate?,
     startDate: LocalDate,
     onDismiss: () -> Unit,
-    onCheckedChange: (RepeatTime, RepeatEndTime?) -> Unit,
+    onCheckedChange: (RepeatTime, LocalDate?) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -200,7 +205,7 @@ internal fun RepeatTimeBottomSheet(
                                     onCheckedChange = { isChecked ->
                                         bottomSheetRepeatEndTime = if (isChecked) {
                                             timeSpinnerDisplayed = true
-                                            RepeatEndTime(startDate.year, startDate.monthValue, startDate.dayOfMonth)
+                                            startDate
                                         } else {
                                             null
                                         }
@@ -227,7 +232,7 @@ internal fun RepeatTimeBottomSheet(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
-                                        text = bottomSheetRepeatEndTime?.dateStr ?: "",
+                                        text = bottomSheetRepeatEndTime?.toKoreanDateText() ?: "",
                                         style = MaterialTheme.typography.titleSmall,
                                         textAlign = TextAlign.Center
                                     )
@@ -242,11 +247,11 @@ internal fun RepeatTimeBottomSheet(
                                             shape = RoundedCornerShape(0),
                                             border = BorderStroke(0.dp, gray40)
                                         ),
-                                        startDate = LocalDate.of(bottomSheetRepeatEndTime?.year ?: 2024, bottomSheetRepeatEndTime?.month ?: 1, bottomSheetRepeatEndTime?.dayOfMonth ?: 1),
+                                        startDate = bottomSheetRepeatEndTime ?: LocalDate.now(),
                                         textStyle = MaterialTheme.typography.titleMedium,
                                         textColor = gray100
                                     ) { snappedDate ->
-                                        bottomSheetRepeatEndTime = RepeatEndTime(snappedDate.year, snappedDate.monthValue, snappedDate.dayOfMonth)
+                                        bottomSheetRepeatEndTime = snappedDate
                                     }
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
@@ -317,7 +322,7 @@ private fun RepeatText(
 @Composable
 private fun RepeatTimeBottomSheetPreview() {
     var checkedTime by remember { mutableStateOf(RepeatTime.NONE) }
-    var checkedEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
+    var checkedEndTime by remember { mutableStateOf<LocalDate?>(null) }
     var isBottomSheetOpen by remember { mutableStateOf(false) }
 
     SeeDayTheme {
@@ -342,7 +347,7 @@ private fun RepeatTimeBottomSheetPreview() {
                 style = Typography.displayMedium,
             )
             Text(
-                text = checkedEndTime?.dateStr ?: "끝나는 시간 지정 안함",
+                text = checkedEndTime?.toKoreanDateText() ?: "끝나는 시간 지정 안함",
                 style = Typography.displayMedium,
             )
         }
@@ -360,13 +365,4 @@ private fun RepeatTimeBottomSheetPreview() {
             )
         }
     }
-}
-
-data class RepeatEndTime(
-    val year: Int,
-    val month: Int,
-    val dayOfMonth: Int,
-) {
-    val dateStr: String
-        get() = "${year}년 ${month}월 ${dayOfMonth}일"
 }

@@ -46,7 +46,6 @@ import see.day.schedule.component.CalendarSetting
 import see.day.schedule.component.ColorSetting
 import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.MemoSetting
-import see.day.schedule.component.bottomsheet.RepeatEndTime
 import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.ScheduleTopBar
 import see.day.ui.button.CompleteButton
@@ -66,7 +65,7 @@ fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Un
     var checkedTimeMinute by remember { mutableStateOf(0) }
 
     var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NONE) }
-    var checkedRepeatEndTime by remember { mutableStateOf<RepeatEndTime?>(null) }
+    var checkedRepeatEndTime by remember { mutableStateOf<LocalDate?>(null) }
 
     var locationText by remember { mutableStateOf("") }
 
@@ -118,7 +117,7 @@ internal fun ScheduleDetailScreen(
     checkedTimeHour: Int,
     checkedTimeMinute: Int,
     repeatTime: RepeatTime,
-    repeatEndTime: RepeatEndTime?,
+    repeatEndTime: LocalDate?,
     locationText: String,
     memoText: String,
     onBack: () -> Unit,
@@ -127,7 +126,7 @@ internal fun ScheduleDetailScreen(
     onStartDateChange: (LocalDate) -> Unit,
     onEndDateChange: (LocalDate) -> Unit,
     onCheckedTimeChange: (AlertTime, Int, Int) -> Unit,
-    onRepeatTimeChange: (RepeatTime, RepeatEndTime?) -> Unit,
+    onRepeatTimeChange: (RepeatTime, LocalDate?) -> Unit,
     onLocationChange: (String) -> Unit,
     onColorChange: (Color) -> Unit,
     onMemoChange: (String) -> Unit,
