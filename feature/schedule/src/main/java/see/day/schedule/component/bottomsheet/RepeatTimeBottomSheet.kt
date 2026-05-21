@@ -60,10 +60,10 @@ import java.time.format.DateTimeFormatter
 internal fun RepeatTime.toTextRes(): Int {
     return when (this) {
         RepeatTime.NONE -> R.string.no_repeat
-        RepeatTime.DAILY -> R.string.day_repeat
-        RepeatTime.WEEKLY -> R.string.week_repeat
-        RepeatTime.MONTHLY -> R.string.month_repeat
-        RepeatTime.YEARLY -> R.string.year_repeat
+        RepeatTime.DAY -> R.string.day_repeat
+        RepeatTime.WEEK -> R.string.week_repeat
+        RepeatTime.MONTH -> R.string.month_repeat
+        RepeatTime.YEAR -> R.string.year_repeat
     }
 }
 

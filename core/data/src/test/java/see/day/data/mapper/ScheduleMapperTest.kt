@@ -23,7 +23,7 @@ class ScheduleMapperTest {
             notificationType = AlertTime.CUSTOM,
             notificationCustomHours = 9,
             notificationCustomMinutes = 30,
-            repeatType = RepeatTime.WEEKLY,
+            repeatType = RepeatTime.WEEK,
             repeatEndsOn = LocalDate.of(2026, 8, 10),
             location = "도쿄점",
             color = SchedulePaletteColor.ORANGE,
