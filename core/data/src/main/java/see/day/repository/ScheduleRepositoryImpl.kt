@@ -24,4 +24,10 @@ class ScheduleRepositoryImpl @Inject constructor(
             scheduleService.getSchedule(scheduleId).toModel()
         }
     }
+
+    override suspend fun deleteSchedule(scheduleId: String): Result<Unit> {
+        return createResult {
+            scheduleService.deleteSchedule(scheduleId)
+        }
+    }
 }

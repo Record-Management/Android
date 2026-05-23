@@ -59,6 +59,7 @@ import see.day.schedule.state.ScheduleDetailUiState
 import see.day.schedule.state.SchedulePostType
 import see.day.schedule.viewModel.ScheduleDetailViewModel
 import see.day.ui.button.CompleteButton
+import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.RecordDetailBackDialog
 import see.day.ui.topbar.DetailRecordTopBar
 import see.day.ui.topbar.EditMode
@@ -153,6 +154,20 @@ internal fun ScheduleDetailScreen(
     onAction: (ScheduleDetailUiEvent) -> Unit,
     onClickBackButton: () -> Unit,
 ) {
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        ConfirmDialog(
+            body = see.day.ui.R.string.record_delete_body,
+            onDismiss = { openDeleteDialog = false },
+            onClickConfirmButton = {
+                val editMode = uiState.editMode
+                if (editMode is ScheduleDetailUiState.EditMode.Edit) {
+                    onAction(ScheduleDetailUiEvent.OnDeleteSchedule)
+                }
+            }
+        )
+    }
+
     Scaffold(
         modifier = modifier
             .background(Color.White)
@@ -168,7 +183,7 @@ internal fun ScheduleDetailScreen(
                 },
                 onClickCloseButton = onClickBackButton,
                 onClickDeleteButton = {
-                    // TODO 삭제하기 api 추가후 수정
+                    openDeleteDialog = true
                 }
             )
         },

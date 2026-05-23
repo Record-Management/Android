@@ -15,4 +15,5 @@ sealed interface ScheduleDetailUiEvent {
     data class OnColorChanged(val color: SchedulePaletteColor) : ScheduleDetailUiEvent
     data class OnMemoChanged(val memo: String) : ScheduleDetailUiEvent
     data object OnSaveSchedule: ScheduleDetailUiEvent
+    data object OnDeleteSchedule: ScheduleDetailUiEvent
 }

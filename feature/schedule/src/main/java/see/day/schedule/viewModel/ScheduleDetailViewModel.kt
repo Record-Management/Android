@@ -97,6 +97,9 @@ class ScheduleDetailViewModel @Inject constructor(
             is ScheduleDetailUiEvent.OnSaveSchedule -> {
                 onSaveSchedule()
             }
+            is ScheduleDetailUiEvent.OnDeleteSchedule -> {
+                onDeleteSchedule()
+            }
         }
     }
 
@@ -197,6 +200,17 @@ class ScheduleDetailViewModel @Inject constructor(
             )
         ).onSuccess {
             _uiEffect.emit(ScheduleDetailUiEffect.NavigateToHome(true))
+        }
+    }
+
+    private fun onDeleteSchedule() {
+        viewModelScope.launch {
+            val editMode = uiState.value.editMode
+            if (editMode is ScheduleDetailUiState.EditMode.Edit) {
+                scheduleRepository.deleteSchedule(editMode.scheduleId).onSuccess {
+                    _uiEffect.emit(ScheduleDetailUiEffect.NavigateToHome(true))
+                }
+            }
         }
     }
 }
