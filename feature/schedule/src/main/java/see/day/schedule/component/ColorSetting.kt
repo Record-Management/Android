@@ -22,14 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import see.day.model.schedule.SchedulePaletteColor
 import see.day.schedule.R
 import see.day.schedule.component.bottomsheet.ColorPaletteBottomSheet
+import see.day.schedule.component.bottomsheet.toColor
 
 @Composable
 internal fun ColorSetting(
     modifier: Modifier = Modifier,
-    selectedColor: Color,
-    onColorChange: (Color) -> Unit,
+    selectedColor: SchedulePaletteColor,
+    onColorChange: (SchedulePaletteColor) -> Unit,
 ) {
     var isShowColorBottomSheet by remember { mutableStateOf(false) }
 
@@ -65,7 +67,7 @@ internal fun ColorSetting(
         Box(
             modifier = Modifier
                 .size(20.dp)
-                .background(selectedColor, shape = CircleShape),
+                .background(selectedColor.toColor(), shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
         }

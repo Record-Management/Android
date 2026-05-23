@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 sealed interface ScheduleRoute {
 
     @Serializable
-    data object Schedule : ScheduleRoute
+    data object ScheduleWrite : ScheduleRoute
 }

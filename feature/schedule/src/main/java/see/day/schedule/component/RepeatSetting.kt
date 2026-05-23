@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import see.day.designsystem.theme.gray70
 import see.day.model.schedule.RepeatTime
 import see.day.schedule.R
-import see.day.schedule.component.bottomsheet.RepeatEndTime
 import see.day.schedule.component.bottomsheet.RepeatTimeBottomSheet
+import see.day.schedule.component.bottomsheet.toKoreanDateText
 import see.day.schedule.component.bottomsheet.toTextRes
 import java.time.LocalDate
 
@@ -33,8 +33,8 @@ internal fun RepeatSetting(
     modifier: Modifier = Modifier,
     startDate: LocalDate,
     repeatTime: RepeatTime,
-    repeatEndTime: RepeatEndTime?,
-    onCheckedChange: (RepeatTime, RepeatEndTime?) -> Unit,
+    repeatEndTime: LocalDate?,
+    onCheckedChange: (RepeatTime, LocalDate?) -> Unit,
 ) {
     var isShowRepeatBottomSheet by remember { mutableStateOf(false) }
 
@@ -70,7 +70,7 @@ internal fun RepeatSetting(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = stringResource(repeatTime.toTextRes()) + if (repeatEndTime != null) ", ${repeatEndTime.dateStr} 종료" else "",
+            text = stringResource(repeatTime.toTextRes()) + if (repeatEndTime != null) ", ${repeatEndTime.toKoreanDateText()} 종료" else "",
             style = MaterialTheme.typography.labelSmall.copy(
                 color = gray70
             )

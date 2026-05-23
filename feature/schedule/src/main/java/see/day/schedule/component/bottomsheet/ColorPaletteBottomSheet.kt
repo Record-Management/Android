@@ -57,9 +57,9 @@ internal fun SchedulePaletteColor.toColor(): Color {
 @Composable
 internal fun ColorPaletteBottomSheet(
     modifier: Modifier = Modifier,
-    selectedColor: Color,
+    selectedColor: SchedulePaletteColor,
     onDismiss: () -> Unit,
-    onColorSelected: (Color) -> Unit,
+    onColorSelected: (SchedulePaletteColor) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -157,10 +157,10 @@ internal fun ColorPaletteBottomSheet(
                                                     color = paletteColor.toColor(),
                                                     shape = CircleShape
                                                 )
-                                                .clickable { currentColor = paletteColor.toColor() },
+                                                .clickable { currentColor = paletteColor },
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            if (currentColor == paletteColor.toColor()) {
+                                            if (currentColor == paletteColor) {
                                                 Icon(
                                                     painter = painterResource(R.drawable.ic_checked),
                                                     contentDescription = "체크 아이콘",
@@ -185,7 +185,7 @@ internal fun ColorPaletteBottomSheet(
 @Preview
 @Composable
 private fun ColorPaletteBottomSheetPreview() {
-    var selectedColor by remember { mutableStateOf(primaryColor) }
+    var selectedColor by remember { mutableStateOf(SchedulePaletteColor.ORANGE) }
     var isBottomSheetOpen by remember { mutableStateOf(false) }
 
     SeeDayTheme {
@@ -204,7 +204,7 @@ private fun ColorPaletteBottomSheetPreview() {
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .background(selectedColor, shape = CircleShape),
+                    .background(selectedColor.toColor(), shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
             }
