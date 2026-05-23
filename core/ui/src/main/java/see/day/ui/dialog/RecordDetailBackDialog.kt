@@ -36,14 +36,14 @@ fun RecordDetailBackDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit,
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnBackPress = true,
-            dismissOnClickOutside = true,
+            dismissOnClickOutside = false,
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false
         )
     ) {
         DialogBackground(
             modifier = modifier,
-            onDismiss = onDismiss
+            onDismiss = {}
         ) {
             Box(
                 modifier = Modifier

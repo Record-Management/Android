@@ -71,7 +71,7 @@ internal fun AlertSetting(
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = if (checkedTime == AlertTime.CUSTOM) {
-                formatTimeToKorean(checkedTimeHour, checkedTimeMinute)
+                "시간 설정, " + formatTimeToKorean(checkedTimeHour, checkedTimeMinute)
             } else {
                 stringResource(checkedTime.getTextRes())
             },

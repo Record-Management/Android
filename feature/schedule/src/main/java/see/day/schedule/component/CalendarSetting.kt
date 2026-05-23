@@ -77,9 +77,8 @@ internal fun CalendarSetting(
             isClicked = isShowStartDatePicker,
             isAnyDatePickerOpen = isAnyDatePickerOpen,
             onClickDate = {
-                if (!isShowStartDatePicker) {
-                    isShowStartDatePicker = true
-                }
+                // 자신이 켜져있으면 다시 닫음
+                isShowStartDatePicker = !isShowStartDatePicker
                 if (isShowEndDatePicker) {
                     isShowEndDatePicker = false
                 }
@@ -96,9 +95,8 @@ internal fun CalendarSetting(
             isClicked = isShowEndDatePicker,
             isAnyDatePickerOpen = isAnyDatePickerOpen,
             onClickDate = {
-                if (!isShowEndDatePicker) {
-                    isShowEndDatePicker = true
-                }
+                // 자신이 켜져있으면 다시 닫음
+                isShowEndDatePicker = !isShowEndDatePicker
                 if (isShowStartDatePicker) {
                     isShowStartDatePicker = false
                 }
