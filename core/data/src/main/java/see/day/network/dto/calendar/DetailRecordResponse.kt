@@ -9,6 +9,6 @@ import see.day.network.dto.schedule.DailyScheduleResponse
 data class DailyDetailRecordResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val date: String,
-    val records: List<RecordResponse>,
-    val schedules: List<DailyScheduleResponse>,
+    val records: List<RecordResponse> = listOf(),
+    val schedules: List<DailyScheduleResponse> = listOf(),
 )
