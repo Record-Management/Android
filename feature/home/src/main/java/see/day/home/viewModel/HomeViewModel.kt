@@ -301,7 +301,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onClickDetailRecord(recordType: RecordType, recordId: String) {
+    private fun  onClickDetailRecord(recordType: RecordType, recordId: String) {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.NavigateToDetailRecord(recordType, recordId))
         }
@@ -339,10 +339,10 @@ class HomeViewModel @Inject constructor(
                             _toastMessage.emit("기록이 삭제 되었습니다.")
                         }
                 }
-
-//                RecordType.SCHEDULE -> {
-//
-//                }
+                // TODO 추가
+                RecordType.SCHEDULE -> {
+                    _toastMessage.emit("스케줄 삭제 버튼 $recordId")
+                }
             }
         }
     }
