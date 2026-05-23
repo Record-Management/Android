@@ -190,6 +190,8 @@ class ScheduleDetailViewModel @Inject constructor(
                 color = uiState.value.color,
                 memo = uiState.value.memo
             )
-        )
+        ).onSuccess {
+            _uiEffect.emit(ScheduleDetailUiEffect.NavigateToHome(true))
+        }
     }
 }

@@ -1,5 +1,6 @@
 package see.day.schedule.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,9 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
@@ -48,88 +53,103 @@ import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.MemoSetting
 import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.ScheduleTopBar
+import see.day.schedule.component.bottomsheet.toColor
+import see.day.schedule.state.ScheduleDetailUiEffect
+import see.day.schedule.state.ScheduleDetailUiEvent
+import see.day.schedule.state.ScheduleDetailUiState
+import see.day.schedule.state.SchedulePostType
+import see.day.schedule.viewModel.ScheduleDetailViewModel
 import see.day.ui.button.CompleteButton
-import timber.log.Timber
+import see.day.ui.dialog.RecordDetailBackDialog
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ScheduleDetailScreenRoot(onBack: () -> Unit, onClickPopHome: (Boolean) -> Unit) {
-    var scheduleTitle by remember { mutableStateOf("") }
+fun ScheduleDetailScreenRoot(
+    viewModel: ScheduleDetailViewModel = hiltViewModel(),
+    editType: SchedulePostType,
+    onClickPopHome: (Boolean) -> Unit
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    var startDate by remember { mutableStateOf(LocalDate.now()) }
-    var endDate by remember { mutableStateOf(LocalDate.now()) }
+    LaunchedEffect(editType) {
+        viewModel.fetchData(editType)
+    }
 
-    var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
-    var checkedTimeHour by remember { mutableStateOf(9) }
-    var checkedTimeMinute by remember { mutableStateOf(0) }
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is ScheduleDetailUiEffect.NavigateToHome -> {
+                    onClickPopHome(effect.isUpdated)
+                }
+            }
+        }
+    }
 
-    var checkedRepeatTime by remember { mutableStateOf(RepeatTime.NONE) }
-    var checkedRepeatEndTime by remember { mutableStateOf<LocalDate?>(null) }
+    var openBackDialog by remember { mutableStateOf(false) }
 
-    var locationText by remember { mutableStateOf("") }
+    BackHandler {
+        if (uiState.isEditing()) {
+            openBackDialog = true
+        } else {
+            if (uiState.editMode is ScheduleDetailUiState.EditMode.Create) {
+//                viewModel.writeHabitRecordCancelLog()
+            }
+            onClickPopHome(false)
+        }
+    }
 
-    var checkedColor by remember { mutableStateOf(primaryColor) }
+    if (openBackDialog) {
+        RecordDetailBackDialog(
+            modifier = Modifier,
+            onDismiss = { openBackDialog = false },
+            onBackRecordDetail = {
+                if (uiState.editMode is ScheduleDetailUiState.EditMode.Create) {
+//                    viewModel.writeHabitRecordCancelLog()
+                }
+                onClickPopHome(false)
+            },
+            title = when (uiState.editMode) {
+                is ScheduleDetailUiState.EditMode.Create -> {
+                    see.day.ui.R.string.record_close_dialog_title
+                }
 
-    var memoText by remember { mutableStateOf("") }
+                is ScheduleDetailUiState.EditMode.Edit -> {
+                    see.day.ui.R.string.record_close_detail_dialog_title
+                }
+            },
+            body = when (uiState.editMode) {
+                is ScheduleDetailUiState.EditMode.Create -> {
+                    see.day.ui.R.string.record_close_dialog_body
+                }
+
+                is ScheduleDetailUiState.EditMode.Edit -> {
+                    see.day.ui.R.string.record_close_detail_dialog_body
+                }
+            }
+        )
+    }
 
     ScheduleDetailScreen(
         modifier = Modifier.systemBarsPadding(),
-        scheduleTitle = scheduleTitle,
-        checkedColor = checkedColor,
-        startDate = startDate,
-        endDate = endDate,
-        checkedTime = checkedTime,
-        checkedTimeHour = checkedTimeHour,
-        checkedTimeMinute = checkedTimeMinute,
-        repeatTime = checkedRepeatTime,
-        repeatEndTime = checkedRepeatEndTime,
-        locationText = locationText,
-        memoText = memoText,
-        onBack = onBack,
-        onClickPopHome = onClickPopHome,
-        onScheduleTitleChange = { scheduleTitle = it },
-        onStartDateChange = { startDate = it },
-        onEndDateChange = { endDate = it },
-        onCheckedTimeChange = { newCheckedTime, newHour, newMinute ->
-            checkedTime = newCheckedTime
-            checkedTimeHour = newHour
-            checkedTimeMinute = newMinute
+        uiState = uiState,
+        onAction = viewModel::onAction,
+        onClickBackButton = {
+            if (uiState.isEditing()) {
+                openBackDialog = true
+            } else {
+                onClickPopHome(false)
+            }
         },
-        onRepeatTimeChange = { repeatTime, repeatEndTime ->
-            checkedRepeatTime = repeatTime
-            checkedRepeatEndTime = repeatEndTime
-        },
-        onLocationChange = { locationText = it },
-        onColorChange = { checkedColor = it },
-        onMemoChange = { memoText = it }
     )
 }
 
 @Composable
 internal fun ScheduleDetailScreen(
     modifier: Modifier = Modifier,
-    scheduleTitle: String,
-    checkedColor: Color,
-    startDate: LocalDate,
-    endDate: LocalDate,
-    checkedTime: AlertTime,
-    checkedTimeHour: Int,
-    checkedTimeMinute: Int,
-    repeatTime: RepeatTime,
-    repeatEndTime: LocalDate?,
-    locationText: String,
-    memoText: String,
-    onBack: () -> Unit,
-    onClickPopHome: (Boolean) -> Unit,
-    onScheduleTitleChange: (String) -> Unit,
-    onStartDateChange: (LocalDate) -> Unit,
-    onEndDateChange: (LocalDate) -> Unit,
-    onCheckedTimeChange: (AlertTime, Int, Int) -> Unit,
-    onRepeatTimeChange: (RepeatTime, LocalDate?) -> Unit,
-    onLocationChange: (String) -> Unit,
-    onColorChange: (Color) -> Unit,
-    onMemoChange: (String) -> Unit,
+    uiState: ScheduleDetailUiState,
+    onAction: (ScheduleDetailUiEvent) -> Unit,
+    onClickBackButton: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier
@@ -139,27 +159,17 @@ internal fun ScheduleDetailScreen(
             .imePadding(),
         topBar = {
             ScheduleTopBar(
-                onClickCloseButton = onBack
+                onClickCloseButton = onClickBackButton
             )
         },
         bottomBar = {
             CompleteButton(
                 modifier = Modifier.navigationBarsPadding(),
                 text = stringResource(see.day.ui.R.string.write_record_text),
-                isEnabled = scheduleTitle.isNotBlank(),
+                isEnabled = uiState.canSubmit,
                 onClick = {
-                    Timber.d(
-                        "scheduleTitle: $scheduleTitle\n" +
-                            "checkedColor: $checkedColor\n" +
-                            "startDate: $startDate\n" +
-                            "endDate: $endDate\n" +
-                            "checkedTime: $checkedTime\n" +
-                            "repeatTime: $repeatTime\n" +
-                            "repeatEndTime: $repeatEndTime\n" +
-                            "locationText: $locationText\n" +
-                            "memoText: $memoText\n"
-                    )
-                }
+                    onAction(ScheduleDetailUiEvent.OnSaveSchedule)
+                },
             )
         },
     ) { innerPadding ->
@@ -169,27 +179,36 @@ internal fun ScheduleDetailScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             // 색상하고 일정명 텍스트 필드
-            ScheduleTitle(checkedColor, scheduleTitle, onScheduleTitleChange)
+            ScheduleTitle(
+                checkedColor = uiState.color.toColor(),
+                scheduleTitle = uiState.title,
+                onScheduleTitleChange = {
+                    onAction(ScheduleDetailUiEvent.OnTitleChanged(it))
+                })
             CalendarSetting(
                 modifier = Modifier.padding(top = 24.dp),
-                startDate = startDate,
-                endDate = endDate,
-                setStartDate = onStartDateChange,
-                setEndDate = onEndDateChange,
+                startDate = uiState.startDate,
+                endDate = uiState.endDate,
+                setStartDate = { onAction(ScheduleDetailUiEvent.OnStartDateChanged(it)) },
+                setEndDate = {  onAction(ScheduleDetailUiEvent.OnEndDateChanged(it)) },
             )
             AlertSetting(
                 modifier = Modifier.padding(top = 16.dp),
-                checkedTime = checkedTime,
-                checkedTimeHour = checkedTimeHour,
-                checkedTimeMinute = checkedTimeMinute,
-                onCheckedTimeChange = onCheckedTimeChange
+                checkedTime = uiState.alertType,
+                checkedTimeHour = uiState.notificationCustomHours ?: 9,
+                checkedTimeMinute = uiState.notificationCustomMinutes ?: 0,
+                onCheckedTimeChange = { alertTime, hours, minutes ->
+                    onAction(ScheduleDetailUiEvent.OnAlertTimeChanged(alertTime, hours, minutes))
+                }
             )
             RepeatSetting(
                 modifier = Modifier.padding(top = 16.dp),
-                startDate = startDate,
-                repeatTime = repeatTime,
-                repeatEndTime = repeatEndTime,
-                onCheckedChange = onRepeatTimeChange
+                startDate = uiState.startDate,
+                repeatTime = uiState.repeatType,
+                repeatEndTime = uiState.repeatEndsOn,
+                onCheckedChange = { repeatTime, repeatEndsOn ->
+                    onAction(ScheduleDetailUiEvent.OnRepeatTypeChanged(repeatTime, repeatEndsOn))
+                }
             )
             Spacer(
                 modifier = Modifier
@@ -200,8 +219,8 @@ internal fun ScheduleDetailScreen(
             )
             LocationSetting(
                 modifier = Modifier.padding(top = 10.dp),
-                locationText = locationText,
-                onLocationChange = onLocationChange,
+                locationText = uiState.location,
+                onLocationChange = { onAction(ScheduleDetailUiEvent.OnLocationChanged(it)) },
             )
             Spacer(
                 modifier = Modifier
@@ -212,13 +231,17 @@ internal fun ScheduleDetailScreen(
             )
             ColorSetting(
                 modifier = Modifier.padding(top = 24.dp),
-                selectedColor = checkedColor,
-                onColorChange = onColorChange,
+                selectedColor = uiState.color,
+                onColorChange = {
+                    onAction(ScheduleDetailUiEvent.OnColorChanged(it))
+                },
             )
             MemoSetting(
                 modifier = Modifier.padding(top = 16.dp),
-                text = memoText,
-                onChangedText = onMemoChange,
+                text = uiState.memo,
+                onChangedText = {
+                    onAction(ScheduleDetailUiEvent.OnMemoChanged(it))
+                },
             )
         }
     }
@@ -281,7 +304,7 @@ private fun ScheduleScreenPreview() {
     var checkedTime by remember { mutableStateOf(AlertTime.NONE) }
     SeeDayTheme {
         ScheduleDetailScreenRoot(
-            onBack = {},
+            editType = SchedulePostType.Write,
             onClickPopHome = {}
         )
     }
