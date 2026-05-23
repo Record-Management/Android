@@ -42,7 +42,6 @@ fun DetailRecordTopBar(
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
-                        .padding(start = 16.dp)
                         .size(24.dp)
                         .clickable { onClickCloseButton() },
                     painter = painterResource(R.drawable.ic_arrow_left),

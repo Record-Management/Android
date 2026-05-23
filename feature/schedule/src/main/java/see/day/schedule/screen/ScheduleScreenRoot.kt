@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +42,7 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.primaryColor
+import see.day.model.record.RecordType
 import see.day.model.schedule.AlertTime
 import see.day.model.schedule.RepeatTime
 import see.day.schedule.R
@@ -53,14 +53,17 @@ import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.MemoSetting
 import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.ScheduleTopBar
-import see.day.schedule.component.bottomsheet.toColor
 import see.day.schedule.state.ScheduleDetailUiEffect
 import see.day.schedule.state.ScheduleDetailUiEvent
 import see.day.schedule.state.ScheduleDetailUiState
 import see.day.schedule.state.SchedulePostType
 import see.day.schedule.viewModel.ScheduleDetailViewModel
 import see.day.ui.button.CompleteButton
+import see.day.ui.dialog.ConfirmDialog
 import see.day.ui.dialog.RecordDetailBackDialog
+import see.day.ui.topbar.DetailRecordTopBar
+import see.day.ui.topbar.EditMode
+import see.day.util.toColor
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -151,6 +154,20 @@ internal fun ScheduleDetailScreen(
     onAction: (ScheduleDetailUiEvent) -> Unit,
     onClickBackButton: () -> Unit,
 ) {
+    var openDeleteDialog by remember { mutableStateOf(false) }
+    if (openDeleteDialog) {
+        ConfirmDialog(
+            body = see.day.ui.R.string.record_delete_body,
+            onDismiss = { openDeleteDialog = false },
+            onClickConfirmButton = {
+                val editMode = uiState.editMode
+                if (editMode is ScheduleDetailUiState.EditMode.Edit) {
+                    onAction(ScheduleDetailUiEvent.OnDeleteSchedule)
+                }
+            }
+        )
+    }
+
     Scaffold(
         modifier = modifier
             .background(Color.White)
@@ -158,14 +175,25 @@ internal fun ScheduleDetailScreen(
             .statusBarsPadding()
             .imePadding(),
         topBar = {
-            ScheduleTopBar(
-                onClickCloseButton = onClickBackButton
+            DetailRecordTopBar(
+                recordType = RecordType.SCHEDULE,
+                editMode = when (uiState.editMode) {
+                    ScheduleDetailUiState.EditMode.Create -> EditMode.ADD
+                    is ScheduleDetailUiState.EditMode.Edit -> EditMode.UPDATE
+                },
+                onClickCloseButton = onClickBackButton,
+                onClickDeleteButton = {
+                    openDeleteDialog = true
+                }
             )
         },
         bottomBar = {
             CompleteButton(
                 modifier = Modifier.navigationBarsPadding(),
-                text = stringResource(see.day.ui.R.string.write_record_text),
+                text = when (uiState.editMode) {
+                    is ScheduleDetailUiState.EditMode.Create -> stringResource(see.day.ui.R.string.write_record_text)
+                    is ScheduleDetailUiState.EditMode.Edit -> stringResource(see.day.ui.R.string.modifiy_record_text)
+                },
                 isEnabled = uiState.canSubmit,
                 onClick = {
                     onAction(ScheduleDetailUiEvent.OnSaveSchedule)

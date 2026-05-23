@@ -19,6 +19,8 @@ import see.day.model.record.RecordType
 import see.day.navigation.onboarding.CompleteType
 import see.day.onboarding.navigation.navigateOnboarding
 import see.day.onboarding.navigation.navigateOnboardingComplete
+import see.day.schedule.navigation.navigateSchedule
+import see.day.schedule.navigation.navigateScheduleDetail
 
 class NavigationState(
     val navController: NavHostController
@@ -69,6 +71,10 @@ class NavigationState(
             RecordType.HABIT -> {
                 navController.navigateHabit(navOptions)
             }
+            // 스케줄은 다른 버튼으로 추가 가능
+            else -> {
+
+            }
         }
     }
 
@@ -84,6 +90,9 @@ class NavigationState(
 
             RecordType.HABIT -> {
                 navController.navigateHabitDetail(recordId)
+            }
+            else -> {
+                navController.navigateScheduleDetail(recordId)
             }
         }
     }

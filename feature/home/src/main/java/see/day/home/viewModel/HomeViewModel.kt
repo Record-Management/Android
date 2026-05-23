@@ -21,6 +21,7 @@ import see.day.domain.repository.DailyRecordRepository
 import see.day.domain.repository.ExerciseRecordRepository
 import see.day.domain.repository.GoalRepository
 import see.day.domain.repository.HabitRecordRepository
+import see.day.domain.repository.ScheduleRepository
 import see.day.domain.repository.UserRepository
 import see.day.home.screen.toRecordType
 import see.day.home.state.HomeUiEffect
@@ -41,6 +42,7 @@ class HomeViewModel @Inject constructor(
     private val goalRepository: GoalRepository,
     private val exerciseRecordRepository: ExerciseRecordRepository,
     private val dailyRecordRepository: DailyRecordRepository,
+    private val scheduleRepository: ScheduleRepository,
     private val calendarRepository: CalendarRepository,
     private val userRepository: UserRepository,
     private val analyticsLogger: AnalyticsLogger
@@ -301,7 +303,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onClickDetailRecord(recordType: RecordType, recordId: String) {
+    private fun  onClickDetailRecord(recordType: RecordType, recordId: String) {
         viewModelScope.launch {
             _uiEffect.emit(HomeUiEffect.NavigateToDetailRecord(recordType, recordId))
         }
@@ -339,10 +341,14 @@ class HomeViewModel @Inject constructor(
                             _toastMessage.emit("기록이 삭제 되었습니다.")
                         }
                 }
-
-//                RecordType.SCHEDULE -> {
-//
-//                }
+                // TODO 추가
+                RecordType.SCHEDULE -> {
+                    scheduleRepository.deleteSchedule(recordId)
+                        .onSuccess {
+                            onRefresh()
+                            _toastMessage.emit("기록이 삭제 되었습니다.")
+                        }
+                }
             }
         }
     }

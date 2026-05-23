@@ -63,7 +63,7 @@ class RecordScreenTest {
             }
         }
 
-        RecordType.entries.forEach { type ->
+        RecordType.getGoalAvailableTypes().forEach { type ->
             composeTestRule
                 .onNodeWithContentDescription("$type Image")
                 .performClick()
@@ -89,7 +89,7 @@ class RecordScreenTest {
             }
         }
 
-        RecordType.entries.forEach { type ->
+        RecordType.getGoalAvailableTypes().forEach { type ->
             val typeImageNode = composeTestRule.onNodeWithContentDescription("$type Image")
 
             typeImageNode.performClick()

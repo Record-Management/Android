@@ -26,7 +26,7 @@ fun RecordTypeScreen(modifier: Modifier = Modifier, selectedRecordType: RecordTy
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        RecordType.entries.forEach { recordType ->
+        RecordType.getGoalAvailableTypes().forEach { recordType ->
             GoalRecordTypeCard (
                 modifier = Modifier,
                 recordType = recordType,

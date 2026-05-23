@@ -57,7 +57,7 @@ class ResetGoalScreenTest {
             .onNodeWithText("다음")
             .assertIsNotEnabled()
 
-        RecordType.entries.forEach { recordType ->
+        RecordType.getGoalAvailableTypes().forEach { recordType ->
             composeTestRule
                 .onNodeWithText(recordType.title)
                 .assertIsDisplayed()

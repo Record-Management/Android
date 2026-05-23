@@ -4,6 +4,7 @@ import see.day.model.record.RecordType
 import see.day.model.record.daily.DailyEmotion
 import see.day.model.record.exercise.ExerciseType
 import see.day.model.record.habit.HabitType
+import see.day.model.schedule.DailySchedule
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -11,7 +12,8 @@ import java.util.Locale
 
 data class DailyRecordDetails(
     val date: String,
-    val records: List<RecordDetail>
+    val records: List<RecordDetail>,
+    val schedules: List<DailySchedule>
 ) {
     val formatFullDate: String by lazy {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

@@ -1,10 +1,12 @@
 package see.day.mapper.schedule
 
 import see.day.model.schedule.AlertTime
+import see.day.model.schedule.DailySchedule
 import see.day.model.schedule.RepeatTime
 import see.day.model.schedule.ScheduleDetail
 import see.day.model.schedule.ScheduleInput
 import see.day.model.time.formatter.formatIsoDate
+import see.day.network.dto.schedule.DailyScheduleResponse
 import see.day.network.dto.schedule.ScheduleInputRequest
 import see.day.network.dto.schedule.ScheduleResponse
 
@@ -36,6 +38,17 @@ fun ScheduleResponse.toModel() : ScheduleDetail {
         repeatType = repeatType,
         repeatEndsOn = repeatEndsOn,
         location = location ?: "",
+        color = color,
+        memo = memo ?: "",
+    )
+}
+
+fun DailyScheduleResponse.toModel() : DailySchedule {
+    return DailySchedule(
+        scheduleId = scheduleId,
+        title = title,
+        startDate = startDate,
+        endDate = endDate,
         color = color,
         memo = memo ?: "",
     )

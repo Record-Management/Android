@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import see.day.model.schedule.SchedulePaletteColor
 import see.day.schedule.R
 import see.day.schedule.component.bottomsheet.ColorPaletteBottomSheet
-import see.day.schedule.component.bottomsheet.toColor
+import see.day.util.toColor
 
 @Composable
 internal fun ColorSetting(

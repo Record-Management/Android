@@ -520,9 +520,18 @@ private fun HomeBottomSheetContent(
             } ?: uiState.dailyRecordDetails.records
         }
 
-        if (filteredRecords.isNotEmpty()) {
+        val filteredSchedule = remember(
+            uiState.selectedFilterType,
+            uiState.dailyRecordDetails.schedules
+        ) {
+            if(uiState.selectedFilterType == RecordFilterType.SCHEDULE || uiState.selectedFilterType == RecordFilterType.ALL) {
+                uiState.dailyRecordDetails.schedules
+            } else listOf()
+        }
+
+        if (filteredRecords.isNotEmpty() || filteredSchedule.isNotEmpty()) {
             CalendarDetail(
-                dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords),
+                dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords, schedules = filteredSchedule),
                 onClickRevise = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 },
@@ -548,7 +557,7 @@ fun RecordFilterType.toRecordType(): RecordType? {
         RecordFilterType.ALL -> null
         RecordFilterType.DAILY -> RecordType.DAILY
         RecordFilterType.EXERCISE -> RecordType.EXERCISE
-//        RecordFilterType.SCHEDULE -> RecordType.SCHEDULE
+        RecordFilterType.SCHEDULE -> RecordType.SCHEDULE
         RecordFilterType.HABIT -> RecordType.HABIT
     }
 }

@@ -34,7 +34,9 @@ import see.day.model.record.daily.DailyEmotion
 import see.day.ui.component.record.overview.DailyRecordOverview
 import see.day.ui.component.record.overview.ExerciseRecordOverview
 import see.day.ui.component.record.overview.HabitRecordOverView
+import see.day.ui.component.record.overview.ScheduleRecordOverview
 import see.day.ui.dialog.DialogBackground
+import see.day.util.toColor
 
 @Composable
 fun CalendarDetail(
@@ -69,6 +71,18 @@ fun CalendarDetail(
             modifier = Modifier.padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+            dailyRecordDetails.schedules.forEach { schedule ->
+                ScheduleRecordOverview(
+                    scheduleId = schedule.scheduleId,
+                    title = schedule.title,
+                    startDate = schedule.startDate,
+                    endDate = schedule.endDate,
+                    color = schedule.color.toColor(),
+                    memo = schedule.memo,
+                    onClickItem = onClickRevise,
+                    onClickLongItem = { openLongPressureDialog = openLongPressureDialog.copy(true, RecordType.SCHEDULE, schedule.scheduleId) }
+                )
+            }
             dailyRecordDetails.records.forEach { record ->
                 when (record) {
                     is DailyRecordDetail -> {
@@ -176,7 +190,8 @@ private fun CalendarDetailPreview() {
         CalendarDetail(
             dailyRecordDetails = DailyRecordDetails(
                 "2025-09-12",
-                listOf(DailyRecordDetail(id = "", type = RecordType.DAILY, emotion = DailyEmotion.Love, content = "asdasdasd", imageUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime = "13:30", recordDate = "2025-11-10", createdAt = "", updatedAt = ""))
+                listOf(DailyRecordDetail(id = "", type = RecordType.DAILY, emotion = DailyEmotion.Love, content = "asdasdasd", imageUrls = listOf("https://wikidocs.net/images/page/49159/png-2702691_1920_back.png"), recordTime = "13:30", recordDate = "2025-11-10", createdAt = "", updatedAt = "")),
+                listOf()
             ),
             onClickRevise = { recordType, recordId -> },
             onClickDelete = { recordType, recordId -> },
