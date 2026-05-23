@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,7 +52,6 @@ import see.day.schedule.component.LocationSetting
 import see.day.schedule.component.MemoSetting
 import see.day.schedule.component.RepeatSetting
 import see.day.schedule.component.ScheduleTopBar
-import see.day.schedule.component.bottomsheet.toColor
 import see.day.schedule.state.ScheduleDetailUiEffect
 import see.day.schedule.state.ScheduleDetailUiEvent
 import see.day.schedule.state.ScheduleDetailUiState
@@ -61,6 +59,7 @@ import see.day.schedule.state.SchedulePostType
 import see.day.schedule.viewModel.ScheduleDetailViewModel
 import see.day.ui.button.CompleteButton
 import see.day.ui.dialog.RecordDetailBackDialog
+import see.day.util.toColor
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
