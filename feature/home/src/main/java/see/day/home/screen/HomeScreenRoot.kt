@@ -272,6 +272,8 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
         HomeImage(Modifier, uiState.treeStage)
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
+            containerColor = Color.Transparent,
+            sheetContainerColor = Color.White,
             topBar = {
                 HomeTopBar(
                     modifier = Modifier,
@@ -310,7 +312,6 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
             } else {
                 RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             },
-            sheetContainerColor = Color.White
         ) { innerPadding ->
         }
         if (uiState.mainRecordType == null) {
