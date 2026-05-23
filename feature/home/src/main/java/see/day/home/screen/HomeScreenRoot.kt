@@ -531,7 +531,7 @@ private fun HomeBottomSheetContent(
 
         if (filteredRecords.isNotEmpty() || filteredSchedule.isNotEmpty()) {
             CalendarDetail(
-                dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords),
+                dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords, schedules = filteredSchedule),
                 onClickRevise = { recordType, recordId ->
                     uiEvent(HomeUiEvent.OnClickDetailButton(recordType, recordId))
                 },
