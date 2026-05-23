@@ -520,7 +520,16 @@ private fun HomeBottomSheetContent(
             } ?: uiState.dailyRecordDetails.records
         }
 
-        if (filteredRecords.isNotEmpty()) {
+        val filteredSchedule = remember(
+            uiState.selectedFilterType,
+            uiState.dailyRecordDetails.schedules
+        ) {
+            if(uiState.selectedFilterType == RecordFilterType.SCHEDULE || uiState.selectedFilterType == RecordFilterType.ALL) {
+                uiState.dailyRecordDetails.schedules
+            } else listOf()
+        }
+
+        if (filteredRecords.isNotEmpty() || filteredSchedule.isNotEmpty()) {
             CalendarDetail(
                 dailyRecordDetails = uiState.dailyRecordDetails.copy(records = filteredRecords),
                 onClickRevise = { recordType, recordId ->

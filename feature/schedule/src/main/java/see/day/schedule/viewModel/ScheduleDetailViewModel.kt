@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import see.day.domain.repository.ScheduleRepository
 import see.day.model.schedule.AlertTime
 import see.day.model.schedule.RepeatTime
+import see.day.model.schedule.ScheduleDetail
 import see.day.model.schedule.ScheduleInput
 import see.day.model.schedule.SchedulePaletteColor
 import see.day.schedule.state.ScheduleDetailUiEffect
@@ -54,7 +55,11 @@ class ScheduleDetailViewModel @Inject constructor(
                                 repeatEndsOn = scheduleDetail.repeatEndsOn,
                                 location = scheduleDetail.location,
                                 color = scheduleDetail.color,
-                                memo = scheduleDetail.memo
+                                memo = scheduleDetail.memo,
+                                editMode = ScheduleDetailUiState.EditMode.Edit(
+                                    originalSchedule = scheduleDetail.toScheduleInput(),
+                                    scheduleId = scheduleDetail.scheduleRecordId
+                                )
                             )
                         }
                     }
@@ -194,4 +199,20 @@ class ScheduleDetailViewModel @Inject constructor(
             _uiEffect.emit(ScheduleDetailUiEffect.NavigateToHome(true))
         }
     }
+}
+
+private fun ScheduleDetail.toScheduleInput(): ScheduleInput {
+    return ScheduleInput(
+        title = title,
+        startDate = startDate,
+        endDate = endDate,
+        notificationType = alertType,
+        notificationCustomHours = notificationCustomHours,
+        notificationCustomMinutes = notificationCustomMinutes,
+        repeatType = repeatType,
+        repeatEndsOn = repeatEndsOn,
+        location = location,
+        color = color,
+        memo = memo
+    )
 }

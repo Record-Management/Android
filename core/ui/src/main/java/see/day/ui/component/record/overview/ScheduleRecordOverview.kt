@@ -1,6 +1,7 @@
 package see.day.ui.component.record.overview
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import see.day.designsystem.theme.SeeDayTheme
 import see.day.designsystem.theme.Typography
 import see.day.designsystem.theme.gray60
 import see.day.designsystem.theme.primaryColor
+import see.day.model.record.RecordType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -29,14 +31,21 @@ import java.util.Locale
 @Composable
 fun ScheduleRecordOverview(
     modifier: Modifier = Modifier,
+    scheduleId : String,
     title: String,
     startDate: LocalDate,
     endDate: LocalDate,
     color: Color,
     memo: String,
+    onClickItem : (RecordType, String) -> Unit,
+    onClickLongItem : (String) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
+            .combinedClickable(
+                onClick = { onClickItem(RecordType.SCHEDULE, scheduleId) },
+                onLongClick = { onClickLongItem(scheduleId) }
+            )
     ) {
         Spacer(
             modifier = Modifier
@@ -75,11 +84,14 @@ private fun ScheduleRecordOverviewPreview() {
     SeeDayTheme {
         ScheduleRecordOverview(
             modifier = Modifier.padding(horizontal = 16.dp),
+            scheduleId = "",
             title = "장보기",
             startDate = LocalDate.now().minusDays(2),
             endDate = LocalDate.now(),
             color = primaryColor,
-            memo = "만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 "
+            memo = "만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 만두사기 만두사기 만두사기 만두사기만두사기 ",
+            onClickItem = { recordType, s -> },
+            onClickLongItem = {},
         )
     }
 }

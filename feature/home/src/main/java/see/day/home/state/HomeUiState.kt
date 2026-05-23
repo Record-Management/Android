@@ -31,9 +31,9 @@ data class HomeUiState(
             mainRecordType = RecordType.DAILY,
             goalDays = 10,
             monthlyRecords = listOf(),
-            dailyRecordDetails = DailyRecordDetails(getTodayDate(), listOf()),
+            dailyRecordDetails = DailyRecordDetails(getTodayDate(), listOf(), listOf()),
             createdAt = getTodayDate(),
-            todayRecords = DailyRecordDetails(getTodayDate(), listOf()),
+            todayRecords = DailyRecordDetails(getTodayDate(), listOf(), listOf()),
             treeStage = TreeStage.STAGE_1,
         )
 

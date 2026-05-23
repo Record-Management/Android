@@ -42,6 +42,7 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray30
 import see.day.designsystem.theme.gray50
 import see.day.designsystem.theme.primaryColor
+import see.day.model.record.RecordType
 import see.day.model.schedule.AlertTime
 import see.day.model.schedule.RepeatTime
 import see.day.schedule.R
@@ -59,6 +60,8 @@ import see.day.schedule.state.SchedulePostType
 import see.day.schedule.viewModel.ScheduleDetailViewModel
 import see.day.ui.button.CompleteButton
 import see.day.ui.dialog.RecordDetailBackDialog
+import see.day.ui.topbar.DetailRecordTopBar
+import see.day.ui.topbar.EditMode
 import see.day.util.toColor
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -157,14 +160,25 @@ internal fun ScheduleDetailScreen(
             .statusBarsPadding()
             .imePadding(),
         topBar = {
-            ScheduleTopBar(
-                onClickCloseButton = onClickBackButton
+            DetailRecordTopBar(
+                recordType = RecordType.SCHEDULE,
+                editMode = when (uiState.editMode) {
+                    ScheduleDetailUiState.EditMode.Create -> EditMode.ADD
+                    is ScheduleDetailUiState.EditMode.Edit -> EditMode.UPDATE
+                },
+                onClickCloseButton = onClickBackButton,
+                onClickDeleteButton = {
+                    // TODO 삭제하기 api 추가후 수정
+                }
             )
         },
         bottomBar = {
             CompleteButton(
                 modifier = Modifier.navigationBarsPadding(),
-                text = stringResource(see.day.ui.R.string.write_record_text),
+                text = when (uiState.editMode) {
+                    is ScheduleDetailUiState.EditMode.Create -> stringResource(see.day.ui.R.string.write_record_text)
+                    is ScheduleDetailUiState.EditMode.Edit -> stringResource(see.day.ui.R.string.modifiy_record_text)
+                },
                 isEnabled = uiState.canSubmit,
                 onClick = {
                     onAction(ScheduleDetailUiEvent.OnSaveSchedule)
