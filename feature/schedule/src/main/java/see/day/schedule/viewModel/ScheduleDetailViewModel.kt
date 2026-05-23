@@ -52,9 +52,9 @@ class ScheduleDetailViewModel @Inject constructor(
                                 notificationCustomMinutes = scheduleDetail.notificationCustomMinutes,
                                 repeatType = scheduleDetail.repeatType,
                                 repeatEndsOn = scheduleDetail.repeatEndsOn,
-                                location = it.location,
-                                color = it.color,
-                                memo = it.memo
+                                location = scheduleDetail.location,
+                                color = scheduleDetail.color,
+                                memo = scheduleDetail.memo
                             )
                         }
                     }
