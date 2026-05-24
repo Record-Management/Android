@@ -2,17 +2,19 @@ package see.day.mapper.calendar
 
 import see.day.model.calendar.DailyRecord
 import see.day.model.calendar.DailyRecords
+import see.day.model.calendar.DailySchedule
 import see.day.model.calendar.MonthlyRecord
 import see.day.model.record.RecordType
 import see.day.network.dto.calendar.DailyRecordResponse
 import see.day.network.dto.calendar.DailyRecordsResponse
+import see.day.network.dto.calendar.DailyScheduleResponse
 import see.day.network.dto.calendar.MonthlyRecordResponse
 
 fun MonthlyRecordResponse.toModel(): MonthlyRecord {
     return MonthlyRecord(
         year = year,
         month = month,
-        dailyRecords = monthlyRecords.toDailyRecordsList()
+        dailyRecords = monthlyRecords.toDailyRecordsList(),
     )
 }
 
@@ -24,7 +26,8 @@ fun DailyRecordsResponse.toModel(): DailyRecords {
     return DailyRecords(
         date = date,
         mainRecordType = mainRecordType,
-        records = records.toDailyRecordList()
+        records = records.toDailyRecordList(),
+        schedules = schedules.toModel()
     )
 }
 
@@ -37,5 +40,16 @@ fun DailyRecordResponse.toModel(): DailyRecord {
         id = id,
         type = RecordType.valueOf(type),
         isCompleted = isCompleted
+    )
+}
+
+fun DailyScheduleResponse?.toModel(): DailySchedule? {
+    if(this == null) {
+        return null
+    }
+    return DailySchedule(
+        title = title,
+        size = size,
+        color = color
     )
 }
