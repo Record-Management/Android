@@ -75,7 +75,7 @@ fun RecordTypePickerDialog(modifier: Modifier = Modifier, currentRecordType: Rec
                             .padding(top = 24.dp, bottom = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        items(items = RecordType.entries.toList()) { type ->
+                        items(items = RecordType.getGoalAvailableTypes()) { type ->
                             if (type != currentRecordType) {
                                 RecordTypeSmallComponent(
                                     currentRecordType = type,
