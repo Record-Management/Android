@@ -37,7 +37,8 @@ class RecordNotificationViewModel @Inject constructor(
                         it.copy(
                             dailyRecordNotificationEnabled = notificationSetting.dailyRecordEnabled,
                             exerciseRecordNotificationEnabled = notificationSetting.exerciseRecordEnabled,
-                            habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled
+                            habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled,
+//                            scheduleNotificationEnabled = notificationSetting.scheduleNotificationEnabled
                         )
                     }
                 }
@@ -54,7 +55,8 @@ class RecordNotificationViewModel @Inject constructor(
                 onChangedRecordNotification(
                     dailyRecordEnabled = uiEvent.dailyRecordNotificationEnabled,
                     exerciseRecordEnabled = uiEvent.exerciseRecordNotificationEnabled,
-                    habitRecordEnabled = uiEvent.habitRecordNotificationEnabled
+                    habitRecordEnabled = uiEvent.habitRecordNotificationEnabled,
+                    scheduleNotificationEnabled = uiEvent.scheduleNotificationEnabled
                 )
             }
         }
@@ -69,21 +71,24 @@ class RecordNotificationViewModel @Inject constructor(
     private fun onChangedRecordNotification(
         dailyRecordEnabled: Boolean?,
         exerciseRecordEnabled: Boolean?,
-        habitRecordEnabled: Boolean?
+        habitRecordEnabled: Boolean?,
+        scheduleNotificationEnabled: Boolean?
     ) {
         viewModelScope.launch {
             notificationRepository.updateNotificationSetting(
                 NotificationSettingsEdit(
                     dailyRecordNotificationEnabled = dailyRecordEnabled,
                     exerciseNotificationEnabled = exerciseRecordEnabled,
-                    habitNotificationEnabled = habitRecordEnabled
+                    habitNotificationEnabled = habitRecordEnabled,
+//                    scheduleNotificationEnabled = scheduleNotificationEnabled
                 )
             ).onSuccess { notificationSetting ->
                 _uiState.update {
                     it.copy(
                         dailyRecordNotificationEnabled = notificationSetting.dailyRecordEnabled,
                         exerciseRecordNotificationEnabled = notificationSetting.exerciseRecordEnabled,
-                        habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled
+                        habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled,
+//                        scheduleNotificationEnabled = notificationSetting.scheduleNotificationEnabled
                     )
                 }
             }

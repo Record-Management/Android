@@ -5,6 +5,7 @@ sealed interface RecordNotificationUiEvent {
     data class OnRecordNotificationChanged(
         val dailyRecordNotificationEnabled: Boolean? = null,
         val exerciseRecordNotificationEnabled: Boolean? = null,
-        val habitRecordNotificationEnabled: Boolean? = null
+        val habitRecordNotificationEnabled: Boolean? = null,
+        val scheduleNotificationEnabled: Boolean? = null
     ) : RecordNotificationUiEvent
 }
