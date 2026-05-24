@@ -65,6 +65,7 @@ class HomeViewModel @Inject constructor(
             try {
                 val user = async { userRepository.getUser().getOrThrow() }
                 val monthlyRecords = async { calendarRepository.getMonthlyRecords(state.currentYear, state.currentMonth, arrayOf()).getOrThrow() }
+                val recordsLimit = async { dailyRecordRepository.getRecordsLimit().getOrThrow() }
                 val detailDailyRecords = calendarRepository.getDailyRecords(HomeUiState.getTodayDate()).getOrThrow()
 
 
@@ -72,6 +73,7 @@ class HomeViewModel @Inject constructor(
                 monthlyRecord.update {
                     calendarDayInfos
                 }
+
 
                 _uiState.update {
                     it.copy(
@@ -81,7 +83,8 @@ class HomeViewModel @Inject constructor(
                         dailyRecordDetails = detailDailyRecords,
                         createdAt = user.await().createdAt,
                         todayRecords = detailDailyRecords,
-                        treeStage = user.await().treeStage
+                        treeStage = user.await().treeStage,
+                        recordsLimit = recordsLimit.await()
                     )
                 }
 
@@ -195,6 +198,7 @@ class HomeViewModel @Inject constructor(
             }
             try {
                 val monthlyRecords = async { calendarRepository.getMonthlyRecords(uiState.value.currentYear, uiState.value.currentMonth, arrayOf()).getOrThrow() }
+                val recordsLimit = async { dailyRecordRepository.getRecordsLimit().getOrThrow() }
                 val detailDailyRecords = calendarRepository.getDailyRecords(uiState.value.todayFormat()).getOrThrow()
 
                 val calendarDayInfos = CalendarDayInfo.of(monthlyRecords.await())
@@ -212,7 +216,8 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         monthlyRecords = calendarDayInfos,
                         dailyRecordDetails = detailDailyRecords,
-                        todayRecords = todayRecords
+                        todayRecords = todayRecords,
+                        recordsLimit = recordsLimit.await()
                     )
                 }
                 if (HomeUiState.getTodayDate() < uiState.value.createdAt) {

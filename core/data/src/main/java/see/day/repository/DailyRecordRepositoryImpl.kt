@@ -3,8 +3,10 @@ package see.day.repository
 import javax.inject.Inject
 import see.day.domain.repository.DailyRecordRepository
 import see.day.mapper.record.toDto
+import see.day.mapper.record.toModel
 import see.day.model.calendar.DailyRecordDetail
 import see.day.model.exception.NoDataException
+import see.day.model.record.RecordsLimit
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyRecordEdit
 import see.day.network.DailyRecordService
@@ -29,6 +31,12 @@ class DailyRecordRepositoryImpl @Inject constructor(
     override suspend fun deleteRecord(recordId: String): Result<Unit> {
         return createResult {
             dailyRecordService.deleteDailyRecord(recordId)
+        }
+    }
+
+    override suspend fun getRecordsLimit(): Result<RecordsLimit> {
+        return createResult {
+            dailyRecordService.getRecordsLimit().toModel()
         }
     }
 }

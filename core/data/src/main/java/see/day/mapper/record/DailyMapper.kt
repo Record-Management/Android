@@ -1,7 +1,9 @@
 package see.day.mapper.record
 
+import see.day.model.record.RecordsLimit
 import see.day.model.record.daily.DailyRecordInput
 import see.day.model.record.daily.DailyRecordEdit
+import see.day.network.dto.record.RecordsLimitResponse
 import see.day.network.dto.record.daily.DailyRecordInputRequest
 import see.day.network.dto.record.daily.DailyRecordEditRequest
 
@@ -20,5 +22,12 @@ fun DailyRecordEdit.toDto() : DailyRecordEditRequest {
         content = content,
         emotion = emotion.name,
         imageUrls = imageUrls
+    )
+}
+
+fun RecordsLimitResponse.toModel() : RecordsLimit {
+    return RecordsLimit(
+        canCreateRecord = canCreateRecord,
+        canCreateSchedule = canCreateSchedule
     )
 }

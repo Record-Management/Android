@@ -2,11 +2,13 @@ package see.day.network
 
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import see.day.network.dto.CommonResponse
 import see.day.network.dto.record.DailyRecordResponse
+import see.day.network.dto.record.RecordsLimitResponse
 import see.day.network.dto.record.daily.DailyRecordEditRequest
 import see.day.network.dto.record.daily.DailyRecordInputRequest
 
@@ -25,4 +27,7 @@ interface DailyRecordService {
     suspend fun deleteDailyRecord(
         @Path("recordId") recordId: String
     ) : CommonResponse<Unit>
+
+    @GET("api/daily-records/creation-limits")
+    suspend fun getRecordsLimit() : RecordsLimitResponse
 }
