@@ -114,6 +114,12 @@ class NotificationViewModel @Inject constructor(
 
     private fun onClickItem(recordType: RecordType, relativeTime: String) {
         viewModelScope.launch {
+            // 일정 기록은 홈 화면으로 돌아감
+            if(recordType == RecordType.SCHEDULE) {
+                _uiEffect.emit(NotificationUiEffect.NavigateToBackStack)
+                return@launch
+            }
+
             val isTodayNotification = relativeTime.contains("시간 전")
             val hasAlreadyRecordedToday = uiState.value.todayRecords.size >= 2 ||
                 uiState.value.todayRecords.any { it.type == uiState.value.mainRecordType }
