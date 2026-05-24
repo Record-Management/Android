@@ -206,7 +206,7 @@ class ScheduleDetailViewModel @Inject constructor(
     private suspend fun updateScheduleForEditMode(scheduleId: String) {
         scheduleRepository.updateSchedule(
             scheduleId = scheduleId,
-            ScheduleInput(
+            scheduleInput = ScheduleInput(
                 title = uiState.value.title,
                 startDate = uiState.value.startDate,
                 endDate = uiState.value.endDate,
