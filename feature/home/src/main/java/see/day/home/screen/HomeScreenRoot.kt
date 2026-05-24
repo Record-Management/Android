@@ -363,8 +363,8 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, onAction: (H
                             }
                         },
                         recordType = uiState.mainRecordType,
-                        isScheduleEnabled = true, // 추후 서버로부터 데이터를 받으면 수정
-                        isRecordEnabled = uiState.todayRecords.records.filter { it.type == uiState.mainRecordType }.size < 2,
+                        isScheduleEnabled = uiState.recordsLimit.canCreateSchedule,
+                        isRecordEnabled = uiState.recordsLimit.canCreateRecord,
                     )
                 }
             }
@@ -446,7 +446,7 @@ private fun AddRecordMenuRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(enabled = isEnabled, onClick = onClick)
             .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

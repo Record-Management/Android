@@ -6,6 +6,7 @@ import see.day.model.calendar.DailyRecordDetails
 import see.day.model.date.CalendarDayInfo
 import see.day.model.goal.TreeStage
 import see.day.model.record.RecordType
+import see.day.model.record.RecordsLimit
 
 data class HomeUiState(
     val currentYear: Int,
@@ -20,6 +21,7 @@ data class HomeUiState(
     val createdAt: String,
     val todayRecords: DailyRecordDetails,
     val treeStage: TreeStage?,
+    val recordsLimit: RecordsLimit,
 ) {
     companion object {
         val init = HomeUiState(
@@ -35,6 +37,7 @@ data class HomeUiState(
             createdAt = getTodayDate(),
             todayRecords = DailyRecordDetails(getTodayDate(), listOf(), listOf()),
             treeStage = TreeStage.STAGE_1,
+            recordsLimit = RecordsLimit(canCreateRecord = true, canCreateSchedule = true),
         )
 
         fun getTodayDate(): String {
