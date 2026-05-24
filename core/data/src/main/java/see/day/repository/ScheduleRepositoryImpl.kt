@@ -30,4 +30,10 @@ class ScheduleRepositoryImpl @Inject constructor(
             scheduleService.deleteSchedule(scheduleId)
         }
     }
+
+    override suspend fun updateSchedule(scheduleId: String, scheduleInput: ScheduleInput): Result<String> {
+        return createResult {
+            scheduleService.updateSchedule(scheduleId, scheduleInput.toDto()).scheduleRecordId
+        }
+    }
 }
