@@ -177,7 +177,7 @@ class ScheduleDetailViewModel @Inject constructor(
                     saveScheduleForCreateMode()
                 }
                 is ScheduleDetailUiState.EditMode.Edit -> {
-
+                    updateScheduleForEditMode(mode.scheduleId)
                 }
             }
         }
@@ -186,6 +186,27 @@ class ScheduleDetailViewModel @Inject constructor(
     private suspend fun saveScheduleForCreateMode() {
         scheduleRepository.insertSchedule(
             ScheduleInput(
+                title = uiState.value.title,
+                startDate = uiState.value.startDate,
+                endDate = uiState.value.endDate,
+                notificationType = uiState.value.alertType,
+                notificationCustomHours = uiState.value.notificationCustomHours,
+                notificationCustomMinutes = uiState.value.notificationCustomMinutes,
+                repeatType = uiState.value.repeatType,
+                repeatEndsOn = uiState.value.repeatEndsOn,
+                location = uiState.value.location,
+                color = uiState.value.color,
+                memo = uiState.value.memo
+            )
+        ).onSuccess {
+            _uiEffect.emit(ScheduleDetailUiEffect.NavigateToHome(true))
+        }
+    }
+
+    private suspend fun updateScheduleForEditMode(scheduleId: String) {
+        scheduleRepository.updateSchedule(
+            scheduleId = scheduleId,
+            scheduleInput = ScheduleInput(
                 title = uiState.value.title,
                 startDate = uiState.value.startDate,
                 endDate = uiState.value.endDate,

@@ -4,6 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import see.day.network.dto.schedule.ScheduleInputRequest
 import see.day.network.dto.schedule.ScheduleResponse
@@ -24,4 +25,10 @@ interface ScheduleService {
     suspend fun deleteSchedule(
         @Path("scheduleRecordId") scheduleRecordId: String
     )
+
+    @PUT("/api/schedule-records/{scheduleRecordId}")
+    suspend fun updateSchedule(
+        @Path("scheduleRecordId") scheduleRecordId: String,
+        @Body scheduleInputRequest: ScheduleInputRequest
+    ): ScheduleResponse
 }

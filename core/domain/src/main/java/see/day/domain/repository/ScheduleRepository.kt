@@ -10,4 +10,6 @@ interface ScheduleRepository {
     suspend fun getSchedule(scheduleId: String) : Result<ScheduleDetail>
 
     suspend fun deleteSchedule(scheduleId: String) : Result<Unit>
+
+    suspend fun updateSchedule(scheduleId: String, scheduleInput: ScheduleInput) : Result<String>
 }
