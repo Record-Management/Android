@@ -7,5 +7,6 @@ enum class NotificationType {
     HABIT_TIME_BASED_REMINDER, // 습관 시간 지정 알림
     GOAL_SETTING_REMINDER, // - 목표 미설정 알림
     SYSTEM_ANNOUNCEMENT, // - 시스템 공지사항
+    SCHEDULE, // - 일정 알림 [TODO] 이름 변경될 수 있음
     TEST, // - 테스트 알림
 }
