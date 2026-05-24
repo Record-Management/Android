@@ -3,6 +3,7 @@ package see.day.network.dto.calendar
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import see.day.model.record.RecordType
+import see.day.model.schedule.SchedulePaletteColor
 import see.day.network.decoder.FlexibleDateTimeArraySerializer
 
 @Serializable
@@ -17,7 +18,8 @@ data class DailyRecordsResponse(
     @Serializable(with = FlexibleDateTimeArraySerializer::class)
     val date: String,
     @SerialName("mainRecordTypeForDate") val mainRecordType : RecordType? = null,
-    val records: List<DailyRecordResponse>
+    val records: List<DailyRecordResponse>,
+    val schedules: DailyScheduleResponse? = null,
 )
 
 @Serializable
@@ -25,4 +27,11 @@ data class DailyRecordResponse(
     val id: String,
     val type: String,
     val isCompleted: Boolean= true
+)
+
+@Serializable
+data class DailyScheduleResponse(
+    val title: String,
+    val size: Int,
+    val color: SchedulePaletteColor
 )

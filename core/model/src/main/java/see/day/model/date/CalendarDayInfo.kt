@@ -1,6 +1,7 @@
 package see.day.model.date
 
 import see.day.model.calendar.DailyRecord
+import see.day.model.calendar.DailySchedule
 import see.day.model.calendar.MonthlyRecord
 import see.day.model.record.RecordType
 
@@ -10,13 +11,12 @@ data class CalendarDayInfo(
     val day: Int,
     val mainRecordType: RecordType?,
     val records: List<DailyRecord>,
-    val schedules: List<String>,
+    val schedules: DailySchedule?,
 ) {
     companion object {
         fun of(monthlyRecord: MonthlyRecord): List<CalendarDayInfo> {
             return monthlyRecord.dailyRecords.map { dailyRecord ->
                 val (year, month, day) = dailyRecord.date.split("-").map { it.toInt() }
-//                val (scheduleRecords, otherRecords) = dailyRecord.records.partition { it.type == RecordType.SCHEDULE }
                 val otherRecords = dailyRecord.records
 
                 CalendarDayInfo(
@@ -25,7 +25,7 @@ data class CalendarDayInfo(
                     day = day,
                     mainRecordType = dailyRecord.mainRecordType,
                     records = otherRecords,
-                    schedules = listOf()
+                    schedules = dailyRecord.schedules
                 )
             }
         }
