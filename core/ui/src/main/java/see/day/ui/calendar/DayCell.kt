@@ -39,17 +39,19 @@ import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray40
 import see.day.designsystem.theme.primaryColor
 import see.day.model.calendar.DailyRecord
+import see.day.model.calendar.DailySchedule
 import see.day.model.record.RecordType
 import see.day.model.record.RecordType.DAILY
 import see.day.model.record.RecordType.EXERCISE
 import see.day.model.record.RecordType.HABIT
 import see.day.util.getGrayIcon
 import see.day.util.getIcon
+import see.day.util.toColor
 import java.time.LocalDate
 import java.time.ZoneId
 
 @Composable
-fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>, scheduleFilter : Boolean = false, schedules: List<String>, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
+fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelected: Boolean = false, year: Int, month: Int, day: Int, filterType: RecordType?, mainRecordType: RecordType?, records: List<DailyRecord>, schedules: DailySchedule?, createdAt: String, onClickItem: (Int, Int, Int) -> Unit) {
     Column(
         modifier = modifier
             .heightIn(min = 80.dp)
@@ -74,15 +76,17 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
         )
         if (!isSameMonth || isAfterToday(year, month, day) || isBeforeCreatedAt(createdAt, year, month, day)) {
 
-        } else if (isBeforeToday(year, month, day) && !scheduleFilter) {
+        } else if (isBeforeToday(year, month, day) && filterType != RecordType.SCHEDULE) {
             PastDayImages(filterType, mainRecordType, records)
-        } else if (LocalDate.of(year, month, day).isEqual(now) && !scheduleFilter) {
+        } else if (LocalDate.of(year, month, day).isEqual(now) && filterType != RecordType.SCHEDULE) {
             TodayImages(filterType, mainRecordType, records)
         }
-        if(filterType == null || scheduleFilter) {
-            ScheduleCalendar(modifier = Modifier.padding(top = 6.dp), color = primaryColor, title = "dasdadas", scheduleSize = 2)
+        if(schedules == null) {
+            return
         }
-
+        if(filterType == null || filterType == RecordType.SCHEDULE) {
+            ScheduleCalendar(modifier = Modifier.padding(top = 6.dp), color = schedules.color.toColor(), title = schedules.title, scheduleSize = schedules.size)
+        }
     }
 }
 
@@ -324,7 +328,7 @@ private fun PastDayCellFilterAllAndTwoDailyRecord() {
                 isSelected = true,
                 mainRecordType = DAILY,
                 records = listOf(DailyRecord(id = "", DAILY, true), DailyRecord(id = "", HABIT, isCompleted = true)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -352,7 +356,7 @@ private fun PastDayCellFilterAllAndHabitComplete() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(DailyRecord(id = "", DAILY, true), DailyRecord(id = "", HABIT, isCompleted = true)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -380,7 +384,7 @@ private fun PastDayCellFilterAllAndHabitNotComplete() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(DailyRecord(id = "", HABIT, isCompleted = false)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -408,7 +412,7 @@ private fun PastDayCellFilterDailyAndHasDailyRecord() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(DailyRecord(id = "", DAILY, isCompleted = false)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -436,7 +440,7 @@ private fun PastDayCellFilterDailyAndHasNoDailyRecord() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(DailyRecord(id = "", EXERCISE, isCompleted = false)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -463,7 +467,7 @@ private fun TodayCellFilterAllAndHabitComplete() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(DailyRecord(id = "", DAILY, true), DailyRecord(id = "", HABIT, isCompleted = true)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -490,7 +494,7 @@ private fun TodayCellFilterAllAndHabitNotComplete() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(DailyRecord(id = "", HABIT, isCompleted = false)),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()
@@ -517,7 +521,7 @@ private fun TodayCellFilterAllAndNoHabit() {
                 isSelected = true,
                 mainRecordType = HABIT,
                 records = listOf(),
-                schedules = listOf(),
+                schedules = null,
                 createdAt = "2025-10-10",
                 onClickItem = { year, month, day ->
                     Toast.makeText(context, "$year $month $day", Toast.LENGTH_SHORT).show()

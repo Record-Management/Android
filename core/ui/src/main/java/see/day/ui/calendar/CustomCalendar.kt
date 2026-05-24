@@ -119,7 +119,7 @@ fun CustomCalendar(
                         }?.records ?: listOf(),
                         schedules = calendarDayInfo.firstOrNull {
                             it.day == date.day && it.month == date.month && it.year == date.year
-                        }?.schedules ?: listOf(),
+                        }?.schedules,
                         onClickItem = onClickCell
                     )
                 }
