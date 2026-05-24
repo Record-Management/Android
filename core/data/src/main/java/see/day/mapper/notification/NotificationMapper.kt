@@ -37,15 +37,17 @@ fun NotificationSettingResponse.toModel(): NotificationSettings {
         dailyRecordEnabled = dailyRecordNotificationEnabled,
         exerciseRecordEnabled = exerciseNotificationEnabled,
         habitRecordEnabled = habitNotificationEnabled,
-        goalSettingNotificationEnabled = goalSettingNotificationEnabled
+        goalSettingNotificationEnabled = goalSettingNotificationEnabled,
+//        scheduleNotificationEnabled = scheduleNotificationEnabled [TODO] 이름 변경될 수 있음
     )
 }
 
-fun NotificationSettingsEdit.toDto() : NotificationSettingsEditRequest {
+fun NotificationSettingsEdit.toDto(): NotificationSettingsEditRequest {
     return NotificationSettingsEditRequest(
         dailyRecordNotificationEnabled = dailyRecordNotificationEnabled,
         exerciseNotificationEnabled = exerciseNotificationEnabled,
         habitNotificationEnabled = habitNotificationEnabled,
-        goalSettingNotificationEnabled = goalSettingNotificationEnabled
+        goalSettingNotificationEnabled = goalSettingNotificationEnabled,
+//        scheduleNotificationEnabled = scheduleNotificationEnabled [TODO] 이름 변경될 수 있음
     )
 }
