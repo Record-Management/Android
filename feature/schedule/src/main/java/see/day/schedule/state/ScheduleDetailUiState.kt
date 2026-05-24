@@ -37,7 +37,7 @@ data class ScheduleDetailUiState(
     }
 
     fun isEditing(): Boolean = when(editMode) {
-        is EditMode.Create -> true
+        is EditMode.Create -> this != init
         is EditMode.Edit -> {
             val origin = editMode.originalSchedule
             title != origin.title ||
