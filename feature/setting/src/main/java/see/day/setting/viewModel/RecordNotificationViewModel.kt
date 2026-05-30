@@ -38,7 +38,7 @@ class RecordNotificationViewModel @Inject constructor(
                             dailyRecordNotificationEnabled = notificationSetting.dailyRecordEnabled,
                             exerciseRecordNotificationEnabled = notificationSetting.exerciseRecordEnabled,
                             habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled,
-//                            scheduleNotificationEnabled = notificationSetting.scheduleNotificationEnabled
+                            scheduleNotificationEnabled = notificationSetting.scheduleNotificationEnabled
                         )
                     }
                 }
@@ -80,7 +80,7 @@ class RecordNotificationViewModel @Inject constructor(
                     dailyRecordNotificationEnabled = dailyRecordEnabled,
                     exerciseNotificationEnabled = exerciseRecordEnabled,
                     habitNotificationEnabled = habitRecordEnabled,
-//                    scheduleNotificationEnabled = scheduleNotificationEnabled
+                    scheduleNotificationEnabled = scheduleNotificationEnabled
                 )
             ).onSuccess { notificationSetting ->
                 _uiState.update {
@@ -88,7 +88,7 @@ class RecordNotificationViewModel @Inject constructor(
                         dailyRecordNotificationEnabled = notificationSetting.dailyRecordEnabled,
                         exerciseRecordNotificationEnabled = notificationSetting.exerciseRecordEnabled,
                         habitRecordNotificationEnabled = notificationSetting.habitRecordEnabled,
-//                        scheduleNotificationEnabled = notificationSetting.scheduleNotificationEnabled
+                        scheduleNotificationEnabled = notificationSetting.scheduleNotificationEnabled
                     )
                 }
             }

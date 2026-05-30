@@ -38,7 +38,7 @@ fun NotificationSettingResponse.toModel(): NotificationSettings {
         exerciseRecordEnabled = exerciseNotificationEnabled,
         habitRecordEnabled = habitNotificationEnabled,
         goalSettingNotificationEnabled = goalSettingNotificationEnabled,
-//        scheduleNotificationEnabled = scheduleNotificationEnabled [TODO] 이름 변경될 수 있음
+        scheduleNotificationEnabled = scheduleNotificationEnabled
     )
 }
 
@@ -48,6 +48,6 @@ fun NotificationSettingsEdit.toDto(): NotificationSettingsEditRequest {
         exerciseNotificationEnabled = exerciseNotificationEnabled,
         habitNotificationEnabled = habitNotificationEnabled,
         goalSettingNotificationEnabled = goalSettingNotificationEnabled,
-//        scheduleNotificationEnabled = scheduleNotificationEnabled [TODO] 이름 변경될 수 있음
+        scheduleNotificationEnabled = scheduleNotificationEnabled
     )
 }

@@ -9,5 +9,5 @@ data class NotificationSettingResponse(
     val exerciseNotificationEnabled: Boolean,
     val habitNotificationEnabled: Boolean,
     val goalSettingNotificationEnabled: Boolean,
-//    val scheduleNotificationEnabled: Boolean [TODO] 이름 변경될 수 있음
+    val scheduleNotificationEnabled: Boolean
 )

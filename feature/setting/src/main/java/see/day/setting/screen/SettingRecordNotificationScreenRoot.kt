@@ -117,7 +117,8 @@ internal fun SettingRecordNotificationScreen(
                         RecordNotificationUiEvent.OnRecordNotificationChanged(
                             dailyRecordNotificationEnabled = currentChecked,
                             exerciseRecordNotificationEnabled = currentChecked,
-                            habitRecordNotificationEnabled = currentChecked
+                            habitRecordNotificationEnabled = currentChecked,
+                            scheduleNotificationEnabled = currentChecked,
                         )
                     )
                 }
