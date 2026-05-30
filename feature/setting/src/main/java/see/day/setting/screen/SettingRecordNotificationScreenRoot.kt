@@ -117,7 +117,8 @@ internal fun SettingRecordNotificationScreen(
                         RecordNotificationUiEvent.OnRecordNotificationChanged(
                             dailyRecordNotificationEnabled = currentChecked,
                             exerciseRecordNotificationEnabled = currentChecked,
-                            habitRecordNotificationEnabled = currentChecked
+                            habitRecordNotificationEnabled = currentChecked,
+                            scheduleNotificationEnabled = currentChecked,
                         )
                     )
                 }
@@ -171,6 +172,21 @@ internal fun SettingRecordNotificationScreen(
                     onAction(
                         RecordNotificationUiEvent.OnRecordNotificationChanged(
                             habitRecordNotificationEnabled = currentChecked,
+                        )
+                    )
+                }
+            )
+
+            NotificationSwitch(
+                modifier = Modifier.padding(top = 24.dp),
+                title = R.string.schedule_notification,
+                body = R.string.habit_time_notification,
+                checked = uiState.scheduleNotificationEnabled,
+                isAllChecked = uiState.isAllNotificationEnabled(),
+                onCheckedChanged = { currentChecked ->
+                    onAction(
+                        RecordNotificationUiEvent.OnRecordNotificationChanged(
+                            scheduleNotificationEnabled = currentChecked,
                         )
                     )
                 }

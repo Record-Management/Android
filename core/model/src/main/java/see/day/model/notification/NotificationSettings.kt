@@ -5,5 +5,6 @@ data class NotificationSettings(
     val dailyRecordEnabled: Boolean,
     val exerciseRecordEnabled: Boolean,
     val habitRecordEnabled: Boolean,
-    val goalSettingNotificationEnabled: Boolean
+    val goalSettingNotificationEnabled: Boolean,
+    val scheduleNotificationEnabled: Boolean
 )
