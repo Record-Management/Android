@@ -168,3 +168,21 @@ private fun HistoryCardTypeTimeBasedHabitPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+private fun HistoryCardScheduleTypesPreview() {
+    val time = TimeFormatUtil.getRelativeTimeString(hourBefore(5))
+    SeeDayTheme {
+        HistoryCard(
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+            notificationType = NotificationType.SCHEDULE_REMINDER,
+            title = "일정 기록",
+            message = "친구들이랑 치맥 파티",
+            isChecked = false,
+            relativeTime = time,
+            onClickCard = { type, relativeTime -> }
+        )
+    }
+}
+
