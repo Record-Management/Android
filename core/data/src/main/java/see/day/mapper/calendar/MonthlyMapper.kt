@@ -49,7 +49,7 @@ fun DailyScheduleResponse?.toModel(): DailySchedule? {
     }
     return DailySchedule(
         title = title,
-        size = size,
+        extraScheduleCount = extraScheduleCount,
         color = color
     )
 }

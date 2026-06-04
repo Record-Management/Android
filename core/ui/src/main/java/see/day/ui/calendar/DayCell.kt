@@ -2,7 +2,6 @@ package see.day.ui.calendar
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import see.day.designsystem.R
 import see.day.designsystem.theme.SeeDayTheme
-import see.day.designsystem.theme.Typography
 import see.day.designsystem.theme.gray100
 import see.day.designsystem.theme.gray20
 import see.day.designsystem.theme.gray40
@@ -85,7 +83,7 @@ fun DayCell(modifier: Modifier = Modifier, isSameMonth: Boolean = true, isSelect
             return
         }
         if(filterType == null || filterType == RecordType.SCHEDULE) {
-            ScheduleCalendar(modifier = Modifier.padding(top = 6.dp), color = schedules.color.toColor(), title = schedules.title, scheduleSize = schedules.size)
+            ScheduleCalendar(modifier = Modifier.padding(top = 6.dp), color = schedules.color.toColor(), title = schedules.title, extraScheduleCount = schedules.extraScheduleCount)
         }
     }
 }
@@ -264,7 +262,7 @@ private fun ScheduleCalendar(
     modifier: Modifier,
     color: Color,
     title: String,
-    scheduleSize: Int,
+    extraScheduleCount: Int?,
 ) {
     Column(
         modifier = modifier.padding(end = 4.dp),
@@ -282,10 +280,10 @@ private fun ScheduleCalendar(
                 overflow = TextOverflow.Ellipsis
             )
         }
-        if(scheduleSize > 1) {
+        if(extraScheduleCount != null) {
             Text(
                 modifier = Modifier.padding(top = 2.dp).background(color = gray20, shape = RoundedCornerShape(4.dp)).padding(vertical = 1.dp, horizontal = 2.dp),
-                text = "+${scheduleSize-1}",
+                text = "+${extraScheduleCount}",
                 style = MaterialTheme.typography.headlineSmall
             )
         }
@@ -536,6 +534,6 @@ private fun TodayCellFilterAllAndNoHabit() {
 @Composable
 private fun ScheduleCalendarPreview() {
     SeeDayTheme {
-        ScheduleCalendar(modifier = Modifier.padding(bottom = 6.dp), color = primaryColor, "일정명ㅁㄴㅇㅁㄴㅇㄴㅁ", scheduleSize = 2)
+        ScheduleCalendar(modifier = Modifier.padding(bottom = 6.dp), color = primaryColor, "일정명ㅁㄴㅇㅁㄴㅇㄴㅁ", extraScheduleCount = 2)
     }
 }
