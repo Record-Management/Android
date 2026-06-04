@@ -24,6 +24,6 @@ data class DailyRecord(
 
 data class DailySchedule(
     val title: String,
-    val size: Int,
+    val extraScheduleCount: Int?,
     val color: SchedulePaletteColor
 )

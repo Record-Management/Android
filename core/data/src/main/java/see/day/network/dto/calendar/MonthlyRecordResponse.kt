@@ -32,6 +32,6 @@ data class DailyRecordResponse(
 @Serializable
 data class DailyScheduleResponse(
     val title: String,
-    val size: Int,
+    val extraScheduleCount: Int? = null,
     val color: SchedulePaletteColor
 )
